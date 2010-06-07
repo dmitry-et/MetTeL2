@@ -1,7 +1,10 @@
-syntax{
-	sort individual,concept,role;
+specification ALCO;
+
+syntax ALCOsorts{
+	sort individual, concept, role;
 }
-syntax{
+
+syntax ALCO extends ALCOsorts{
 	concept singleton = '{' individual '}' |
 			negation = '~' concept |
 			conjunction = concept '&' concept |

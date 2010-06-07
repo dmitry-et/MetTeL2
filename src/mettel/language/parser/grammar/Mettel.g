@@ -48,7 +48,7 @@ specification
         
     importBlock?
     
-    (SEMI block (SEMI? block)*)?
+    (block | SEMI)*
     EOF
     ;
     
@@ -64,7 +64,7 @@ importBlock
     
 importDeclaration
 	:
-	IMPORT (SYNTAX|SEMANTICS|TABLEAU|PROBLEM|ALL) path
+	IMPORT (SYNTAX|SEMANTICS|TABLEAU|PROBLEM|ALL)? path
 	;
     
 path
