@@ -26,16 +26,26 @@ options{
 }
 
 tokens{
+	SPECIFICATION = 'specification';
+
+	IMPORT		=	'import';
+	
+	ALL			=	'all';
+	PROBLEM		=	'problem';
 	SYNTAX		=	'syntax';
 	SEMANTICS	=	'semantics';
-	PROBLEM		=	'problem';
 	TABLEAU		=	'tableau';
+
 	SORT		=	'sort';
-	IMPORT		=	'import';
-	ALL			=	'all';
-	SPECIFICATION = 'specification';
-	ANTLR		=	'antlr';
 	EXTENDS		=	'extends';
+	ANTLR		=	'antlr';
+	
+/*	PREDICATE   =   'predicate'; I think, it will be easy to determine the type of any symbol from its context
+	FUNCTION    =   'function';
+	CONSTANT    =   'constant';
+	ARITY	    =   'arity';
+	OF			=   'of';      
+*/	
 }
 
 
@@ -120,7 +130,32 @@ charOrStringLiteral
     (CHARLITERAL | STRINGLITERAL)//change to string literal only?
     ;
     
+semantics
+	:
+	SEMANTICS IDENTIFIER (EXTENDS path)?
+    	LBRACE
+		    semanticOperator (SEMI semanticOperator)*
+		RBRACE
+    ;
     
+semanticOperator
+	:
+	semanticFormula
+	;
+
+/*    
+semanticSymbolDeclaration
+	:
+	((PREDICATE | FUNCTION) IDENTIFIER OF ARITY INTLITERAL)
+	|
+	CONSTANT IDENTIFIER
+	;
+*/ 
+   
+semanticFormula
+	:
+	IDENTIFIER //TODO: Expand further
+	;  
 /*****************************************************************************************
                                 Lexer section
 *****************************************************************************************/
@@ -132,7 +167,7 @@ MAP     :   '->';
 /*LONGLITERAL
     :   IntegerNumber LongSuffix
     ;
-
+*/
     
 INTLITERAL
     :   IntegerNumber 
@@ -155,7 +190,7 @@ fragment
 HexDigit
     :   ('0'..'9'|'a'..'f'|'A'..'F')
     ;
-
+/*
 fragment
 LongSuffix
     :   'l' | 'L'
