@@ -91,9 +91,8 @@ syntax
     :
     SYNTAX IDENTIFIER (EXTENDS path)?
     	LBRACE
-		    (syntaxOperator
-			)? 
-		    (SEMI 
+		    syntaxOperator?
+			(SEMI 
 		     syntaxOperator?
 		    )* 
 //		    (SEMI)?
@@ -134,7 +133,10 @@ semantics
 	:
 	SEMANTICS IDENTIFIER (EXTENDS path)?
     	LBRACE
-		    semanticOperator (SEMI semanticOperator)*
+		    semanticOperator? 
+		    (SEMI 
+		    semanticOperator?
+		    )*
 		RBRACE
     ;
     
@@ -154,6 +156,11 @@ semanticSymbolDeclaration
    
 semanticFormula
 	:
+	semanticEquivalenceFormula
+	;
+	
+semanticEquivalenceFormula
+	:	
 	IDENTIFIER //TODO: Expand further
 	;  
 /*****************************************************************************************

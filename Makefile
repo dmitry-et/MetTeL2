@@ -97,14 +97,13 @@ STATISTICS_FILE := $(SRC_DIR)/etc/statistics
 
 PARSER_DIR := $(SRC_DIR)/$(NAME)/language/parser
 
-#LEXER_NAME := $(CLASS_PREFIX)Lexer
-#LEXER_FILE_NAME := $(LEXER_NAME).g
-#LEXER_FILE := $(PARSER_DIR)/grammar/$(LEXER_FILE_NAME)
-PARSER_NAME := $(CLASS_PREFIX)
-PARSER_FILE_NAME := $(PARSER_NAME).g
-PARSER_FILE := $(PARSER_DIR)/grammar/$(PARSER_FILE_NAME)
-VOCABULARY := $(CLASS_PREFIX)
-VOCABULARY_FILE := $(PARSER_DIR)/grammar/$(VOCABULARY)TokenTypes.txt
+GRAMMAR_NAME := $(CLASS_PREFIX)
+LEXER_NAME := $(GRAMMAR_NAME)Lexer
+PARSER_NAME := $(GRAMMAR_NAME)Parser
+GRAMMAR_FILE_NAME := $(GRAMMAR_NAME).g
+GRAMMAR_FILE := $(PARSER_DIR)/grammar/$(PARSER_FILE_NAME)
+TOKENS_FILE := $(PARSER_DIR)/$(GRAMMAR_NAME).tokens
+PARSER_FILES := $(PARSER_DIR)/$(LEXER_NAME).java $(PARSER_DIR)/$(PARSER_NAME).java 
 
 # Parser doc files
 LEXER_DOC_FILE := $(DOC_DIR)/grammar/$(LEXER_NAME).html
@@ -126,10 +125,6 @@ $(PARSER_DIR)/$(PARSER_NAME).java $(PARSER_DIR)/$(PARSER_NAME)TokenTypes.java
 # Classes
 EXTRA_CLASSES := 
 CLASSES := $(shell echo $(SOURCES) | sed -e 's/java/class/g; s/src/classes/g') $(EXTRA_CLASSES)
-
-# ???
-LEXER_FILES := $(VOCABULARY_FILE) $(PARSER_DIR)/$(LEXER_NAME).java $(PARSER_DIR)/$(VOCABULARY)TokenTypes.java 
-PARSER_FILES := $(PARSER_DIR)/$(PARSER_NAME).java $(PARSER_DIR)/$(PARSER_NAME)TokenTypes.java
 
 ### Test ###########################################################################
 
@@ -211,8 +206,8 @@ clear-parser-files:
 	@ echo $(DELIM0)
 	@ echo "Clearing parser files"
 	@ echo $(DELIM1)
-	@ rm -f -v $(PARSER_DIR)/*.*
-	@ rm -f -v $(VOCABULARY_FILE) $(PARSER_DIR)/grammar/$(PARSER_NAME)TokenTypes.txt
+#	@ rm -f -v $(PARSER_DIR)/*.*
+	@ rm -f -v $(PARSER_FILES) $(TOKENS_FILE)
     
 clear-classes: 
 	@ echo $(DELIM0)
@@ -278,49 +273,38 @@ $(TEST_CLASSES_DIR):
 	@ echo $(DELIM1)
 	@ mkdir $(TEST_CLASSES_DIR)
 
-#$(LEXER_FILES): $(LEXER_FILE)
-#	@ echo $(DELIM0)
-#	@ echo "Making lexer"
-#	@ echo $(DELIM1)
-#	@ cd $(PARSER_DIR)/grammar && $(JAVA) -classpath $(COMPILE_CLASSPATH) antlr.Tool -o $(PARSER_DIR)/grammar $(ANTLR_OPTIONS) $(LEXER_FILE_NAME) > $(ANTLR_LEXER_LOG_FILE)
-#	@ mv "$(PARSER_DIR)/grammar/$(LEXER_NAME).java" "$(PARSER_DIR)/grammar/$(VOCABULARY)TokenTypes.java" $(PARSER_DIR)
-#	@ cat $(ANTLR_LEXER_LOG_FILE)
-#	@ cd $(BASE_DIR)
-
-$(PARSER_FILES): $(PARSER_FILE)
+$(PARSER_FILES): $(GRAMMAR_FILE)
 	@ echo $(DELIM0)
 	@ echo "Making parser"
 	@ echo $(DELIM1)
-	@ cd $(PARSER_DIR)/grammar && $(JAVA) -classpath $(COMPILE_CLASSPATH) org.antlr.Tool -o $(PARSER_DIR) $(ANTLR_OPTIONS) $(PARSER_FILE_NAME) >$(ANTLR_PARSER_LOG_FILE)
+	@ cd $(PARSER_DIR)/grammar && $(JAVA) -classpath $(COMPILE_CLASSPATH) org.antlr.Tool -o $(PARSER_DIR) $(ANTLR_OPTIONS) $(GRAMMAR_FILE_NAME) && rm -f $(TOKENS_FILE) >$(ANTLR_PARSER_LOG_FILE)
 	@ cat $(ANTLR_PARSER_LOG_FILE)
 	@ cd $(BASE_DIR)
-
-#only-lexer: $(LEXER_FILES)
 
 only-parser: $(PARSER_FILES)
        
 parser: clear-parser-files only-parser
 
-$(LEXER_DOC_FILE): $(LEXER_FILE)
-	@ echo $(DELIM0)
-	@ echo "Making lexer documentation"
-	@ echo $(DELIM1)
-	@ mkdir -p $(DOC_DIR)/grammar
-	@ cd $(PARSER_DIR)/grammar && $(JAVA) -classpath $(COMPILE_CLASSPATH) antlr.Tool -o $(DOC_DIR)/grammar -html $(LEXER_FILE_NAME) > $(ANTLR_LEXER_LOG_FILE)
-#	@ mv $(DOC_DIR)/grammar/$(LEXER_NAME).txt $(DOC_DIR)/grammar/$(LEXER_NAME).html
-	@ cat $(ANTLR_LEXER_LOG_FILE)
-	@ cd $(BASE_DIR)
+#$(LEXER_DOC_FILE): $(LEXER_FILE)
+#	@ echo $(DELIM0)
+#	@ echo "Making lexer documentation"
+#	@ echo $(DELIM1)
+#	@ mkdir -p $(DOC_DIR)/grammar
+#	@ cd $(PARSER_DIR)/grammar && $(JAVA) -classpath $(COMPILE_CLASSPATH) antlr.Tool -o $(DOC_DIR)/grammar -html $(LEXER_FILE_NAME) > $(ANTLR_LEXER_LOG_FILE)
+##	@ mv $(DOC_DIR)/grammar/$(LEXER_NAME).txt $(DOC_DIR)/grammar/$(LEXER_NAME).html
+#	@ cat $(ANTLR_LEXER_LOG_FILE)
+#	@ cd $(BASE_DIR)
 
-$(PARSER_DOC_FILE): $(VOCABULARY_FILE) $(PARSER_FILE)
+$(PARSER_DOC_FILE): $(GRAMMAR_FILE)
 	@ echo $(DELIM0)
 	@ echo "Making parser documentation"
 	@ echo $(DELIM1)
 	@ mkdir -p $(DOC_DIR)/grammar
-	@ cd $(PARSER_DIR)/grammar && $(JAVA) -classpath $(COMPILE_CLASSPATH) antlr.Tool -o $(DOC_DIR)/grammar -html $(PARSER_FILE_NAME) > $(ANTLR_PARSER_LOG_FILE)
+	@ cd $(PARSER_DIR)/grammar && $(JAVA) -classpath $(COMPILE_CLASSPATH) org.antlr.Tool -o $(DOC_DIR)/grammar -html $(GRAMMAR_FILE_NAME) > $(ANTLR_PARSER_LOG_FILE)
 	@ cat $(ANTLR_PARSER_LOG_FILE)
 	@ cd $(BASE_DIR)
 
-lexer-doc: $(LEXER_DOC_FILE)
+#lexer-doc: $(LEXER_DOC_FILE)
 
 parser-doc: $(PARSER_DOC_FILE)
 
