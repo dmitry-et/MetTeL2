@@ -53,8 +53,12 @@ tokens{
                                 Parser section
 *****************************************************************************************/
 specification
+    returns [MettelSpecification spec = null;]
     :
-    specificationDeclaration
+    SPECIFICATION
+    p = path
+    SEMI
+    {spec = new MettelSpecification(p);}
         
     importBlock?
     
@@ -62,11 +66,16 @@ specification
     EOF
     ;
     
-specificationDeclaration
+/*specificationDeclaration
+	returns [List r = null;]
 	:	
-	SPECIFICATION path SEMI
+	SPECIFICATION 
+	p = path
+	{r = p;}
+	SEMI
 	;    
-    
+ */ 
+   
 importBlock
 	:	
 	(importDeclaration SEMI)+
@@ -78,8 +87,13 @@ importDeclaration
 	;
     
 path
+	returns [List ids = new ArrayList<String>();]
 	:	
-	IDENTIFIER (DOT IDENTIFIER)*
+	id = IDENTIFIER 
+	{ids.append($id.text);}
+	(DOT id = IDENTIFIER
+	          {ids.append($id.text);}	
+	)*
 	;    
     
 block
