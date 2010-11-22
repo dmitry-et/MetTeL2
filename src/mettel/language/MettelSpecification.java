@@ -22,5 +22,23 @@ package mettel.language;
  *
  */
 public class MettelSpecification {
+	
+	private String path = null;
+
+	/**
+	 * @param path the path to set
+	 */
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	/**
+	 * @return the path
+	 */
+	public String path() {
+		return path;
+	}
+	
+	
 
 }

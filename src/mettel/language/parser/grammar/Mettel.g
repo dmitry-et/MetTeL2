@@ -15,7 +15,7 @@
 // along with MetTeL.  If not, see <http://www.gnu.org/licenses/>.
 //
 // Author: Dmitry Tishkovsky
-// Version: $Revision: $ $Date: $
+// Version: $Revision$ $Date$
 //
 grammar Mettel;
 
