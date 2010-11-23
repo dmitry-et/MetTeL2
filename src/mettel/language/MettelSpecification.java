@@ -16,8 +16,6 @@
  */
 package mettel.language;
 
-import java.util.List;
-
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -25,12 +23,12 @@ import java.util.List;
  */
 public class MettelSpecification {
 
-	private List<String> path = null;
+	private String path = null;
 
 	@SuppressWarnings("unused")
 	private MettelSpecification(){}
 
-	public MettelSpecification(List<String> path){
+	public MettelSpecification(String path){
 		super();
 		this.path = path;
 	}
@@ -38,7 +36,7 @@ public class MettelSpecification {
 	/**
 	 * @return the path
 	 */
-	public List<String> path() {
+	public String path() {
 		return path;
 	}
 
