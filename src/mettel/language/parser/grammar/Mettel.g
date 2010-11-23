@@ -87,12 +87,16 @@ importDeclaration
 	;
     
 path
-	returns [List ids = new ArrayList<String>();]
+	returns [String p = null;]
+	@init{StringBuffer buf = new StringBuffer();}
+	@after{p = buf.toString();}
 	:	
 	id = IDENTIFIER 
-	{ids.append($id.text);}
-	(DOT id = IDENTIFIER
-	          {ids.append($id.text);}	
+	{buf.append($id.text);}
+	(DOT 
+		{buf.append(token.DOTt);}
+	 id = IDENTIFIER
+	          	{buf.append($id.text);}	
 	)*
 	;    
     
