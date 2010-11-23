@@ -18,26 +18,28 @@ package mettel.language;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision$ $Date$
+ * @version $Revision: $ $Date: $
  *
  */
-class MettelSpecification {
+class MettelSort implements MettelToken {
 
-	private String path = null;
-
+	private String name = null;
+	/**
+	 *
+	 */
 	@SuppressWarnings("unused")
-	private MettelSpecification(){}
+	private	MettelSort() {};
 
-	MettelSpecification(String path){
+	MettelSort(String name){
 		super();
-		this.path = path;
+		this.name = name;
 	}
 
 	/**
-	 * @return the path
+	 * @returns the name
 	 */
-	String path() {
-		return path;
+	String name(){
+		return name;
 	}
 
 }

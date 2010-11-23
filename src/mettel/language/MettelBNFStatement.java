@@ -18,26 +18,17 @@ package mettel.language;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision$ $Date$
+ * @version $Revision: $ $Date: $
  *
  */
-class MettelSpecification {
+class MettelBNFStatement {
 
-	private String path = null;
-
-	@SuppressWarnings("unused")
-	private MettelSpecification(){}
-
-	MettelSpecification(String path){
-		super();
-		this.path = path;
-	}
 
 	/**
-	 * @return the path
+	 *
 	 */
-	String path() {
-		return path;
+	MettelBNFStatement() {
+		// TODO Auto-generated constructor stub
 	}
 
 }

@@ -18,26 +18,9 @@ package mettel.language;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision$ $Date$
+ * @version $Revision: $ $Date: $
  *
  */
-class MettelSpecification {
-
-	private String path = null;
-
-	@SuppressWarnings("unused")
-	private MettelSpecification(){}
-
-	MettelSpecification(String path){
-		super();
-		this.path = path;
-	}
-
-	/**
-	 * @return the path
-	 */
-	String path() {
-		return path;
-	}
+public interface MettelBlock {
 
 }

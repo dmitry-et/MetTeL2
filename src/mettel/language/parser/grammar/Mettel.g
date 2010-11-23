@@ -93,13 +93,13 @@ path
 	:	
 	id = IDENTIFIER 
 	{buf.append($id.text);}
-	(DOT 
-		{buf.append(token.DOTt);}
+	(td = DOT 
+		{buf.append($td.text);}
 	 id = IDENTIFIER
 	          	{buf.append($id.text);}	
 	)*
-	;    
-    
+	;
+
 block
     :
     (syntax)
@@ -123,8 +123,13 @@ syntaxOperator
     ;
 
 sortDeclaration
+    returns[List<MettelSort> sorts = new ArrayList<MettelSort>();]
     :
-    SORT IDENTIFIER (COMMA IDENTIFIER)*
+    SORT id = IDENTIFIER
+    		{sorts.add(new MettelSort($id.text));} 
+    	(COMMA id = IDENTIFIER
+    			{sorts.add(new MettelSort($id.text));}
+    	)*
     ;
 
 bnf
