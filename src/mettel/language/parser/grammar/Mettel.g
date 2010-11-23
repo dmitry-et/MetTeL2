@@ -26,19 +26,19 @@ options{
 }
 
 tokens{
-	SPECIFICATION = 'specification';
+	SPECIFICATION 	= 	'specification';
 
 	IMPORT		=	'import';
 	
 	ALL			=	'all';
 	PROBLEM		=	'problem';
 	SYNTAX		=	'syntax';
-	SEMANTICS	=	'semantics';
+	SEMANTICS		=	'semantics';
 	TABLEAU		=	'tableau';
 
-	SORT		=	'sort';
+	SORT			=	'sort';
 	EXTENDS		=	'extends';
-	ANTLR		=	'antlr';
+	ANTLR			=	'antlr';
 	
 /*	PREDICATE   =   'predicate'; I think, it will be easy to determine the type of any symbol from its context
 	FUNCTION    =   'function';
@@ -106,8 +106,10 @@ block
     ; 
 
 syntax
+    returns [MettelSyntax syn =null;]
     :
-    SYNTAX IDENTIFIER (EXTENDS path)?
+    SYNTAX id = IDENTIFIER 
+    		(extendsBlock)?
     	LBRACE
 		    syntaxOperator?
 			(SEMI 
@@ -117,13 +119,24 @@ syntax
 		RBRACE
     ;
 
+extendsBlock
+   returns [List<String> paths = new ArrayList<String>();]
+   :
+   EXTENDS 
+   p = path
+   {paths.add($p.text);} 
+   (COMMA path
+   {paths.add($p.text);}
+   )*
+   ;	
+
 syntaxOperator
     :
     (sortDeclaration | bnf)
     ;
 
 sortDeclaration
-    returns[List<MettelSort> sorts = new ArrayList<MettelSort>();]
+    returns [List<MettelSort> sorts = new ArrayList<MettelSort>();]
     :
     SORT id = IDENTIFIER
     		{sorts.add(new MettelSort($id.text));} 
