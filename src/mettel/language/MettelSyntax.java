@@ -17,6 +17,8 @@
 package mettel.language;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -28,11 +30,14 @@ class MettelSyntax implements MettelBlock {
 
 	private String identifier = null;
 
+	/*TODO implement hierarchical extension mechanism
+	 *
     private MettelSyntax parent = null;
+	*/
 
-    private List<MettelSort> sorts = null;
+    private HashMap<String,MettelSort> sorts = new HashMap<String,MettelSort>();
 
-    private List<MettelBNFStatement> statements = null;
+    private ArrayList<MettelBNFStatement> statements = new ArrayList<MettelBNFStatement>();
 	/**
 	 *
 	 */
@@ -44,54 +49,73 @@ class MettelSyntax implements MettelBlock {
 		this.identifier = identifier;
 	}
 
-	MettelSyntax(String identifier, MettelSyntax parent){
+/*TODO implement hierarchical extension mechanism
+ *
+  	MettelSyntax(String identifier, MettelSyntax parent){
 		this(identifier);
 		this.parent = parent;
 	}
-
+*/
 	/**
 	 * @returns the parent
-	 */
+     *TODO implement hierarchical extension mechanism
+     *
 	protected MettelSyntax parent() {
 		return parent;
 	}
-
+	*/
 
 	/**
 	 * @param sort A sort to add
 	 */
-	void addSort(MettelSort sort) {
+	void append(MettelSort sort) {
 		if(sort == null) return;
-		if(sorts == null) sorts = new ArrayList<MettelSort>();
-		sorts.add(sort);
+		sorts.put(sort.name(),sort);
+	}
+
+	/**
+	 * @param sorts A collection of sorts to add
+	 */
+	void append(Collection<MettelSort> sorts) {
+		if(sorts == null) return;
+		for(MettelSort sort: sorts){
+			this.sorts.put(sort.name(),sort);
+		}
 	}
 
 	/**
 	 * @return the sorts
 	 */
-	List<MettelSort> sorts() {
-		return sorts;
+	Collection<MettelSort> sorts() {
+		return sorts.values();
 	}
 
 	/**
-	 * @param statements the statements to set
+	 * @param statement A BNF statement to add
 	 */
-	void addStatement(MettelBNFStatement statement) {
+	void append(MettelBNFStatement statement) {
 		if(statement == null) return;
-		if(statements == null) statements = new ArrayList<MettelBNFStatement>();
 		statements.add(statement);
 	}
 
 	/**
+	 * @param statements A list of BNF statements to add
+	 */
+	void append(List<MettelBNFStatement> statements) {
+		if(statements == null) return;
+		this.statements.addAll(statements);
+	}
+
+
+	/**
 	 * @return the statements
 	 */
-	List<MettelBNFStatement> statements() {
+	ArrayList<MettelBNFStatement> statements() {
 		return statements;
 	}
 
-	/**
+	/*TODO implement hierarchical extension mechanism
 	 *
-	 */
 	void unravel(){
 		while(parent!= null){
 			sorts.addAll(0,parent.sorts);
@@ -99,5 +123,6 @@ class MettelSyntax implements MettelBlock {
 			parent = parent.parent();
 		}
 	}
+	*/
 
 }

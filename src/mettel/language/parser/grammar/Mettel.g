@@ -109,17 +109,24 @@ syntax
     returns [MettelSyntax syn =null;]
     :
     SYNTAX id = IDENTIFIER 
-    		(extendsBlock)?
+    	{syn = new MettelSyntax($id.text);}
+ //TODO   		(extendsBlock)?
     	LBRACE
-		    syntaxOperator?
+		    (
+		    o = syntaxOperator[syn.sorts()]
+		    {syn.append(o);}
+		    )?
 			(SEMI 
-		     syntaxOperator?
+		     (o= syntaxOperator[syn.sorts()]
+		     {syn.append(o);}
+		     )?
 		    )* 
 //		    (SEMI)?
 		RBRACE
     ;
 
-extendsBlock
+/*TODO
+   extendsBlock
    returns [List<String> paths = new ArrayList<String>();]
    :
    EXTENDS 
@@ -128,41 +135,74 @@ extendsBlock
    (COMMA path
    {paths.add($p.text);}
    )*
-   ;	
+   ;
+*/	
 
 syntaxOperator
+    [HashMap<MettelSort> sorts]
     :
-    (sortDeclaration | bnf)
+    (sortDeclaration | bnf[sorts])
     ;
 
 sortDeclaration
-    returns [List<MettelSort> sorts = new ArrayList<MettelSort>();]
+    returns [HashSet<MettelSort> sorts = new HashSet<MettelSort>();]
     :
     SORT id = IDENTIFIER
     		{sorts.add(new MettelSort($id.text));} 
     	(COMMA id = IDENTIFIER
-    			{sorts.add(new MettelSort($id.text));}
+    		{sorts.add(new MettelSort($id.text));}
     	)*
     ;
 
 bnf
+    [HashMap<MettelSort> sorts]
     :
-    IDENTIFIER bnfStatement (BAR bnfStatement)* 
+    t = IDENTIFIER
+    {
+    String sortName = t.getText();
+    sort = sorts.get(sortName);
+    if(sort == null) 
+    	throw new MettelRecognitionException("Sort "+sortName+" is not declared");
+    }
+    bnfStatement[sorts] 
+    (BAR bnfStatement[sorts])* 
     ;
     
 bnfStatement
+   [HashMap<MettelSorts> sorts]
+    returns [MettelBNFStatement statement = null]
     :
-    IDENTIFIER? EQ  bnfDefinition
+    IDENTIFIER? EQ  
+    bnfDefinition[sorts]
     ;
     
 bnfDefinition
+   [HashMap<MettelSorts> sorts]
+   returns [ArrayList<MettelToken> def = new ArrayList<MettelToken>()]
+ //  throws MettelParseException
     :
-    charOrStringLiteral? (IDENTIFIER charOrStringLiteral?)*
+    (
+    l = charOrStringLiteral
+    {def.add(l);}
+    )? 
+    (sortName = IDENTIFIER
+    {
+    sort = sorts.get($sortName.text);
+    if(sort == null) throw new MettelRecognitionException("Sort "+$sortName.text+" is not declared");
+    def.add(sort);
+    } 
+    (
+    l =charOrStringLiteral
+    {def.add(l);}
+    )?
+    )*
     ;
     
 charOrStringLiteral
+    returns [MettelStringLiteral]
     :
-    (CHARLITERAL | STRINGLITERAL)//change to string literal only?
+    l = (CHARLITERAL | STRINGLITERAL)//change to string literal only?
+    {literal = new MettelStringLiteral($l.text);}
     ;
     
 semantics
