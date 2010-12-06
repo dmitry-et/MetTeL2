@@ -18,7 +18,7 @@ package mettel.language;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision: $ $Date: $
+ * @version $Revision$ $Date$
  *
  */
 class MettelStringLiteral implements MettelToken {
