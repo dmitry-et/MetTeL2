@@ -23,7 +23,7 @@ import java.util.List;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision: $ $Date: $
+ * @version $Revision$ $Date$
  *
  */
 class MettelSyntax implements MettelBlock {

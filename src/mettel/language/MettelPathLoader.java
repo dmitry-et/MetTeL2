@@ -20,7 +20,7 @@ import java.util.Hashtable;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision: $ $Date: $
+ * @version $Revision$ $Date$
  *
  */
 class MettelPathLoader {
