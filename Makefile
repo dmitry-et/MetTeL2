@@ -70,8 +70,14 @@ JAVADOC_OPTIONS := -private -windowtitle "$(TITLE)" -author -version -use -sourc
 
 # Class paths
 ANTLR:=antlr
+ANTLR3:=antlr3
+ANTLR3_RUNTIME:=antlr3-runtime
+STRINGTEMPLATE:=stringtemplate
 ANTLR_JAR:=$(LIB_DIR)/$(ANTLR).jar
-COMPILE_CLASSPATH:=$(ANTLR_JAR)
+ANTLR3_JAR:=$(LIB_DIR)/$(ANTLR3).jar
+ANTLR3_RUNTIME_JAR:=$(LIB_DIR)/$(ANTLR3_RUNTIME).jar
+STRINGTEMPLATE_JAR:=$(LIB_DIR)/$(STRINGTEMPLATE).jar
+COMPILE_CLASSPATH:=$(ANTLR3_RUNTIME_JAR):$(STRINGTEMPLATE_JAR):$(ANTLR_JAR):$(ANTLR3_JAR)
 
 #Antlr shared library
 LIBANTLR=$(BIN_DIR)/lib$(ANTLR).so

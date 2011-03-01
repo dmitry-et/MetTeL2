@@ -117,7 +117,7 @@ syntax
 		    {syn.append(o);}
 		    )?
 			(SEMI 
-		     (o= syntaxOperator[syn.sorts()]
+		     (o = syntaxOperator[syn.sorts()]
 		     {syn.append(o);}
 		     )?
 		    )* 
