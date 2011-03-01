@@ -18,17 +18,9 @@ package mettel.language;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision$ $Date$
+ * @version $Revision: $ $Date: $
  *
  */
-class MettelBNFStatement implements MettelSyntaxStatement{
-
-
-	/**
-	 *
-	 */
-	MettelBNFStatement() {
-		// TODO Auto-generated constructor stub
-	}
+public interface MettelSyntaxStatement {
 
 }

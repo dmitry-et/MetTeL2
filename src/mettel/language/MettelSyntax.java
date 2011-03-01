@@ -86,6 +86,13 @@ class MettelSyntax implements MettelBlock {
 	/**
 	 * @return the sorts
 	 */
+	HashMap<String,MettelSort> sortTable() {
+		return sorts;
+	}
+
+	/**
+	 * @return the sorts
+	 */
 	Collection<MettelSort> sorts() {
 		return sorts.values();
 	}

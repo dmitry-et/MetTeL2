@@ -49,9 +49,16 @@ tokens{
 }
 
 @header{
-package mettel.language.parser;
+package mettel.language;
+
+//Java imports
+import java.util.HashMap;
 
 //import mettel.language.MettelSpecification;
+}
+
+@lexer::header{
+package mettel.language;
 }
 
 
@@ -115,16 +122,16 @@ syntax
     returns [MettelSyntax syn =null;]
     :
     SYNTAX id = IDENTIFIER 
-    	{syn = new MettelSyntax($id.text);}
+    	{
+    	syn = new MettelSyntax($id.text);
+    	}
  //TODO   		(extendsBlock)?
     	LBRACE
 		    (
-		    o = syntaxOperator[syn.sorts()]
-		    {syn.append(o);}
+		    syntaxStatement[syn]
 		    )?
 			(SEMI 
-		     (o = syntaxOperator[syn.sorts()]
-		     {syn.append(o);}
+		     (syntaxStatement[syn]
 		     )?
 		    )* 
 //		    (SEMI)?
@@ -144,38 +151,43 @@ syntax
    ;
 */	
 
-syntaxOperator
-    [HashMap<MettelSort> sorts]
+syntaxStatement
+    [MettelSyntax syn]
     :
-    (sortDeclaration | bnf[sorts])
+    (sortDeclaration[syn] | bnf[syn])
     ;
 
 sortDeclaration
-    returns [HashSet<MettelSort> sorts = new HashSet<MettelSort>();]
-    :
+    [MettelSyntax syn]
+    @init{HashMap<String,MettelSort> sorts = syn.sortTable();}
+     :
     SORT id = IDENTIFIER
-    		{sorts.add(new MettelSort($id.text));} 
+    		{sorts.put($id.text,new MettelSort($id.text));} 
     	(COMMA id = IDENTIFIER
-    		{sorts.add(new MettelSort($id.text));}
+    		{sorts.put($id.text,new MettelSort($id.text));}
     	)*
     ;
 
 bnf
-    [HashMap<MettelSort> sorts]
-    :
+    [MettelSyntax syn]
+    @init{HashMap<String,MettelSort> sorts = syn.sortTable(); }
+     :
     t = IDENTIFIER
     {
-    String sortName = t.getText();
-    sort = sorts.get(sortName);
+    MettelSort sort = sorts.get($t.text);
     if(sort == null) 
-    	throw new MettelRecognitionException("Sort "+sortName+" is not declared");
+    	throw new MettelUndeclaredSortException($t.text);
     }
-    bnfStatement[sorts] 
-    (BAR bnfStatement[sorts])* 
+    bs = bnfStatement[sorts]
+    {syn.append(bs);}
+    (BAR 
+    bs = bnfStatement[sorts]
+    {syn.append(bs);}
+    )* 
     ;
     
 bnfStatement
-   [HashMap<MettelSorts> sorts]
+   [HashMap<String,MettelSort> sorts]
     returns [MettelBNFStatement statement = null]
     :
     IDENTIFIER? EQ  
@@ -183,7 +195,7 @@ bnfStatement
     ;
     
 bnfDefinition
-   [HashMap<MettelSorts> sorts]
+   [HashMap<String,MettelSort> sorts]
    returns [ArrayList<MettelToken> def = new ArrayList<MettelToken>()]
  //  throws MettelParseException
     :
@@ -193,8 +205,8 @@ bnfDefinition
     )? 
     (sortName = IDENTIFIER
     {
-    sort = sorts.get($sortName.text);
-    if(sort == null) throw new MettelRecognitionException("Sort "+$sortName.text+" is not declared");
+    MettelSort sort = sorts.get($sortName.text);
+    if(sort == null) throw new MettelUndeclaredSortException($sortName.text);
     def.add(sort);
     } 
     (
@@ -205,7 +217,7 @@ bnfDefinition
     ;
     
 charOrStringLiteral
-    returns [MettelStringLiteral]
+    returns [MettelStringLiteral literal = null]
     :
     l = (CHARLITERAL | STRINGLITERAL)//change to string literal only?
     {literal = new MettelStringLiteral($l.text);}

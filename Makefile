@@ -101,7 +101,7 @@ STATISTICS_FILE := $(SRC_DIR)/etc/statistics
 
 ### Parser #########################################################################
 
-PARSER_DIR := $(SRC_DIR)/$(NAME)/language/parser
+PARSER_DIR := $(SRC_DIR)/$(NAME)/language
 
 GRAMMAR_NAME := $(CLASS_PREFIX)
 LEXER_NAME := $(GRAMMAR_NAME)Lexer

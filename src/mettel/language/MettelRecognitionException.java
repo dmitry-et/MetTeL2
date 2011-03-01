@@ -16,18 +16,33 @@
  */
 package mettel.language;
 
+import org.antlr.runtime.IntStream;
+import org.antlr.runtime.RecognitionException;
+
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision$ $Date$
+ * @version $Revision: $ $Date: $
  *
  */
-class MettelBNFStatement implements MettelSyntaxStatement{
-
+public class MettelRecognitionException extends RecognitionException {
 
 	/**
 	 *
 	 */
-	MettelBNFStatement() {
+	private static final long serialVersionUID = -6523022868000940084L;
+
+	/**
+	 *
+	 */
+	public MettelRecognitionException() {
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @param input
+	 */
+	public MettelRecognitionException(IntStream input) {
+		super(input);
 		// TODO Auto-generated constructor stub
 	}
 

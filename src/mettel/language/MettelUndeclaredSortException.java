@@ -18,17 +18,25 @@ package mettel.language;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision$ $Date$
+ * @version $Revision: $ $Date: $
  *
  */
-class MettelBNFStatement implements MettelSyntaxStatement{
-
+public class MettelUndeclaredSortException extends MettelRecognitionException {
 
 	/**
 	 *
 	 */
-	MettelBNFStatement() {
-		// TODO Auto-generated constructor stub
+	private static final long serialVersionUID = -8253966884272432661L;
+
+	/**
+	 *
+	 */
+	private String sortName = null;
+	/**
+	 * @param sortName
+	 */
+	public MettelUndeclaredSortException(String sortName) {
+		this.sortName =  sortName;
 	}
 
 }
