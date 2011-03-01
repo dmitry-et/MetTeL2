@@ -48,6 +48,12 @@ tokens{
 */	
 }
 
+@header{
+package mettel.language.parser;
+
+//import mettel.language.MettelSpecification;
+}
+
 
 /*****************************************************************************************
                                 Parser section
