@@ -54,9 +54,8 @@ class MettelBNFStatement{
 
 	MettelBNFStatement(String identifier) {
 		super();
-		id++;
 		if(identifier == null) {
-			this.identifier = className + id;
+			this.identifier = className + ++id;
 		} else {
 			this.identifier = identifier;
 		}
