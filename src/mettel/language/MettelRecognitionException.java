@@ -21,7 +21,7 @@ import org.antlr.runtime.RecognitionException;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision: $ $Date: $
+ * @version $Revision$ $Date$
  *
  */
 public class MettelRecognitionException extends RecognitionException {

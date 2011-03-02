@@ -18,7 +18,7 @@ package mettel.language;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision: $ $Date: $
+ * @version $Revision$ $Date$
  *
  */
 public class MettelUndeclaredSortException extends MettelRecognitionException {
@@ -39,4 +39,7 @@ public class MettelUndeclaredSortException extends MettelRecognitionException {
 		this.sortName =  sortName;
 	}
 
+	public String toString(){
+		return "The sort "+sortName+" at line "+line+" at position "+charPositionInLine+" is not declared";
+	}
 }

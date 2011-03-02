@@ -23,7 +23,7 @@ import java.util.ArrayList;
  * @version $Revision$ $Date$
  *
  */
-class MettelBNFStatement implements MettelSyntaxStatement{
+class MettelBNFStatement{
 
 	/**
 	 *
