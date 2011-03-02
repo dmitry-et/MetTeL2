@@ -105,11 +105,11 @@ path
 	@after{p = buf.toString();}
 	:	
 	id = IDENTIFIER 
-	{buf.append($id.text);}
+	{buf.append(id.getText());}
 	(td = DOT 
-		{buf.append($td.text);}
+		{buf.append(td.getText());}
 	 id = IDENTIFIER
-	          	{buf.append($id.text);}	
+	          	{buf.append(id.getText());}	
 	)*
 	;
 
@@ -123,7 +123,7 @@ syntax
     :
     SYNTAX id = IDENTIFIER 
     	{
-    	syn = new MettelSyntax($id.text);
+    	syn = new MettelSyntax(id.getText());
     	}
  //TODO   		(extendsBlock)?
     	LBRACE
@@ -159,59 +159,61 @@ syntaxStatement
 
 sortDeclaration
     [MettelSyntax syn]
-    @init{HashMap<String,MettelSort> sorts = syn.sortTable();}
      :
     SORT id = IDENTIFIER
-    		{sorts.put($id.text,new MettelSort($id.text));} 
+    	{syn.addSort(id.getText());}//Throw RedeclaredSortException?
     	(COMMA id = IDENTIFIER
-    		{sorts.put($id.text,new MettelSort($id.text));}
+    	{syn.addSort(id.getText());}
     	)*
     ;
 
 bnf
     [MettelSyntax syn]
-    @init{HashMap<String,MettelSort> sorts = syn.sortTable(); }
      :
     t = IDENTIFIER
     {
-    MettelSort sort = sorts.get($t.text);
-    if(sort == null) 
-    	throw new MettelUndeclaredSortException($t.text);
+    if(!syn.sortExists(t.getText())) 
+    	throw new MettelUndeclaredSortException(t.getText());
     }
-    bs = bnfStatement[sorts]
+    bs = bnfStatement[syn]
     {syn.append(bs);}
     (BAR 
-    bs = bnfStatement[sorts]
+    bs = bnfStatement[syn]
     {syn.append(bs);}
     )* 
     ;
     
 bnfStatement
-   [HashMap<String,MettelSort> sorts]
+   [MettelSyntax syn]
     returns [MettelBNFStatement statement = null]
+    @init{String id = null;}
     :
-    IDENTIFIER? EQ  
-    bnfDefinition[sorts]
+    (t = IDENTIFIER
+    {id = t.getText();}
+    )?
+    EQ
+    {statement = new MettelBNFStatement(id);} 
+    bnfDefinition[syn, statement]
     ;
     
 bnfDefinition
-   [HashMap<String,MettelSort> sorts]
+   [MettelSyntax syn, MettelBNFStatement statement]
    returns [ArrayList<MettelToken> def = new ArrayList<MettelToken>()]
  //  throws MettelParseException
     :
     (
     l = charOrStringLiteral
-    {def.add(l);}
+    {statement.addToken(l);}
     )? 
-    (sortName = IDENTIFIER
+    (t = IDENTIFIER
     {
-    MettelSort sort = sorts.get($sortName.text);
-    if(sort == null) throw new MettelUndeclaredSortException($sortName.text);
-    def.add(sort);
+    MettelSort sort = syn.getSort(t.getText());
+    if(sort == null)  throw new MettelUndeclaredSortException(t.getText());
+    statement.addToken(sort);
     } 
     (
     l =charOrStringLiteral
-    {def.add(l);}
+    {statement.addToken(l);}
     )?
     )*
     ;
@@ -220,7 +222,7 @@ charOrStringLiteral
     returns [MettelStringLiteral literal = null]
     :
     l = (CHARLITERAL | STRINGLITERAL)//change to string literal only?
-    {literal = new MettelStringLiteral($l.text);}
+    {literal = new MettelStringLiteral(l.getText());}
     ;
     
 semantics

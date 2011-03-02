@@ -16,6 +16,8 @@
  */
 package mettel.language;
 
+import java.util.ArrayList;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -23,12 +25,47 @@ package mettel.language;
  */
 class MettelBNFStatement implements MettelSyntaxStatement{
 
+	/**
+	 *
+	 */
+	private static int id = 0;
+
+	/**
+	 *
+	 */
+	private static final String className = "MettelBNFStatement";
+
+	/**
+	 *
+	 */
+	private String identifier = null;
+
+	/**
+	 *
+	 */
+	private ArrayList<MettelToken> tokens = new ArrayList<MettelToken>();
 
 	/**
 	 *
 	 */
 	MettelBNFStatement() {
-		// TODO Auto-generated constructor stub
+		this(null);
 	}
 
+	MettelBNFStatement(String identifier) {
+		super();
+		id++;
+		if(identifier == null) {
+			this.identifier = className + id;
+		} else {
+			this.identifier = identifier;
+		}
+	}
+
+	/**
+	 *
+	 */
+	void addToken(MettelToken token) {
+		tokens.add(token);
+	}
 }

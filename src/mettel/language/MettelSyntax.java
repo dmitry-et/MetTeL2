@@ -74,6 +74,32 @@ class MettelSyntax implements MettelBlock {
 	}
 
 	/**
+	 * @param sortName A sort name to add
+	 */
+	boolean addSort(String sortName) {
+		MettelSort sort = sorts.get(sortName);
+		if(sort != null) return false;
+		sorts.put(sortName, new MettelSort(sortName));
+		return true;
+	}
+
+	/**
+	 * @param sortName A sort name to check for existence
+	 * @returns true if the sort exists
+	 */
+	boolean sortExists(String sortName) {
+		return (sorts.get(sortName) != null);
+	}
+
+	/**
+	 * @param sortName A sort name to get
+	 * @returns sort
+	 */
+	MettelSort getSort(String sortName) {
+		return sorts.get(sortName);
+	}
+
+	/**
 	 * @param sorts A collection of sorts to add
 	 */
 	void append(Collection<MettelSort> sorts) {
@@ -83,19 +109,19 @@ class MettelSyntax implements MettelBlock {
 		}
 	}
 
-	/**
-	 * @return the sorts
-	 */
-	HashMap<String,MettelSort> sortTable() {
-		return sorts;
-	}
+//	/**
+//	 * @return the sorts
+//	 */
+//	HashMap<String,MettelSort> sortTable() {
+//		return sorts;
+//	}
 
-	/**
-	 * @return the sorts
-	 */
-	Collection<MettelSort> sorts() {
-		return sorts.values();
-	}
+//	/**
+//	 * @return the sorts
+//	 */
+//	Collection<MettelSort> sorts() {
+//		return sorts.values();
+//	}
 
 	/**
 	 * @param statement A BNF statement to add
@@ -114,12 +140,12 @@ class MettelSyntax implements MettelBlock {
 	}
 
 
-	/**
-	 * @return the statements
-	 */
-	ArrayList<MettelBNFStatement> statements() {
-		return statements;
-	}
+//	/**
+//	 * @return the statements
+//	 */
+//	ArrayList<MettelBNFStatement> statements() {
+//		return statements;
+//	}
 
 	/*TODO implement hierarchical extension mechanism
 	 *
