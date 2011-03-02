@@ -21,7 +21,7 @@ package mettel.language;
  * @version $Revision$ $Date$
  *
  */
-class MettelSpecification {
+public class MettelSpecification {
 
 	private String path = null;
 
