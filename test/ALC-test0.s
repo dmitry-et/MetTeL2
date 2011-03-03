@@ -19,7 +19,7 @@ syntax ALCO{
 	role composition = role '.' role |
 		 union = role '|' role |
 		 converse = role '-'|
-		 weirdRole = "weird(" role ',' individual ';' concept ')'|
+		 weirdRole = "weird" '(' role ',' individual ';' concept ')'|
 		 = "empty" role '.' concept;
 
 }

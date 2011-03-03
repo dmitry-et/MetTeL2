@@ -202,6 +202,18 @@ bnfDefinition
  //  throws MettelParseException
     :
     (
+    l = charOrStringLiteral 
+    {statement.addToken(l);}
+     |  
+     t = IDENTIFIER
+    {
+    MettelSort sort = syn.getSort(t.getText());
+    if(sort == null)  throw new MettelUndeclaredSortException(t.getText());
+    statement.addToken(sort);
+    }
+    )+
+  
+/*    (
     l = charOrStringLiteral
     {statement.addToken(l);}
     )? 
@@ -216,6 +228,7 @@ bnfDefinition
     {statement.addToken(l);}
     )?
     )*
+ */
     ;
     
 charOrStringLiteral

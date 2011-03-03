@@ -20,7 +20,7 @@ syntax ALCO extends ALCOsorts{
 	role composition = role '.' role |
 		 union = role '|' role |
 		 converse = role '-'|
-		 weirdRole = "weird(" role ',' individual ';' concept ')'|
-		 = "empty" role '.' concept;									 									 
-										 
+		 weirdRole = "weird" '(' role ',' individual ';' concept ')'|
+		 = "empty" role '.' concept;
+
 }
