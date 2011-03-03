@@ -175,14 +175,14 @@ bnf
      :
     t = IDENTIFIER
     {
-    if(!syn.sortExists(t.getText())) 
-    	throw new MettelUndeclaredSortException(t.getText());
+    MettelSort sort = syn.getSort(t.getText());
+    if(sort == null)  throw new MettelUndeclaredSortException(t.getText());
     }
     bs = bnfStatement[syn]
-    {syn.append(bs);}
+    {syn.addBNF(sort,bs);}
     (BAR 
     bs = bnfStatement[syn]
-    {syn.append(bs);}
+    {syn.addBNF(sort,bs);}
     )* 
     ;
     

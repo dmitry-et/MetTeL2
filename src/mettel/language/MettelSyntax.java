@@ -43,7 +43,7 @@ class MettelSyntax implements MettelBlock {
 
     private HashMap<String,MettelSort> sorts = new HashMap<String,MettelSort>();
 
-    private ArrayList<MettelBNFStatement> statements = new ArrayList<MettelBNFStatement>();
+    private HashMap<MettelSort,ArrayList<MettelBNFStatement>> bnfs = new HashMap<MettelSort,ArrayList<MettelBNFStatement>>();
 	/**
 	 *
 	 */
@@ -74,10 +74,11 @@ class MettelSyntax implements MettelBlock {
 	/**
 	 * @param sort A sort to add
 	 */
-	void append(MettelSort sort) {
+/*	void append(MettelSort sort) {
 		if(sort == null) return;
 		sorts.put(sort.name(),sort);
 	}
+*/
 
 	/**
 	 * @param sortName A sort name to add
@@ -108,12 +109,13 @@ class MettelSyntax implements MettelBlock {
 	/**
 	 * @param sorts A collection of sorts to add
 	 */
-	void append(Collection<MettelSort> sorts) {
+/*	void append(Collection<MettelSort> sorts) {
 		if(sorts == null) return;
 		for(MettelSort sort: sorts){
 			this.sorts.put(sort.name(),sort);
 		}
 	}
+*/
 
 //	/**
 //	 * @return the sorts
@@ -132,18 +134,23 @@ class MettelSyntax implements MettelBlock {
 	/**
 	 * @param statement A BNF statement to add
 	 */
-	void append(MettelBNFStatement statement) {
+	void addBNF(MettelSort sort,MettelBNFStatement statement) {
 		if(statement == null) return;
+		ArrayList<MettelBNFStatement> statements = bnfs.get(sort);
+		if(statements == null){
+			statements = new ArrayList<MettelBNFStatement>();
+			bnfs.put(sort,statements);
+		}
 		statements.add(statement);
 	}
 
 	/**
 	 * @param statements A list of BNF statements to add
 	 */
-	void append(List<MettelBNFStatement> statements) {
+	/*void append(List<MettelBNFStatement> statements) {
 		if(statements == null) return;
 		this.statements.addAll(statements);
-	}
+	}*/
 
 	/**
 	 * @param buf
@@ -152,8 +159,10 @@ class MettelSyntax implements MettelBlock {
 		buf.append("syntax ");
 		buf.append(name);
 		buf.append('{');
+		buf.append(LINE_SEPARATOR);
 		int i = 0;
 		buf.append(LINE_SEPARATOR);
+		buf.append('\t');
 		for(MettelSort sort:sorts.values()){
 			if(i == 0){
 				buf.append("sort ");
@@ -163,16 +172,32 @@ class MettelSyntax implements MettelBlock {
 			sort.toBuffer(buf);
 			i++;
 		}
-		if(i > 0) buf.append(';');
-
-		i = 0;
-		for(MettelBNFStatement s:statements){
+		if(i > 0){
+			buf.append(';');
 			buf.append(LINE_SEPARATOR);
-			if(i > 0) buf.append('|');
-			s.toBuffer(buf);
-			i++;
 		}
-		if(i > 0) buf.append(';');
+
+		for(MettelSort sort:bnfs.keySet()){
+			buf.append(LINE_SEPARATOR);
+			buf.append('\t');
+			sort.toBuffer(buf);
+			buf.append(' ');
+			ArrayList<MettelBNFStatement> statements = bnfs.get(sort);
+			i = 0;
+			for(MettelBNFStatement s:statements){
+				if(i > 0){
+					buf.append(LINE_SEPARATOR);
+					buf.append("\t| ");
+				}
+				s.toBuffer(buf);
+				i++;
+			}
+			if(i > 0){
+				buf.append(';');
+				buf.append(LINE_SEPARATOR);
+			}
+		}
+
 		buf.append(LINE_SEPARATOR);
 		buf.append('}');
 	}

@@ -73,10 +73,10 @@ class MettelBNFStatement{
 	 */
 	public void toBuffer(StringBuffer buf) {
 		buf.append(identifier);
-		buf.append('=');
+		buf.append(" =");
 		for(MettelToken t:tokens){
-			t.toBuffer(buf);
 			buf.append(' ');
+			t.toBuffer(buf);
 		}
 
 	}
