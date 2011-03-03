@@ -16,6 +16,8 @@
  */
 package mettel.language;
 
+import java.util.HashMap;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -24,6 +26,8 @@ package mettel.language;
 public class MettelSpecification {
 
 	private String path = null;
+
+	private HashMap<String,MettelSyntax> syntaxTable = new HashMap<String,MettelSyntax>();
 
 	@SuppressWarnings("unused")
 	private MettelSpecification(){}
@@ -38,6 +42,32 @@ public class MettelSpecification {
 	 */
 	String path() {
 		return path;
+	}
+
+
+	final static String LINE_SEPARATOR = System.getProperty("line.separator");
+
+	/**
+	 *
+	 */
+	public void toBuffer(StringBuffer buf){
+		buf.append("specification ");
+		buf.append(path);
+		buf.append(';');
+		buf.append(LINE_SEPARATOR);
+		for(MettelSyntax syn:syntaxTable.values()){
+			buf.append(LINE_SEPARATOR);
+			syn.toBuffer(buf);
+		}
+
+	}
+
+	/**
+	 * @param syn
+	 */
+	void addSyntax(MettelSyntax syn) {
+		syntaxTable.put(syn.name(), syn);
+
 	}
 
 }

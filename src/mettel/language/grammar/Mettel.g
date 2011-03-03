@@ -75,7 +75,7 @@ specification
         
     importBlock?
     
-    (block | SEMI)*
+    (block[spec] | SEMI)*
     EOF
     ;
     
@@ -114,8 +114,11 @@ path
 	;
 
 block
+    [MettelSpecification spec]
     :
-    (syntax)
+    (syn  = syntax
+     {spec.addSyntax(syn);}    
+    )
     ; 
 
 syntax

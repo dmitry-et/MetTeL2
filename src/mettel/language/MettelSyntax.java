@@ -21,6 +21,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import static mettel.language.MettelSpecification.LINE_SEPARATOR;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -28,7 +30,11 @@ import java.util.List;
  */
 class MettelSyntax implements MettelBlock {
 
-	private String identifier = null;
+	private String name = null;
+
+	String name(){
+		return name;
+	}
 
 	/*TODO implement hierarchical extension mechanism
 	 *
@@ -44,9 +50,9 @@ class MettelSyntax implements MettelBlock {
     @SuppressWarnings("unused")
 	private MettelSyntax(){};
 
-	MettelSyntax(String identifier) {
+	MettelSyntax(String name) {
 		super();
-		this.identifier = identifier;
+		this.name = name;
 	}
 
 /*TODO implement hierarchical extension mechanism
@@ -137,6 +143,38 @@ class MettelSyntax implements MettelBlock {
 	void append(List<MettelBNFStatement> statements) {
 		if(statements == null) return;
 		this.statements.addAll(statements);
+	}
+
+	/**
+	 * @param buf
+	 */
+	public void toBuffer(StringBuffer buf) {
+		buf.append("syntax ");
+		buf.append(name);
+		buf.append('{');
+		int i = 0;
+		buf.append(LINE_SEPARATOR);
+		for(MettelSort sort:sorts.values()){
+			if(i == 0){
+				buf.append("sort ");
+			}else{
+				buf.append(',');
+			}
+			sort.toBuffer(buf);
+			i++;
+		}
+		if(i > 0) buf.append(';');
+
+		i = 0;
+		for(MettelBNFStatement s:statements){
+			buf.append(LINE_SEPARATOR);
+			if(i > 0) buf.append('|');
+			s.toBuffer(buf);
+			i++;
+		}
+		if(i > 0) buf.append(';');
+		buf.append(LINE_SEPARATOR);
+		buf.append('}');
 	}
 
 

@@ -16,6 +16,8 @@
  */
 package mettel.language;
 
+import static mettel.language.MettelSpecification.LINE_SEPARATOR;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -40,6 +42,15 @@ class MettelSort implements MettelToken {
 	 */
 	String name(){
 		return name;
+	}
+
+	/**
+	 * @param buf
+	 */
+	public void toBuffer(StringBuffer buf) {
+		//buf.append("sort ");
+		buf.append(name);
+		//buf.append(';');
 	}
 
 }

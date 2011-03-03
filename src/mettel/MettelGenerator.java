@@ -89,6 +89,10 @@ public class MettelGenerator {
 
         	MettelSpecification spec = parser.specification();
 
+        	StringBuffer buf = new StringBuffer();
+        	spec.toBuffer(buf);
+        	System.out.print(buf);
+
         	System.exit(0);
         } catch(Exception e) {
 
