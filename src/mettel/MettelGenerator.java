@@ -36,25 +36,21 @@ import mettel.language.MettelSpecification;
  */
 public class MettelGenerator {
 
+	private static PrintWriter out = null;
+	private static PrintWriter err = null;
+	private static CharStream in = null;
+
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 
-    	PrintWriter out =
-    			new PrintWriter(
-    				new OutputStreamWriter(System.out),true);
-    	PrintWriter err =
-    			new PrintWriter(
-    				new OutputStreamWriter(System.err),true);
     	try{
-    		CharStream in = new ANTLRInputStream(System.in);
-        	final int SIZE = args.length;
-        	for(int i = 0; i < SIZE; i++){
+    		final int SIZE = args.length;
+    		for(int i = 0; i < SIZE; i++){
         	  	if("-i".equals(args[i])||"--input".equals(args[i])){
-
-                    if(i < SIZE-1){
-            		  in = new ANTLRFileStream(args[++i]);
+        	        if(i < SIZE-1){
+            		    in = new ANTLRFileStream(args[++i]);
                     }else{
                         System.out.println("Input file name required");
                     }
@@ -76,10 +72,20 @@ public class MettelGenerator {
                     }
         		}
         	}
+
+        	CommonTokenStream tokens = new CommonTokenStream();
+
+    		if(in == null) in = new ANTLRInputStream(System.in);
+
         	MettelLexer lexer = new MettelLexer(in);
-            CommonTokenStream tokens = new CommonTokenStream();
+
         	tokens.setTokenSource(lexer);
         	MettelParser parser = new MettelParser(tokens);
+
+        	if(out == null) out = new PrintWriter(
+    				new OutputStreamWriter(System.out),true);
+         	if(err == null) err = new PrintWriter(
+    				new OutputStreamWriter(System.err),true);
 
         	MettelSpecification spec = parser.specification();
 
