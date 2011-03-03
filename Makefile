@@ -125,8 +125,8 @@ PURE_SOURCES := $(shell find $(SRC_DIR) -name '*.java' \
 ! -name $(VOCABULARY)TokenTypes.java \
 ! -name $(PARSER_NAME)TokenTypes.java) 
 SOURCES := $(PURE_SOURCES) \
-$(PARSER_DIR)/$(LEXER_NAME).java $(PARSER_DIR)/$(VOCABULARY)TokenTypes.java \
-$(PARSER_DIR)/$(PARSER_NAME).java $(PARSER_DIR)/$(PARSER_NAME)TokenTypes.java
+$(PARSER_DIR)/$(LEXER_NAME).java \
+$(PARSER_DIR)/$(PARSER_NAME).java
 
 # Classes
 EXTRA_CLASSES := 
@@ -281,9 +281,10 @@ $(TEST_CLASSES_DIR):
 
 $(PARSER_FILES): $(GRAMMAR_FILE)
 	@ echo $(DELIM0)
-	@ echo "Making parser"
+	@ echo "Making parser and parser documentation"
 	@ echo $(DELIM1)
-	@ cd $(PARSER_DIR)/grammar && $(JAVA) -classpath $(COMPILE_CLASSPATH) org.antlr.Tool -o $(PARSER_DIR) $(ANTLR_OPTIONS) $(GRAMMAR_FILE_NAME) && rm -f $(TOKENS_FILE) >$(ANTLR_PARSER_LOG_FILE)
+	@ mkdir -p $(DOC_DIR)/grammar
+	@ cd $(PARSER_DIR)/grammar && $(JAVA) -classpath $(COMPILE_CLASSPATH) org.antlr.Tool -o $(PARSER_DIR) -print $(ANTLR_OPTIONS) $(GRAMMAR_FILE_NAME) 1>$(DOC_DIR)/grammar/$(PARSER_NAME).txt 2>$(ANTLR_PARSER_LOG_FILE) && rm -f $(TOKENS_FILE) 
 	@ cat $(ANTLR_PARSER_LOG_FILE)
 	@ cd $(BASE_DIR)
 
@@ -291,28 +292,7 @@ only-parser: $(PARSER_FILES)
        
 parser: clear-parser-files only-parser
 
-#$(LEXER_DOC_FILE): $(LEXER_FILE)
-#	@ echo $(DELIM0)
-#	@ echo "Making lexer documentation"
-#	@ echo $(DELIM1)
-#	@ mkdir -p $(DOC_DIR)/grammar
-#	@ cd $(PARSER_DIR)/grammar && $(JAVA) -classpath $(COMPILE_CLASSPATH) antlr.Tool -o $(DOC_DIR)/grammar -html $(LEXER_FILE_NAME) > $(ANTLR_LEXER_LOG_FILE)
-##	@ mv $(DOC_DIR)/grammar/$(LEXER_NAME).txt $(DOC_DIR)/grammar/$(LEXER_NAME).html
-#	@ cat $(ANTLR_LEXER_LOG_FILE)
-#	@ cd $(BASE_DIR)
-
-$(PARSER_DOC_FILE): $(GRAMMAR_FILE)
-	@ echo $(DELIM0)
-	@ echo "Making parser documentation"
-	@ echo $(DELIM1)
-	@ mkdir -p $(DOC_DIR)/grammar
-	@ cd $(PARSER_DIR)/grammar && $(JAVA) -classpath $(COMPILE_CLASSPATH) org.antlr.Tool -o $(DOC_DIR)/grammar -html $(GRAMMAR_FILE_NAME) > $(ANTLR_PARSER_LOG_FILE)
-	@ cat $(ANTLR_PARSER_LOG_FILE)
-	@ cd $(BASE_DIR)
-
-#lexer-doc: $(LEXER_DOC_FILE)
-
-parser-doc: $(PARSER_DOC_FILE)
+parser-doc: only-parser
 
 packages-file:
 	@ cd $(SRC_DIR) && \
