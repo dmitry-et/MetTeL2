@@ -26,6 +26,6 @@ public interface MettelToken {
 	/**
 	 * @param buf
 	 */
-	void toBuffer(StringBuffer buf);
+	void toBuffer(StringBuilder buf);
 
 }

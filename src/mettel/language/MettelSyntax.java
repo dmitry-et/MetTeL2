@@ -17,9 +17,7 @@
 package mettel.language;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 import static mettel.language.MettelSpecification.LINE_SEPARATOR;
 
@@ -155,7 +153,7 @@ class MettelSyntax implements MettelBlock {
 	/**
 	 * @param buf
 	 */
-	public void toBuffer(StringBuffer buf) {
+	public void toBuffer(StringBuilder buf) {
 		buf.append("syntax ");
 		buf.append(name);
 		buf.append('{');

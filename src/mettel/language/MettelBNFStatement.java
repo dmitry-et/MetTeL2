@@ -71,7 +71,7 @@ class MettelBNFStatement{
 	/**
 	 * @param buf
 	 */
-	public void toBuffer(StringBuffer buf) {
+	public void toBuffer(StringBuilder buf) {
 		buf.append(identifier);
 		buf.append(" =");
 		for(MettelToken t:tokens){

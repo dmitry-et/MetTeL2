@@ -50,7 +50,7 @@ public class MettelSpecification {
 	/**
 	 *
 	 */
-	public void toBuffer(StringBuffer buf){
+	public void toBuffer(StringBuilder buf){
 		buf.append("specification ");
 		buf.append(path);
 		buf.append(';');
