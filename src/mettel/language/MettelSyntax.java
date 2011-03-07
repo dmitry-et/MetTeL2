@@ -16,6 +16,7 @@
  */
 package mettel.language;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -218,5 +219,37 @@ class MettelSyntax implements MettelBlock {
 		}
 	}
 	*/
+
+	/**
+	 *
+	 */
+//	void generateParser(PrintWriter out){
+//		//TODO header
+//		for(MettelSort sort:bnfs.keySet()){
+//			ArrayList<MettelBNFStatement> statements = bnfs.get(sort);
+//			String nodeName = sort.name()+"Primitive";
+//			out.println(nodeName);
+//			out.println(':');
+//				out.println("IDENTIFIER");
+//			out.println(';');
+//			int i = 0;
+//			for(MettelBNFStatement s:statements){
+//				if(i == 0){
+//					//identifier
+//					so = s;
+//				}else{
+//					buf.append(LINE_SEPARATOR);
+//					buf.append("\t| ");
+//				}
+//				s.toBuffer(buf);
+//				i++;
+//			}
+//			if(i > 0){
+//				buf.append(';');
+//				buf.append(LINE_SEPARATOR);
+//			}
+//		}
+//		//TODO footer
+//	}
 
 }

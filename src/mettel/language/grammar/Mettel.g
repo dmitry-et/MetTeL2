@@ -1,16 +1,16 @@
 //
 // This file is part of MetTeL.
-// 
+//
 // MetTeL is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // MetTeL is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with MetTeL.  If not, see <http://www.gnu.org/licenses/>.
 //
@@ -29,7 +29,7 @@ tokens{
 	SPECIFICATION 	= 	'specification';
 
 	IMPORT		=	'import';
-	
+
 	ALL			=	'all';
 	PROBLEM		=	'problem';
 	SYNTAX		=	'syntax';
@@ -39,13 +39,13 @@ tokens{
 	SORT			=	'sort';
 	EXTENDS		=	'extends';
 	ANTLR			=	'antlr';
-	
+
 /*	PREDICATE   =   'predicate'; I think, it will be easy to determine the type of any symbol from its context
 	FUNCTION    =   'function';
 	CONSTANT    =   'constant';
 	ARITY	    =   'arity';
-	OF			=   'of';      
-*/	
+	OF			=   'of';
+*/
 }
 
 @header{
@@ -72,44 +72,44 @@ specification
     p = path
     SEMI
     {spec = new MettelSpecification(p);}
-        
+
     importBlock?
-    
+
     (block[spec] | SEMI)*
     EOF
     ;
-    
+
 /*specificationDeclaration
 	returns [List r = null;]
-	:	
-	SPECIFICATION 
+	:
+	SPECIFICATION
 	p = path
 	{r = p;}
 	SEMI
-	;    
- */ 
-   
+	;
+ */
+
 importBlock
-	:	
+	:
 	(importDeclaration SEMI)+
-	;    
-    
+	;
+
 importDeclaration
 	:
 	IMPORT (SYNTAX|SEMANTICS|TABLEAU|PROBLEM|ALL)? path
 	;
-    
+
 path
 	returns [String p = null;]
 	@init{StringBuffer buf = new StringBuffer();}
 	@after{p = buf.toString();}
-	:	
-	id = IDENTIFIER 
+	:
+	id = IDENTIFIER
 	{buf.append(id.getText());}
-	(td = DOT 
+	(td = DOT
 		{buf.append(td.getText());}
 	 id = IDENTIFIER
-	          	{buf.append(id.getText());}	
+	          	{buf.append(id.getText());}
 	)*
 	;
 
@@ -117,14 +117,14 @@ block
     [MettelSpecification spec]
     :
     (syn  = syntax
-     {spec.addSyntax(syn);}    
+     {spec.addSyntax(syn);}
     )
-    ; 
+    ;
 
 syntax
     returns [MettelSyntax syn =null;]
     :
-    SYNTAX id = IDENTIFIER 
+    SYNTAX id = IDENTIFIER
     	{
     	syn = new MettelSyntax(id.getText());
     	}
@@ -133,10 +133,10 @@ syntax
 		    (
 		    syntaxStatement[syn]
 		    )?
-			(SEMI 
+			(SEMI
 		     (syntaxStatement[syn]
 		     )?
-		    )* 
+		    )*
 //		    (SEMI)?
 		RBRACE
     ;
@@ -145,14 +145,14 @@ syntax
    extendsBlock
    returns [List<String> paths = new ArrayList<String>();]
    :
-   EXTENDS 
+   EXTENDS
    p = path
-   {paths.add($p.text);} 
+   {paths.add($p.text);}
    (COMMA path
    {paths.add($p.text);}
    )*
    ;
-*/	
+*/
 
 syntaxStatement
     [MettelSyntax syn]
@@ -180,12 +180,12 @@ bnf
     }
     bs = bnfStatement[syn]
     {syn.addBNF(sort,bs);}
-    (BAR 
+    (BAR
     bs = bnfStatement[syn]
     {syn.addBNF(sort,bs);}
-    )* 
+    )*
     ;
-    
+
 bnfStatement
    [MettelSyntax syn]
     returns [MettelBNFStatement statement = null]
@@ -195,19 +195,19 @@ bnfStatement
     {id = t.getText();}
     )?
     EQ
-    {statement = new MettelBNFStatement(id);} 
+    {statement = new MettelBNFStatement(id);}
     bnfDefinition[syn, statement]
     ;
-    
+
 bnfDefinition
    [MettelSyntax syn, MettelBNFStatement statement]
    returns [ArrayList<MettelToken> def = new ArrayList<MettelToken>()]
  //  throws MettelParseException
     :
     (
-    l = charOrStringLiteral 
+    l = charOrStringLiteral
     {statement.addToken(l);}
-     |  
+     |
      t = IDENTIFIER
     {
     MettelSort sort = syn.getSort(t.getText());
@@ -215,17 +215,17 @@ bnfDefinition
     statement.addToken(sort);
     }
     )+
-  
+
 /*    (
     l = charOrStringLiteral
     {statement.addToken(l);}
-    )? 
+    )?
     (t = IDENTIFIER
     {
     MettelSort sort = syn.getSort(t.getText());
     if(sort == null)  throw new MettelUndeclaredSortException(t.getText());
     statement.addToken(sort);
-    } 
+    }
     (
     l =charOrStringLiteral
     {statement.addToken(l);}
@@ -233,48 +233,48 @@ bnfDefinition
     )*
  */
     ;
-    
+
 charOrStringLiteral
     returns [MettelStringLiteral literal = null]
     :
     l = (CHARLITERAL | STRINGLITERAL)//change to string literal only?
     {literal = new MettelStringLiteral(l.getText());}
     ;
-    
+
 semantics
 	:
 	SEMANTICS IDENTIFIER (EXTENDS path)?
     	LBRACE
-		    semanticOperator? 
-		    (SEMI 
+		    semanticOperator?
+		    (SEMI
 		    semanticOperator?
 		    )*
 		RBRACE
     ;
-    
+
 semanticOperator
 	:
 	semanticFormula
 	;
 
-/*    
+/*
 semanticSymbolDeclaration
 	:
 	((PREDICATE | FUNCTION) IDENTIFIER OF ARITY INTLITERAL)
 	|
 	CONSTANT IDENTIFIER
 	;
-*/ 
-   
+*/
+
 semanticFormula
 	:
 	semanticEquivalenceFormula
 	;
-	
+
 semanticEquivalenceFormula
-	:	
+	:
 	IDENTIFIER //TODO: Expand further
-	;  
+	;
 /*****************************************************************************************
                                 Lexer section
 *****************************************************************************************/
@@ -282,29 +282,29 @@ EQ	 	:   '=';
 //OR      :   '|';
 MAP     :   '->';
 //AT      :   '@';
-        
+
 /*LONGLITERAL
     :   IntegerNumber LongSuffix
     ;
 */
-    
+
 INTLITERAL
-    :   IntegerNumber 
+    :   IntegerNumber
     ;
-    
+
 fragment
 IntegerNumber
-    :   '0' 
-    |   '1'..'9' ('0'..'9')*    
-    |   '0' ('0'..'7')+         
-    |   HexPrefix HexDigit+        
+    :   '0'
+    |   '1'..'9' ('0'..'9')*
+    |   '0' ('0'..'7')+
+    |   HexPrefix HexDigit+
     ;
 
 fragment
 HexPrefix
     :   '0x' | '0X'
     ;
-        
+
 fragment
 HexDigit
     :   ('0'..'9'|'a'..'f'|'A'..'F')
@@ -318,93 +318,93 @@ LongSuffix
 
 fragment
 NonIntegerNumber
-    :   ('0' .. '9')+ '.' ('0' .. '9')* Exponent?  
-    |   '.' ( '0' .. '9' )+ Exponent?  
-    |   ('0' .. '9')+ Exponent  
-    |   ('0' .. '9')+ 
-    |   
-        HexPrefix (HexDigit )* 
-        (    () 
-        |    ('.' (HexDigit )* ) 
-        ) 
-        ( 'p' | 'P' ) 
-        ( '+' | '-' )? 
+    :   ('0' .. '9')+ '.' ('0' .. '9')* Exponent?
+    |   '.' ( '0' .. '9' )+ Exponent?
+    |   ('0' .. '9')+ Exponent
+    |   ('0' .. '9')+
+    |
+        HexPrefix (HexDigit )*
+        (    ()
+        |    ('.' (HexDigit )* )
+        )
+        ( 'p' | 'P' )
+        ( '+' | '-' )?
         ( '0' .. '9' )+
         ;
-        
-fragment 
-Exponent    
-    :   ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ 
+
+fragment
+Exponent
+    :   ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+
     ;
-    
-fragment 
+
+fragment
 FloatSuffix
-    :   'f' | 'F' 
-    ;     
+    :   'f' | 'F'
+    ;
 
 fragment
 DoubleSuffix
     :   'd' | 'D'
     ;
-        
+
 FLOATLITERAL
     :   NonIntegerNumber FloatSuffix
     ;
-    
+
 DOUBLELITERAL
     :   NonIntegerNumber DoubleSuffix?
     ;
 */
 
 CHARLITERAL
-    :   '\'' 
-        (   EscapeSequence 
+    :   '\''
+        (   EscapeSequence
         |   ~( '\'' | '\\' | '\r' | '\n' )
-        ) 
+        )
         '\''
-    ; 
+    ;
 
 STRINGLITERAL
-    :   '"' 
+    :   '"'
         (   EscapeSequence
-        |   ~( '\\' | '"' | '\r' | '\n' )        
-        )* 
-        '"' 
+        |   ~( '\\' | '"' | '\r' | '\n' )
+        )*
+        '"'
     ;
 
 fragment
-EscapeSequence 
+EscapeSequence
     :   '\\' (
-                 'b' 
-             |   't' 
-             |   'n' 
-             |   'f' 
-             |   'r' 
-             |   '\"' 
-             |   '\'' 
-             |   '\\' 
-             |       
+                 'b'
+             |   't'
+             |   'n'
+             |   'f'
+             |   'r'
+             |   '\"'
+             |   '\''
+             |   '\\'
+             |
                  ('0'..'3') ('0'..'7') ('0'..'7')
-             |       
-                 ('0'..'7') ('0'..'7') 
-             |       
+             |
+                 ('0'..'7') ('0'..'7')
+             |
                  ('0'..'7')
-             )          
-;     
+             )
+;
 
-WS  
+WS
     :   (
              ' '
         |    '\r'
         |    '\t'
         |    '\u000C'
         |    '\n'
-        ) 
+        )
             {
                 skip();
-            }          
+            }
     ;
-    
+
 COMMENT
          @init{
             boolean isJavaDoc = false;
@@ -415,7 +415,7 @@ COMMENT
                     isJavaDoc = true;
                 }
             }
-        (options {greedy=false;} : . )* 
+        (options {greedy=false;} : . )*
         '*/'
             {
                 if(isJavaDoc==true){
@@ -427,7 +427,7 @@ COMMENT
     ;
 
 LINE_COMMENT
-    :   '//' ~('\n'|'\r')*  ('\r\n' | '\r' | '\n') 
+    :   '//' ~('\n'|'\r')*  ('\r\n' | '\r' | '\n')
             {
                 skip();
             }
@@ -435,45 +435,45 @@ LINE_COMMENT
             {
                 skip();
             }
-    ;   
- 
-/*       
+    ;
+
+/*
 ABSTRACT
     :   'abstract'
     ;
-    
+
 ASSERT
     :   'assert'
     ;
-    
+
 BOOLEAN
     :   'boolean'
     ;
-    
+
 BREAK
     :   'break'
     ;
-    
+
 BYTE
     :   'byte'
     ;
-    
+
 CASE
     :   'case'
     ;
-   
+
 CATCH
     :   'catch'
     ;
-    
+
 CHAR
     :   'char'
     ;
-    
+
 CLASS
     :   'class'
     ;
-    
+
 CONST
     :   'const'
     ;
@@ -500,7 +500,7 @@ ELSE
 
 ENUM
     :   'enum'
-    ;             
+    ;
 
 EXTENDS
     :   'extends'
@@ -764,8 +764,8 @@ PERCENT
 
 PLUSEQ
     :   '+='
-    ; 
-    
+    ;
+
 SUBEQ
     :   '-='
     ;
@@ -808,19 +808,19 @@ GT
 
 LT
     :   '<'
-    ;        
+    ;
 */
-              
+
 IDENTIFIER
-    :   
+    :
 //    IdentifierStart IdentifierPart*
 	('a'..'z'|'A'..'Z'|'_'|'$') ('a'..'z'|'A'..'Z'|'0'..'9'|'_'|'$')*
     ;
 
 /*fragment
-SurrogateIdentifer 
-    :   ('\ud800'..'\udbff') ('\udc00'..'\udfff') 
-    ;                 
+SurrogateIdentifer
+    :   ('\ud800'..'\udbff') ('\udc00'..'\udfff')
+    ;
 */
 /*fragment
 IdentifierStart
@@ -1022,7 +1022,7 @@ IdentifierStart
     |   '\u1760'..'\u176c'
     |   '\u176e'..'\u1770'
     |   '\u1780'..'\u17b3'
-    |   '\u17d7' 
+    |   '\u17d7'
     |   '\u17db'..'\u17dc'
     |   '\u1820'..'\u1877'
     |   '\u1880'..'\u18a8'
@@ -1117,10 +1117,10 @@ IdentifierStart
     |   '\uffda'..'\uffdc'
     |   '\uffe0'..'\uffe1'
     |   '\uffe5'..'\uffe6'
-    |   ('\ud800'..'\udbff') ('\udc00'..'\udfff') 
-    ;                
-                       
-fragment 
+    |   ('\ud800'..'\udbff') ('\udc00'..'\udfff')
+    ;
+
+fragment
 IdentifierPart
     :   '\u0000'..'\u0008'
     |   '\u000e'..'\u001b'
@@ -1231,7 +1231,7 @@ IdentifierPart
     |   '\u0ae6'..'\u0aef'
     |   '\u0af1'
     |   '\u0b01'..'\u0b03'
-    |   '\u0b05'..'\u0b0c'        
+    |   '\u0b05'..'\u0b0c'
     |   '\u0b0f'..'\u0b10'
     |   '\u0b13'..'\u0b28'
     |   '\u0b2a'..'\u0b30'
@@ -1273,7 +1273,7 @@ IdentifierPart
     |   '\u0c4a'..'\u0c4d'
     |   '\u0c55'..'\u0c56'
     |   '\u0c60'..'\u0c61'
-    |   '\u0c66'..'\u0c6f'        
+    |   '\u0c66'..'\u0c6f'
     |   '\u0c82'..'\u0c83'
     |   '\u0c85'..'\u0c8c'
     |   '\u0c8e'..'\u0c90'
@@ -1314,7 +1314,7 @@ IdentifierPart
     |   '\u0e50'..'\u0e59'
     |   '\u0e81'..'\u0e82'
     |   '\u0e84'
-    |   '\u0e87'..'\u0e88'        
+    |   '\u0e87'..'\u0e88'
     |   '\u0e8a'
     |   '\u0e8d'
     |   '\u0e94'..'\u0e97'
@@ -1355,7 +1355,7 @@ IdentifierPart
     |   '\u1100'..'\u1159'
     |   '\u115f'..'\u11a2'
     |   '\u11a8'..'\u11f9'
-    |   '\u1200'..'\u1206'        
+    |   '\u1200'..'\u1206'
     |   '\u1208'..'\u1246'
     |   '\u1248'
     |   '\u124a'..'\u124d'
@@ -1363,7 +1363,7 @@ IdentifierPart
     |   '\u1258'
     |   '\u125a'..'\u125d'
     |   '\u1260'..'\u1286'
-    |   '\u1288'        
+    |   '\u1288'
     |   '\u128a'..'\u128d'
     |   '\u1290'..'\u12ae'
     |   '\u12b0'
@@ -1420,7 +1420,7 @@ IdentifierPart
     |   '\u1f5d'
     |   '\u1f5f'..'\u1f7d'
     |   '\u1f80'..'\u1fb4'
-    |   '\u1fb6'..'\u1fbc'        
+    |   '\u1fb6'..'\u1fbc'
     |   '\u1fbe'
     |   '\u1fc2'..'\u1fc4'
     |   '\u1fc6'..'\u1fcc'
@@ -1456,7 +1456,7 @@ IdentifierPart
     |   '\u2145'..'\u2149'
     |   '\u2160'..'\u2183'
     |   '\u3005'..'\u3007'
-    |   '\u3021'..'\u302f'        
+    |   '\u3021'..'\u302f'
     |   '\u3031'..'\u3035'
     |   '\u3038'..'\u303c'
     |   '\u3041'..'\u3096'
@@ -1506,7 +1506,7 @@ IdentifierPart
     |   '\uffda'..'\uffdc'
     |   '\uffe0'..'\uffe1'
     |   '\uffe5'..'\uffe6'
-    |   '\ufff9'..'\ufffb' 
+    |   '\ufff9'..'\ufffb'
     |   ('\ud800'..'\udbff') ('\udc00'..'\udfff')
     ;
 
