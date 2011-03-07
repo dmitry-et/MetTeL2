@@ -35,7 +35,6 @@ class MettelStringLiteral implements MettelToken {
 	/* (non-Javadoc)
 	 * @see mettel.language.MettelToken#toBuffer(java.lang.StringBuffer)
 	 */
-	@Override
 	public void toBuffer(StringBuilder buf) {
 		//buf.append('"');
 		buf.append(literal);
