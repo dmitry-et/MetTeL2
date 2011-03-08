@@ -16,7 +16,7 @@
  */
 package mettel.generator.antlr;
 
-import static mettel.util.MettelStrings.LINE_SEPARATOR;
+import mettel.util.MettelIndentedStringBuilder;
 
 /**
  * @author Dmitry Tishkovsky
@@ -37,18 +37,22 @@ public class MettelANTLRRule {
 	/**
 	 * @param b
 	 */
-	public void toStringBuilder(StringBuilder b) {
-		b.append('\t');
+	void toStringBuilder(StringBuilder b) {
+		toStringBuilder(new MettelIndentedStringBuilder(b));
+	}
+
+	void toStringBuilder(MettelIndentedStringBuilder ib){
+		MettelIndentedStringBuilder b = new MettelIndentedStringBuilder(ib);
+		b.indent();
 		b.append(name);
-		b.append(LINE_SEPARATOR);
-		b.append('\t');
-		b.append('\t');
+		b.appendEOL();
+		b = new MettelIndentedStringBuilder(b);
+		b.indent();
 		b.append(':');
 
 
 
-		b.append('\t');
-		b.append('\t');
+		b.indent();
 		b.append(';');
 	}
 
