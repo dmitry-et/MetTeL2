@@ -28,9 +28,9 @@ public final class MettelIndentedStringBuilder implements Appendable{
 
 	private StringBuilder b = null;
 
-	public StringBuilder builder(){
-		return b;
-	}
+//	public StringBuilder builder(){
+//		return b;
+//	}
 
 	@SuppressWarnings("unused")
 	private MettelIndentedStringBuilder(){};
@@ -43,7 +43,7 @@ public final class MettelIndentedStringBuilder implements Appendable{
 	}
 
 	public MettelIndentedStringBuilder(MettelIndentedStringBuilder b) {
-		this(b.builder(),b.indentString(),b.indentLevel++);
+		this(b.b,b.indentString,(++b.indentLevel));
 	}
 
 	public MettelIndentedStringBuilder(StringBuilder b, String indent) {
@@ -67,9 +67,9 @@ public final class MettelIndentedStringBuilder implements Appendable{
 
 	private String indentString = TAB;
 
-	public String indentString(){
-		return indentString;
-	}
+//	public String indentString(){
+//		return indentString;
+//	}
 
 	public void setIndent(String indent){
 		this.indentString = indent;
@@ -77,9 +77,9 @@ public final class MettelIndentedStringBuilder implements Appendable{
 
 	private int indentLevel = -1;
 
-	public int indentLevel(){
-		return indentLevel;
-	}
+//	public int indentLevel(){
+//		return indentLevel;
+//	}
 
 	public void setIndentLevel(int l){
 		this.indentLevel = l;
