@@ -1,4 +1,4 @@
-grammar ALC;
+grammar Test;
 
 options{
 	k=1;
@@ -23,7 +23,7 @@ basicIndividual
 	|
 	'(' individual ')'
 	;
-	
+
 individual
 	:
 	basicIndividual
@@ -33,18 +33,18 @@ concept
 	:
 	universalRestrictionConcept
 	;
-	
+
 conceptVariable
 	:
 	ID
 	;
-	
+
 basicConcept
 	:
 	conceptVariable
 	|
 	'(' concept ')'
-	;	
+	;
 
 falseConcept
 	:
@@ -60,25 +60,25 @@ singletonConcept
 	:
 	trueConcept | '{' individual '}'
 	;
-	
+
 negationConcept
 	:
-	singletonConcept | '~' singletonConcept
+	singletonConcept | '~' negationConcept
 	;
-	
+
 conjunctionConcept
 	:
-	negationConcept ( '&' negationConcept)?
-	;	
+	negationConcept ('&'  negationConcept)*
+	;
 
 disjunctionConcept
 	:
-	conjunctionConcept ('|' conjunctionConcept)?
+	conjunctionConcept ('|' conjunctionConcept)*
 	;
 
 implicationConcept
 	:
-	disjunctionConcept ( '->' disjunctionConcept)?
+	disjunctionConcept ( '->' disjunctionConcept)*
 	;
 
 weirdConstantConcept
@@ -88,19 +88,19 @@ weirdConstantConcept
 
 equivalenceConcept
 	:
-	weirdConstantConcept ( '<->' weirdConstantConcept)?
+	weirdConstantConcept ( '<->' weirdConstantConcept)*
 	;
 
 existentialRestrictionConcept
 	:
-	('exists' role '.')? equivalenceConcept
+	('exists' role '.')* equivalenceConcept
 	;
 
 universalRestrictionConcept
 	:
-	('forall' role '.')? existentialRestrictionConcept
+	('forall' role '.')* existentialRestrictionConcept
 	;
-	
+
 role
 	:
 	emptyRole
@@ -118,37 +118,37 @@ basicRole
 	|
 	'(' role ')'
 	;
-	
+
 topRole
 	:
 	basicRole | 'top'
 	;
-	
+
 compositionRole
 	:
-	topRole (';' topRole)?
+	topRole (';' topRole)*
 	;
-	
+
 unionRole
 	:
-	compositionRole ('|' compositionRole)?
-	; 	
-	
-roleConverse
-	:
-	unionRole ('-')?
+	compositionRole ('|' compositionRole)*
 	;
-	
+
+converseRole
+	:
+	unionRole ('-')*
+	;
+
 weirdRole
 	:
-	roleConverse | 'weird' '(' roleConverse ',' individual ';' concept ')'
+	converseRole | 'weird' '(' converseRole ',' individual ';' concept ')'
 	;
-	
+
 weirdConstantRole
 	:
 	weirdRole | 'weirdConstant'
 	;
-	
+
 emptyRole
 	:
 	weirdConstantRole | 'empty' weirdConstantRole '.' concept
