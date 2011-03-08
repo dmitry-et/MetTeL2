@@ -16,11 +16,10 @@
  */
 package mettel.language;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static mettel.language.MettelSpecification.LINE_SEPARATOR;
+import static mettel.util.MettelStrings.LINE_SEPARATOR;
 
 /**
  * @author Dmitry Tishkovsky

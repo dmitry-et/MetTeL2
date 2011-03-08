@@ -14,60 +14,49 @@
  * You should have received a copy of the GNU General Public License
  * along with MetTeL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package mettel.language;
+package mettel.generator.antlr;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import static mettel.util.MettelStrings.LINE_SEPARATOR;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision$ $Date$
+ * @version $Revision: $ $Date: $
  *
  */
-public class MettelSpecification {
-
-	private String path = null;
-
-	private HashMap<String,MettelSyntax> syntaxTable = new HashMap<String,MettelSyntax>();
-
-	@SuppressWarnings("unused")
-	private MettelSpecification(){}
-
-	MettelSpecification(String path){
-		super();
-		this.path = path;
-	}
-
-	/**
-	 * @return the path
-	 */
-	String path() {
-		return path;
-	}
-
+public class MettelANTLRGrammar {
 
 	/**
 	 *
 	 */
-	public void toBuffer(StringBuilder buf){
-		buf.append("specification ");
-		buf.append(path);
-		buf.append(';');
-		buf.append(LINE_SEPARATOR);
-		for(MettelSyntax syn:syntaxTable.values()){
-			buf.append(LINE_SEPARATOR);
-			syn.toBuffer(buf);
-		}
+	private String name = null;
 
+	public MettelANTLRGrammar(String name){
+		this.name = name;
 	}
 
 	/**
-	 * @param syn
+	 *
 	 */
-	void addSyntax(MettelSyntax syn) {
-		syntaxTable.put(syn.name(), syn);
+	 private ArrayList<MettelANTLRRule> rules = new ArrayList<MettelANTLRRule>();
 
-	}
+	 /**
+	  *
+	  */
+	 void addRule(MettelANTLRRule rule){
+		 rules.add(rule);
+	 }
 
+	 void toStringBuilder(StringBuilder b){
+		 b.append("grammar ");
+		 b.append(name);
+		 b.append(';');
+		 b.append(LINE_SEPARATOR);
+
+		 for(MettelANTLRRule rule:rules){
+			 rule.toStringBuilder(b);
+			 b.append(LINE_SEPARATOR);
+		 }
+	 }
 }

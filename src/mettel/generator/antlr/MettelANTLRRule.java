@@ -14,60 +14,42 @@
  * You should have received a copy of the GNU General Public License
  * along with MetTeL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package mettel.language;
-
-import java.util.HashMap;
+package mettel.generator.antlr;
 
 import static mettel.util.MettelStrings.LINE_SEPARATOR;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision$ $Date$
+ * @version $Revision: $ $Date: $
  *
  */
-public class MettelSpecification {
-
-	private String path = null;
-
-	private HashMap<String,MettelSyntax> syntaxTable = new HashMap<String,MettelSyntax>();
-
-	@SuppressWarnings("unused")
-	private MettelSpecification(){}
-
-	MettelSpecification(String path){
-		super();
-		this.path = path;
-	}
-
-	/**
-	 * @return the path
-	 */
-	String path() {
-		return path;
-	}
-
+public class MettelANTLRRule {
 
 	/**
 	 *
 	 */
-	public void toBuffer(StringBuilder buf){
-		buf.append("specification ");
-		buf.append(path);
-		buf.append(';');
-		buf.append(LINE_SEPARATOR);
-		for(MettelSyntax syn:syntaxTable.values()){
-			buf.append(LINE_SEPARATOR);
-			syn.toBuffer(buf);
-		}
+	private String name = null;
 
+	MettelANTLRRule(String name){
+		this.name = name;
 	}
 
 	/**
-	 * @param syn
+	 * @param b
 	 */
-	void addSyntax(MettelSyntax syn) {
-		syntaxTable.put(syn.name(), syn);
+	public void toStringBuilder(StringBuilder b) {
+		b.append('\t');
+		b.append(name);
+		b.append(LINE_SEPARATOR);
+		b.append('\t');
+		b.append('\t');
+		b.append(':');
 
+
+
+		b.append('\t');
+		b.append('\t');
+		b.append(';');
 	}
 
 }
