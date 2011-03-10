@@ -69,6 +69,7 @@ class MettelANTLRHeader {
 	ib.appendEOL();
 	
 	for(String s:statements){
+	    ib.indent();
 	    ib.append(s);
 	    ib.appendEOL();
 	}
