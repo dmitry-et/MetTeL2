@@ -20,7 +20,7 @@ import mettel.util.MettelIndentedStringBuilder;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision: $ $Date: $
+ * @version $Revision$ $Date$
  *
  */
 public class MettelANTLRRule {

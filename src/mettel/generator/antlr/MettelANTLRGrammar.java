@@ -18,11 +18,13 @@ package mettel.generator.antlr;
 
 import java.util.ArrayList;
 
-import static mettel.util.MettelStrings.LINE_SEPARATOR;
+import mettel.util.MettelIndentedStringBuilder;
+
+import static mettel.util.MettelStrings.GRAMMAR;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision: $ $Date: $
+ * @version $Revision$ $Date$
  *
  */
 public class MettelANTLRGrammar {
@@ -51,16 +53,19 @@ public class MettelANTLRGrammar {
 	 private MettelANTLRGrammarOptions options = new MettelANTLRGrammarOptions();
 	 
 	 void toStringBuilder(StringBuilder b){
-		 b.append("grammar ");
-		 b.append(name);
-		 b.append(';');
-		 b.append(LINE_SEPARATOR);
+	         MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
+	     
+		 ib.append(GRAMMAR);
+		 ib.append(' ');
+		 ib.append(name);
+		 ib.append(';');
+		 ib.appendEOL();
 
-		 options.toStringBuilder(b);
+		 options.toStringBuilder(ib);
 		 
 		 for(MettelANTLRRule rule:rules){
-			 rule.toStringBuilder(b);
-			 b.append(LINE_SEPARATOR);
+			 rule.toStringBuilder(ib);
+			 ib.appendEOL();
 		 }
 	 }
 }

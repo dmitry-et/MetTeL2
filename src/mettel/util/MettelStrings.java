@@ -18,7 +18,7 @@ package mettel.util;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision: $ $Date: $
+ * @version $Revision$ $Date$
  *
  */
 public interface MettelStrings {
@@ -26,5 +26,6 @@ public interface MettelStrings {
 	final static String LINE_SEPARATOR = System.getProperty("line.separator");
 	final static String TAB = "\t";
 	final static String OPTIONS = "options";
+	final static String GRAMMAR = "grammar";
 
 }

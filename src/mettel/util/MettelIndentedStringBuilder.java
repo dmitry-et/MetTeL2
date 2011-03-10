@@ -21,7 +21,7 @@ import static mettel.util.MettelStrings.TAB;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision: $ $Date: $
+ * @version $Revision$ $Date$
  *
  */
 public final class MettelIndentedStringBuilder implements Appendable{
