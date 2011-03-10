@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 import mettel.util.MettelIndentedStringBuilder;
 
-import static mettel.util.MettelStrings.GRAMMAR;
+import static mettel.util.MettelStrings.GRAMMAR_STRING;
 
 /**
  * @author Dmitry Tishkovsky
@@ -52,16 +52,22 @@ public class MettelANTLRGrammar {
 
 	 private MettelANTLRGrammarOptions options = new MettelANTLRGrammarOptions();
 	 
+	 private MettelANTLRHeader header = new MettelANTLRHeader(MettelANTLRHeader.PARSER); 
+	 private MettelANTLRHeader lexerHeader = new MettelANTLRHeader(MettelANTLRHeader.LEXER); 
+	 
 	 void toStringBuilder(StringBuilder b){
 	         MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
 	     
-		 ib.append(GRAMMAR);
+		 ib.append(GRAMMAR_STRING);
 		 ib.append(' ');
 		 ib.append(name);
 		 ib.append(';');
 		 ib.appendEOL();
 
 		 options.toStringBuilder(ib);
+		 header.toStringBuilder(ib);
+		 lexerHeader.toStringBuilder(ib);
+		 
 		 
 		 for(MettelANTLRRule rule:rules){
 			 rule.toStringBuilder(ib);

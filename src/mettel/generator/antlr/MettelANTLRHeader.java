@@ -16,49 +16,65 @@
  */
 package mettel.generator.antlr;
 
+import java.util.ArrayList;
+
 import mettel.util.MettelIndentedStringBuilder;
 
-import static mettel.util.MettelStrings.OPTIONS_STRING;
+import static mettel.util.MettelStrings.HEADER_STRING;
+import static mettel.util.MettelStrings.LEXER_STRING;
+
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision$ $Date$
+ * @version $Revision: $ $Date: $
  *
  */
-class MettelANTLRGrammarOptions {
+class MettelANTLRHeader {
 
-    private int k = 1;
-    
     /**
      * 
      */
-    MettelANTLRGrammarOptions() {
-	super();
-	this.k = 1;
+    MettelANTLRHeader() {
+	this(PARSER);
     }
     
-    MettelANTLRGrammarOptions(int k) {
+    private int kind = PARSER;
+    final static int PARSER = 0;
+    final static int LEXER = 1;
+    
+    MettelANTLRHeader(int kind){
 	super();
-	this.k = k;
+	this.kind = kind;
     }
 
-    void toStringBuilder(MettelIndentedStringBuilder b) {
+    ArrayList<String> statements = new ArrayList<String>();
+    
+    void addStatement(String s){
+	statements.add(s);
+    }
+    
+    /**
+     * @param b
+     */
+    public void toStringBuilder(MettelIndentedStringBuilder b) {
 	MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
 	ib.indent();
-	ib.append(OPTIONS_STRING);
+	ib.append('@');
+	if(kind == LEXER){
+	    ib.append(LEXER_STRING);
+	    ib.append(':');
+	    ib.append(':');
+	}
+	ib.append(HEADER_STRING);
 	ib.append('{');
 	ib.appendEOL();
 	
-	MettelIndentedStringBuilder ibb = new MettelIndentedStringBuilder(ib);
-	ibb.indent();
-	ibb.append('k');
-	ibb.append('=');
-	ibb.append(String.valueOf(k));
-	ibb.append(';');
-	ibb.appendEOL();
+	for(String s:statements){
+	    ib.append(s);
+	    ib.appendEOL();
+	}
 	
 	ib.append('}');
 	ib.appendEOL();
     }
-    
-    
+
 }

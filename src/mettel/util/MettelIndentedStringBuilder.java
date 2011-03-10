@@ -17,7 +17,7 @@
 package mettel.util;
 
 import static mettel.util.MettelStrings.LINE_SEPARATOR;
-import static mettel.util.MettelStrings.TAB;
+import static mettel.util.MettelStrings.TAB_STRING;
 
 /**
  * @author Dmitry Tishkovsky
@@ -65,7 +65,7 @@ public final class MettelIndentedStringBuilder implements Appendable{
 		return b.append(LINE_SEPARATOR);
 	}
 
-	private String indentString = TAB;
+	private String indentString = TAB_STRING;
 
 //	public String indentString(){
 //		return indentString;
