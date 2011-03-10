@@ -48,12 +48,16 @@ public class MettelANTLRGrammar {
 		 rules.add(rule);
 	 }
 
+	 private MettelANTLRGrammarOptions options = new MettelANTLRGrammarOptions();
+	 
 	 void toStringBuilder(StringBuilder b){
 		 b.append("grammar ");
 		 b.append(name);
 		 b.append(';');
 		 b.append(LINE_SEPARATOR);
 
+		 options.toStringBuilder(b);
+		 
 		 for(MettelANTLRRule rule:rules){
 			 rule.toStringBuilder(b);
 			 b.append(LINE_SEPARATOR);

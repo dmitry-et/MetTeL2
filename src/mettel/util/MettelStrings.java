@@ -25,5 +25,6 @@ public interface MettelStrings {
 
 	final static String LINE_SEPARATOR = System.getProperty("line.separator");
 	final static String TAB = "\t";
+	final static String OPTIONS = "options";
 
 }
