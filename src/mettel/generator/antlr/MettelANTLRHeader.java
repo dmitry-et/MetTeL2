@@ -25,7 +25,7 @@ import static mettel.util.MettelStrings.LEXER_STRING;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision: $ $Date: $
+ * @version $Revision$ $Date$
  *
  */
 class MettelANTLRHeader {
