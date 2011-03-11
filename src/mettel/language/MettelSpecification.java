@@ -31,6 +31,10 @@ public class MettelSpecification {
 
 	private HashMap<String,MettelSyntax> syntaxTable = new HashMap<String,MettelSyntax>();
 
+	public MettelSyntax getSyntax(String name){
+		return syntaxTable.get(name);
+	}
+
 	@SuppressWarnings("unused")
 	private MettelSpecification(){}
 
@@ -42,7 +46,7 @@ public class MettelSpecification {
 	/**
 	 * @return the path
 	 */
-	String path() {
+	public String path() {
 		return path;
 	}
 

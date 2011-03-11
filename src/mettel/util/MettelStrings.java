@@ -29,5 +29,7 @@ public interface MettelStrings {
 	final static String GRAMMAR_STRING = "grammar";
 	final static String HEADER_STRING = "header";
 	final static String LEXER_STRING = "lexer";
+	final static String PACKAGE_STRING = "package";
+	final static String EOF_String = "EOF";
 
 }

@@ -17,6 +17,7 @@
 package mettel.language;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import static mettel.util.MettelStrings.LINE_SEPARATOR;
@@ -26,7 +27,7 @@ import static mettel.util.MettelStrings.LINE_SEPARATOR;
  * @version $Revision$ $Date$
  *
  */
-class MettelSyntax implements MettelBlock {
+public class MettelSyntax implements MettelBlock {
 
 	private String name = null;
 
@@ -198,6 +199,13 @@ class MettelSyntax implements MettelBlock {
 
 		buf.append(LINE_SEPARATOR);
 		buf.append('}');
+	}
+
+	/**
+	 * @return
+	 */
+	public Collection<MettelSort> sorts() {
+		return sorts.values();
 	}
 
 

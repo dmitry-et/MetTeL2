@@ -6,9 +6,21 @@ options{
 //	memoize=true;
 }
 
+individuals
+	:
+	individual*
+	EOF
+	;
+
 concepts
 	:
 	concept*
+	EOF
+	;
+
+roles
+	:
+	role*
 	EOF
 	;
 

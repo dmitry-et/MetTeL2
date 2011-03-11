@@ -21,7 +21,7 @@ package mettel.language;
  * @version $Revision$ $Date$
  *
  */
-class MettelSort implements MettelToken {
+public class MettelSort implements MettelToken {
 
 	private String name = null;
 	/**

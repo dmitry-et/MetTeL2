@@ -19,7 +19,6 @@ package mettel.generator.antlr;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StringWriter;
 import java.util.ArrayList;
 
 import mettel.util.MettelIndentedStringBuilder;
@@ -50,18 +49,26 @@ public class MettelANTLRGrammar {
 	 /**
 	  *
 	  */
-	 void addRule(MettelANTLRRule rule){
+	 public void addRule(MettelANTLRRule rule){
 		 rules.add(rule);
 	 }
 
 	 private MettelANTLRGrammarOptions options = new MettelANTLRGrammarOptions();
-	 
-	 private MettelANTLRHeader header = new MettelANTLRHeader(MettelANTLRHeader.PARSER); 
-	 private MettelANTLRHeader lexerHeader = new MettelANTLRHeader(MettelANTLRHeader.LEXER); 
-	 
+
+	 private MettelANTLRHeader header = new MettelANTLRHeader(MettelANTLRHeader.PARSER);
+	 private MettelANTLRHeader lexerHeader = new MettelANTLRHeader(MettelANTLRHeader.LEXER);
+
+	 public void addToHeader(String statement){
+		 header.addStatement(statement);
+	 }
+
+	 public void addToLexerHeader(String statement){
+		 header.addStatement(statement);
+	 }
+
 	 void toStringBuilder(StringBuilder b){
 	         MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
-	     
+
 		 ib.append(GRAMMAR_STRING);
 		 ib.append(' ');
 		 ib.append(name);
@@ -71,12 +78,12 @@ public class MettelANTLRGrammar {
 		 options.toStringBuilder(ib);
 		 header.toStringBuilder(ib);
 		 lexerHeader.toStringBuilder(ib);
-		 		 
+
 		 for(MettelANTLRRule rule:rules){
 			 rule.toStringBuilder(ib);
 			 ib.appendEOL();
 		 }
-		 
+
 		 BufferedReader r = new BufferedReader(
 			 new InputStreamReader(
 				 getClass().getResourceAsStream("resource.lexer")));
