@@ -72,7 +72,9 @@ public class MettelANTLRGrammarGenerator {
 	 */
 	private void processSort(MettelANTLRGrammar grammar, MettelSort sort) {
 
-		grammar.addRule(makeANTLREntryrule(sort));
+		grammar.addRule(makeANTLREntryRule(sort));
+		grammar.addRule(makeANTLRVariableRule(sort));
+		grammar.addRule(makeANTLRBasicRule(sort));
 
 	}
 
@@ -80,7 +82,25 @@ public class MettelANTLRGrammarGenerator {
 	 * @param sort
 	 * @return
 	 */
-	private MettelANTLRRule makeANTLREntryrule(MettelSort sort) {
+	private MettelANTLRRule makeANTLRBasicRule(MettelSort sort) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * @param sort
+	 * @return
+	 */
+	private MettelANTLRRule makeANTLRVariableRule(MettelSort sort) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * @param sort
+	 * @return
+	 */
+	private MettelANTLRRule makeANTLREntryRule(MettelSort sort) {
 		MettelANTLRRule rule = new MettelANTLRRule(sort.name()+'s');
 		rule.addStatement(sort.name());
 		rule.addStatement('*');
