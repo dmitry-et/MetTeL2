@@ -17,7 +17,10 @@
 package mettel.generator;
 
 import mettel.generator.antlr.MettelANTLRGrammar;
+import mettel.generator.antlr.MettelANTLROperator;
 import mettel.generator.antlr.MettelANTLRRule;
+import mettel.generator.antlr.MettelANTLRStringToken;
+import mettel.generator.antlr.MettelANTLRToken;
 import mettel.language.MettelSpecification;
 import mettel.language.MettelSyntax;
 import mettel.language.MettelSort;
@@ -72,7 +75,7 @@ public class MettelANTLRGrammarGenerator {
 	 */
 	private void processSort(MettelANTLRGrammar grammar, MettelSort sort) {
 
-		grammar.addRule(makeANTLREntryRule(sort));
+		grammar.addRule(makeANTLREntryRule(grammar,sort));
 		grammar.addRule(makeANTLRVariableRule(sort));
 		grammar.addRule(makeANTLRBasicRule(sort));
 
@@ -100,11 +103,11 @@ public class MettelANTLRGrammarGenerator {
 	 * @param sort
 	 * @return
 	 */
-	private MettelANTLRRule makeANTLREntryRule(MettelSort sort) {
-		MettelANTLRRule rule = new MettelANTLRRule(sort.name()+'s');
-		rule.addStatement(sort.name());
-		rule.addStatement('*');
-		rule.addStatement(EOF_STRING);
+	private MettelANTLRRule makeANTLREntryRule(MettelANTLRGrammar grammar, MettelSort sort) {
+		MettelANTLRRule rule = grammar.createRule(sort.name()+'s');
+		rule.addStatement(grammar.createRule(sort.name()));
+		rule.addStatement(MettelANTLROperator.STAR);
+		rule.addStatement(MettelANTLRStringToken.EOF);
 		return rule;
 	}
 

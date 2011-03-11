@@ -30,6 +30,6 @@ public interface MettelStrings {
 	final static String HEADER_STRING = "header";
 	final static String LEXER_STRING = "lexer";
 	final static String PACKAGE_STRING = "package";
-	final static String EOF_String = "EOF";
+	final static String EOF_STRING = "EOF";
 
 }

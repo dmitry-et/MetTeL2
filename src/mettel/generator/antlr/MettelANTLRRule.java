@@ -23,7 +23,7 @@ import mettel.util.MettelIndentedStringBuilder;
  * @version $Revision$ $Date$
  *
  */
-public class MettelANTLRRule {
+public class MettelANTLRRule implements MettelANTLRToken {
 
 	/**
 	 *
@@ -54,6 +54,14 @@ public class MettelANTLRRule {
 
 		b.indent();
 		b.append(';');
+	}
+
+	/**
+	 * @param createRule
+	 */
+	public void addStatement(MettelANTLRToken token) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

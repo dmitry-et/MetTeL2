@@ -14,41 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with MetTeL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package mettel.language;
+package mettel.generator.antlr;
 
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public class MettelSort implements MettelToken {
-
-	private String name = null;
-	/**
-	 *
-	 */
-	@SuppressWarnings("unused")
-	private	MettelSort() {};
-
-	MettelSort(String name){
-		super();
-		this.name = name;
-	}
-
-	/**
-	 * @returns the name
-	 */
-	public String name(){
-		return name;
-	}
-
-	/**
-	 * @param buf
-	 */
-	public void toBuffer(StringBuilder buf) {
-		//buf.append("sort ");
-		buf.append(name);
-		//buf.append(';');
-	}
+public interface MettelANTLRToken {
 
 }

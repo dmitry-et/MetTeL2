@@ -96,4 +96,13 @@ public class MettelANTLRGrammar {
 		    e.printStackTrace();
 		 }
 	 }
+
+	/**
+	 * @param name
+	 * @return
+	 */
+	public MettelANTLRRule createRule(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

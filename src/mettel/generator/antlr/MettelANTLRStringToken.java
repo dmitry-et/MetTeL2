@@ -14,41 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with MetTeL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package mettel.language;
+package mettel.generator.antlr;
 
+import static mettel.util.MettelStrings.EOF_STRING;
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public class MettelSort implements MettelToken {
+public class MettelANTLRStringToken implements MettelANTLRToken{
 
-	private String name = null;
+
+	public static final MettelANTLRStringToken EOF = new MettelANTLRStringToken(EOF_STRING);
+
+	private String token = null;
+
 	/**
 	 *
 	 */
-	@SuppressWarnings("unused")
-	private	MettelSort() {};
-
-	MettelSort(String name){
+	public MettelANTLRStringToken(String token) {
 		super();
-		this.name = name;
-	}
-
-	/**
-	 * @returns the name
-	 */
-	public String name(){
-		return name;
-	}
-
-	/**
-	 * @param buf
-	 */
-	public void toBuffer(StringBuilder buf) {
-		//buf.append("sort ");
-		buf.append(name);
-		//buf.append(';');
+		this.token  = token;
 	}
 
 }
