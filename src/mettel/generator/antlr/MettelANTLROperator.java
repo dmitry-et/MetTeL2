@@ -21,9 +21,9 @@ package mettel.generator.antlr;
  * @version $Revision$ $Date$
  *
  */
-public class MettelANTLROperator implements MettelANTLRToken{
+public class MettelANTLROperator implements MettelANTLRBlock{
 
-	public static final MettelANTLRToken STAR = new MettelANTLROperator('*');
+	public static final MettelANTLRBlock STAR = new MettelANTLROperator('*');
 
 	private char symbol = '*';
 	/**

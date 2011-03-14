@@ -22,7 +22,7 @@ import static mettel.util.MettelStrings.EOF_STRING;
  * @version $Revision$ $Date$
  *
  */
-public class MettelANTLRStringToken implements MettelANTLRToken{
+public class MettelANTLRStringToken implements MettelANTLRBlock{
 
 
 	public static final MettelANTLRStringToken EOF = new MettelANTLRStringToken(EOF_STRING);

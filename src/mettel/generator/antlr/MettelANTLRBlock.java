@@ -21,6 +21,6 @@ package mettel.generator.antlr;
  * @version $Revision$ $Date$
  *
  */
-public interface MettelANTLRToken {
+public interface MettelANTLRBlock {
 
 }

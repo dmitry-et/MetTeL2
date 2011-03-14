@@ -20,7 +20,7 @@ import mettel.generator.antlr.MettelANTLRGrammar;
 import mettel.generator.antlr.MettelANTLROperator;
 import mettel.generator.antlr.MettelANTLRRule;
 import mettel.generator.antlr.MettelANTLRStringToken;
-import mettel.generator.antlr.MettelANTLRToken;
+import mettel.generator.antlr.MettelANTLRBlock;
 import mettel.language.MettelSpecification;
 import mettel.language.MettelSyntax;
 import mettel.language.MettelSort;
