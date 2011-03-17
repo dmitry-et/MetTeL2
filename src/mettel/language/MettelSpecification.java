@@ -16,6 +16,7 @@
  */
 package mettel.language;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 import static mettel.util.MettelStrings.LINE_SEPARATOR;
@@ -72,6 +73,13 @@ public class MettelSpecification {
 	void addSyntax(MettelSyntax syn) {
 		syntaxTable.put(syn.name(), syn);
 
+	}
+
+	/**
+	 * @return
+	 */
+	public Collection<MettelSyntax> syntaxes() {
+		return syntaxTable.values();
 	}
 
 }

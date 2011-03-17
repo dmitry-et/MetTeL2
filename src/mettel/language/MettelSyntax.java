@@ -32,7 +32,7 @@ public class MettelSyntax implements MettelBlock {
 
 	private String name = null;
 
-	String name(){
+	public String name(){
 		return name;
 	}
 

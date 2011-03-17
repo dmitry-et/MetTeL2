@@ -16,6 +16,8 @@
  */
 package mettel.generator;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import mettel.generator.antlr.MettelANTLRGrammar;
@@ -44,7 +46,7 @@ import static mettel.util.MettelStrings.BASIC_STRING;
 public class MettelANTLRGrammarGenerator {
 
 	@SuppressWarnings("unused")
-	private MettelANTLRGrammarGenerator(){}
+	public MettelANTLRGrammarGenerator(){}
 
 	private MettelSpecification spec = null;
 	/**
@@ -93,13 +95,48 @@ public class MettelANTLRGrammarGenerator {
 
 			MettelToken[] tokens = (MettelToken[])s.tokens().toArray();
 			final int SIZE = tokens.length;
-			if(tokens[0] instanceof MettelStringLiteral){
+			if( (SIZE == 3) &&
+					  (tokens[0] instanceof MettelSort) &&
+					  (SORT_NAME.equals(((MettelSort)tokens[0]).name())) &&
+					  (tokens[1] instanceof MettelStringLiteral) &&
+					  (tokens[2] instanceof MettelSort) &&
+					  (SORT_NAME.equals(((MettelSort)tokens[2]).name()))
+					){
+
+				MettelANTLRMultiaryBNFStatement st = new MettelANTLRMultiaryBNFStatement();
+				st.addExpression(new MettelANTLRRuleReference(s0));
+
+				MettelANTLRMultiaryBNFStatement st1 = new MettelANTLRMultiaryBNFStatement();
+				st1.addExpression(new MettelANTLRToken(tokens[1].toString()));
+				st1.addExpression(new MettelANTLRRuleReference(s0));
+
+				MettelANTLRUnaryBNFStatement st0 = new MettelANTLRUnaryBNFStatement(
+						st1,MettelANTLRUnaryBNFStatement.STAR);
+				st.addExpression(st0);
+
+				grammar.addRule(new MettelANTLRRule(s1,st));
+
+			}else if( (SIZE == 2) &&
+					  (tokens[0] instanceof MettelSort) &&
+					  (SORT_NAME.equals(((MettelSort)tokens[0]).name())) &&
+					  (tokens[1] instanceof MettelStringLiteral)
+					){
+				MettelANTLRMultiaryBNFStatement st = new MettelANTLRMultiaryBNFStatement();
+				st.addExpression(new MettelANTLRRuleReference(s0));
+
+				MettelANTLRUnaryBNFStatement st0 = new MettelANTLRUnaryBNFStatement(
+						new MettelANTLRToken(tokens[1].toString()),MettelANTLRUnaryBNFStatement.STAR);
+				st.addExpression(st0);
+
+				grammar.addRule(new MettelANTLRRule(s1,st));
+
+			}else{ //if(tokens[0] instanceof MettelStringLiteral){
 				MettelANTLRMultiaryBNFStatement st = new MettelANTLRMultiaryBNFStatement(
 						MettelANTLRMultiaryBNFStatement.OR);
 				st.addExpression(new MettelANTLRRuleReference(s0));
 				MettelANTLRMultiaryBNFStatement st0 = new MettelANTLRMultiaryBNFStatement();
-				st0.addExpression(new MettelANTLRToken(tokens[0].toString()));
-				for(int i = 1; i < SIZE; i++){
+				//st0.addExpression(new MettelANTLRToken(tokens[0].toString()));
+				for(int i = 0; i < SIZE; i++){
 					if(tokens[i] instanceof MettelStringLiteral){
 						st0.addExpression(new MettelANTLRToken(tokens[i].toString()));
 					}else if(tokens[i] instanceof MettelSort){
@@ -112,9 +149,9 @@ public class MettelANTLRGrammarGenerator {
 					}
 				}
 				st.addExpression(st0);
-			}else{
-				//TODO fill
-			}
+
+				grammar.addRule(new MettelANTLRRule(s1,st));
+			}//TODO other alternatives
 			s0 = s1;
 		}
 
@@ -168,6 +205,17 @@ public class MettelANTLRGrammarGenerator {
 						new MettelANTLRRuleReference(NAME),MettelANTLRUnaryBNFStatement.STAR));
 		s.addExpression(MettelANTLRToken.EOF);
 		return new MettelANTLRRule(NAME+'s',s);
+	}
+
+	/**
+	 *
+	 */
+	public Collection<MettelANTLRGrammar> processSyntaxes() {
+		ArrayList<MettelANTLRGrammar> grammars = new ArrayList<MettelANTLRGrammar>();
+		for(MettelSyntax syn:spec.syntaxes()){
+			grammars.add(processSyntax(syn.name()));
+		}
+		return grammars;
 	}
 
 

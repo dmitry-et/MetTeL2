@@ -25,6 +25,8 @@ import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
 
+import mettel.generator.MettelANTLRGrammarGenerator;
+import mettel.generator.antlr.MettelANTLRGrammar;
 import mettel.language.MettelLexer;
 import mettel.language.MettelParser;
 import mettel.language.MettelSpecification;
@@ -89,9 +91,16 @@ public class MettelGenerator {
 
         	MettelSpecification spec = parser.specification();
 
+        	//StringBuilder buf = new StringBuilder();
+        	//spec.toBuffer(buf);
+        	//System.out.print(buf);
+
+        	MettelANTLRGrammarGenerator gen = new MettelANTLRGrammarGenerator(spec);
         	StringBuilder buf = new StringBuilder();
-        	spec.toBuffer(buf);
-        	System.out.print(buf);
+        	for(MettelANTLRGrammar g:gen.processSyntaxes()){
+        		g.toStringBuilder(buf);
+        	}
+        	out.print(buf);
 
         	System.exit(0);
         } catch(Exception e) {

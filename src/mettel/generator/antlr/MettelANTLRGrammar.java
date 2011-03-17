@@ -66,7 +66,7 @@ public class MettelANTLRGrammar {
 		 header.addStatement(statement);
 	 }
 
-	 void toStringBuilder(StringBuilder b){
+	 public void toStringBuilder(StringBuilder b){
 	         MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
 
 		 ib.append(GRAMMAR_STRING);
