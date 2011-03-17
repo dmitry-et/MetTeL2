@@ -17,13 +17,14 @@
 package mettel.language;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-class MettelBNFStatement{
+public class MettelBNFStatement{
 
 	/**
 	 *
@@ -45,6 +46,10 @@ class MettelBNFStatement{
 	 */
 	private ArrayList<MettelToken> tokens = new ArrayList<MettelToken>();
 
+	public List<MettelToken> tokens(){
+		return tokens;
+	}
+
 	/**
 	 *
 	 */
@@ -59,6 +64,10 @@ class MettelBNFStatement{
 		} else {
 			this.identifier = identifier;
 		}
+	}
+
+	public String identifier(){
+		return identifier;
 	}
 
 	/**

@@ -19,6 +19,7 @@ package mettel.language;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import static mettel.util.MettelStrings.LINE_SEPARATOR;
 
@@ -209,6 +210,14 @@ public class MettelSyntax implements MettelBlock {
 	 */
 	public Collection<MettelSort> sorts() {
 		return sorts.values();
+	}
+
+	/**
+	 * @param sort
+	 * @return
+	 */
+	public List<MettelBNFStatement> getBNFs(MettelSort sort) {
+		return bnfs.get(sort);
 	}
 
 

@@ -21,7 +21,7 @@ package mettel.language;
  * @version $Revision$ $Date$
  *
  */
-class MettelStringLiteral implements MettelToken {
+public class MettelStringLiteral implements MettelToken {
 
 	private String literal = null;
 

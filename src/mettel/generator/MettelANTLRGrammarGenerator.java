@@ -16,12 +16,18 @@
  */
 package mettel.generator;
 
+import java.util.List;
+
 import mettel.generator.antlr.MettelANTLRGrammar;
 import mettel.generator.antlr.MettelANTLRRule;
 import mettel.generator.antlr.MettelANTLRToken;
 import mettel.generator.antlr.MettelANTLRRuleReference;
 import mettel.generator.antlr.MettelANTLRUnaryBNFStatement;
 import mettel.generator.antlr.MettelANTLRMultiaryBNFStatement;
+
+import mettel.language.MettelStringLiteral;
+import mettel.language.MettelToken;
+import mettel.language.MettelBNFStatement;
 import mettel.language.MettelSpecification;
 import mettel.language.MettelSyntax;
 import mettel.language.MettelSort;
@@ -67,9 +73,51 @@ public class MettelANTLRGrammarGenerator {
 
 		for(MettelSort sort:syn.sorts()){
 			processSort(grammar,sort);
+			processBNFs(grammar,sort,syn.getBNFs(sort));
 		}
 
 		return grammar;
+	}
+
+	/**
+	 * @param grammar
+	 * @param sort
+	 */
+	private void processBNFs(MettelANTLRGrammar grammar, MettelSort sort, List<MettelBNFStatement> bnfs) {
+		final String SORT_NAME = sort.name();
+		String s0 = BASIC_STRING+SORT_NAME;
+		String s1 = null;
+		for(MettelBNFStatement s:bnfs){
+			String id = s.identifier();
+			s1 = SORT_NAME+id.substring(0, 0).toUpperCase()+id.substring(1);
+
+			MettelToken[] tokens = (MettelToken[])s.tokens().toArray();
+			final int SIZE = tokens.length;
+			if(tokens[0] instanceof MettelStringLiteral){
+				MettelANTLRMultiaryBNFStatement st = new MettelANTLRMultiaryBNFStatement(
+						MettelANTLRMultiaryBNFStatement.OR);
+				st.addExpression(new MettelANTLRRuleReference(s0));
+				MettelANTLRMultiaryBNFStatement st0 = new MettelANTLRMultiaryBNFStatement();
+				st0.addExpression(new MettelANTLRToken(tokens[0].toString()));
+				for(int i = 1; i < SIZE; i++){
+					if(tokens[i] instanceof MettelStringLiteral){
+						st0.addExpression(new MettelANTLRToken(tokens[i].toString()));
+					}else if(tokens[i] instanceof MettelSort){
+						String name = ((MettelSort)tokens[i]).name();
+						if(SORT_NAME.equals(name)){
+							st0.addExpression(new MettelANTLRRuleReference(s0));
+						}else{
+							st0.addExpression(new MettelANTLRRuleReference(tokens[i].toString()));
+						}
+					}
+				}
+				st.addExpression(st0);
+			}else{
+				//TODO fill
+			}
+			s0 = s1;
+		}
+
 	}
 
 	/**
