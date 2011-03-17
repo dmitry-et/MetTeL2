@@ -16,11 +16,37 @@
  */
 package mettel.generator.antlr;
 
+import mettel.util.MettelIndentedStringBuilder;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public interface MettelANTLRBlock {
+abstract class MettelANTLRExpression {
+
+	private MettelANTLRJavaBlock blockBefore = null, blockAfter = null;
+
+//	abstract void toStringBuilder(StringBuilder b);
+
+	void appendJavaToPrefix(CharSequence csq){
+		blockBefore.append(csq);
+	}
+
+	void appendJavaToPostfix(CharSequence csq){
+		blockAfter.append(csq);
+	}
+
+	void prefixOutput(MettelIndentedStringBuilder ib){
+		ib.appendLine('(');
+		if(blockBefore != null) blockBefore.toStringBuilder(ib);
+	}
+
+	void postfixOutput(MettelIndentedStringBuilder ib){
+		if(blockAfter != null) blockAfter.toStringBuilder(ib);
+		ib.appendLine(')');
+	}
+
+	abstract void toStringBuilder(MettelIndentedStringBuilder b);
 
 }

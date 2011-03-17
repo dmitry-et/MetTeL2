@@ -16,22 +16,38 @@
  */
 package mettel.generator.antlr;
 
+import java.util.ArrayList;
+
+import mettel.util.MettelIndentedStringBuilder;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public class MettelANTLROperator implements MettelANTLRBlock{
+class MettelANTLRJavaBlock {
 
-	public static final MettelANTLRBlock STAR = new MettelANTLROperator('*');
+	private ArrayList<CharSequence> statements = new ArrayList<CharSequence>();
 
-	private char symbol = '*';
+	void append(CharSequence statement){
+		statements.add(statement);
+	}
 	/**
 	 *
 	 */
-	private MettelANTLROperator(char c) {
+	MettelANTLRJavaBlock() {
 		super();
-		this.symbol = c;
+	}
+	/**
+	 * @param ib
+	 */
+	public void toStringBuilder(MettelIndentedStringBuilder b) {
+		MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
+		ib.appendLine('{');
+		for(CharSequence s:statements){
+			ib.appendLine(s);
+		}
+		ib.appendLine('}');
 	}
 
 }

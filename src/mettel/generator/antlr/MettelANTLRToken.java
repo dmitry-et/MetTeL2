@@ -17,24 +17,39 @@
 package mettel.generator.antlr;
 
 import static mettel.util.MettelStrings.EOF_STRING;
+import static mettel.util.MettelStrings.ID_STRING;
+import mettel.util.MettelIndentedStringBuilder;
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public class MettelANTLRStringToken implements MettelANTLRBlock{
+public class MettelANTLRToken extends MettelANTLRExpression{
 
 
-	public static final MettelANTLRStringToken EOF = new MettelANTLRStringToken(EOF_STRING);
+	public static final MettelANTLRToken EOF = new MettelANTLRToken(EOF_STRING);
+	public static final MettelANTLRToken ID = new MettelANTLRToken(ID_STRING);
 
 	private String token = null;
 
 	/**
 	 *
 	 */
-	public MettelANTLRStringToken(String token) {
+	public MettelANTLRToken(String token) {
 		super();
 		this.token  = token;
+	}
+
+	/* (non-Javadoc)
+	 * @see mettel.generator.antlr.MettelANTLRExpression#toStringBuilder(mettel.util.MettelIndentedStringBuilder)
+	 */
+	@Override
+	void toStringBuilder(MettelIndentedStringBuilder b) {
+		MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
+		prefixOutput(ib);
+		ib.appendLine(token);
+		postfixOutput(ib);
+
 	}
 
 }

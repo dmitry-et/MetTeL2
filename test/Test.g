@@ -8,8 +8,9 @@ options{
 
 individuals
 	:
-	individual*
-	EOF
+	(individual)*
+	{} {}
+	(EOF)
 	;
 
 concepts

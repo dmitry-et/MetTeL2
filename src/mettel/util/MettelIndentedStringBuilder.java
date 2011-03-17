@@ -112,4 +112,16 @@ public final class MettelIndentedStringBuilder implements Appendable{
 	public StringBuilder append(char c) {
 		return b.append(c);
 	}
+
+	public StringBuilder appendLine(CharSequence csq) {
+		indent();
+		append(csq);
+		return appendEOL();
+	}
+
+	public StringBuilder appendLine(char c) {
+			indent();
+			append(c);
+			return appendEOL();
+	}
 }

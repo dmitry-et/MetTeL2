@@ -16,8 +16,6 @@
  */
 package mettel.generator.antlr;
 
-import java.util.ArrayList;
-
 import mettel.util.MettelIndentedStringBuilder;
 
 /**
@@ -25,44 +23,36 @@ import mettel.util.MettelIndentedStringBuilder;
  * @version $Revision$ $Date$
  *
  */
-public class MettelANTLRRule {
+class MettelANTLRBinaryBNFStatement extends MettelANTLRExpression {
+
+	public static char OR = '|';
+
+	private char operator = OR;
+
+	private MettelANTLRExpression left = null, right = null;
+
+	@SuppressWarnings("unused")
+	private MettelANTLRBinaryBNFStatement(){}
 
 	/**
 	 *
 	 */
-	private String name = null;
-
-	private ArrayList<MettelANTLRExpression> expressions = new ArrayList<MettelANTLRExpression>();
-
-	public MettelANTLRRule(String name){
-		this.name = name;
+	MettelANTLRBinaryBNFStatement(MettelANTLRExpression left,MettelANTLRExpression right) {
+		super();
+		this.left = left;
+		this.right = right;
 	}
 
-	/**
-	 * @param b
+	/* (non-Javadoc)
+	 * @see mettel.generator.antlr.MettelANTLRExpression#toStringBuilder(mettel.util.MettelIndentedStringBuilder)
 	 */
-	void toStringBuilder(StringBuilder b) {
-		toStringBuilder(new MettelIndentedStringBuilder(b));
+	@Override
+	void toStringBuilder(MettelIndentedStringBuilder b) {
+		MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
+		prefixOutput(ib);
+		left.toStringBuilder(ib);
+		ib.appendLine(operator);
+		right.toStringBuilder(ib);
+		postfixOutput(ib);
 	}
-
-	void toStringBuilder(MettelIndentedStringBuilder ib){
-		MettelIndentedStringBuilder b = new MettelIndentedStringBuilder(ib);
-		b.appendLine(name);
-		b = new MettelIndentedStringBuilder(b);
-		b.appendLine(':');
-
-		for(MettelANTLRExpression e:expressions){
-			e.toStringBuilder(b);
-		}
-
-		b.appendLine(';');
-	}
-
-	/**
-	 * @param createRule
-	 */
-	public void addStatement(MettelANTLRExpression e) {
-		expressions.add(e);
-	}
-
 }

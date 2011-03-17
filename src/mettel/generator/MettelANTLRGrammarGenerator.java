@@ -17,15 +17,17 @@
 package mettel.generator;
 
 import mettel.generator.antlr.MettelANTLRGrammar;
-import mettel.generator.antlr.MettelANTLROperator;
 import mettel.generator.antlr.MettelANTLRRule;
-import mettel.generator.antlr.MettelANTLRStringToken;
-import mettel.generator.antlr.MettelANTLRBlock;
+import mettel.generator.antlr.MettelANTLRToken;
+import mettel.generator.antlr.MettelANTLRRuleReference;
+import mettel.generator.antlr.MettelANTLRUnaryBNFStatement;
 import mettel.language.MettelSpecification;
 import mettel.language.MettelSyntax;
 import mettel.language.MettelSort;
 
 import static mettel.util.MettelStrings.PACKAGE_STRING;
+import static mettel.util.MettelStrings.VARIABLE_STRING;
+import static mettel.util.MettelStrings.BASIC_STRING;
 
 /**
  * @author Dmitry Tishkovsky
@@ -86,8 +88,12 @@ public class MettelANTLRGrammarGenerator {
 	 * @return
 	 */
 	private MettelANTLRRule makeANTLRBasicRule(MettelSort sort) {
-		// TODO Auto-generated method stub
-		return null;
+		MettelANTLRRule rule = new MettelANTLRRule(BASIC_STRING+sort.name());
+		rule.addStatement(
+				new MettelANTLRBinaryBNFStatement(
+						new MettelANTLRRoleReference(sort.name()+VARIABLE_STRING),
+						new );
+		return rule;
 	}
 
 	/**
@@ -95,8 +101,9 @@ public class MettelANTLRGrammarGenerator {
 	 * @return
 	 */
 	private MettelANTLRRule makeANTLRVariableRule(MettelSort sort) {
-		// TODO Auto-generated method stub
-		return null;
+		MettelANTLRRule rule = new MettelANTLRRule(sort.name()+VARIABLE_STRING);
+		rule.addStatement(MettelANTLRToken.ID);
+		return rule;
 	}
 
 	/**
@@ -104,10 +111,11 @@ public class MettelANTLRGrammarGenerator {
 	 * @return
 	 */
 	private MettelANTLRRule makeANTLREntryRule(MettelANTLRGrammar grammar, MettelSort sort) {
-		MettelANTLRRule rule = grammar.createRule(sort.name()+'s');
-		rule.addStatement(grammar.createRule(sort.name()));
-		rule.addStatement(MettelANTLROperator.STAR);
-		rule.addStatement(MettelANTLRStringToken.EOF);
+		MettelANTLRRule rule = new MettelANTLRRule(sort.name()+'s');
+		rule.addStatement(
+				new MettelANTLRUnaryBNFStatement(
+						new MettelANTLRRuleReference(sort.name()),MettelANTLRUnaryBNFStatement.STAR));
+		rule.addStatement(MettelANTLRToken.EOF);
 		return rule;
 	}
 

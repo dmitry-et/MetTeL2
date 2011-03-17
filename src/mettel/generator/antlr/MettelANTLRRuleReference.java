@@ -14,24 +14,38 @@
  * You should have received a copy of the GNU General Public License
  * along with MetTeL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package mettel.util;
+package mettel.generator.antlr;
+
+import mettel.util.MettelIndentedStringBuilder;
 
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public interface MettelStrings {
+public class MettelANTLRRuleReference extends MettelANTLRExpression {
 
-	final static String LINE_SEPARATOR = System.getProperty("line.separator");
-	final static String TAB_STRING = "\t";
-	final static String OPTIONS_STRING = "options";
-	final static String GRAMMAR_STRING = "grammar";
-	final static String HEADER_STRING = "header";
-	final static String LEXER_STRING = "lexer";
-	final static String PACKAGE_STRING = "package";
-	final static String EOF_STRING = "EOF";
-	final static String ID_STRING = "ID";
-	final static String VARIABLE_STRING = "Variable";
-	final static String BASIC_STRING = "basic";
+	private String name = null;
+
+	@SuppressWarnings("unused")
+	private MettelANTLRRuleReference(){}
+
+	/**
+	 *
+	 */
+	public MettelANTLRRuleReference(String name) {
+		super();
+		this.name = name;
+	}
+
+	/* (non-Javadoc)
+	 * @see mettel.generator.antlr.MettelANTLRExpression#toStringBuilder(mettel.util.MettelIndentedStringBuilder)
+	 */
+	@Override
+	void toStringBuilder(MettelIndentedStringBuilder b) {
+		MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
+		prefixOutput(ib);
+		ib.appendLine(name);
+		postfixOutput(ib);
+	}
 }
