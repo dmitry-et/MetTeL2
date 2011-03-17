@@ -21,6 +21,7 @@ import mettel.generator.antlr.MettelANTLRRule;
 import mettel.generator.antlr.MettelANTLRToken;
 import mettel.generator.antlr.MettelANTLRRuleReference;
 import mettel.generator.antlr.MettelANTLRUnaryBNFStatement;
+import mettel.generator.antlr.MettelANTLRMultiaryBNFStatement;
 import mettel.language.MettelSpecification;
 import mettel.language.MettelSyntax;
 import mettel.language.MettelSort;
@@ -77,7 +78,7 @@ public class MettelANTLRGrammarGenerator {
 	 */
 	private void processSort(MettelANTLRGrammar grammar, MettelSort sort) {
 
-		grammar.addRule(makeANTLREntryRule(grammar,sort));
+		grammar.addRule(makeANTLREntryRule(sort));
 		grammar.addRule(makeANTLRVariableRule(sort));
 		grammar.addRule(makeANTLRBasicRule(sort));
 
@@ -88,12 +89,16 @@ public class MettelANTLRGrammarGenerator {
 	 * @return
 	 */
 	private MettelANTLRRule makeANTLRBasicRule(MettelSort sort) {
-		MettelANTLRRule rule = new MettelANTLRRule(BASIC_STRING+sort.name());
-		rule.addStatement(
-				new MettelANTLRBinaryBNFStatement(
-						new MettelANTLRRoleReference(sort.name()+VARIABLE_STRING),
-						new );
-		return rule;
+		final String NAME =sort.name();
+		MettelANTLRMultiaryBNFStatement s = new MettelANTLRMultiaryBNFStatement(
+				MettelANTLRMultiaryBNFStatement.OR);
+		s.addExpression(new MettelANTLRRuleReference(NAME+VARIABLE_STRING));
+		MettelANTLRMultiaryBNFStatement s0 = new MettelANTLRMultiaryBNFStatement();
+		s0.addExpression(MettelANTLRToken.LBRACE);
+		s0.addExpression(new MettelANTLRRuleReference(NAME));
+		s0.addExpression(MettelANTLRToken.RBRACE);
+		s.addExpression(s0);
+		return new MettelANTLRRule(BASIC_STRING+NAME,s);
 	}
 
 	/**
@@ -101,22 +106,20 @@ public class MettelANTLRGrammarGenerator {
 	 * @return
 	 */
 	private MettelANTLRRule makeANTLRVariableRule(MettelSort sort) {
-		MettelANTLRRule rule = new MettelANTLRRule(sort.name()+VARIABLE_STRING);
-		rule.addStatement(MettelANTLRToken.ID);
-		return rule;
+		return new MettelANTLRRule(sort.name()+VARIABLE_STRING,MettelANTLRToken.ID);
 	}
 
 	/**
 	 * @param sort
 	 * @return
 	 */
-	private MettelANTLRRule makeANTLREntryRule(MettelANTLRGrammar grammar, MettelSort sort) {
-		MettelANTLRRule rule = new MettelANTLRRule(sort.name()+'s');
-		rule.addStatement(
-				new MettelANTLRUnaryBNFStatement(
-						new MettelANTLRRuleReference(sort.name()),MettelANTLRUnaryBNFStatement.STAR));
-		rule.addStatement(MettelANTLRToken.EOF);
-		return rule;
+	private MettelANTLRRule makeANTLREntryRule(MettelSort sort) {
+		final String NAME = sort.name();
+		MettelANTLRMultiaryBNFStatement s = new MettelANTLRMultiaryBNFStatement();
+		s.addExpression(new MettelANTLRUnaryBNFStatement(
+						new MettelANTLRRuleReference(NAME),MettelANTLRUnaryBNFStatement.STAR));
+		s.addExpression(MettelANTLRToken.EOF);
+		return new MettelANTLRRule(NAME+'s',s);
 	}
 
 

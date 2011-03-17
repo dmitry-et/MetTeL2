@@ -34,4 +34,7 @@ public interface MettelStrings {
 	final static String ID_STRING = "ID";
 	final static String VARIABLE_STRING = "Variable";
 	final static String BASIC_STRING = "basic";
+	final static String LBRACE_STRING = "'('";
+	final static String RBRACE_STRING = "')'";
+
 }

@@ -16,8 +16,6 @@
  */
 package mettel.generator.antlr;
 
-import java.util.ArrayList;
-
 import mettel.util.MettelIndentedStringBuilder;
 
 /**
@@ -32,10 +30,12 @@ public class MettelANTLRRule {
 	 */
 	private String name = null;
 
-	private ArrayList<MettelANTLRExpression> expressions = new ArrayList<MettelANTLRExpression>();
+	private MettelANTLRExpression e = null;
 
-	public MettelANTLRRule(String name){
+	public MettelANTLRRule(String name, MettelANTLRExpression e){
+		super();
 		this.name = name;
+		this.e = e;
 	}
 
 	/**
@@ -50,19 +50,7 @@ public class MettelANTLRRule {
 		b.appendLine(name);
 		b = new MettelIndentedStringBuilder(b);
 		b.appendLine(':');
-
-		for(MettelANTLRExpression e:expressions){
-			e.toStringBuilder(b);
-		}
-
+		e.toStringBuilder(b);
 		b.appendLine(';');
 	}
-
-	/**
-	 * @param createRule
-	 */
-	public void addStatement(MettelANTLRExpression e) {
-		expressions.add(e);
-	}
-
 }

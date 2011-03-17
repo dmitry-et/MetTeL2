@@ -16,6 +16,8 @@
  */
 package mettel.generator.antlr;
 
+import java.util.ArrayList;
+
 import mettel.util.MettelIndentedStringBuilder;
 
 /**
@@ -23,24 +25,29 @@ import mettel.util.MettelIndentedStringBuilder;
  * @version $Revision$ $Date$
  *
  */
-class MettelANTLRBinaryBNFStatement extends MettelANTLRExpression {
+public class MettelANTLRMultiaryBNFStatement extends MettelANTLRExpression {
 
 	public static char OR = '|';
+	private static char  SEQ = ';';
 
-	private char operator = OR;
+	private char operator = SEQ;
 
-	private MettelANTLRExpression left = null, right = null;
+	private ArrayList<MettelANTLRExpression> expressions = new ArrayList<MettelANTLRExpression>();
 
-	@SuppressWarnings("unused")
-	private MettelANTLRBinaryBNFStatement(){}
+	public MettelANTLRMultiaryBNFStatement(){
+		super();
+	}
+
+	public MettelANTLRMultiaryBNFStatement(char operator){
+		super();
+		this.operator = operator;
+	}
 
 	/**
 	 *
 	 */
-	MettelANTLRBinaryBNFStatement(MettelANTLRExpression left,MettelANTLRExpression right) {
-		super();
-		this.left = left;
-		this.right = right;
+	public void addExpression(MettelANTLRExpression e){
+		expressions.add(e);
 	}
 
 	/* (non-Javadoc)
@@ -50,9 +57,15 @@ class MettelANTLRBinaryBNFStatement extends MettelANTLRExpression {
 	void toStringBuilder(MettelIndentedStringBuilder b) {
 		MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
 		prefixOutput(ib);
-		left.toStringBuilder(ib);
-		ib.appendLine(operator);
-		right.toStringBuilder(ib);
+		MettelANTLRExpression[] es = (MettelANTLRExpression[])expressions.toArray();
+		final int SIZE = es.length;
+		if(SIZE > 0){
+			es[0].toStringBuilder(ib);
+			for(int i = 1; i < SIZE; i++){
+				if(i < SIZE)ib.appendLine(operator);
+				es[i].toStringBuilder(ib);
+			}
+		}
 		postfixOutput(ib);
 	}
 }

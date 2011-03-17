@@ -18,6 +18,8 @@ package mettel.generator.antlr;
 
 import static mettel.util.MettelStrings.EOF_STRING;
 import static mettel.util.MettelStrings.ID_STRING;
+import static mettel.util.MettelStrings.LBRACE_STRING;
+import static mettel.util.MettelStrings.RBRACE_STRING;
 import mettel.util.MettelIndentedStringBuilder;
 /**
  * @author Dmitry Tishkovsky
@@ -29,6 +31,8 @@ public class MettelANTLRToken extends MettelANTLRExpression{
 
 	public static final MettelANTLRToken EOF = new MettelANTLRToken(EOF_STRING);
 	public static final MettelANTLRToken ID = new MettelANTLRToken(ID_STRING);
+	public static final MettelANTLRToken LBRACE = new MettelANTLRToken(LBRACE_STRING);
+	public static final MettelANTLRToken RBRACE = new MettelANTLRToken(RBRACE_STRING);
 
 	private String token = null;
 
