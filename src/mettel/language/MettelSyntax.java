@@ -85,7 +85,10 @@ public class MettelSyntax implements MettelBlock {
 	boolean addSort(String sortName) {
 		MettelSort sort = sorts.get(sortName);
 		if(sort != null) return false;
-		sorts.put(sortName, new MettelSort(sortName));
+		final MettelSort SORT = new MettelSort(sortName);
+		sorts.put(sortName, SORT);
+		final ArrayList<MettelBNFStatement> BNFS = new ArrayList<MettelBNFStatement>();
+		bnfs.put(SORT,BNFS);
 		return true;
 	}
 
@@ -136,10 +139,10 @@ public class MettelSyntax implements MettelBlock {
 	void addBNF(MettelSort sort,MettelBNFStatement statement) {
 		if(statement == null) return;
 		ArrayList<MettelBNFStatement> statements = bnfs.get(sort);
-		if(statements == null){
-			statements = new ArrayList<MettelBNFStatement>();
+//		if(statements == null){
+//			statements = new ArrayList<MettelBNFStatement>();
 			bnfs.put(sort,statements);
-		}
+//		}
 		statements.add(statement);
 	}
 
