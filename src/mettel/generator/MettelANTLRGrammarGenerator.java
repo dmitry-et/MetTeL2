@@ -46,7 +46,7 @@ import static mettel.util.MettelStrings.BASIC_STRING;
 public class MettelANTLRGrammarGenerator {
 
 	@SuppressWarnings("unused")
-	public MettelANTLRGrammarGenerator(){}
+	private MettelANTLRGrammarGenerator(){}
 
 	private MettelSpecification spec = null;
 	/**
