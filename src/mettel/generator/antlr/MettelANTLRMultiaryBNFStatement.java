@@ -57,12 +57,12 @@ public class MettelANTLRMultiaryBNFStatement extends MettelANTLRExpression {
 	void toStringBuilder(MettelIndentedStringBuilder b) {
 		MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
 		prefixOutput(ib);
-		MettelANTLRExpression[] es = (MettelANTLRExpression[]) expressions.toArray();
+		MettelANTLRExpression[] es = expressions.toArray(new MettelANTLRExpression[0]);
 		final int SIZE = es.length;
 		if(SIZE > 0){
 			es[0].toStringBuilder(ib);
 			for(int i = 1; i < SIZE; i++){
-				if(i < SIZE)ib.appendLine(operator);
+				if(i < SIZE && (operator!=SEQ)) ib.appendLine(operator);
 				es[i].toStringBuilder(ib);
 			}
 		}

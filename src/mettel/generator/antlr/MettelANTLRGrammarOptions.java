@@ -27,15 +27,15 @@ import static mettel.util.MettelStrings.OPTIONS_STRING;
 class MettelANTLRGrammarOptions {
 
     private int k = 1;
-    
+
     /**
-     * 
+     *
      */
     MettelANTLRGrammarOptions() {
 	super();
 	this.k = 1;
     }
-    
+
     MettelANTLRGrammarOptions(int k) {
 	super();
 	this.k = k;
@@ -47,7 +47,7 @@ class MettelANTLRGrammarOptions {
 	ib.append(OPTIONS_STRING);
 	ib.append('{');
 	ib.appendEOL();
-	
+
 	MettelIndentedStringBuilder ibb = new MettelIndentedStringBuilder(ib);
 	ibb.indent();
 	ibb.append('k');
@@ -55,10 +55,10 @@ class MettelANTLRGrammarOptions {
 	ibb.append(String.valueOf(k));
 	ibb.append(';');
 	ibb.appendEOL();
-	
+
 	ib.append('}');
 	ib.appendEOL();
     }
-    
-    
+
+
 }

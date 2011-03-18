@@ -69,7 +69,7 @@ public class MettelANTLRGrammarGenerator {
 		if(syn == null) return null;
 
 		MettelANTLRGrammar grammar = new MettelANTLRGrammar(name);
-		String s = PACKAGE_STRING+' '+spec.path();
+		String s = PACKAGE_STRING+' '+spec.path()+';';
 		grammar.addToHeader(s);
 		grammar.addToLexerHeader(s);
 
@@ -91,9 +91,9 @@ public class MettelANTLRGrammarGenerator {
 		String s1 = null;
 		for(MettelBNFStatement s:bnfs){
 			String id = s.identifier();
-			s1 = SORT_NAME+id.substring(0, 0).toUpperCase()+id.substring(1);
+			s1 = SORT_NAME+id.substring(0, 1).toUpperCase()+id.substring(1);
 
-			MettelToken[] tokens = (MettelToken[])s.tokens().toArray();
+			MettelToken[] tokens = s.tokens().toArray(new MettelToken[0]);
 			final int SIZE = tokens.length;
 			if( (SIZE == 3) &&
 					  (tokens[0] instanceof MettelSort) &&

@@ -41,4 +41,8 @@ public class MettelStringLiteral implements MettelToken {
 		//buf.append('"');
 	}
 
+	public String toString(){
+		return literal;
+	}
+
 }

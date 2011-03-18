@@ -31,33 +31,32 @@ import static mettel.util.MettelStrings.LEXER_STRING;
 class MettelANTLRHeader {
 
     /**
-     * 
+     *
      */
     MettelANTLRHeader() {
 	this(PARSER);
     }
-    
+
     private int kind = PARSER;
     final static int PARSER = 0;
     final static int LEXER = 1;
-    
+
     MettelANTLRHeader(int kind){
 	super();
 	this.kind = kind;
     }
 
     ArrayList<String> statements = new ArrayList<String>();
-    
+
     void addStatement(String s){
 	statements.add(s);
     }
-    
+
     /**
      * @param b
      */
     public void toStringBuilder(MettelIndentedStringBuilder b) {
 	MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
-	ib.indent();
 	ib.append('@');
 	if(kind == LEXER){
 	    ib.append(LEXER_STRING);
@@ -67,15 +66,13 @@ class MettelANTLRHeader {
 	ib.append(HEADER_STRING);
 	ib.append('{');
 	ib.appendEOL();
-	
+
 	for(String s:statements){
-	    ib.indent();
-	    ib.append(s);
-	    ib.appendEOL();
+	    ib.appendLine(s);
 	}
-	
+
 	ib.append('}');
 	ib.appendEOL();
-    }
+	}
 
 }

@@ -51,4 +51,8 @@ public class MettelSort implements MettelToken {
 		//buf.append(';');
 	}
 
+	public String toString(){
+		return name;
+	}
+
 }

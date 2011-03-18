@@ -24,7 +24,7 @@ package mettel.util;
 public interface MettelStrings {
 
 	final static String LINE_SEPARATOR = System.getProperty("line.separator");
-	final static String TAB_STRING = "\t";
+	final static String TAB_STRING = " ";
 	final static String OPTIONS_STRING = "options";
 	final static String GRAMMAR_STRING = "grammar";
 	final static String HEADER_STRING = "header";
