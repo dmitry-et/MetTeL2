@@ -87,7 +87,7 @@ public class MettelANTLRGrammarGenerator {
 	 */
 	private void processBNFs(MettelANTLRGrammar grammar, MettelSort sort, List<MettelBNFStatement> bnfs) {
 		final String SORT_NAME = sort.name();
-		String s0 = BASIC_STRING+SORT_NAME;
+		String s0 = BASIC_STRING+SORT_NAME.substring(0,1).toUpperCase()+SORT_NAME.substring(1);
 		String s1 = null;
 		for(MettelBNFStatement s:bnfs){
 			String id = s.identifier();
@@ -184,7 +184,7 @@ public class MettelANTLRGrammarGenerator {
 		s0.addExpression(new MettelANTLRRuleReference(NAME));
 		s0.addExpression(MettelANTLRToken.RBRACE);
 		s.addExpression(s0);
-		return new MettelANTLRRule(BASIC_STRING+NAME,s);
+		return new MettelANTLRRule(BASIC_STRING+NAME.substring(0, 1).toUpperCase()+NAME.substring(1),s);
 	}
 
 	/**
