@@ -10,18 +10,18 @@ syntax ALCO{
     concept	negation = '~' concept;
 	concept	conjunction = concept '&' concept;
 	concept	disjunction = concept '|' concept;
-	concept	implication = concept "->" concept;
-	concept	equivalence = concept "<->" concept;
-	concept	existentialRestriction = "exists"
+	concept	implication = concept '->' concept;
+	concept	equivalence = concept '<->' concept;
+	concept	existentialRestriction = 'exists'
 									 role '.'
 									 concept;
-	concept universalRestriction = "forall"
+	concept universalRestriction = 'forall'
 									 role '.'
 									 concept;
-	role composition = role '.' role;
+	role composition = role ';' role;
 	role union = role '|' role;
 	role converse = role '-';
-	role weirdRole = "weird" '(' role ',' individual ';' concept ')';
-	role = "empty" role '.' concept;
+	role weirdRole = 'weird' '(' role ',' individual ';' concept ')';
+	role = 'empty' role '.' concept;
 
 }

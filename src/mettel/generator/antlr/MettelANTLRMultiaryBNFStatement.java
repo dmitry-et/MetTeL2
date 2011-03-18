@@ -54,18 +54,32 @@ public class MettelANTLRMultiaryBNFStatement extends MettelANTLRExpression {
 	 * @see mettel.generator.antlr.MettelANTLRExpression#toStringBuilder(mettel.util.MettelIndentedStringBuilder)
 	 */
 	@Override
-	void toStringBuilder(MettelIndentedStringBuilder b) {
+	void toStringBuilder0(MettelIndentedStringBuilder b) {
 		MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
-		prefixOutput(ib);
+		//prefixOutput(b);
 		MettelANTLRExpression[] es = expressions.toArray(new MettelANTLRExpression[0]);
 		final int SIZE = es.length;
 		if(SIZE > 0){
+			if(SIZE>1){
+				ib.appendEOL();
+				ib.indent();
+			}
 			es[0].toStringBuilder(ib);
 			for(int i = 1; i < SIZE; i++){
-				if(i < SIZE && (operator!=SEQ)) ib.appendLine(operator);
+				if(i < SIZE && (operator!=SEQ)){
+					ib.appendEOL();
+					ib.indent();
+					ib.append(operator);
+				}
+				ib.appendEOL();
+				ib.indent();
 				es[i].toStringBuilder(ib);
 			}
+			if(SIZE>1){
+				ib.appendEOL();
+				b.indent();
+			}
 		}
-		postfixOutput(ib);
+		//postfixOutput(b);
 	}
 }

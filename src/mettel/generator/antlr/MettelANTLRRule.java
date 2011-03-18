@@ -41,16 +41,12 @@ public class MettelANTLRRule {
 	/**
 	 * @param b
 	 */
-	void toStringBuilder(StringBuilder b) {
-		toStringBuilder(new MettelIndentedStringBuilder(b));
-	}
-
-	void toStringBuilder(MettelIndentedStringBuilder ib){
-		MettelIndentedStringBuilder b = new MettelIndentedStringBuilder(ib);
+	void toStringBuilder(MettelIndentedStringBuilder b){
 		b.appendLine(name);
-		b = new MettelIndentedStringBuilder(b);
-		b.appendLine(':');
-		e.toStringBuilder(b);
+		MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
+		ib.appendLine(':');
+		e.toStringBuilder(ib);
+		b.appendEOL();
 		b.appendLine(';');
 	}
 }

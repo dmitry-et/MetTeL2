@@ -237,7 +237,7 @@ bnfDefinition
 charOrStringLiteral
     returns [MettelStringLiteral literal = null]
     :
-    l = (CHARLITERAL | STRINGLITERAL)//change to string literal only?
+    l = STRINGLITERAL
     {literal = new MettelStringLiteral(l.getText());}
     ;
 
@@ -356,20 +356,21 @@ DOUBLELITERAL
     ;
 */
 
-CHARLITERAL
+/*CHARLITERAL
     :   '\''
         (   EscapeSequence
         |   ~( '\'' | '\\' | '\r' | '\n' )
         )
         '\''
     ;
+*/
 
 STRINGLITERAL
-    :   '"'
+    :   '\''
         (   EscapeSequence
-        |   ~( '\\' | '"' | '\r' | '\n' )
+        |   ~( '\\' | '\'' | '\r' | '\n' )
         )*
-        '"'
+        '\''
     ;
 
 fragment

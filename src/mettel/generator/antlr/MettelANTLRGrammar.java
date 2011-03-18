@@ -16,6 +16,9 @@
  */
 package mettel.generator.antlr;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import mettel.util.MettelIndentedStringBuilder;
@@ -78,28 +81,24 @@ public class MettelANTLRGrammar {
 
 		 for(MettelANTLRRule rule:rules){
 			 rule.toStringBuilder(ib);
-			 ib.appendEOL();
 		 }
 
-		 /*BufferedReader r = new BufferedReader(
+		 ib.appendEOL();
+		 //ib.append("//Trivial lexer");
+		 //ib.appendEOL();
+
+		 BufferedReader r = new BufferedReader(
 			 new InputStreamReader(
-				 getClass().getResourceAsStream("resource.lexer")));
+				 this.getClass().getResourceAsStream("resources/lexer")));
 		 String s;
 		 try {
 		    while((s = r.readLine()) != null){
 		         ib.append(s);
+		         ib.appendEOL();
 		     }
 		 } catch (IOException e) {
 		    e.printStackTrace();
-		 }*/
+		 }
 	 }
 
-	/**
-	 * @param name
-	 * @return
-	 */
-	public MettelANTLRRule createRule(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

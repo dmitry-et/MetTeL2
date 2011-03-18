@@ -49,11 +49,15 @@ public class MettelANTLRUnaryBNFStatement extends MettelANTLRExpression {
 	 * @see mettel.generator.antlr.MettelANTLRExpression#toStringBuilder(mettel.util.MettelIndentedStringBuilder)
 	 */
 	@Override
-	void toStringBuilder(MettelIndentedStringBuilder b) {
+	void toStringBuilder0(MettelIndentedStringBuilder b) {
 		MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
-		prefixOutput(ib);
+		//prefixOutput(ib);
+		ib.appendEOL();
+		ib.indent();
 		expression.toStringBuilder(ib);
-		ib.appendLine(operator);
-		postfixOutput(ib);
+		ib.append(operator);
+		ib.appendEOL();
+		b.indent();
+		//postfixOutput(ib);
 	}
 }

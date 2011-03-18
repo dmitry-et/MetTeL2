@@ -69,7 +69,7 @@ public class MettelANTLRGrammarGenerator {
 		if(syn == null) return null;
 
 		MettelANTLRGrammar grammar = new MettelANTLRGrammar(name);
-		String s = PACKAGE_STRING+' '+spec.path()+';';
+		String s = PACKAGE_STRING+' '+spec.path().toLowerCase()+';';
 		grammar.addToHeader(s);
 		grammar.addToLexerHeader(s);
 
@@ -154,6 +154,7 @@ public class MettelANTLRGrammarGenerator {
 			}//TODO other alternatives
 			s0 = s1;
 		}
+		grammar.addRule(new MettelANTLRRule(SORT_NAME,new MettelANTLRRuleReference(s0)));
 
 	}
 

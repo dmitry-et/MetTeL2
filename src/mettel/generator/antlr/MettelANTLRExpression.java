@@ -25,7 +25,8 @@ import mettel.util.MettelIndentedStringBuilder;
  */
 abstract class MettelANTLRExpression {
 
-	private MettelANTLRJavaBlock blockBefore = null, blockAfter = null;
+	private MettelANTLRJavaBlock blockBefore = null;
+	private MettelANTLRJavaBlock blockAfter = null;
 
 //	abstract void toStringBuilder(StringBuilder b);
 
@@ -37,16 +38,44 @@ abstract class MettelANTLRExpression {
 		blockAfter.append(csq);
 	}
 
-	void prefixOutput(MettelIndentedStringBuilder ib){
-		ib.appendLine('(');
-		if(blockBefore != null) blockBefore.toStringBuilder(ib);
+/*	void prefixOutput(MettelIndentedStringBuilder ib){
+		if(blockBefore != null){
+			ib.appendLine('(');
+		    blockBefore.toStringBuilder(ib);
+		}else{
+			ib.indent();
+			ib.append('(');
+		}
 	}
 
 	void postfixOutput(MettelIndentedStringBuilder ib){
-		if(blockAfter != null) blockAfter.toStringBuilder(ib);
-		ib.appendLine(')');
+		if(blockAfter != null){
+			blockAfter.toStringBuilder(ib);
+			ib.appendLine(')');
+		}else{
+			ib.append(')');
+			ib.appendEOL();
+		}
+	}
+*/
+
+	void toStringBuilder(MettelIndentedStringBuilder ib){
+		if(blockBefore != null){
+			ib.appendLine('(');
+		    blockBefore.toStringBuilder(ib);
+		}else{
+			ib.append('(');
+		}
+		toStringBuilder0(ib);
+		if(blockAfter != null){
+			ib.appendEOL();
+			blockAfter.toStringBuilder(ib);
+			ib.appendLine(')');
+		}else{
+			ib.append(')');
+		}
 	}
 
-	abstract void toStringBuilder(MettelIndentedStringBuilder b);
+	abstract void toStringBuilder0(MettelIndentedStringBuilder ib);
 
 }

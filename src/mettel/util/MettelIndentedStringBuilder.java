@@ -43,7 +43,7 @@ public final class MettelIndentedStringBuilder implements Appendable{
 	}
 
 	public MettelIndentedStringBuilder(MettelIndentedStringBuilder b) {
-		this(b.b,b.indentString,(++b.indentLevel));
+		this(b.b,b.indentString,b.indentLevel+1);
 	}
 
 	public MettelIndentedStringBuilder(StringBuilder b, String indent) {

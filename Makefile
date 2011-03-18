@@ -333,7 +333,7 @@ $(CLASSES): $(SOURCES) $(CLASSES_DIR)
     
 resources: $(RC_FILES)
 
-$(RC_FILES): $(CLASSES_DIR)
+$(RC_FILES): $(CLASSES_DIR) $(SRC_RC_FILES)
 	@ echo $(DELIM0)
 	@ echo "Copying resources"
 	@ echo $(DELIM1)

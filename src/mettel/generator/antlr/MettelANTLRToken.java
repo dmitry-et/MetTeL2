@@ -48,11 +48,11 @@ public class MettelANTLRToken extends MettelANTLRExpression{
 	 * @see mettel.generator.antlr.MettelANTLRExpression#toStringBuilder(mettel.util.MettelIndentedStringBuilder)
 	 */
 	@Override
-	void toStringBuilder(MettelIndentedStringBuilder b) {
-		MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
-		prefixOutput(ib);
-		ib.appendLine(token);
-		postfixOutput(ib);
+	void toStringBuilder0(MettelIndentedStringBuilder b) {
+		//eMettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
+		//prefixOutput(ib);
+		b.append(token);
+		//postfixOutput(ib);
 
 	}
 

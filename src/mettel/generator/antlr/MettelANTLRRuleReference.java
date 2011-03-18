@@ -42,10 +42,7 @@ public class MettelANTLRRuleReference extends MettelANTLRExpression {
 	 * @see mettel.generator.antlr.MettelANTLRExpression#toStringBuilder(mettel.util.MettelIndentedStringBuilder)
 	 */
 	@Override
-	void toStringBuilder(MettelIndentedStringBuilder b) {
-		MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
-		prefixOutput(ib);
-		ib.appendLine(name);
-		postfixOutput(ib);
+	void toStringBuilder0(MettelIndentedStringBuilder b) {
+		b.append(name);
 	}
 }

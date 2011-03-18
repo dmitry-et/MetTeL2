@@ -101,6 +101,7 @@ public class MettelGenerator {
         		g.toStringBuilder(buf);
         	}
         	out.print(buf);
+        	out.flush();
 
         	System.exit(0);
         } catch(Exception e) {
