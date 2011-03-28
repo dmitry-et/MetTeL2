@@ -5,5 +5,6 @@
 	<classpathentry kind="lib" path="lib/antlr3-runtime.jar"/>
 	<classpathentry kind="lib" path="lib/antlr3.jar"/>
 	<classpathentry kind="lib" path="lib/antlr.jar"/>
+	<classpathentry kind="lib" path="/usr/lib64/eclipse/dropins/jdt/plugins/org.eclipse.jdt.core_3.6.1.v_A68_R36x.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
