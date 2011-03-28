@@ -3,5 +3,7 @@
 	<classpathentry excluding="mettel/language/Mettel.tokens|mettel/language/grammar" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/antlr3-runtime.jar"/>
+	<classpathentry kind="lib" path="lib/antlr3.jar"/>
+	<classpathentry kind="lib" path="lib/antlr.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

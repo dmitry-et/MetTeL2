@@ -24,6 +24,9 @@ import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
+import org.antlr.tool.ErrorManager;
+
+import org.antlr.Tool;
 
 import mettel.generator.MettelANTLRGrammarGenerator;
 import mettel.generator.antlr.MettelANTLRGrammar;
@@ -41,6 +44,7 @@ public class MettelGenerator {
 	private static PrintWriter out = null;
 	private static PrintWriter err = null;
 	private static CharStream in = null;
+	private static String outFileName = null;
 
 	/**
 	 * @param args
@@ -60,7 +64,8 @@ public class MettelGenerator {
         		}else if("-o".equals(args[i])||"--output".equals(args[i])){
 
                     if(i < SIZE-1){
-            		  out = new PrintWriter(new FileWriter(args[++i]),true);
+                      outFileName = args[++i];
+            		  out = new PrintWriter(new FileWriter(outFileName),true);
                     }else{
                         System.out.println("Output file name required");
                     }
@@ -102,6 +107,18 @@ public class MettelGenerator {
         	}
         	out.print(buf);
         	out.flush();
+
+        	String[] antlrArgs = {"-o", "/var/tmp/", "-print", outFileName};
+        	if(outFileName == null){
+        		System.err.print("ANTLR file name required");
+        		System.exit(0);
+        	}
+
+        	Tool antlr = new Tool(antlrArgs);
+            antlr.process();
+            if(ErrorManager.getNumErrors() > 0){
+            	System.exit(1);
+            }
 
         	System.exit(0);
         } catch(Exception e) {
