@@ -1,4 +1,4 @@
-#
+#                                                                                   
 # [only works with gnu make]
 #
 
@@ -51,8 +51,6 @@ TEST_ERR_FILE := $(BASE_DIR)/test.err
 ANTLR_LEXER_LOG_FILE := $(BASE_DIR)/antlr.lexer.log
 ANTLR_PARSER_LOG_FILE := $(BASE_DIR)/antlr.parser.log
 
-# Resources
-RC_FILES :=
 
 # Project paths
 BIN_DIR := $(BASE_DIR)/bin
@@ -60,6 +58,10 @@ SRC_DIR := $(BASE_DIR)/src
 LIB_DIR := $(BASE_DIR)/lib
 CLASSES_DIR := $(BASE_DIR)/classes
 #AST_CLASSES_DIR := 
+
+# Resources
+SRC_RC_FILES := $(SRC_DIR)/mettel/generator/antlr/resources/lexer
+RC_FILES := $(shell echo $(SRC_RC_FILES) | sed -e 's/src/classes/g')
 
 # Doc paths
 DOC_DIR := $(BASE_DIR)/doc
@@ -337,6 +339,10 @@ $(RC_FILES): $(CLASSES_DIR) $(SRC_RC_FILES)
 	@ echo $(DELIM0)
 	@ echo "Copying resources"
 	@ echo $(DELIM1)
+	@ for i in $(SRC_RC_FILES); do \
+	    j=$$(echo $$i | sed -e 's/src/classes/g'); \
+	    mkdir -p $$(dirname $$j); \
+	    cp -r $$i $$j; done
 
 jar: $(JAR_FILE)
 
