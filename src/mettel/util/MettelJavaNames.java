@@ -14,16 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with MetTeL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package mettel.core.language;
+package mettel.util;
 
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public interface MettelObjectFactory{
+public class MettelJavaNames {
 
-	MettelExpression createExpression(int type, MettelExpression[] children);
-	boolean deleteExpression(MettelExpression e);
+	public static String firstCharToUpperCase(String s){
+		return s.substring(0,1).toUpperCase()+s.substring(1);
+	}
 
+	public static String firstCharToLowerCase(String s){
+		return s.substring(0,1).toLowerCase()+s.substring(1);
+	}
+
+
+	public static String methodName(String prefix, String postfix){
+		return firstCharToLowerCase(prefix)+firstCharToUpperCase(postfix);
+	}
+
+	public static String className(String prefix, String postfix){
+		return firstCharToUpperCase(prefix)+firstCharToUpperCase(postfix);
+	}
+
+	public static String packageName(String s){
+		return s.toLowerCase();
+	}
 }

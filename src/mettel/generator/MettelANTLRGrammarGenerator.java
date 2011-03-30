@@ -33,6 +33,7 @@ import mettel.language.MettelBNFStatement;
 import mettel.language.MettelSpecification;
 import mettel.language.MettelSyntax;
 import mettel.language.MettelSort;
+import mettel.util.MettelJavaNames;
 
 import static mettel.util.MettelStrings.PACKAGE_STRING;
 import static mettel.util.MettelStrings.VARIABLE_STRING;
@@ -69,7 +70,7 @@ public class MettelANTLRGrammarGenerator {
 		if(syn == null) return null;
 
 		MettelANTLRGrammar grammar = new MettelANTLRGrammar(name);
-		String s = PACKAGE_STRING+' '+spec.path().toLowerCase()+';';
+		String s = PACKAGE_STRING+' '+MettelJavaNames.packageName(spec.path())+';';
 		grammar.addToHeader(s);
 		grammar.addToLexerHeader(s);
 
@@ -87,11 +88,10 @@ public class MettelANTLRGrammarGenerator {
 	 */
 	private void processBNFs(MettelANTLRGrammar grammar, MettelSort sort, List<MettelBNFStatement> bnfs) {
 		final String SORT_NAME = sort.name();
-		String s0 = BASIC_STRING+SORT_NAME.substring(0,1).toUpperCase()+SORT_NAME.substring(1);
+		String s0 = BASIC_STRING + MettelJavaNames.firstCharToUpperCase(SORT_NAME);
 		String s1 = null;
 		for(MettelBNFStatement s:bnfs){
-			String id = s.identifier();
-			s1 = SORT_NAME+id.substring(0, 1).toUpperCase()+id.substring(1);
+			s1 = SORT_NAME + MettelJavaNames.firstCharToUpperCase(s.identifier());
 
 			MettelToken[] tokens = s.tokens().toArray(new MettelToken[0]);
 			final int SIZE = tokens.length;
@@ -175,7 +175,7 @@ public class MettelANTLRGrammarGenerator {
 	 * @return
 	 */
 	private MettelANTLRRule makeANTLRBasicRule(MettelSort sort) {
-		final String NAME =sort.name();
+		final String NAME = sort.name();
 		MettelANTLRMultiaryBNFStatement s = new MettelANTLRMultiaryBNFStatement(
 				MettelANTLRMultiaryBNFStatement.OR);
 		s.addExpression(new MettelANTLRRuleReference(NAME+VARIABLE_STRING));
@@ -184,7 +184,7 @@ public class MettelANTLRGrammarGenerator {
 		s0.addExpression(new MettelANTLRRuleReference(NAME));
 		s0.addExpression(MettelANTLRToken.RBRACE);
 		s.addExpression(s0);
-		return new MettelANTLRRule(BASIC_STRING+NAME.substring(0, 1).toUpperCase()+NAME.substring(1),s);
+		return new MettelANTLRRule(BASIC_STRING+MettelJavaNames.firstCharToUpperCase(NAME),s);
 	}
 
 	/**
@@ -218,7 +218,5 @@ public class MettelANTLRGrammarGenerator {
 		}
 		return grammars;
 	}
-
-
 
 }

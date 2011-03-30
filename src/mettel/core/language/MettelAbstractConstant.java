@@ -24,7 +24,7 @@ package mettel.core.language;
 abstract class MettelAbstractConstant extends MettelAbstractExpression{
 
     public MettelAbstractConstant(MettelObjectFactory factory){
-        super(factory);
+        //TODO super(factory);
     }
 
 

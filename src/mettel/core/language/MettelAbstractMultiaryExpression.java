@@ -26,8 +26,8 @@ abstract class MettelAbstractMultiaryExpression
 
 	MettelExpression[] expressions = null;
 
-    MettelAbstractMultiaryExpression(MettelObjectFactory factory) {
+/*    MettelAbstractMultiaryExpression(MettelObjectFactory factory) {
         super(factory);
     }
-
+*/
 }

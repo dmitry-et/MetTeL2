@@ -30,7 +30,7 @@ abstract class MettelAbstractAtomicExpression extends MettelAbstractExpression{
 	}
 
 	public MettelAbstractAtomicExpression(String name, MettelObjectFactory factory){
-		super(factory);
+		//TODO super(factory);
 		this.name = name;
 	}
 

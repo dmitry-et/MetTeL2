@@ -24,17 +24,25 @@ package mettel.core.language;
 abstract class MettelAbstractExpression
         implements MettelExpression {
 
-    private static int expressionCounter = 0;
+    private static volatile int expressionCounter = 0;
 
-    private int id = 0;
+    private int id = -1;
 
-    //TODO implement the default constructor
-/*    MettelAbstractExpression() {
+    protected MettelAbstractExpression(){
+    	super();
+    	id = expressionCounter++;
+    }
+
+    public int id() {
+        return id;
+    }
+
+
+//TODO the commented code must go into a generated class
+/*
+    MettelAbstractExpression() {
         this(MettelObjectFactory.DEFAULT);
     }
-*/
-    @SuppressWarnings("unused")
-	private MettelAbstractExpression(){}
 
     MettelAbstractExpression(MettelObjectFactory factory) {
         super();
@@ -42,33 +50,15 @@ abstract class MettelAbstractExpression
         id = expressionCounter++;
     }
 
-    public int id() {
-        return id;
-    }
-
     MettelObjectFactory factory = null;
 
     public MettelObjectFactory factory() {
         return factory;
     }
+*/
 
-    volatile String string = null;
-
-    private volatile int hash = 0;
-
-    //TODO rewrite hashcode
     public int hashCode() {
-        if (hash == 0) {
-            hash = toString().hashCode();
-        }
-        return hash;
-    }
-
-    //TODO rewrite equals
-    public boolean equals(Object obj) {
-        return (obj != null)
-                && (getClass() == obj.getClass())
-                && (toString().equals(obj.toString()));
+        return id;
     }
 
     public int compareTo(MettelExpression e) {
