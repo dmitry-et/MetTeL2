@@ -33,8 +33,8 @@ import mettel.language.MettelBNFStatement;
 import mettel.language.MettelSpecification;
 import mettel.language.MettelSyntax;
 import mettel.language.MettelSort;
-import mettel.util.MettelJavaNames;
 
+import mettel.util.MettelJavaNames;
 import static mettel.util.MettelStrings.PACKAGE_STRING;
 import static mettel.util.MettelStrings.VARIABLE_STRING;
 import static mettel.util.MettelStrings.BASIC_STRING;
@@ -71,6 +71,7 @@ public class MettelANTLRGrammarGenerator {
 
 		MettelANTLRGrammar grammar = new MettelANTLRGrammar(name);
 		String s = PACKAGE_STRING+' '+MettelJavaNames.packageName(spec.path())+';';
+		//new java.io.File("dir").
 		grammar.addToHeader(s);
 		grammar.addToLexerHeader(s);
 
