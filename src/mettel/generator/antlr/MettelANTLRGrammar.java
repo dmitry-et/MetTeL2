@@ -101,4 +101,13 @@ public class MettelANTLRGrammar {
 		 }
 	 }
 
+	/**
+	 * @return
+	 */
+	public StringBuilder toStringBuilder() {
+		StringBuilder b = new StringBuilder();
+		toStringBuilder(b);
+		return b;
+	}
+
 }

@@ -26,6 +26,8 @@ import mettel.generator.antlr.MettelANTLRToken;
 import mettel.generator.antlr.MettelANTLRRuleReference;
 import mettel.generator.antlr.MettelANTLRUnaryBNFStatement;
 import mettel.generator.antlr.MettelANTLRMultiaryBNFStatement;
+import mettel.generator.java.MettelJavaFile;
+import mettel.generator.java.MettelJavaPackage;
 
 import mettel.language.MettelStringLiteral;
 import mettel.language.MettelToken;
@@ -38,6 +40,7 @@ import mettel.util.MettelJavaNames;
 import static mettel.util.MettelStrings.PACKAGE_STRING;
 import static mettel.util.MettelStrings.VARIABLE_STRING;
 import static mettel.util.MettelStrings.BASIC_STRING;
+import static mettel.util.MettelStrings.GRAMMAR_STRING;
 
 /**
  * @author Dmitry Tishkovsky
@@ -65,12 +68,20 @@ public class MettelANTLRGrammarGenerator {
 		this.outputPath = path;
 	}
 
+	private MettelJavaPackage langPackage = null;
+	private MettelJavaPackage grammarPackage = null;
+
 	public MettelANTLRGrammar processSyntax(String name){
 		MettelSyntax syn = spec.getSyntax(name);
 		if(syn == null) return null;
 
 		MettelANTLRGrammar grammar = new MettelANTLRGrammar(name);
-		String s = PACKAGE_STRING+' '+MettelJavaNames.packageName(spec.path())+';';
+		final String PATH = spec.path();
+		final String s = PACKAGE_STRING+' '+PATH+';';
+
+		langPackage = new MettelJavaPackage(PATH);
+		grammarPackage = new MettelJavaPackage(PATH+'.'+GRAMMAR_STRING);
+
 		//new java.io.File("dir").
 		grammar.addToHeader(s);
 		grammar.addToLexerHeader(s);
@@ -79,6 +90,9 @@ public class MettelANTLRGrammarGenerator {
 			processSort(grammar,sort);
 			processBNFs(grammar,sort,syn.getBNFs(sort));
 		}
+
+		MettelJavaFile f = grammarPackage.createFile(name+".g");
+		f.append(grammar.toStringBuilder());
 
 		return grammar;
 	}
