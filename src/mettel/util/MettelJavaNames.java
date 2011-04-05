@@ -16,6 +16,8 @@
  */
 package mettel.util;
 
+import static mettel.util.MettelStrings.FILE_SEPARATOR;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -42,5 +44,9 @@ public class MettelJavaNames {
 
 	public static String packageName(String s){
 		return s.toLowerCase();
+	}
+
+	public static String systemPath(String javaPath){
+		return javaPath.replaceAll(".", FILE_SEPARATOR);
 	}
 }

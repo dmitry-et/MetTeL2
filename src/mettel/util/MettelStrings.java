@@ -24,6 +24,7 @@ package mettel.util;
 public interface MettelStrings {
 
 	final static String LINE_SEPARATOR = System.getProperty("line.separator");
+	final static String FILE_SEPARATOR = System.getProperty("file.separator");
 	final static String TAB_STRING = " ";
 	final static String OPTIONS_STRING = "options";
 	final static String GRAMMAR_STRING = "grammar";

@@ -20,6 +20,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import mettel.util.MettelJavaNames;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -29,15 +31,18 @@ public class MettelJavaFile implements Appendable{
 
 	private String fileName = null;
 
+	private MettelJavaPackage pack = null;
+
 	@SuppressWarnings("unused")
 	private MettelJavaFile(){}
 
 	/**
 	 *
 	 */
-	public MettelJavaFile(String fileName) {
+	MettelJavaFile(String fileName, MettelJavaPackage pack) {
 		super();
 		this.fileName = fileName;
+		this.pack = pack;
 	}
 
 	private StringBuilder content = new StringBuilder();
@@ -66,8 +71,10 @@ public class MettelJavaFile implements Appendable{
 		return content.append(c);
 	}
 
-	public void flush() throws IOException {
-		PrintWriter w = new PrintWriter(new FileWriter(fileName));
+	public void flush(String outputPath) throws IOException {
+		PrintWriter w = new PrintWriter(
+				new FileWriter(outputPath +
+						MettelJavaNames.systemPath(pack != null ? pack.path() + fileName : fileName)));
 		w.print(content.toString());
 		w.close();
 	}

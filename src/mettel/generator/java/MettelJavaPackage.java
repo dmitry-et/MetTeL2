@@ -16,7 +16,11 @@
  */
 package mettel.generator.java;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import mettel.util.MettelJavaNames;
 
 /**
  * @author Dmitry Tishkovsky
@@ -25,7 +29,11 @@ import java.util.ArrayList;
  */
 public class MettelJavaPackage {
 
-	private String path = null;
+	private String path = "";
+
+	String path(){
+		return path;
+	}
 
 	@SuppressWarnings("unused")
 	private MettelJavaPackage(){}
@@ -39,7 +47,20 @@ public class MettelJavaPackage {
 
 	private ArrayList<MettelJavaFile> files = new ArrayList<MettelJavaFile>();
 
-	
+	public MettelJavaFile createFile(String fileName){
+		MettelJavaFile file = new MettelJavaFile(fileName, this);
+		files.add(file);
+		return file;
+	}
+
+	//outputPath includes final separator and conforms path format on the system
+	public void flush(String outputPath) throws IOException {
+		File dir = new File(outputPath + MettelJavaNames.systemPath(path));
+		if(! dir.mkdirs()) throw new IOException("Cannot create directory");
+		for(MettelJavaFile f: files){
+			f.flush(outputPath);
+		}
+	}
 
 
 }
