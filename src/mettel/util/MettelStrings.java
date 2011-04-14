@@ -28,6 +28,7 @@ public interface MettelStrings {
 	final static String TAB_STRING = " ";
 	final static String OPTIONS_STRING = "options";
 	final static String GRAMMAR_STRING = "grammar";
+	final static String PARSER_STRING = "parser";
 	final static String HEADER_STRING = "header";
 	final static String LEXER_STRING = "lexer";
 	final static String PACKAGE_STRING = "package";

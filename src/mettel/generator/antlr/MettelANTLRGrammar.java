@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import mettel.util.MettelIndentedStringBuilder;
 
 import static mettel.util.MettelStrings.GRAMMAR_STRING;
-
+import static mettel.util.MettelStrings.PARSER_STRING;
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -56,6 +56,7 @@ public class MettelANTLRGrammar {
 	 private MettelANTLRGrammarOptions options = new MettelANTLRGrammarOptions();
 
 	 private MettelANTLRHeader header = new MettelANTLRHeader(MettelANTLRHeader.PARSER);
+	 //TODO split on parser and lexer to allow inheritance
 	 private MettelANTLRHeader lexerHeader = new MettelANTLRHeader(MettelANTLRHeader.LEXER);
 
 	 public void addToHeader(String statement){
@@ -71,6 +72,8 @@ public class MettelANTLRGrammar {
 
 		 ib.append(GRAMMAR_STRING);
 		 ib.append(' ');
+		 ib.append(PARSER_STRING);
+		 ib.append(' ');
 		 ib.append(name);
 		 ib.append(';');
 		 ib.appendEOL();
@@ -84,21 +87,21 @@ public class MettelANTLRGrammar {
 		 }
 
 		 ib.appendEOL();
-		 //ib.append("//Trivial lexer");
-		 //ib.appendEOL();
-
-		 BufferedReader r = new BufferedReader(
-			 new InputStreamReader(
-				 this.getClass().getResourceAsStream("resources/lexer")));
-		 String s;
-		 try {
-		    while((s = r.readLine()) != null){
-		         ib.append(s);
-		         ib.appendEOL();
-		     }
-		 } catch (IOException e) {
-		    e.printStackTrace();
-		 }
+//		 //ib.append("//Trivial lexer");
+//		 //ib.appendEOL();
+//
+//		 BufferedReader r = new BufferedReader(
+//			 new InputStreamReader(
+//				 this.getClass().getResourceAsStream("resources/lexer")));
+//		 String s;
+//		 try {
+//		    while((s = r.readLine()) != null){
+//		         ib.append(s);
+//		         ib.appendEOL();
+//		     }
+//		 } catch (IOException e) {
+//		    e.printStackTrace();
+//		 }
 	 }
 
 	/**
@@ -108,6 +111,13 @@ public class MettelANTLRGrammar {
 		StringBuilder b = new StringBuilder();
 		toStringBuilder(b);
 		return b;
+	}
+
+	/**
+	 * @return
+	 */
+	public String name() {
+		return name;
 	}
 
 }

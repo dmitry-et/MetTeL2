@@ -91,8 +91,7 @@ public class MettelANTLRGrammarGenerator {
 			processBNFs(grammar,sort,syn.getBNFs(sort));
 		}
 
-		MettelJavaFile f = grammarPackage.createFile(name+".g");
-		f.append(grammar.toStringBuilder());
+		grammarPackage.createFile(name+".g").append(grammar.toStringBuilder());
 
 		return grammar;
 	}
