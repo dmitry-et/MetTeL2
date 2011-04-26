@@ -16,9 +16,6 @@
  */
 package mettel.generator.antlr;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import mettel.util.MettelIndentedStringBuilder;
