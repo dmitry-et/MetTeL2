@@ -64,7 +64,7 @@ public class MettelJavaPackageStructure {
 
 		BufferedReader r = new BufferedReader(
 			new InputStreamReader(
-				this.getClass().getResourceAsStream("../resources/lexer")));
+				this.getClass().getResourceAsStream("../antlr/resources/lexer")));
 		String s;
 		try {
 		   while((s = r.readLine()) != null){
