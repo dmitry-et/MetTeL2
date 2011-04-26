@@ -26,8 +26,7 @@ import mettel.generator.antlr.MettelANTLRToken;
 import mettel.generator.antlr.MettelANTLRRuleReference;
 import mettel.generator.antlr.MettelANTLRUnaryBNFStatement;
 import mettel.generator.antlr.MettelANTLRMultiaryBNFStatement;
-import mettel.generator.java.MettelJavaFile;
-import mettel.generator.java.MettelJavaPackage;
+import mettel.generator.java.MettelJavaPackageStructure;
 
 import mettel.language.MettelStringLiteral;
 import mettel.language.MettelToken;
@@ -40,7 +39,6 @@ import mettel.util.MettelJavaNames;
 import static mettel.util.MettelStrings.PACKAGE_STRING;
 import static mettel.util.MettelStrings.VARIABLE_STRING;
 import static mettel.util.MettelStrings.BASIC_STRING;
-import static mettel.util.MettelStrings.GRAMMAR_STRING;
 
 /**
  * @author Dmitry Tishkovsky
@@ -61,7 +59,7 @@ public class MettelANTLRGrammarGenerator {
 		this.spec = spec;
 	}
 
-	//TODO use of output path
+/*	//TODO use of output path
 	private String outputPath = null;
 
 	public void setOutputPath(String path){
@@ -70,8 +68,8 @@ public class MettelANTLRGrammarGenerator {
 
 	private MettelJavaPackage langPackage = null;
 	private MettelJavaPackage grammarPackage = null;
-
-	public MettelANTLRGrammar processSyntax(String name){
+*/
+	public MettelJavaPackageStructure processSyntax(String name){
 		MettelSyntax syn = spec.getSyntax(name);
 		if(syn == null) return null;
 
@@ -79,8 +77,10 @@ public class MettelANTLRGrammarGenerator {
 		final String PATH = spec.path();
 		final String s = PACKAGE_STRING+' '+PATH+';';
 
-		langPackage = new MettelJavaPackage(PATH);
+		/*langPackage = new MettelJavaPackage(PATH);
 		grammarPackage = new MettelJavaPackage(PATH+'.'+GRAMMAR_STRING);
+*/
+		MettelJavaPackageStructure pStructure = new MettelJavaPackageStructure(PATH);
 
 		//new java.io.File("dir").
 		grammar.addToHeader(s);
@@ -91,9 +91,12 @@ public class MettelANTLRGrammarGenerator {
 			processBNFs(grammar,sort,syn.getBNFs(sort));
 		}
 
-		grammarPackage.createFile(name+".g").append(grammar.toStringBuilder());
+//		grammarPackage.createFile(name+".g").append(grammar.toStringBuilder());
 
-		return grammar;
+		pStructure.appendParser(grammar);
+		pStructure.appendTrivialLexer();
+
+		return pStructure;
 	}
 
 	/**
@@ -225,8 +228,8 @@ public class MettelANTLRGrammarGenerator {
 	/**
 	 *
 	 */
-	public Collection<MettelANTLRGrammar> processSyntaxes() {
-		ArrayList<MettelANTLRGrammar> grammars = new ArrayList<MettelANTLRGrammar>();
+	public Collection<MettelJavaPackageStructure> processSyntaxes() {
+		ArrayList<MettelJavaPackageStructure> grammars = new ArrayList<MettelJavaPackageStructure>();
 		for(MettelSyntax syn:spec.syntaxes()){
 			grammars.add(processSyntax(syn.name()));
 		}

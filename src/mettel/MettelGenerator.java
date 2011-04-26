@@ -29,7 +29,7 @@ import org.antlr.runtime.CommonTokenStream;
 //import org.antlr.Tool;
 
 import mettel.generator.MettelANTLRGrammarGenerator;
-import mettel.generator.antlr.MettelANTLRGrammar;
+import mettel.generator.java.MettelJavaPackageStructure;
 import mettel.language.MettelLexer;
 import mettel.language.MettelParser;
 import mettel.language.MettelSpecification;
@@ -45,6 +45,7 @@ public class MettelGenerator {
 	private static PrintWriter err = null;
 	private static CharStream in = null;
 	private static String outFileName = null;
+	private static String outputPath = "output";
 
 	/**
 	 * @param args
@@ -77,6 +78,13 @@ public class MettelGenerator {
                     }else{
                         System.out.println("Error file name required");
                     }
+        		}else if("-d".equals(args[i])||"--output-directory".equals(args[i])){
+
+                    if(i < SIZE-1){
+            		  outputPath = args[++i];
+                    }else{
+                        System.out.println("Output directory name required");
+                    }
         		}
         	}
 
@@ -101,14 +109,14 @@ public class MettelGenerator {
         	//System.out.print(buf);
 
         	MettelANTLRGrammarGenerator gen = new MettelANTLRGrammarGenerator(spec);
-        	StringBuilder buf = new StringBuilder();
-        	for(MettelANTLRGrammar g:gen.processSyntaxes()){
-        		g.toStringBuilder(buf);
+//        	StringBuilder buf = new StringBuilder();
+        	for(MettelJavaPackageStructure pStructure:gen.processSyntaxes()){
+        		pStructure.flush(outputPath);
         	}
-        	out.print(buf);
+/*        	out.print(buf);
         	out.flush();
         	out.close();
-
+*/
 /*        	String[] antlrArgs = {"-o", "/var/tmp/", "-print", outFileName};
         	if(outFileName == null){
         		System.err.print("ANTLR file name required");
