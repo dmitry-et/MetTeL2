@@ -16,18 +16,18 @@
  */
 package mettel.generator.java;
 
-import static mettel.util.MettelStrings.GRAMMAR_STRING;
-import static mettel.util.MettelStrings.LEXER_STRING;
+//import static mettel.util.MettelStrings.GRAMMAR_STRING;
+//import static mettel.util.MettelStrings.LEXER_STRING;
 
 
-import java.io.BufferedReader;
+//import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+//import java.io.InputStream;
+//import java.io.InputStreamReader;
 
 import mettel.generator.antlr.MettelANTLRGrammar;
-import mettel.generator.antlr.MettelANTLRHeader;
-import mettel.util.MettelIndentedStringBuilder;
+//import mettel.generator.antlr.MettelANTLRHeader;
+//import mettel.util.MettelIndentedStringBuilder;
 
 /**
  * @author Dmitry Tishkovsky
@@ -44,7 +44,7 @@ public class MettelJavaPackageStructure {
 	public MettelJavaPackageStructure(String base){
 		super();
 
-		grammarPackage = new MettelJavaPackage(base +'.'+GRAMMAR_STRING);
+		grammarPackage = new MettelJavaPackage(base);// +'.'+GRAMMAR_STRING);
 		langPackage = new MettelJavaPackage(base);
 
 	}
@@ -53,7 +53,7 @@ public class MettelJavaPackageStructure {
 		grammarPackage.createFile(g.name() + ".g").append(g.toStringBuilder());
 	}
 
-	public void appendLexer(String name, MettelANTLRHeader h, InputStream stream){
+	/*public void appendLexer(String name, MettelANTLRHeader h, InputStream stream){
 		MettelIndentedStringBuilder b = new MettelIndentedStringBuilder(new StringBuilder());
 		b.append(LEXER_STRING);
 		b.append(' ');
@@ -77,7 +77,7 @@ public class MettelJavaPackageStructure {
 		   e.printStackTrace();
 		}
 		grammarPackage.createFile(name + ".g").append(b.toString());
-	}
+	}*/
 
 
 

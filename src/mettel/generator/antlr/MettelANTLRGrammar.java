@@ -16,12 +16,15 @@
  */
 package mettel.generator.antlr;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import mettel.util.MettelIndentedStringBuilder;
 
 import static mettel.util.MettelStrings.GRAMMAR_STRING;
-import static mettel.util.MettelStrings.PARSER_STRING;
+//import static mettel.util.MettelStrings.PARSER_STRING;
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -54,21 +57,21 @@ public class MettelANTLRGrammar {
 
 	 private MettelANTLRHeader header = new MettelANTLRHeader(MettelANTLRHeader.PARSER);
 	 //TODO split on parser and lexer to allow inheritance
-	 //private MettelANTLRHeader lexerHeader = new MettelANTLRHeader(MettelANTLRHeader.LEXER);
+	 private MettelANTLRHeader lexerHeader = new MettelANTLRHeader(MettelANTLRHeader.LEXER);
 
 	 public void addToHeader(String statement){
 		 header.addStatement(statement);
 	 }
 
-/*	 public void addToLexerHeader(String statement){
+	 public void addToLexerHeader(String statement){
 		 lexerHeader.addStatement(statement);
 	 }
-*/
+
 	 public void toStringBuilder(StringBuilder b){
 	         MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
 
-		 ib.append(PARSER_STRING);
-		 ib.append(' ');
+//		 ib.append(PARSER_STRING);
+//		 ib.append(' ');
 		 ib.append(GRAMMAR_STRING);
 		 ib.append(' ');
 		 ib.append(name);
@@ -77,28 +80,28 @@ public class MettelANTLRGrammar {
 
 		 options.toStringBuilder(ib);
 		 header.toStringBuilder(ib);
-		 //lexerHeader.toStringBuilder(ib);
+		 lexerHeader.toStringBuilder(ib);
 
 		 for(MettelANTLRRule rule:rules){
 			 rule.toStringBuilder(ib);
 		 }
 
 		 ib.appendEOL();
-//		 //ib.append("//Trivial lexer");
-//		 //ib.appendEOL();
-//
-//		 BufferedReader r = new BufferedReader(
-//			 new InputStreamReader(
-//				 this.getClass().getResourceAsStream("resources/lexer")));
-//		 String s;
-//		 try {
-//		    while((s = r.readLine()) != null){
-//		         ib.append(s);
-//		         ib.appendEOL();
-//		     }
-//		 } catch (IOException e) {
-//		    e.printStackTrace();
-//		 }
+		 //ib.append("//Trivial lexer");
+		 //ib.appendEOL();
+
+		 BufferedReader r = new BufferedReader(
+			 new InputStreamReader(
+				 this.getClass().getResourceAsStream("resources/lexer")));
+		 String s;
+		 try {
+		    while((s = r.readLine()) != null){
+		         ib.append(s);
+		         ib.appendEOL();
+		     }
+		 } catch (IOException e) {
+		    e.printStackTrace();
+		 }
 	 }
 
 	/**

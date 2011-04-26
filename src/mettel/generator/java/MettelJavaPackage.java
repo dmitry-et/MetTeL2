@@ -57,7 +57,7 @@ public class MettelJavaPackage {
 	public void flush(String outputPath) throws IOException {
 		final String PATH = MettelJavaNames.addSeparator(outputPath) + MettelJavaNames.systemPath(path);
 		File dir = new File(PATH);
-		if(! dir.mkdirs()) throw new IOException("Cannot create directory " + PATH);
+		if(!dir.exists() && !dir.mkdirs()) throw new IOException("Cannot create directory " + PATH);
 		for(MettelJavaFile f: files){
 			f.flush(outputPath);
 		}
