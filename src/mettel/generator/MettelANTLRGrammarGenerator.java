@@ -94,7 +94,7 @@ public class MettelANTLRGrammarGenerator {
 //		grammarPackage.createFile(name+".g").append(grammar.toStringBuilder());
 
 		pStructure.appendParser(grammar);
-		pStructure.appendTrivialLexer();
+		pStructure.appendLexer(this.getClass().getResourceAsStream("resources/lexer"));
 
 		return pStructure;
 	}
