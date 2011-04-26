@@ -73,8 +73,9 @@ public class MettelJavaFile implements Appendable{
 
 	public void flush(String outputPath) throws IOException {
 		PrintWriter w = new PrintWriter(
-				new FileWriter(outputPath +
-						MettelJavaNames.systemPath(pack != null ? pack.path() + fileName : fileName)));
+				new FileWriter(
+						MettelJavaNames.addSeparator(outputPath) +
+						MettelJavaNames.addSeparator(MettelJavaNames.systemPath(pack != null ? pack.path() : "" )) + fileName ));
 		w.print(content.toString());
 		w.close();
 	}

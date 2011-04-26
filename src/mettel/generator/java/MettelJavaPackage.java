@@ -55,7 +55,7 @@ public class MettelJavaPackage {
 
 	//outputPath includes final separator and conforms path format on the system
 	public void flush(String outputPath) throws IOException {
-		final String PATH = outputPath + MettelJavaNames.systemPath(path);
+		final String PATH = MettelJavaNames.addSeparator(outputPath) + MettelJavaNames.systemPath(path);
 		File dir = new File(PATH);
 		if(! dir.mkdirs()) throw new IOException("Cannot create directory " + PATH);
 		for(MettelJavaFile f: files){

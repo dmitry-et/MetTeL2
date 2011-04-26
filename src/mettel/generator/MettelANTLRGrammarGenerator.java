@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.List;
 
 import mettel.generator.antlr.MettelANTLRGrammar;
+import mettel.generator.antlr.MettelANTLRHeader;
 import mettel.generator.antlr.MettelANTLRRule;
 import mettel.generator.antlr.MettelANTLRToken;
 import mettel.generator.antlr.MettelANTLRRuleReference;
@@ -84,7 +85,10 @@ public class MettelANTLRGrammarGenerator {
 
 		//new java.io.File("dir").
 		grammar.addToHeader(s);
-		grammar.addToLexerHeader(s);
+
+		MettelANTLRHeader lexerHeader = new MettelANTLRHeader(MettelANTLRHeader.LEXER);
+		lexerHeader.addStatement(s);
+//		grammar.addToLexerHeader(s);
 
 		for(MettelSort sort:syn.sorts()){
 			processSort(grammar,sort);
@@ -94,7 +98,7 @@ public class MettelANTLRGrammarGenerator {
 //		grammarPackage.createFile(name+".g").append(grammar.toStringBuilder());
 
 		pStructure.appendParser(grammar);
-		pStructure.appendLexer(this.getClass().getResourceAsStream("resources/lexer"));
+		pStructure.appendLexer("Trivial", lexerHeader, this.getClass().getResourceAsStream("antlr/resources/lexer"));
 
 		return pStructure;
 	}

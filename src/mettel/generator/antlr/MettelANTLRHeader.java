@@ -28,7 +28,7 @@ import static mettel.util.MettelStrings.LEXER_STRING;
  * @version $Revision$ $Date$
  *
  */
-class MettelANTLRHeader {
+public class MettelANTLRHeader {
 
     /**
      *
@@ -39,16 +39,16 @@ class MettelANTLRHeader {
 
     private int kind = PARSER;
     final static int PARSER = 0;
-    final static int LEXER = 1;
+    public final static int LEXER = 1;
 
-    MettelANTLRHeader(int kind){
+    public MettelANTLRHeader(int kind){
 	super();
 	this.kind = kind;
     }
 
     ArrayList<String> statements = new ArrayList<String>();
 
-    void addStatement(String s){
+    public void addStatement(String s){
 	statements.add(s);
     }
 

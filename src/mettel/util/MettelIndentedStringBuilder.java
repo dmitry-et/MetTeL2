@@ -124,4 +124,12 @@ public final class MettelIndentedStringBuilder implements Appendable{
 			append(c);
 			return appendEOL();
 	}
+
+	public StringBuilder builder(){
+		return b;
+	}
+
+	public String toString(){
+		return b.toString();
+	}
 }

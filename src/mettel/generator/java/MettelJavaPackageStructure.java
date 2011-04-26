@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import mettel.generator.antlr.MettelANTLRGrammar;
+import mettel.generator.antlr.MettelANTLRHeader;
 import mettel.util.MettelIndentedStringBuilder;
 
 /**
@@ -52,16 +53,17 @@ public class MettelJavaPackageStructure {
 		grammarPackage.createFile(g.name() + ".g").append(g.toStringBuilder());
 	}
 
-	public void appendLexer(InputStream stream){
+	public void appendLexer(String name, MettelANTLRHeader h, InputStream stream){
 		MettelIndentedStringBuilder b = new MettelIndentedStringBuilder(new StringBuilder());
-		b.append(GRAMMAR_STRING);
-		b.append(' ');
 		b.append(LEXER_STRING);
+		b.append(' ');
+		b.append(GRAMMAR_STRING);
 		b.append(' ');
 		b.append("Trivial");
 		b.append(';');
 		b.appendEOL();
-			//TODO header
+
+		h.toStringBuilder(b);
 
 		BufferedReader r = new BufferedReader(
 			new InputStreamReader(stream));
@@ -74,6 +76,7 @@ public class MettelJavaPackageStructure {
 		} catch (IOException e) {
 		   e.printStackTrace();
 		}
+		grammarPackage.createFile(name + ".g").append(b.toString());
 	}
 
 
