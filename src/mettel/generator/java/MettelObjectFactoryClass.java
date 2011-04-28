@@ -16,9 +16,8 @@
  */
 package mettel.generator.java;
 
+import mettel.util.MettelIndentedStringBuilder;
 import mettel.util.MettelJavaNames;
-
-import static mettel.util.MettelStrings.LINE_SEPARATOR;
 
 /**
  * @author Dmitry Tishkovsky
@@ -35,42 +34,115 @@ public class MettelObjectFactoryClass extends MettelJavaFile {
 	public MettelObjectFactoryClass(String name, MettelJavaPackage pack) {
 		//if(name == null) throw MettelGeneratorRuntimeException("Name is null");
 		super(MettelJavaNames.firstCharToUpperCase(name) + "DefaultObjectFactory.java", pack);
-		this.name = name;
+		this.name = MettelJavaNames.firstCharToUpperCase(name);
 	}
 
-	public void addCreateMethod(String connective, String sort, String[] children){
-		append(LINE_SEPARATOR);
+
+	public void addCreateMethod(String connective, String sort, String[] children, String[] cSorts){
+		final String TYPE = MettelJavaNames.firstCharToUpperCase(connective) +
+							MettelJavaNames.firstCharToUpperCase(sort);
+		final int SIZE = children.length;
+		String[] types = new String[SIZE];
+		for(int i = 0; i < SIZE; i++){
+			types[i] = MettelJavaNames.firstCharToUpperCase(children[i]) +
+					   MettelJavaNames.firstCharToUpperCase(cSorts[i]);
+		}
+		addCreateMethod(TYPE,types);
+	}
+
+
+	public void addCreateMethod(String type, String[] types){
+		final String TYPE = name + type;
+
+		appendEOL();
 
 		append("public");
 		append(' ');
-		append(MettelJavaNames.firstCharToUpperCase(name));
-		append(MettelJavaNames.firstCharToUpperCase(connective));
-		append(MettelJavaNames.firstCharToUpperCase(sort));
+		append(TYPE);
+		//append(type);
 		append(' ');
 		append("create");
-		append(MettelJavaNames.firstCharToUpperCase(connective));
-		append(MettelJavaNames.firstCharToUpperCase(sort));
+		append(type);
 		append('(');
-		final int SIZE = children.length;
+		final int SIZE = types.length;
 		if(SIZE > 0){
-			append(MettelJavaNames.firstCharToUpperCase(name));
-			append(MettelJavaNames.firstCharToUpperCase(children[0]));
+			append(name);
+			append(types[0]);
 			append(' ');
-			append("param" +0);
+			append("param"+0);
 			for(int i = 1; i < SIZE; i++){
-				append(',');
+				append(',');append(' ');
+				append(name);
+				append(types[i]);
 				append(' ');
-				append(MettelJavaNames.firstCharToUpperCase(name));
-				append(MettelJavaNames.firstCharToUpperCase(children[i]));
 				append("param"+i);
 			}
 		}
-		append(')');
-		append('{');
-		append(LINE_SEPARATOR);
+		append(')');append('{');
+		appendEOL();
 
-		append(LINE_SEPARATOR);
-		append('}');
+		MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(this);
+
+		ib.indent();
+
+		ib.append("String key = ");
+		ib.append(TYPE);
+		//append(type);
+		ib.append('.');
+        ib.append("toString");
+        ib.append('(');
+        if(SIZE > 0){
+        	ib.append("param"+0);
+        	for(int i = 1; i < SIZE; i++){
+        		ib.append(',');
+        		ib.append(' ');
+        		ib.append("param"+i);
+        	}
+        }
+        ib.append(')');ib.append(';');
+        ib.appendEOL();
+
+        ib.indent();
+
+        ib.append(TYPE);
+        ib.append(' ');
+        ib.append('e');
+        ib.append(' ');ib.append('=');ib.append(' ');
+        ib.append(type);
+        ib.append('.');ib.append("get");ib.append('(');ib.append("key");ib.append(')');ib.append(';');
+        ib.appendEOL();
+
+        ib.indent();
+
+        ib.append("if(e == null)");ib.append('{');ib.appendEOL();
+
+        	MettelIndentedStringBuilder ibb = new MettelIndentedStringBuilder(ib);
+            ibb.indent();
+        	ibb.append("e = new ");
+        	ibb.append(TYPE);
+        	ibb.append('(');ibb.append("this");
+        		for(int i = 0; i < SIZE; i++){
+        			ibb.append(',');ibb.append(' ');
+        			ibb.append("param"+i);
+        		}
+        	ibb.append(')');
+        	ibb.appendEOL();
+        	ibb.indent();
+        	ibb.append(type);
+            ibb.append('.');ibb.append("put");ibb.append('(');
+            	ibb.append("key");ibb.append(',');ibb.append(' ');ibb.append('e');
+            ibb.append(')');ibb.append(';');
+            ibb.appendEOL();
+
+        ib.indent();
+        ib.append('}');
+        ib.appendEOL();
+        ib.indent();
+        ib.append("return e;");
+        ib.appendEOL();
+
+        append('}');
+		appendEOL();
 	}
 
 }

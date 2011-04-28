@@ -24,9 +24,9 @@ import static mettel.util.MettelStrings.TAB_STRING;
  * @version $Revision$ $Date$
  *
  */
-public final class MettelIndentedStringBuilder implements Appendable{
+public class MettelIndentedStringBuilder implements Appendable{
 
-	private StringBuilder b = null;
+	protected StringBuilder b = null;
 
 //	public StringBuilder builder(){
 //		return b;

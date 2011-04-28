@@ -21,62 +21,65 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import mettel.util.MettelJavaNames;
+import mettel.util.MettelIndentedStringBuilder;
 
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public class MettelJavaFile implements Appendable{
+public class MettelJavaFile extends MettelIndentedStringBuilder{
 
 	private String fileName = null;
 
 	private MettelJavaPackage pack = null;
 
-	@SuppressWarnings("unused")
-	private MettelJavaFile(){}
+	//@SuppressWarnings("unused")
+	//private MettelJavaFile(){}
 
 	/**
 	 *
 	 */
 	MettelJavaFile(String fileName, MettelJavaPackage pack) {
-		super();
+		super(new StringBuilder());
 		this.fileName = fileName;
 		this.pack = pack;
 	}
 
-	private StringBuilder content = new StringBuilder();
+	//private StringBuilder content = null; //new StringBuilder();
 
 	/* (non-Javadoc)
 	 * @see java.lang.Appendable#append(java.lang.CharSequence)
 	 */
-	@Override
+/*	@Override
 	public Appendable append(CharSequence csq){
-		return content.append(csq);
+		return append(csq);
 	}
+*/
 
 	/* (non-Javadoc)
 	 * @see java.lang.Appendable#append(java.lang.CharSequence, int, int)
 	 */
-	@Override
+/*	@Override
 	public Appendable append(CharSequence csq, int start, int end){
-		return content.append(csq, start, end);
+		return append(csq, start, end);
 	}
-
+*/
 	/* (non-Javadoc)
 	 * @see java.lang.Appendable#append(char)
 	 */
-	@Override
+/*	@Override
 	public Appendable append(char c){
 		return content.append(c);
 	}
+*/
 
 	public void flush(String outputPath) throws IOException {
 		PrintWriter w = new PrintWriter(
 				new FileWriter(
 						MettelJavaNames.addSeparator(outputPath) +
 						MettelJavaNames.addSeparator(MettelJavaNames.systemPath(pack != null ? pack.path() : "" )) + fileName ));
-		w.print(content.toString());
+		w.print(toString());
 		w.close();
 	}
 
