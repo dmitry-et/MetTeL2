@@ -54,6 +54,11 @@ public class MettelObjectFactoryClass extends MettelJavaFile {
 	public void addCreateMethod(String type, String[] types){
 		final String TYPE = name + type;
 
+		append("Map");append('<');append("String");append(',');append(' ');append(TYPE);append('>');append(' ');append(type);
+		append(' ');append('=');append(' ');
+		append("new TreeMap");append('<');append("String");append(',');append(' ');append(TYPE);append('>');
+		append('(');append(')');append(';');
+
 		appendEOL();
 
 		append("public");
