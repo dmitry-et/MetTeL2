@@ -24,14 +24,14 @@ import mettel.util.MettelJavaNames;
  * @version $Revision$ $Date$
  *
  */
-public class MettelObjectFactoryClass extends MettelJavaFile {
+public class MettelObjectFactoryClassFile extends MettelJavaFile {
 
 	private String name = null;
 	/**
 	 * @param name
 	 * @param pack
 	 */
-	public MettelObjectFactoryClass(String name, MettelJavaPackage pack) {
+	public MettelObjectFactoryClassFile(String name, MettelJavaPackage pack) {
 		//if(name == null) throw MettelGeneratorRuntimeException("Name is null");
 		super(MettelJavaNames.firstCharToUpperCase(name) + "DefaultObjectFactory.java", pack);
 		this.name = MettelJavaNames.firstCharToUpperCase(name);
