@@ -85,6 +85,14 @@ public class MettelIndentedStringBuilder implements Appendable{
 		this.indentLevel = l;
 	}
 
+	public void incrementIndentLevel(){
+		this.indentLevel++;
+	}
+
+	public void decrementIndentLevel(){
+		this.indentLevel--;
+	}
+
 	public StringBuilder indent(){
 		for(int i = 0;i<indentLevel;i++){
 			b.append(indentString);

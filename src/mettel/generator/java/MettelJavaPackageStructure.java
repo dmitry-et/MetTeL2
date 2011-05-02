@@ -50,7 +50,7 @@ public class MettelJavaPackageStructure {
 	}
 
 	public void appendParser(MettelANTLRGrammar g){
-		grammarPackage.createFile(g.name() + ".g").append(g.toStringBuilder());
+		grammarPackage.createFile(g.name(),"g").append(g.toStringBuilder());
 	}
 
 	/*public void appendLexer(String name, MettelANTLRHeader h, InputStream stream){

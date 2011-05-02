@@ -45,10 +45,10 @@ public class MettelJavaPackage {
 		this.path = path;
 	}
 
-	private ArrayList<MettelJavaFile> files = new ArrayList<MettelJavaFile>();
+	private ArrayList<MettelFile> files = new ArrayList<MettelFile>();
 
-	public MettelJavaFile createFile(String fileName){
-		MettelJavaFile file = new MettelJavaFile(fileName, this);
+	public MettelFile createFile(String fileName, String extension){
+		MettelFile file = new MettelFile(fileName, extension, this);
 		files.add(file);
 		return file;
 	}
@@ -58,7 +58,7 @@ public class MettelJavaPackage {
 		final String PATH = MettelJavaNames.addSeparator(outputPath) + MettelJavaNames.systemPath(path);
 		File dir = new File(PATH);
 		if(!dir.exists() && !dir.mkdirs()) throw new IOException("Cannot create directory " + PATH);
-		for(MettelJavaFile f: files){
+		for(MettelFile f: files){
 			f.flush(outputPath);
 		}
 	}

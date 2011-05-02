@@ -24,7 +24,7 @@ import mettel.util.MettelJavaNames;
  * @version $Revision$ $Date$
  *
  */
-public class MettelObjectFactoryClassFile extends MettelJavaFile {
+public class MettelObjectFactoryClassFile extends MettelJavaClassFile {
 
 	private String name = null;
 	/**
@@ -33,7 +33,8 @@ public class MettelObjectFactoryClassFile extends MettelJavaFile {
 	 */
 	public MettelObjectFactoryClassFile(String name, MettelJavaPackage pack) {
 		//if(name == null) throw MettelGeneratorRuntimeException("Name is null");
-		super(MettelJavaNames.firstCharToUpperCase(name) + "DefaultObjectFactory.java", pack);
+		super(MettelJavaNames.firstCharToUpperCase(name) + "DefaultObjectFactory", pack, null,
+			  new String[]{MettelJavaNames.firstCharToUpperCase(name) + "ObjectFactory"});
 		this.name = MettelJavaNames.firstCharToUpperCase(name);
 	}
 

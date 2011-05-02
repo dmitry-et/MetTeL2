@@ -16,45 +16,20 @@
  */
 package mettel.generator.java;
 
-import mettel.util.MettelStrings;
-
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public class MettelJavaFile extends MettelFile {
+public class MettelSortJavaInterfaceFile extends MettelJavaInterfaceFile {
 
 	/**
-	 * @param fileName
+	 * @param prefix
+	 * @param sort
 	 * @param pack
 	 */
-	public MettelJavaFile(String fileName, MettelJavaPackage pack) {
-		super(fileName, "java", pack);
-		append(MettelStrings.PACKAGE_STRING);
-		append(' ');
-		append(pack.path());
-		append(';');
-		appendEOL();
-
-		imports();
+	public MettelSortJavaInterfaceFile(String prefix, String sort, MettelJavaPackage pack){
+		super(prefix+sort, pack, new String[]{prefix+"Expression"});
 	}
 
-	void imports(){
-
-	}
-
-	void opening(){
-		append('{');appendEOL();
-		this.incrementIndentLevel();
-	}
-
-	private boolean closed = false;
-
-	void  closing(){
-		if(! closed){
-			append('}');appendEOL();
-			closed = true;
-		}
-	}
 }

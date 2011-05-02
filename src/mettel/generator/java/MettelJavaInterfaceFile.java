@@ -16,45 +16,35 @@
  */
 package mettel.generator.java;
 
-import mettel.util.MettelStrings;
-
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public class MettelJavaFile extends MettelFile {
+public class MettelJavaInterfaceFile extends MettelJavaFile {
 
 	/**
 	 * @param fileName
 	 * @param pack
 	 */
-	public MettelJavaFile(String fileName, MettelJavaPackage pack) {
-		super(fileName, "java", pack);
-		append(MettelStrings.PACKAGE_STRING);
-		append(' ');
-		append(pack.path());
-		append(';');
-		appendEOL();
-
-		imports();
+	public MettelJavaInterfaceFile(String fileName, MettelJavaPackage pack, String[] interfaces) {
+		super(fileName, pack);
+		declaration(interfaces);
 	}
 
-	void imports(){
-
-	}
-
-	void opening(){
-		append('{');appendEOL();
-		this.incrementIndentLevel();
-	}
-
-	private boolean closed = false;
-
-	void  closing(){
-		if(! closed){
-			append('}');appendEOL();
-			closed = true;
+	void declaration(String[] interfaces){
+		append("public interface ");
+		append(fileName);
+		final int SIZE =  interfaces.length;
+		if(SIZE > 0){
+			append(" extends ");
+			append(interfaces[0]);
+			for(int i = 1; i < SIZE; i++){
+				append(',');append(' ');
+				append(interfaces[i]);
+			}
 		}
+		opening();
 	}
+
 }
