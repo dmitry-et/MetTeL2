@@ -53,7 +53,7 @@ public class MettelObjectFactoryInterfaceFile extends MettelJavaInterfaceFile {
 
 		indent();
 		if(SIZE > 0){
-			append(TYPE + " create" + type +"(" + prefix + types[0] +"e0");
+			append(TYPE + " create" + type +'(' + prefix + types[0] +"e0");
 			for(int i = 1; i < SIZE; i++){
 				append(", " + prefix + types[i] + 'e' + i);
 			}
@@ -61,5 +61,11 @@ public class MettelObjectFactoryInterfaceFile extends MettelJavaInterfaceFile {
 		}else if(SIZE == 0){
 			append(TYPE + ' ' + type + "Constant();");
 		}
+	}
+
+	public void addVariableMethod(String type){
+		final String TYPE = type + "Variable";
+
+		indent();append(prefix + TYPE + " create" + type + "(String name);");appendEOL();
 	}
 }

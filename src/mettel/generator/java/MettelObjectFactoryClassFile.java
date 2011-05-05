@@ -150,4 +150,24 @@ public class MettelObjectFactoryClassFile extends MettelJavaClassFile {
 		appendEOL();
 	}
 
+	public void addVariableMethod(String type){
+		final String TYPE = type + "Variable";
+		final String PTYPE = prefix + TYPE;
+
+		indent();append(PTYPE + " create" + TYPE + "(String name){");appendEOL();
+
+		incrementIndentLevel();
+		indent();append(PTYPE + " v = " + TYPE + "s(name);");appendEOL();
+		indent();append("if(v == null){");appendEOL();
+			incrementIndentLevel();
+			indent();append("v = new " + PTYPE + "(name, this);");appendEOL();
+			indent();append(TYPE + "s.put(name, v);");appendEOL();
+			decrementIndentLevel();
+		indent();append('}');appendEOL();
+		indent();append("return v;");appendEOL();
+		decrementIndentLevel();
+
+		indent();append('}');appendEOL();
+	}
+
 }
