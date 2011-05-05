@@ -32,7 +32,7 @@ public class MettelObjectFactoryClassFile extends MettelJavaClassFile {
 	 */
 	public MettelObjectFactoryClassFile(String prefix, MettelJavaPackage pack) {
 		//if(name == null) throw MettelGeneratorRuntimeException("Name is null");
-		super(prefix + "DefaultObjectFactory", pack, null,
+		super(prefix + "DefaultObjectFactory", pack, "public", null,
 			  new String[]{prefix + "ObjectFactory"});
 		this.prefix = prefix;
 	}

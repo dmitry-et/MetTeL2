@@ -31,6 +31,7 @@ public class MettelObjectFactoryInterfaceFile extends MettelJavaInterfaceFile {
 	public MettelObjectFactoryInterfaceFile(String prefix, MettelJavaPackage pack) {
 		super(prefix+"ObjectFactory", pack, null);
 		this.prefix = prefix;
+		fields();
 	}
 
 
@@ -47,6 +48,10 @@ public class MettelObjectFactoryInterfaceFile extends MettelJavaInterfaceFile {
 	}
 */
 
+	private void fields(){
+		appendLine("final " + prefix + "ObjectFactory DEFAULT = new " + prefix +"DefaultObjectFactory();");
+	}
+
 	public void addCreateMethod(String type, String[] types){
 		final String TYPE = prefix + type;
 		final int SIZE = types.length;
@@ -61,11 +66,11 @@ public class MettelObjectFactoryInterfaceFile extends MettelJavaInterfaceFile {
 		}else if(SIZE == 0){
 			append(TYPE + ' ' + type + "Constant();");
 		}
+		appendEOL();
 	}
 
 	public void addVariableMethod(String type){
 		final String TYPE = type + "Variable";
-
-		indent();append(prefix + TYPE + " create" + type + "(String name);");appendEOL();
+		appendLine(prefix + TYPE + " create" + TYPE + "(String name);");
 	}
 }

@@ -27,13 +27,13 @@ public class MettelJavaClassFile extends MettelJavaFile {
 	 * @param fileName
 	 * @param pack
 	 */
-	public MettelJavaClassFile(String fileName, MettelJavaPackage pack, String superClass, String[] interfaces) {
+	public MettelJavaClassFile(String fileName, MettelJavaPackage pack, String modifiers, String superClass, String[] interfaces) {
 		super(fileName, pack);
-		declaration(superClass, interfaces);
+		declaration(modifiers, superClass, interfaces);
 	}
 
-	void declaration(String superClass, String[] interfaces){
-		append("public class ");
+	void declaration(String modifiers, String superClass, String[] interfaces){
+		append(modifiers == null? "class ": modifiers + " class ");
 		append(fileName);
 		if(superClass != null && !"".equals(superClass)){
 			append(" extends ");
