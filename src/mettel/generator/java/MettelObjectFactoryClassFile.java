@@ -17,7 +17,6 @@
 package mettel.generator.java;
 
 import mettel.util.MettelIndentedStringBuilder;
-import mettel.util.MettelJavaNames;
 
 /**
  * @author Dmitry Tishkovsky
@@ -26,20 +25,20 @@ import mettel.util.MettelJavaNames;
  */
 public class MettelObjectFactoryClassFile extends MettelJavaClassFile {
 
-	private String name = null;
+	private String prefix = "Mettel";
 	/**
 	 * @param name
 	 * @param pack
 	 */
-	public MettelObjectFactoryClassFile(String name, MettelJavaPackage pack) {
+	public MettelObjectFactoryClassFile(String prefix, MettelJavaPackage pack) {
 		//if(name == null) throw MettelGeneratorRuntimeException("Name is null");
-		super(MettelJavaNames.firstCharToUpperCase(name) + "DefaultObjectFactory", pack, null,
-			  new String[]{MettelJavaNames.firstCharToUpperCase(name) + "ObjectFactory"});
-		this.name = MettelJavaNames.firstCharToUpperCase(name);
+		super(prefix + "DefaultObjectFactory", pack, null,
+			  new String[]{prefix + "ObjectFactory"});
+		this.prefix = prefix;
 	}
 
 
-	public void addCreateMethod(String connective, String sort, String[] children, String[] cSorts){
+/*	public void addCreateMethod(String connective, String sort, String[] children, String[] cSorts){
 		final String TYPE = MettelJavaNames.firstCharToUpperCase(connective) +
 							MettelJavaNames.firstCharToUpperCase(sort);
 		final int SIZE = children.length;
@@ -50,10 +49,10 @@ public class MettelObjectFactoryClassFile extends MettelJavaClassFile {
 		}
 		addCreateMethod(TYPE,types);
 	}
-
+*/
 
 	public void addCreateMethod(String type, String[] types){
-		final String TYPE = name + type;
+		final String TYPE = prefix + type;
 
 		append("Map");append('<');append("String");append(',');append(' ');append(TYPE);append('>');append(' ');append(type);
 		append(' ');append('=');append(' ');
@@ -72,13 +71,13 @@ public class MettelObjectFactoryClassFile extends MettelJavaClassFile {
 		append('(');
 		final int SIZE = types.length;
 		if(SIZE > 0){
-			append(name);
+			append(prefix);
 			append(types[0]);
 			append(' ');
 			append("param"+0);
 			for(int i = 1; i < SIZE; i++){
 				append(',');append(' ');
-				append(name);
+				append(prefix);
 				append(types[i]);
 				append(' ');
 				append("param"+i);

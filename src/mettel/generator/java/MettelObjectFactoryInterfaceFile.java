@@ -16,8 +16,6 @@
  */
 package mettel.generator.java;
 
-import mettel.util.MettelJavaNames;
-
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -36,7 +34,7 @@ public class MettelObjectFactoryInterfaceFile extends MettelJavaInterfaceFile {
 	}
 
 
-	public void addCreateMethod(String connective, String sort, String[] children, String[] cSorts){
+/*	public void addCreateMethod(String connective, String sort, String[] children, String[] cSorts){
 		final String TYPE = MettelJavaNames.firstCharToUpperCase(connective) +
 							MettelJavaNames.firstCharToUpperCase(sort);
 		final int SIZE = children.length;
@@ -47,7 +45,7 @@ public class MettelObjectFactoryInterfaceFile extends MettelJavaInterfaceFile {
 		}
 		addCreateMethod(TYPE,types);
 	}
-
+*/
 
 	public void addCreateMethod(String type, String[] types){
 		final String TYPE = prefix + type;
