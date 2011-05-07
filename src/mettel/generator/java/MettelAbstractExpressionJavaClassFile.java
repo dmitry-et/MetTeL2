@@ -67,13 +67,14 @@ public class MettelAbstractExpressionJavaClassFile extends MettelJavaClassFile {
 		 appendLine(prefix + "ObjectFactory factory = null;");
 		 appendLine("public " + prefix + "ObjectFactory factory() {return factory;}");
 
-		 appendEOL();
+/*		 appendEOL();
 
 		 appendLine("public int hashCode() {return id;}");
 
 		 appendEOL();
 
 		 appendLine("public int compareTo(" + prefix + "Expression e) {return (id - e.id());}");
+*/
 	}
 
 }

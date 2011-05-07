@@ -43,7 +43,7 @@ public class MettelAbstractVariableJavaClassFile extends MettelJavaClassFile {
 
 		appendEOL();
 
-		appendLine("public String name(){");
+		appendLine("public String name() {");
 		incrementIndentLevel();
 		appendLine("return name;");
 		decrementIndentLevel();
@@ -65,6 +65,30 @@ public class MettelAbstractVariableJavaClassFile extends MettelJavaClassFile {
 		appendLine("return name;");
 		decrementIndentLevel();
 		appendLine('}');
+
+/*		appendEOL();
+
+		appendLine("private int hash = 0;");
+		appendLine("public int hashCode() {");
+		incrementIndentLevel();
+		appendLine("if(hash == 0) {");
+		incrementIndentLevel();
+			appendLine("hash = name.hashCode();");
+		decrementIndentLevel();
+		appendLine('}');
+		appendLine("return hash;");
+		decrementIndentLevel();
+		appendLine('}');
+
+		appendEOL();
+
+		appendLine("public int compareTo(" + prefix + "Expression e) {");
+		incrementIndentLevel();
+		appendLine("if(e instanceof " + prefix + "Variable) return (id - e.id());");
+		appendLine("return -1;");//variable is smaller than other terms (including constants).
+		decrementIndentLevel();
+		appendLine('}');
+*/
 	}
 
 }
