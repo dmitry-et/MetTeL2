@@ -39,7 +39,7 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 	private void body(String[] sorts){
 		for(String sort:sorts){
 			final String TYPE = prefix+sort;
-			appendLine("private Map<"+TYPE+", "+TYPE+"> r"+sort+" = new TreeMap<"+TYPE+", "+TYPE+">();");
+			appendLine("private final Map<"+TYPE+", "+TYPE+"> r"+sort+" = new TreeMap<"+TYPE+", "+TYPE+">();");
 
 			appendLine("public " + TYPE+" get"+sort+'('+TYPE+"e){");
 			incrementIndentLevel();
@@ -48,9 +48,9 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 			appendLine('}');
 			appendEOL();
 
-			appendLine("public Iterator<"+TYPE+"> "+sort+"Iterator(){");
+			appendLine("Map<"+TYPE+", "+TYPE+"> "+sort+"Map(){");
 			incrementIndentLevel();
-				appendLine("return r"+sort+".keySet().iterator();");
+				appendLine("return r"+sort+';');
 			decrementIndentLevel();
 			appendLine('}');
 			appendEOL();
@@ -59,7 +59,7 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 			appendLine("public boolean append("+TYPE+"e0, "+TYPE+"e1){");
 			incrementIndentLevel();
 				appendLine("if(e0==null || e1==null){return false;}");
-				appendLine(TYPE+" e = r"+sort+".get(e0);");
+				appendLine("final "+TYPE+" e = r"+sort+".get(e0);");
 				appendLine("if(e == null){");
 				incrementIndentLevel();
 					appendLine("if(!e0.equals(e1)){ r"+sort+".put(e0,e1); };");
@@ -79,12 +79,13 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 		incrementIndentLevel();
 			for(String sort:sorts){
 				final String TYPE = prefix+sort;
-				appendLine("Iterator<"+TYPE+"> i = r."+sort+"Iterator();");
-				appendLine("while(i.hasNext()){");
+				appendLine("final Map<"+TYPE+", "+TYPE+"> m = r."+sort+"Map();");
+				appendLine("boolean result = true;");
+				appendLine("for("+TYPE+" key:m.keySet()){");
 				incrementIndentLevel();
-					appendLine(TYPE+" e = i.next();");
-					appendLine("append(e,r.get"+sort+"(e));");
+					appendLine("result &= append(key,r.get"+sort+"(e));");
 				decrementIndentLevel();
+				appendLine("return result;");
 				appendLine('}');
 			}
 		decrementIndentLevel();
