@@ -16,20 +16,18 @@
  */
 package mettel.generator.java;
 
-import java.util.Map;
-
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public class MettelReplacementJavaClassFile extends MettelJavaInterfaceFile {
+public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 
 	private String prefix = "Mettel";
 
 	public MettelReplacementJavaClassFile(String prefix,
 			MettelJavaPackage pack, String[] sorts) {
-		super(prefix+"Replacement", pack,
+		super(prefix+"TreeReplacement", pack, "public", null,
 				new String[]{"Comparable<"+prefix+"Replacement>"});
 		body(sorts);
 	}
@@ -41,7 +39,7 @@ public class MettelReplacementJavaClassFile extends MettelJavaInterfaceFile {
 	private void body(String[] sorts){
 		for(String sort:sorts){
 			final String TYPE = prefix+sort;
-			appendLine("private Map<"+TYPE+", "+TYPE+"> r"+sort+" = new HashMap<"+TYPE+", "+TYPE+">();");
+			appendLine("private Map<"+TYPE+", "+TYPE+"> r"+sort+" = new TreeMap<"+TYPE+", "+TYPE+">();");
 
 			appendLine("public " + TYPE+" get"+sort+'('+TYPE+"e){");
 			incrementIndentLevel();
@@ -60,10 +58,11 @@ public class MettelReplacementJavaClassFile extends MettelJavaInterfaceFile {
 
 			appendLine("public boolean append("+TYPE+"e0, "+TYPE+"e1){");
 			incrementIndentLevel();
+				appendLine("if(e0==null || e1==null){return false;}");
 				appendLine(TYPE+" e = r"+sort+".get(e0);");
 				appendLine("if(e == null){");
 				incrementIndentLevel();
-					appendLine("r"+sort+".put(e0,e1);");
+					appendLine("if(!e0.equals(e1)){ r"+sort+".put(e0,e1); };");
 					appendLine("return true;");
 				decrementIndentLevel();
 				appendLine("}else{");
@@ -76,7 +75,7 @@ public class MettelReplacementJavaClassFile extends MettelJavaInterfaceFile {
 			appendEOL();
 		}
 
-		appendLine("boolean append("+prefix+"Replacement r){");
+		appendLine("public boolean append("+prefix+"Replacement r){");
 		incrementIndentLevel();
 			for(String sort:sorts){
 				final String TYPE = prefix+sort;
@@ -93,7 +92,71 @@ public class MettelReplacementJavaClassFile extends MettelJavaInterfaceFile {
 		appendEOL();
 		    //MettelReplacement compose(MettelReplacement r);
 
-		Comparable?
+		appendLine("private int hashCode = 0;");
+		appendLine("public int hashCode(){");
+		incrementIndentLevel();
+			appendLine("hashCode = 1;");
+			for(String sort:sorts){
+				appendLine("hashCode = 31*hashCode + r" +sort +".hashCode();");
+			}
+			appendLine("return hashCode;");
+		decrementIndentLevel();
+		appendLine('}');
+		appendEOL();
+
+		appendLine("public int compareTo("+prefix+"Replacement r){");
+		incrementIndentLevel();
+			appendLine("if(o==this){return 0;}");
+			for(String sort:sorts){
+				final String TYPE = prefix + sort;
+				appendLine("final Set<"+TYPE+"> keys0 = r"+sort+".keySet();");
+				appendLine("final Set<"+TYPE+"> keys1 = r."+sort+"keySet();");
+				appendLine("final TreeSet<"+TYPE+"> keys = new TreeSet<"+TYPE+">(keys0);");//Note: this is a sorted set!
+				appendLine("keys.addAll(keys1);");
+				appendLine("for("+TYPE +" key:keys){");
+				incrementIndentLevel();
+					appendLine("if(!key0.contains(key){");
+						incrementIndentLevel();
+							appendLine("return 1;");
+						decrementIndentLevel();
+					appendLine("}else{");
+						incrementIndentLevel();
+						appendLine("if(!key1.contains(key){");
+							incrementIndentLevel();
+								appendLine("return -1;");
+							decrementIndentLevel();
+						appendLine("}else{");
+							incrementIndentLevel();
+								appendLine("final "+TYPE + "v0 = r"+sort+".get(key);");
+								appendLine("final "+TYPE + "v1 = r.get"+sort+"(key);");
+								appendLine("final int result = v0.compareTo(v1);");
+								appendLine("if(result != 0){return result;}");
+							decrementIndentLevel();
+						appendLine('}');
+						decrementIndentLevel();
+					appendLine('}');
+				decrementIndentLevel();
+				appendLine("}");
+			}
+			appendLine("return 0;");
+		decrementIndentLevel();
+		appendLine('}');
+		appendEOL();
+
+		appendLine("public boolean equals(Object o){");
+		incrementIndentLevel();
+			appendLine("if(o==this){return true;}");
+			appendLine("if(!(o instanceof "+prefix+"Replacement){return false;}");
+			appendLine("final "+prefix+"Replacement r = ("+prefix+"Replacement)o;");
+			for(String sort:sorts){
+				appendLine("boolean result = r"+sort+".equals(r.r"+sort+");");
+				appendLine("if(!result){return false;}");
+			}
+			appendLine("return true;");
+		decrementIndentLevel();
+		appendLine('}');
+		appendEOL();
+
 	}
 
 }
