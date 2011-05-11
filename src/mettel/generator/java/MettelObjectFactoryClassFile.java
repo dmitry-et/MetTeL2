@@ -35,6 +35,7 @@ public class MettelObjectFactoryClassFile extends MettelJavaClassFile {
 		super(prefix + "DefaultObjectFactory", pack, "public", null,
 			  new String[]{prefix + "ObjectFactory"});
 		this.prefix = prefix;
+		body();
 	}
 
 
@@ -54,99 +55,43 @@ public class MettelObjectFactoryClassFile extends MettelJavaClassFile {
 	public void addCreateMethod(String type, String[] types){
 		final String TYPE = prefix + type;
 
-		append("Map");append('<');append("String");append(',');append(' ');append(TYPE);append('>');append(' ');append(type);
-		append(' ');append('=');append(' ');
-		append("new TreeMap");append('<');append("String");append(',');append(' ');append(TYPE);append('>');
-		append('(');append(')');append(';');
-
+		appendLine("private Map<"+TYPE+", "+TYPE+"> "+type+"s = new TreeMap<"+TYPE+", "+TYPE+">();");
 		appendEOL();
 
-		append("public");
-		append(' ');
-		append(TYPE);
-		//append(type);
-		append(' ');
-		append("create");
-		append(type);
-		append('(');
+		indent();
 		final int SIZE = types.length;
 		if(SIZE > 0){
-			append(prefix);
-			append(types[0]);
-			append(' ');
-			append("param"+0);
+			append("public "+TYPE+" create"+type+'(');
+			append(prefix+types[0]+" e"+0);
 			for(int i = 1; i < SIZE; i++){
-				append(',');append(' ');
-				append(prefix);
-				append(types[i]);
-				append(' ');
-				append("param"+i);
+				append(", "+prefix+types[i]+"e"+i);
 			}
+		}else{
+			append("public "+TYPE+' '+type+"Constant(e");
 		}
-		append(')');append('{');
+		append("){");
 		appendEOL();
+			incrementIndentLevel();
+				indent();
+				append("final "+TYPE+"e = new "+TYPE+'(');
+				if(SIZE > 0){
+					append("e0");
+					for(int i = 1; i < SIZE; i++){
+						append(", e"+i);
+					}
+				}
+				append(", this);");
+				appendEOL();
 
-		MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(this);
-
-		ib.indent();
-
-		ib.append("String key = ");
-		ib.append(TYPE);
-		//append(type);
-		ib.append('.');
-        ib.append("toString");
-        ib.append('(');
-        if(SIZE > 0){
-        	ib.append("param"+0);
-        	for(int i = 1; i < SIZE; i++){
-        		ib.append(',');
-        		ib.append(' ');
-        		ib.append("param"+i);
-        	}
-        }
-        ib.append(')');ib.append(';');
-        ib.appendEOL();
-
-        ib.indent();
-
-        ib.append(TYPE);
-        ib.append(' ');
-        ib.append('e');
-        ib.append(' ');ib.append('=');ib.append(' ');
-        ib.append(type);
-        ib.append('.');ib.append("get");ib.append('(');ib.append("key");ib.append(')');ib.append(';');
-        ib.appendEOL();
-
-        ib.indent();
-
-        ib.append("if(e == null)");ib.append('{');ib.appendEOL();
-
-        	MettelIndentedStringBuilder ibb = new MettelIndentedStringBuilder(ib);
-            ibb.indent();
-        	ibb.append("e = new ");
-        	ibb.append(TYPE);
-        	ibb.append('(');ibb.append("this");
-        		for(int i = 0; i < SIZE; i++){
-        			ibb.append(',');ibb.append(' ');
-        			ibb.append("param"+i);
-        		}
-        	ibb.append(')');
-        	ibb.appendEOL();
-        	ibb.indent();
-        	ibb.append(type);
-            ibb.append('.');ibb.append("put");ibb.append('(');
-            	ibb.append("key");ibb.append(',');ibb.append(' ');ibb.append('e');
-            ibb.append(')');ibb.append(';');
-            ibb.appendEOL();
-
-        ib.indent();
-        ib.append('}');
-        ib.appendEOL();
-        ib.indent();
-        ib.append("return e;");
-        ib.appendEOL();
-
-        append('}');
+				appendLine("final "+TYPE+"old = "+type+"s.get(e);");
+				appendLine("if(old == null){ ");
+				incrementIndentLevel();
+					appendLine(type+"s.put(e,e);");
+					appendLine("return e;");
+				decrementIndentLevel();
+				appendLine("}else{ return old; }");
+			decrementIndentLevel();
+		appendLine('}');
 		appendEOL();
 	}
 
@@ -154,20 +99,59 @@ public class MettelObjectFactoryClassFile extends MettelJavaClassFile {
 		final String TYPE = type + "Variable";
 		final String PTYPE = prefix + TYPE;
 
-		indent();append(PTYPE + " create" + TYPE + "(String name){");appendEOL();
+		appendLine("private Map<String, "+PTYPE+"> "+type+"s = new TreeMap<String, "+PTYPE+">();");
+		appendEOL();
+
+		appendLine("public "+PTYPE + " create" + TYPE + "(String name){");
 
 		incrementIndentLevel();
-		indent();append(PTYPE + " v = " + TYPE + "s(name);");appendEOL();
-		indent();append("if(v == null){");appendEOL();
+			appendLine(PTYPE + " v = " + TYPE + "s(name);");
+			appendLine("if(v == null){");
 			incrementIndentLevel();
-			indent();append("v = new " + PTYPE + "(name, this);");appendEOL();
-			indent();append(TYPE + "s.put(name, v);");appendEOL();
+				appendLine("v = new " + PTYPE + "(name, this);");
+				appendLine(TYPE + "s.put(name, v);");
 			decrementIndentLevel();
-		indent();append('}');appendEOL();
-		indent();append("return v;");appendEOL();
+			appendLine('}');
+			appendLine("return v;");
 		decrementIndentLevel();
+		appendLine('}');
+		appendEOL();
+	}
 
-		indent();append('}');appendEOL();
+	private void body(){
+		appendLine("private Map<"+prefix+"Substitution, "+prefix+"Substitution> subs = new TreeMap<"+prefix+"Substitution, "+prefix+"Substitution>();");
+		appendEOL();
+
+		appendLine("public "+prefix+"Substitution getSubstitution("+prefix+"Substitution s){");
+		incrementIndentLevel();
+			appendLine("final "+prefix+"Substitution old = subs.get(s);");
+			appendLine("if(old == null){ ");
+			incrementIndentLevel();
+				appendLine("subs.put(s,s);");
+				appendLine("return s;");
+			decrementIndentLevel();
+			appendLine("}else{ return old; }");
+		decrementIndentLevel();
+		appendLine('}');
+
+		appendEOL();
+
+		appendLine("private Map<"+prefix+"Replacement, "+prefix+"Replacement> reps = new TreeMap<"+prefix+"Replacement, "+prefix+"Replacement>();");
+		appendEOL();
+
+		appendLine("public "+prefix+"Replacement getReplacement("+prefix+"Replacement r){");
+		incrementIndentLevel();
+			appendLine("final "+prefix+"Replacement old = reps.get(r);");
+			appendLine("if(old == null){ ");
+			incrementIndentLevel();
+				appendLine("reps.put(r,r);");
+				appendLine("return r;");
+			decrementIndentLevel();
+			appendLine("}else{ return old; }");
+		decrementIndentLevel();
+		appendLine('}');
+
+		appendEOL();
 	}
 
 }

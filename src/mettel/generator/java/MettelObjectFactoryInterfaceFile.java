@@ -32,6 +32,7 @@ public class MettelObjectFactoryInterfaceFile extends MettelJavaInterfaceFile {
 		super(prefix+"ObjectFactory", pack, null);
 		this.prefix = prefix;
 		fields();
+		body();
 	}
 
 
@@ -72,5 +73,10 @@ public class MettelObjectFactoryInterfaceFile extends MettelJavaInterfaceFile {
 	public void addVariableMethod(String type){
 		final String TYPE = type + "Variable";
 		appendLine(prefix + TYPE + " create" + TYPE + "(String name);");
+	}
+
+	private void body(){
+		appendLine(prefix+"Replacement getReplacement("+prefix+"Replacement r);");
+		appendLine(prefix+"Substitution getSubstitution("+prefix+"Substitution s);");
 	}
 }
