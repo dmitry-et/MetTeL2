@@ -16,8 +16,6 @@
  */
 package mettel.generator.java;
 
-import mettel.util.MettelIndentedStringBuilder;
-
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
