@@ -21,14 +21,14 @@ package mettel.generator.java;
  * @version $Revision$ $Date$
  *
  */
-public class MettelSortJavaInterfaceFile extends MettelJavaInterfaceFile {
+public class MettelComplexExpressionJavaInterfaceFile extends MettelJavaInterfaceFile {
 
 	/**
 	 * @param prefix
 	 * @param sort
 	 * @param pack
 	 */
-	public MettelSortJavaInterfaceFile(String prefix, String sort, MettelJavaPackage pack){
+	public MettelComplexExpressionJavaInterfaceFile(String prefix, String sort, MettelJavaPackage pack){
 		super(prefix+sort, pack, new String[]{prefix+"Expression"});
 	}
 

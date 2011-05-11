@@ -39,10 +39,11 @@ public class MettelAbstractExpressionJavaClassFile extends MettelJavaClassFile {
 	private void body(){
 		 appendLine("private static volatile int expressionCounter = 0;");
 		 appendLine("private int id = -1;");
+		 appendLine("protected "+prefix+"ObjectFactory factory = null;");
 
 		 appendEOL();
 
-		 appendLine(prefix + "AbstractExpression(" + prefix + "ObjectFactory factory) {");
+		 appendLine(prefix + "AbstractExpression(" + prefix + "ObjectFactory factory){");
 		 incrementIndentLevel();
 		 	appendLine("super();");
 		 	appendLine("this.factory = factory;");
@@ -52,7 +53,7 @@ public class MettelAbstractExpressionJavaClassFile extends MettelJavaClassFile {
 
 		 appendEOL();
 
-		 appendLine(prefix + "AbstractExpression() {");
+		 appendLine(prefix + "AbstractExpression(){");
 		 incrementIndentLevel();
 		 	appendLine("this(" + prefix +"MettelObjectFactory.DEFAULT);");
 		 decrementIndentLevel();
@@ -60,12 +61,12 @@ public class MettelAbstractExpressionJavaClassFile extends MettelJavaClassFile {
 
 		 appendEOL();
 
-		 appendLine("public int id(){return id;}");
+		 appendLine("public int id(){ return id; }");
 
 		 appendEOL();
 
 		 appendLine(prefix + "ObjectFactory factory = null;");
-		 appendLine("public " + prefix + "ObjectFactory factory() {return factory;}");
+		 appendLine("public " + prefix + "ObjectFactory factory(){ return factory; }");
 
 /*		 appendEOL();
 
