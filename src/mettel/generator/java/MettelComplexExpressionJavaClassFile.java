@@ -26,7 +26,6 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 	private String prefix = "Mettel";
 	private String sort = null;
 	private String name = null;
-
 	/**
 	 * @param prefix
 	 * @param sort
@@ -66,6 +65,10 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 				}
 			decrementIndentLevel();
 		appendLine('}');
+		appendEOL();
+
+		appendLine("static int priority(){ return PRIORITY; }");
+
 		appendEOL();
 
 		appendLine("public "+prefix+"Substitution match("+prefix+"Expression e){");
@@ -134,6 +137,56 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 			}else{
 				appendLine("return this;");
 			}
+		decrementIndentLevel();
+		appendLine('}');
+
+		appendEOL();
+
+		appendLine("private int hashCode = 0;");
+		appendLine("public int hashCode(){");
+		incrementIndentLevel();
+			appendLine("if(hashCode == 0){");
+			incrementIndentLevel();
+				appendLine("hashCode = PRIORITY;");
+				for(int i = 0; i < SIZE; i++){
+					appendLine("hashCode = 31*hashCode + e"+i+".hashCode();");
+				}
+			decrementIndentLevel();
+			appendLine('}');
+			appendLine("return hashCode;");
+		decrementIndentLevel();
+		appendLine('}');
+
+		appendEOL();
+
+		appendLine("public boolean equals(Object o){");
+		incrementIndentLevel();
+			appendLine("if(o == this){ return true; }");
+			appendLine("if(!(o instanceof "+TYPE+")){ return false; }");
+			appendLine(TYPE+" e = ("+TYPE+") o;");
+			for(int i = 0; i < SIZE; i++){
+				appendLine("if(!(e"+i+".equals(e.e"+i+"))){ return false; }");
+			}
+			appendLine("return true;");
+		decrementIndentLevel();
+		appendLine('}');
+
+		appendEOL();
+
+		appendLine("public int compareTo("+prefix+"Expression e){");
+		incrementIndentLevel();
+			appendLine("if(e == this){ return 0; }");
+			appendLine("if(e instanceof "+prefix+sort+"Variable){ return 1; }");
+			appendLine("if(!(e instanceof "+TYPE+")){ return PRIORITY - e.PRIORITY; }");
+			if(SIZE >0 ){
+				appendLine(TYPE+" ee = ("+TYPE+") e;");
+				appendLine("int result = 0;");
+				for(int i = 0; i < SIZE; i++){
+					appendLine("result = e"+i+".compareTo(ee.e"+i+");");
+					appendLine("if(result != 0){ return result; }");
+				}
+			}
+			appendLine("return 0;");
 		decrementIndentLevel();
 		appendLine('}');
 

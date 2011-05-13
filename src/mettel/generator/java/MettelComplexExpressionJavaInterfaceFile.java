@@ -23,6 +23,9 @@ package mettel.generator.java;
  */
 public class MettelComplexExpressionJavaInterfaceFile extends MettelJavaInterfaceFile {
 
+//	private String prefix = "Mettel";
+	private static int counter = 0;
+	private int priority = -1;
 	/**
 	 * @param prefix
 	 * @param sort
@@ -30,6 +33,13 @@ public class MettelComplexExpressionJavaInterfaceFile extends MettelJavaInterfac
 	 */
 	public MettelComplexExpressionJavaInterfaceFile(String prefix, String sort, MettelJavaPackage pack){
 		super(prefix+sort, pack, new String[]{prefix+"Expression"});
+		priority = counter++;
+//		this.prefix = prefix;
+		body();
+	}
+
+	private void body(){
+		appendLine("static final int PRIORITY = "+priority+';');
 	}
 
 }
