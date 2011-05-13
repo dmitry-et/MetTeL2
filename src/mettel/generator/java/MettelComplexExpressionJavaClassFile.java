@@ -16,6 +16,11 @@
  */
 package mettel.generator.java;
 
+import java.util.List;
+
+import mettel.language.MettelStringLiteral;
+import mettel.language.MettelToken;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -190,5 +195,31 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 		decrementIndentLevel();
 		appendLine('}');
 
+	}
+
+	public void addToStringMethod(List<MettelToken> tokens){
+		appendLine("private String str = null;");
+		appendLine("public String toString(){");
+		incrementIndentLevel();
+			appendLine("if(str == null){");
+			incrementIndentLevel();
+				appendLine("StringBuilder b = new StringBuilder();");
+				appendLine("b.append('(');");
+				int i = 0;
+				for(MettelToken t:tokens){
+					if(t instanceof MettelStringLiteral){
+						appendLine("b.append("+t+");");
+					}else{
+						appendLine("b.append(e"+i+");");
+						i++;
+					}
+				}
+				appendLine("b.append(')');");
+				appendLine("str = b.toString();");
+			decrementIndentLevel();
+			appendLine('}');
+			appendLine("return str;");
+		decrementIndentLevel();
+		appendLine('}');
 	}
 }
