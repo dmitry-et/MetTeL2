@@ -94,6 +94,7 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 		appendLine("public int compareTo(" + prefix + "Expression e){");
 		incrementIndentLevel();
 			appendLine("if(e instanceof " + prefix + type +"Variable) return name.compareTo(("+prefix+type+"Variable)e.name());");
+			appendLine("if(e instanceof " + prefix + type +") return -1;");
 			appendLine("return SORTID - ("+prefix+"AbstractExpression)e.sortId());");
 		decrementIndentLevel();
 		appendLine('}');

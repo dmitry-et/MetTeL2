@@ -188,6 +188,7 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 		appendLine("public int compareTo("+prefix+"Expression e){");
 		incrementIndentLevel();
 			appendLine("if(e == this){ return 0; }");
+			appendLine("if(!(e instanceof "+prefix+sort+"){ return SORTID - e.SORTID; }");
 			appendLine("if(e instanceof "+prefix+sort+"Variable){ return 1; }");
 			appendLine("if(!(e instanceof "+TYPE+")){ return PRIORITY - e.PRIORITY; }");
 			if(SIZE >0 ){
