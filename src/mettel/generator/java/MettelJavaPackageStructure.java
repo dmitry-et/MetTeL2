@@ -79,7 +79,15 @@ public class MettelJavaPackageStructure {
 		for(String sort:sorts){
 			langPackage.add(new MettelComplexExpressionJavaInterfaceFile(prefix,sort,langPackage));
 			langPackage.add(new MettelVariableJavaClassFile(prefix,sort,langPackage));
+			iFactory.addVariableMethod(sort);
+			factory.addVariableMethod(sort);
 		}
+	}
+
+	public void appendConnectiveClass(String prefix, String sort, String name, String[] sorts){
+		langPackage.add(new MettelComplexExpressionJavaClassFile(prefix,sort,name,sorts,langPackage));
+		iFactory.addCreateMethod(sort, sorts);
+		factory.addCreateMethod(sort, sorts);
 	}
 
 	/*public void appendLexer(String name, MettelANTLRHeader h, InputStream stream){

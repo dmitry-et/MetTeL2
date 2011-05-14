@@ -144,6 +144,9 @@ public class MettelANTLRGrammarGenerator {
 
 				grammar.addRule(new MettelANTLRRule(s1,st));
 
+				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, s.identifier(),
+						new String[]{((MettelSort)tokens[0]).name(), ((MettelSort)tokens[2]).name()});
+
 			}else if( (SIZE == 2) &&
 					  (tokens[0] instanceof MettelSort) &&
 					  (SORT_NAME.equals(((MettelSort)tokens[0]).name())) &&
@@ -158,17 +161,24 @@ public class MettelANTLRGrammarGenerator {
 
 				grammar.addRule(new MettelANTLRRule(s1,st));
 
+				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, s.identifier(),
+						new String[]{((MettelSort)tokens[0]).name()});
+
+
 			}else{ //if(tokens[0] instanceof MettelStringLiteral){
 				MettelANTLRMultiaryBNFStatement st = new MettelANTLRMultiaryBNFStatement(
 						MettelANTLRMultiaryBNFStatement.OR);
 				st.addExpression(new MettelANTLRRuleReference(s0));
 				MettelANTLRMultiaryBNFStatement st0 = new MettelANTLRMultiaryBNFStatement();
 				//st0.addExpression(new MettelANTLRToken(tokens[0].toString()));
+
+				String[] sortStrings = new String[SIZE];
 				for(int i = 0; i < SIZE; i++){
 					if(tokens[i] instanceof MettelStringLiteral){
 						st0.addExpression(new MettelANTLRToken(tokens[i].toString()));
 					}else if(tokens[i] instanceof MettelSort){
 						String name = ((MettelSort)tokens[i]).name();
+						sortStrings[i] = name;
 						if(SORT_NAME.equals(name)){
 							st0.addExpression(new MettelANTLRRuleReference(s0));
 						}else{
@@ -179,6 +189,9 @@ public class MettelANTLRGrammarGenerator {
 				st.addExpression(st0);
 
 				grammar.addRule(new MettelANTLRRule(s1,st));
+
+				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, s.identifier(),sortStrings);
+
 			}//TODO other alternatives
 			s0 = s1;
 		}
