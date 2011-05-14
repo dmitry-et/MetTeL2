@@ -159,7 +159,7 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 		incrementIndentLevel();
 			appendLine("if(hashCode == 0){");
 			incrementIndentLevel();
-				appendLine("hashCode = 29*PRIORITY;");
+				appendLine("hashCode = 31*SORTID + PRIORITY;");
 				for(int i = 0; i < SIZE; i++){
 					appendLine("hashCode = 31*hashCode + e"+i+".hashCode();");
 				}
