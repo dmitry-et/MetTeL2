@@ -65,7 +65,7 @@ public class MettelObjectFactoryJavaClassFile extends MettelJavaClassFile {
 			append("public "+TYPE+" create"+MettelJavaNames.firstCharToUpperCase(ltype) + '(');
 			append(prefix+MettelJavaNames.firstCharToUpperCase(types[0])+" e"+0);
 			for(int i = 1; i < SIZE; i++){
-				append(", "+prefix+MettelJavaNames.firstCharToUpperCase(types[i])+"e"+i);
+				append(", "+prefix+MettelJavaNames.firstCharToUpperCase(types[i])+" e"+i);
 			}
 		}else{
 			append("public "+TYPE+' '+ltype+"Constant(e");
@@ -100,7 +100,7 @@ public class MettelObjectFactoryJavaClassFile extends MettelJavaClassFile {
 		final String TYPE = type + "Variable";
 		final String PTYPE = prefix + MettelJavaNames.firstCharToUpperCase(TYPE);
 
-		appendLine("private Map<String, "+PTYPE+"> "+type+"Variables = new TreeMap<String, "+PTYPE+">();");
+		appendLine("private Map<String, "+PTYPE+"> "+TYPE+"s = new TreeMap<String, "+PTYPE+">();");
 		appendEOL();
 
 		appendLine("public "+PTYPE + " create" + MettelJavaNames.firstCharToUpperCase(TYPE) + "(String name){");

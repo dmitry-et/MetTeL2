@@ -65,7 +65,7 @@ public class MettelObjectFactoryJavaInterfaceFile extends MettelJavaInterfaceFil
 			append(TYPE + " create" + MettelJavaNames.firstCharToUpperCase(ltype) + '(');
 			append(prefix + MettelJavaNames.firstCharToUpperCase(types[0]) +" e0");
 			for(int i = 1; i < SIZE; i++){
-				append(", " + prefix + MettelJavaNames.firstCharToUpperCase(types[i]) + 'e' + i);
+				append(", " + prefix + MettelJavaNames.firstCharToUpperCase(types[i]) + " e" + i);
 			}
 			append(");");
 		}else if(SIZE == 0){
@@ -76,7 +76,7 @@ public class MettelObjectFactoryJavaInterfaceFile extends MettelJavaInterfaceFil
 
 	public void addVariableMethod(String type){
 		final String TYPE = type + "Variable";
-		appendLine(prefix + TYPE + " create" + TYPE + "(String name);");
+		appendLine(prefix + MettelJavaNames.firstCharToUpperCase(TYPE) + " create" + MettelJavaNames.firstCharToUpperCase(TYPE) + "(String name);");
 	}
 
 	private void body(){
