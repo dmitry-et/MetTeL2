@@ -57,11 +57,12 @@ BIN_DIR := $(BASE_DIR)/bin
 SRC_DIR := $(BASE_DIR)/src
 LIB_DIR := $(BASE_DIR)/lib
 CLASSES_DIR := $(BASE_DIR)/classes
+RESOURCE_DIR := $(BASE_DIR)/resources
 #AST_CLASSES_DIR := 
 
 # Resources
-SRC_RC_FILES := $(SRC_DIR)/mettel/generator/antlr/resources/lexer
-RC_FILES := $(shell echo $(SRC_RC_FILES) | sed -e 's/src/classes/g')
+SRC_RESOURCE_FILES := $(shell find $(RESOURCE_DIR) -type f ! -path '*.svn*') 
+RESOURCE_FILES := $(shell echo $(SRC_RESOURCE_FILES) | sed -e 's/resources/classes/g')
 
 # Doc paths
 DOC_DIR := $(BASE_DIR)/doc
@@ -131,8 +132,9 @@ $(PARSER_DIR)/$(LEXER_NAME).java \
 $(PARSER_DIR)/$(PARSER_NAME).java
 
 # Classes
-EXTRA_CLASSES := 
-CLASSES := $(shell echo $(SOURCES) | sed -e 's/java/class/g; s/src/classes/g') $(EXTRA_CLASSES)
+#EXTRA_CLASSES := 
+CLASSES := $(shell echo $(SOURCES) | sed -e 's/java/class/g; s/src/classes/g')
+#$(EXTRA_CLASSES)
 
 ### Test ###########################################################################
 
@@ -326,23 +328,28 @@ compile-ast: clear-ast-classes $(AST_SOURCES) $(CLASSES_DIR)
 
 compile: $(CLASSES) 
 
-$(CLASSES): $(SOURCES) $(CLASSES_DIR)
+$(CLASSES): $(CLASSES_DIR) $(SOURCES) 
 #	@ echo $(CLASSES)
 	@ echo $(DELIM0)
 	@ echo "Compiling project"
 	@ echo $(DELIM1)
 	@ $(JAVAC) -Xlint:unchecked -classpath $(COMPILE_CLASSPATH) -d "$(CLASSES_DIR)" $(SOURCES) 2>$(JAVAC_LOG_FILE) || (cat $(JAVAC_LOG_FILE) && exit 1)
     
-resources: $(RC_FILES)
+resources: $(RESOURCE_FILES)
 
-$(RC_FILES): $(CLASSES_DIR) $(SRC_RC_FILES)
+$(RESOURCE_FILES): $(CLASSES_DIR) $(SRC_RESOURCE_FILES)
 	@ echo $(DELIM0)
 	@ echo "Copying resources"
 	@ echo $(DELIM1)
-	@ for i in $(SRC_RC_FILES); do \
-	    j=$$(echo $$i | sed -e 's/src/classes/g'); \
-	    mkdir -p $$(dirname $$j); \
-	    cp -r $$i $$j; done
+	cd $(RESOURCE_DIR) && cp -R --parents $(shell cd $(RESOURCE_DIR) && find . -type f ! -path '*.svn*') $(CLASSES_DIR)
+	
+#/ && cp -v -R --parents $(shell find . -type f ! -name '*.svn*') $(CLASSES_DIR)
+#@ cd $(BASE_DIR) 
+	
+#	@ for i in $(SRC_RC_FILES); do \
+#	    j=$$(echo $$i | sed -e 's/src/classes/g'); \
+#	    mkdir -p $$(dirname $$j); \
+#	    cp -r $$i $$j; done
 
 jar: $(JAR_FILE)
 
