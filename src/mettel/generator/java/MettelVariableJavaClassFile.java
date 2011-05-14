@@ -82,7 +82,7 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 		incrementIndentLevel();
 		appendLine("if(hashCode == 0){");
 		incrementIndentLevel();
-			appendLine("hashCode = 31*PRIORITY + name.hashCode();");
+			appendLine("hashCode = 23*SORTID + name.hashCode();");
 		decrementIndentLevel();
 		appendLine('}');
 		appendLine("return hashCode;");
@@ -94,7 +94,7 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 		appendLine("public int compareTo(" + prefix + "Expression e){");
 		incrementIndentLevel();
 			appendLine("if(e instanceof " + prefix + type +"Variable) return name.compareTo(("+prefix+type+"Variable)e.name());");
-			appendLine("return PRIORITY - ("+prefix+"AbstractExpression)e.priority());");
+			appendLine("return SORTID - ("+prefix+"AbstractExpression)e.sortId());");
 		decrementIndentLevel();
 		appendLine('}');
 

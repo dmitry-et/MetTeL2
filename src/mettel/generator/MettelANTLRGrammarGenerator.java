@@ -82,6 +82,7 @@ public class MettelANTLRGrammarGenerator {
 		grammarPackage = new MettelJavaPackage(PATH+'.'+GRAMMAR_STRING);
 */
 		MettelJavaPackageStructure pStructure = new MettelJavaPackageStructure(PATH);
+		pStructure.appendStandardClasses(name);
 
 		//new java.io.File("dir").
 		grammar.addToHeader(s);
@@ -90,10 +91,16 @@ public class MettelANTLRGrammarGenerator {
 //		lexerHeader.addStatement(s);
 		grammar.addToLexerHeader(s);
 
-		for(MettelSort sort:syn.sorts()){
+		final Collection<MettelSort> sorts = syn.sorts();
+		final int SIZE = sorts.size();
+		String[] sortStrings = new String[SIZE];
+		int i = 0;
+		for(MettelSort sort:sorts){
+			sortStrings[i++] = sort.name();
 			processSort(grammar,sort);
 			processBNFs(grammar,sort,syn.getBNFs(sort));
 		}
+		pStructure.appendStandardClasses(name,sortStrings);
 
 //		grammarPackage.createFile(name+".g").append(grammar.toStringBuilder());
 

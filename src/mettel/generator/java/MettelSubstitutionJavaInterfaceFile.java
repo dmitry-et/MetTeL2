@@ -24,7 +24,7 @@ package mettel.generator.java;
 public class MettelSubstitutionJavaInterfaceFile extends MettelJavaInterfaceFile {
 
 	public MettelSubstitutionJavaInterfaceFile(String prefix,
-			MettelJavaPackage pack, String[] sorts) {
+			MettelJavaPackage pack) {
 		super(prefix+"Substitution", pack,
 				new String[]{prefix+"Replacement"});
 	}

@@ -70,7 +70,7 @@ public class MettelAbstractExpressionJavaClassFile extends MettelJavaClassFile {
 
 		 appendEOL();
 
-		 appendLine("abstract int priority();");
+		 appendLine("abstract int sortId();");
 
 /*		 appendEOL();
 

@@ -21,14 +21,14 @@ package mettel.generator.java;
  * @version $Revision$ $Date$
  *
  */
-public class MettelObjectFactoryInterfaceFile extends MettelJavaInterfaceFile {
+public class MettelObjectFactoryJavaInterfaceFile extends MettelJavaInterfaceFile {
 
 	private String prefix = "Mettel";
 	/**
 	 * @param name
 	 * @param pack
 	 */
-	public MettelObjectFactoryInterfaceFile(String prefix, MettelJavaPackage pack) {
+	public MettelObjectFactoryJavaInterfaceFile(String prefix, MettelJavaPackage pack) {
 		super(prefix+"ObjectFactory", pack, null);
 		this.prefix = prefix;
 		fields();

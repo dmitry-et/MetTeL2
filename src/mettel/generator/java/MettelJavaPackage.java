@@ -53,6 +53,10 @@ public class MettelJavaPackage {
 		return file;
 	}
 
+	public void add(MettelJavaFile file){
+		files.add(file);
+	}
+
 	//outputPath includes final separator and conforms path format on the system
 	public void flush(String outputPath) throws IOException {
 		final String PATH = MettelJavaNames.addSeparator(outputPath) + MettelJavaNames.systemPath(path);

@@ -41,6 +41,9 @@ public class MettelJavaPackageStructure {
 
 	private MettelJavaPackage grammarPackage = null, langPackage = null;
 
+	private MettelObjectFactoryJavaInterfaceFile iFactory = null;
+	private MettelObjectFactoryJavaClassFile factory = null;
+
 	public MettelJavaPackageStructure(String base){
 		super();
 
@@ -51,6 +54,32 @@ public class MettelJavaPackageStructure {
 
 	public void appendParser(MettelANTLRGrammar g){
 		grammarPackage.createFile(g.name(),"g").append(g.toStringBuilder());
+	}
+
+	public void appendStandardClasses(String prefix){
+		langPackage.add(new MettelExpressionInterfaceFile(prefix,langPackage));
+		langPackage.add(new MettelVariableJavaInterfaceFile(prefix,langPackage));
+
+		langPackage.add(new MettelAbstractExpressionJavaClassFile(prefix,langPackage));
+		langPackage.add(new MettelAbstractVariableJavaClassFile(prefix,langPackage));
+
+		iFactory = new MettelObjectFactoryJavaInterfaceFile(prefix,langPackage);
+		langPackage.add(iFactory);
+
+		factory = new MettelObjectFactoryJavaClassFile(prefix,langPackage);
+		langPackage.add(factory);
+	}
+
+	public void appendStandardClasses(String prefix, String[] sorts){
+		langPackage.add(new MettelReplacementJavaInterfaceFile(prefix,langPackage,sorts));
+		langPackage.add(new MettelSubstitutionJavaInterfaceFile(prefix,langPackage));
+		langPackage.add(new MettelReplacementJavaClassFile(prefix,langPackage,sorts));
+		langPackage.add(new MettelSubstitutionJavaClassFile(prefix,langPackage,sorts));
+
+		for(String sort:sorts){
+			langPackage.add(new MettelComplexExpressionJavaInterfaceFile(prefix,sort,langPackage));
+			langPackage.add(new MettelVariableJavaClassFile(prefix,sort,langPackage));
+		}
 	}
 
 	/*public void appendLexer(String name, MettelANTLRHeader h, InputStream stream){

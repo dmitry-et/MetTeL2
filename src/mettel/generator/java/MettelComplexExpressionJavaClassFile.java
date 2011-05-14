@@ -28,6 +28,9 @@ import mettel.language.MettelToken;
  */
 public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 
+	private static int counter = 0;
+	private int priority = -1;
+
 	private String prefix = "Mettel";
 	private String sort = null;
 	private String name = null;
@@ -38,6 +41,8 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 	 */
 	public MettelComplexExpressionJavaClassFile(String prefix, String sort, String name, String[] sorts, MettelJavaPackage pack){
 		super(prefix+name+sort, pack, "public", prefix+"AbstractExpression", new String[]{prefix+sort});
+		priority = ++counter;
+
 		this.prefix = prefix;
 		this.sort = sort;
 		this.name = name;
@@ -47,6 +52,8 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 	private void body(String[] sorts){
 		final String TYPE = prefix+name+sort;
 		final int SIZE = sorts.length;
+
+		appendLine("static final int PRIORITY = "+priority+';');
 
 		for(int i = 0; i < SIZE; i++){
 			appendLine("protected "+prefix+sorts[i]+" e"+i+" = null;");
@@ -72,7 +79,7 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 		appendLine('}');
 		appendEOL();
 
-		appendLine("static int priority(){ return PRIORITY; }");
+		appendLine("static int sortId(){ return SORTID; }");
 
 		appendEOL();
 
@@ -152,7 +159,7 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 		incrementIndentLevel();
 			appendLine("if(hashCode == 0){");
 			incrementIndentLevel();
-				appendLine("hashCode = PRIORITY;");
+				appendLine("hashCode = 29*PRIORITY;");
 				for(int i = 0; i < SIZE; i++){
 					appendLine("hashCode = 31*hashCode + e"+i+".hashCode();");
 				}
