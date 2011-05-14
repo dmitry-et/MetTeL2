@@ -16,6 +16,8 @@
  */
 package mettel.generator.java;
 
+import mettel.util.MettelJavaNames;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -32,7 +34,7 @@ public class MettelComplexExpressionJavaInterfaceFile extends MettelJavaInterfac
 	 * @param pack
 	 */
 	public MettelComplexExpressionJavaInterfaceFile(String prefix, String sort, MettelJavaPackage pack){
-		super(prefix+sort, pack, new String[]{prefix+"Expression"});
+		super(prefix+MettelJavaNames.firstCharToUpperCase(sort), pack, new String[]{prefix+"Expression"});
 		sortid = ++counter;
 //		this.prefix = prefix;
 		body();

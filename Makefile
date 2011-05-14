@@ -133,7 +133,7 @@ $(PARSER_DIR)/$(PARSER_NAME).java
 
 # Classes
 #EXTRA_CLASSES := 
-CLASSES := $(shell echo $(SOURCES) | sed -e 's/java/class/g; s/src/classes/g')
+CLASSES := $(shell echo $(SOURCES) | sed -e 's/\.java/\.class/g; s/src/classes/g')
 #$(EXTRA_CLASSES)
 
 ### Test ###########################################################################
@@ -147,7 +147,7 @@ TEST_CLASSPATH:=$(TEST_COMPILE_CLASSPATH):$(TEST_JAR_FILE)
 TEST_CLASSES_DIR:=$(TEST_DIR)/classes
 TEST_SRC_DIR:=$(TEST_DIR)/src
 #TEST_SOURCES := $(shell find $(TEST_SRC_DIR) -name '*.java')
-#TEST_CLASSES := $(shell echo $(TEST_SOURCES) | sed -e 's/java/class/g; s/src/classes/g')
+#TEST_CLASSES := $(shell echo $(TEST_SOURCES) | sed -e 's/\.java/\.class/g; s/src/classes/g')
 
 TEST_FILE := $(TEST_DIR)/Test
 EXAMPLES_DIR := $(BASE_DIR)/examples
@@ -341,7 +341,7 @@ $(RESOURCE_FILES): $(CLASSES_DIR) $(SRC_RESOURCE_FILES)
 	@ echo $(DELIM0)
 	@ echo "Copying resources"
 	@ echo $(DELIM1)
-	cd $(RESOURCE_DIR) && cp -R --parents $(shell cd $(RESOURCE_DIR) && find . -type f ! -path '*.svn*') $(CLASSES_DIR)
+	@ cd $(RESOURCE_DIR) && cp -R --parents $(shell cd $(RESOURCE_DIR) && find . -type f ! -path '*.svn*') $(CLASSES_DIR)
 	
 #/ && cp -v -R --parents $(shell find . -type f ! -name '*.svn*') $(CLASSES_DIR)
 #@ cd $(BASE_DIR) 
@@ -353,7 +353,7 @@ $(RESOURCE_FILES): $(CLASSES_DIR) $(SRC_RESOURCE_FILES)
 
 jar: $(JAR_FILE)
 
-$(JAR_FILE): $(CLASSES) $(RC_FILES) $(MANIFEST_FILE)
+$(JAR_FILE): $(CLASSES) $(RESOURCE_FILES) $(MANIFEST_FILE)
 	@ echo $(DELIM0)
 	@ echo "Building runtime jar ($(JAR_FILE_NAME))"
 	@ echo $(DELIM1)

@@ -172,13 +172,13 @@ public class MettelANTLRGrammarGenerator {
 				MettelANTLRMultiaryBNFStatement st0 = new MettelANTLRMultiaryBNFStatement();
 				//st0.addExpression(new MettelANTLRToken(tokens[0].toString()));
 
-				String[] sortStrings = new String[SIZE];
+				ArrayList<String> sortStrings = new ArrayList<String>();
 				for(int i = 0; i < SIZE; i++){
 					if(tokens[i] instanceof MettelStringLiteral){
 						st0.addExpression(new MettelANTLRToken(tokens[i].toString()));
 					}else if(tokens[i] instanceof MettelSort){
 						String name = ((MettelSort)tokens[i]).name();
-						sortStrings[i] = name;
+						sortStrings.add(name);
 						if(SORT_NAME.equals(name)){
 							st0.addExpression(new MettelANTLRRuleReference(s0));
 						}else{
@@ -190,7 +190,7 @@ public class MettelANTLRGrammarGenerator {
 
 				grammar.addRule(new MettelANTLRRule(s1,st));
 
-				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, s.identifier(),sortStrings);
+				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, s.identifier(), sortStrings.toArray(new String[sortStrings.size()]));
 
 			}//TODO other alternatives
 			s0 = s1;

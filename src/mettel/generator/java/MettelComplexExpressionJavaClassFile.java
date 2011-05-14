@@ -20,6 +20,7 @@ import java.util.List;
 
 import mettel.language.MettelStringLiteral;
 import mettel.language.MettelToken;
+import mettel.util.MettelJavaNames;
 
 /**
  * @author Dmitry Tishkovsky
@@ -40,7 +41,7 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 	 * @param pack
 	 */
 	public MettelComplexExpressionJavaClassFile(String prefix, String sort, String name, String[] sorts, MettelJavaPackage pack){
-		super(prefix+name+sort, pack, "public", prefix+"AbstractExpression", new String[]{prefix+sort});
+		super(prefix+MettelJavaNames.firstCharToUpperCase(name)+MettelJavaNames.firstCharToUpperCase(sort), pack, "public", prefix+"AbstractExpression", new String[]{prefix+sort});
 		priority = ++counter;
 
 		this.prefix = prefix;
@@ -50,7 +51,7 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 	}
 
 	private void body(String[] sorts){
-		final String TYPE = prefix+name+sort;
+		final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(name)+MettelJavaNames.firstCharToUpperCase(sort);
 		final int SIZE = sorts.length;
 
 		appendLine("static final int PRIORITY = "+priority+';');

@@ -16,6 +16,8 @@
  */
 package mettel.generator.java;
 
+import mettel.util.MettelJavaNames;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -27,14 +29,15 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 	private String type = null;
 
 	public MettelVariableJavaClassFile(String prefix, String type, MettelJavaPackage pack) {
-		super(prefix + type + "Variable", pack, "public", prefix + "AbstractVariable", new String[]{prefix + type});
+		super(prefix + MettelJavaNames.firstCharToUpperCase(type) + "Variable", pack, "public",
+				prefix + "AbstractVariable", new String[]{prefix + MettelJavaNames.firstCharToUpperCase(type)});
 		this.prefix = prefix;
 		this.type = type;
 		body();
 	}
 
 	private void body(){
-		final String TYPE = prefix + type;
+		final String TYPE = prefix + MettelJavaNames.firstCharToUpperCase(type);
 
 		appendLine("public " + TYPE + "Variable(String name, " + prefix + "ObjectFactory factory) {");
 		incrementIndentLevel();
@@ -44,16 +47,16 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 
 	    appendEOL();
 
-	    appendLine("public " + TYPE + "replace(" + prefix + "Replacement r) {");
+	    appendLine("public " + prefix + "Expression replace(" + prefix + "Replacement r) {");
 	    incrementIndentLevel();
-	    	appendLine(TYPE + "e = r.get" + type +"(this);");
+	    	appendLine(TYPE + " e = r.get" + type +"(this);");
 	    	appendLine("return (e == null) ? this : e;");
 	   	decrementIndentLevel();
 	   	appendLine('}');
 
 	   	appendEOL();
 
-	   	appendLine("public " + TYPE + "substitute(" + prefix + "Substitution s) {");
+	   	appendLine("public " + prefix + "Expression substitute(" + prefix + "Substitution s) {");
 	    incrementIndentLevel();
 	    	appendLine("return replace(s);");
 	   	decrementIndentLevel();
@@ -66,8 +69,8 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 	    incrementIndentLevel();
 	    	appendLine("if(e instanceof " + TYPE +") {");
 	    	incrementIndentLevel();
-	    		appendLine(prefix + "Substitution s = new " + prefix + "HashSubstitution();");
-	    		appendLine("s.add(this, (" + TYPE + ") e;");
+	    		appendLine(prefix + "Substitution s = new " + prefix + "TreeSubstitution();");
+	    		appendLine("s.add(this, (" + TYPE + ")e);");
 	    		appendLine("return s;");
 	    	decrementIndentLevel();
 	    	appendLine('}');
@@ -93,9 +96,9 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 
 		appendLine("public int compareTo(" + prefix + "Expression e){");
 		incrementIndentLevel();
-			appendLine("if(e instanceof " + prefix + type +"Variable) return name.compareTo(("+prefix+type+"Variable)e.name());");
-			appendLine("if(e instanceof " + prefix + type +") return -1;");
-			appendLine("return SORTID - ("+prefix+"AbstractExpression)e.sortId());");
+			appendLine("if(e instanceof " +TYPE +"Variable) return name.compareTo((("+TYPE+"Variable)e).name());");
+			appendLine("if(e instanceof " +TYPE +") return -1;");
+			appendLine("return SORTID - (("+prefix+"AbstractExpression)e).sortId());");
 		decrementIndentLevel();
 		appendLine('}');
 
@@ -104,8 +107,8 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 		appendLine("public boolean equals(Object o){");
 		incrementIndentLevel();
 			appendLine("if(o == this){ return true; }");
-			appendLine("if(!(o instanceof "+prefix+type+"Variable)){ return false; }");
-			appendLine("return name.equals(("+prefix+type+"Variable)o.name());");
+			appendLine("if(!(o instanceof "+TYPE+"Variable)){ return false; }");
+			appendLine("return name.equals((("+TYPE+"Variable)o).name());");
 		decrementIndentLevel();
 		appendLine('}');
 	}

@@ -16,6 +16,8 @@
  */
 package mettel.generator.java;
 
+import mettel.util.MettelJavaNames;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -53,19 +55,21 @@ public class MettelObjectFactoryJavaInterfaceFile extends MettelJavaInterfaceFil
 		appendLine("final " + prefix + "ObjectFactory DEFAULT = new " + prefix +"DefaultObjectFactory();");
 	}
 
-	public void addCreateMethod(String type, String[] types){
-		final String TYPE = prefix + type;
+	public void addCreateMethod(String type, String name, String[] types){
+		final String ltype = name + MettelJavaNames.firstCharToUpperCase(type);
+		final String TYPE = prefix + MettelJavaNames.firstCharToUpperCase(ltype);
 		final int SIZE = types.length;
 
 		indent();
 		if(SIZE > 0){
-			append(TYPE + " create" + type +'(' + prefix + types[0] +"e0");
+			append(TYPE + " create" + MettelJavaNames.firstCharToUpperCase(ltype) + '(');
+			append(prefix + MettelJavaNames.firstCharToUpperCase(types[0]) +" e0");
 			for(int i = 1; i < SIZE; i++){
-				append(", " + prefix + types[i] + 'e' + i);
+				append(", " + prefix + MettelJavaNames.firstCharToUpperCase(types[i]) + 'e' + i);
 			}
 			append(");");
 		}else if(SIZE == 0){
-			append(TYPE + ' ' + type + "Constant();");
+			append(TYPE + ' ' + ltype + "Constant();");
 		}
 		appendEOL();
 	}

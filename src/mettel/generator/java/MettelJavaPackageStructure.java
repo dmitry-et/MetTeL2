@@ -86,8 +86,8 @@ public class MettelJavaPackageStructure {
 
 	public void appendConnectiveClass(String prefix, String sort, String name, String[] sorts){
 		langPackage.add(new MettelComplexExpressionJavaClassFile(prefix,sort,name,sorts,langPackage));
-		iFactory.addCreateMethod(sort, sorts);
-		factory.addCreateMethod(sort, sorts);
+		factory.addCreateMethod(sort, name, sorts);
+		iFactory.addCreateMethod(sort, name, sorts);
 	}
 
 	/*public void appendLexer(String name, MettelANTLRHeader h, InputStream stream){

@@ -16,6 +16,8 @@
  */
 package mettel.generator.java;
 
+import java.io.IOException;
+
 import mettel.util.MettelStrings;
 
 /**
@@ -56,5 +58,10 @@ public class MettelJavaFile extends MettelFile {
 			append('}');appendEOL();
 			closed = true;
 		}
+	}
+
+	public void flush(String outputPath) throws IOException {
+		closing();
+		super.flush(outputPath);
 	}
 }
