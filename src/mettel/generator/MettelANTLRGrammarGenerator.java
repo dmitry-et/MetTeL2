@@ -91,14 +91,14 @@ public class MettelANTLRGrammarGenerator {
 //		lexerHeader.addStatement(s);
 		grammar.addToLexerHeader(s);
 
-		final Collection<MettelSort> sorts = syn.sorts();
+		final Collection<MettelSort> sorts = syn.sorts();//TODO refactoring needed
 		final int SIZE = sorts.size();
 		String[] sortStrings = new String[SIZE];
 		int i = 0;
 		for(MettelSort sort:sorts){
 			sortStrings[i++] = sort.name();
 			processSort(grammar,sort);
-			processBNFs(grammar,sort,syn.getBNFs(sort));
+			processBNFs(grammar,pStructure,sort,syn.getBNFs(sort));
 		}
 		pStructure.appendStandardClasses(name,sortStrings);
 
@@ -114,7 +114,7 @@ public class MettelANTLRGrammarGenerator {
 	 * @param grammar
 	 * @param sort
 	 */
-	private void processBNFs(MettelANTLRGrammar grammar, MettelSort sort, List<MettelBNFStatement> bnfs) {
+	private void processBNFs(MettelANTLRGrammar grammar, MettelJavaPackageStructure pStructure, MettelSort sort, List<MettelBNFStatement> bnfs) {
 		final String SORT_NAME = sort.name();
 		String s0 = BASIC_STRING + MettelJavaNames.firstCharToUpperCase(SORT_NAME);
 		String s1 = null;
