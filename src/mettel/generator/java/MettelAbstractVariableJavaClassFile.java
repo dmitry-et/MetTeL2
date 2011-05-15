@@ -39,7 +39,7 @@ public class MettelAbstractVariableJavaClassFile extends MettelJavaClassFile {
 	}
 
 	private void body(){
-		appendLine("private String name = null;");
+		appendLine("String name = null;");
 
 		appendEOL();
 
@@ -63,6 +63,12 @@ public class MettelAbstractVariableJavaClassFile extends MettelJavaClassFile {
 		appendLine("public String toString(){");
 		incrementIndentLevel();
 			appendLine("return name;");
+		decrementIndentLevel();
+		appendLine('}');
+
+		appendLine("int priority(){");
+		incrementIndentLevel();
+			appendLine("return -1;");
 		decrementIndentLevel();
 		appendLine('}');
 

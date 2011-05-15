@@ -16,6 +16,8 @@
  */
 package mettel.generator.java;
 
+import mettel.util.MettelJavaNames;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -23,9 +25,22 @@ package mettel.generator.java;
  */
 public class MettelSubstitutionJavaInterfaceFile extends MettelJavaInterfaceFile {
 
+	private String prefix = "Mettel";
+
 	public MettelSubstitutionJavaInterfaceFile(String prefix,
-			MettelJavaPackage pack) {
+			MettelJavaPackage pack, String[] sorts) {
 		super(prefix+"Substitution", pack,
 				new String[]{prefix+"Replacement"});
+		this.prefix = prefix;
+		body(sorts);
+	}
+
+	private void body(String[] sorts){
+		for(String sort:sorts){
+			final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(sort);
+			appendLine(TYPE+" get"+MettelJavaNames.firstCharToUpperCase(sort)+'('+TYPE+"Variable e);");appendEOL();
+//			appendLine("Iterator<"+TYPE+"> "+sort+"Iterator();");appendEOL();
+			appendLine("boolean append("+TYPE+"Variable e0, "+TYPE+" e1);");appendEOL();
+		}
 	}
 }

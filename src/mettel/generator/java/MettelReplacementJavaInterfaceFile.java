@@ -16,6 +16,8 @@
  */
 package mettel.generator.java;
 
+import mettel.util.MettelJavaNames;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -29,22 +31,25 @@ public class MettelReplacementJavaInterfaceFile extends MettelJavaInterfaceFile 
 			MettelJavaPackage pack, String[] sorts) {
 		super(prefix+"Replacement", pack,
 				new String[]{"Comparable<"+prefix+"Replacement>"});
+		this.prefix =prefix;
 		body(sorts);
 	}
 
 	void imports(){
-		append("import java.util.Iterator;");appendEOL();
+		appendLine("import java.util.Map;");
+		appendEOL();
 	}
 
 	private void body(String[] sorts){
 		for(String sort:sorts){
-			final String TYPE = prefix+sort;
-			indent();append(TYPE+" get"+sort+'('+TYPE+"e);");appendEOL();
-			indent();append("Iterator<"+TYPE+"> "+sort+"Iterator();");appendEOL();
-			indent();append("boolean append("+TYPE+"e0, "+TYPE+"e1);");appendEOL();
+			final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(sort);
+			appendLine(TYPE+" get"+MettelJavaNames.firstCharToUpperCase(sort)+'('+TYPE+" e);");appendEOL();
+//			appendLine("Iterator<"+TYPE+"> "+sort+"Iterator();");appendEOL();
+			appendLine("Map<"+TYPE+", "+TYPE+"> "+sort+"Map();");appendEOL();
+			appendLine("boolean append("+TYPE+" e0, "+TYPE+" e1);");appendEOL();
 		}
 
-		indent();append("boolean append("+prefix+"Replacement r);");appendEOL();
+		indent();append("boolean append("+prefix+"Replacement r);");appendEOL();appendEOL();
 		    //MettelReplacement compose(MettelReplacement r);
 	}
 

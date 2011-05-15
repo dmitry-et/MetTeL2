@@ -16,6 +16,8 @@
  */
 package mettel.generator.java;
 
+import mettel.util.MettelJavaNames;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -28,21 +30,35 @@ public class MettelSubstitutionJavaClassFile extends MettelJavaClassFile {
 	public MettelSubstitutionJavaClassFile(String prefix,
 			MettelJavaPackage pack, String[] sorts) {
 		super(prefix+"TreeSubstitution", pack, "public", prefix+"TreeReplacement",
-				new String[]{"Comparable<"+prefix+"Substitution>"});
+				new String[]{prefix+"Substitution"});
+		this.prefix = prefix;
 		body(sorts);
 	}
 
 	private void body(String[] sorts){
 		for(String sort:sorts){
-			final String TYPE = prefix+sort;
+			final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(sort);
 
-			appendLine("public boolean append("+TYPE+"e0, "+TYPE+"e1){");
+			appendLine("public "+TYPE+" get"+MettelJavaNames.firstCharToUpperCase(sort)+'('+TYPE+"Variable e){");
 			incrementIndentLevel();
-				appendLine("if(e0 instanceof "+TYPE+"Variable){");
-				incrementIndentLevel();
-					appendLine("return super.append(e0,e1);");
-				decrementIndentLevel();
-				appendLine("}else{ return false; }");
+			//appendLine("if(e0 instanceof "+TYPE+"Variable){");
+			//incrementIndentLevel();
+				appendLine("return super.get"+MettelJavaNames.firstCharToUpperCase(sort)+"(("+TYPE+")e);");
+			//decrementIndentLevel();
+			//appendLine("}else{ return false; }");
+			decrementIndentLevel();
+			appendLine('}');
+
+			appendEOL();
+
+
+			appendLine("public boolean append("+TYPE+"Variable e0, "+TYPE+" e1){");
+			incrementIndentLevel();
+				//appendLine("if(e0 instanceof "+TYPE+"Variable){");
+				//incrementIndentLevel();
+					appendLine("return super.append(("+TYPE+")e0,e1);");
+				//decrementIndentLevel();
+				//appendLine("}else{ return false; }");
 			decrementIndentLevel();
 			appendLine('}');
 			appendEOL();
@@ -58,14 +74,21 @@ public class MettelSubstitutionJavaClassFile extends MettelJavaClassFile {
 
 		appendLine("public boolean equals(Object o){");
 		incrementIndentLevel();
-			appendLine("if(o==this){return true;}");
-			appendLine("if(!(o instanceof "+prefix+"Substitution){return false;}");
+			appendLine("if(o == this){ return true; }");
+			appendLine("if(!(o instanceof "+prefix+"Substitution)){ return false; }");
 			appendLine("final "+prefix+"Substitution r = ("+prefix+"Substitution)o;");
+			boolean notFirst = false;
+			indent();append("return ");
 			for(String sort:sorts){
-				appendLine("boolean result = r"+sort+".equals(r.r"+sort+");");
-				appendLine("if(!result){return false;}");
+				if(notFirst){
+					append(" && ");
+				}else{
+					notFirst = true;
+				}
+				append(sort+"Map.equals(r."+sort+"Map())");
 			}
-			appendLine("return true;");
+			append(';');
+			appendEOL();
 		decrementIndentLevel();
 		appendLine('}');
 		appendEOL();

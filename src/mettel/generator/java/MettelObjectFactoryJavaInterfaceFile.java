@@ -53,6 +53,7 @@ public class MettelObjectFactoryJavaInterfaceFile extends MettelJavaInterfaceFil
 
 	private void fields(){
 		appendLine("final " + prefix + "ObjectFactory DEFAULT = new " + prefix +"DefaultObjectFactory();");
+		appendEOL();
 	}
 
 	public void addCreateMethod(String type, String name, String[] types){
@@ -72,15 +73,19 @@ public class MettelObjectFactoryJavaInterfaceFile extends MettelJavaInterfaceFil
 			append(TYPE + ' ' + ltype + "Constant();");
 		}
 		appendEOL();
+		appendEOL();
 	}
 
 	public void addVariableMethod(String type){
 		final String TYPE = type + "Variable";
 		appendLine(prefix + MettelJavaNames.firstCharToUpperCase(TYPE) + " create" + MettelJavaNames.firstCharToUpperCase(TYPE) + "(String name);");
+		appendEOL();
 	}
 
 	private void body(){
 		appendLine(prefix+"Replacement getReplacement("+prefix+"Replacement r);");
+		appendEOL();
 		appendLine(prefix+"Substitution getSubstitution("+prefix+"Substitution s);");
+		appendEOL();
 	}
 }

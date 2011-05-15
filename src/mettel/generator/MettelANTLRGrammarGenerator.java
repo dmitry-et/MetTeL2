@@ -145,7 +145,7 @@ public class MettelANTLRGrammarGenerator {
 				grammar.addRule(new MettelANTLRRule(s1,st));
 
 				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, s.identifier(),
-						new String[]{((MettelSort)tokens[0]).name(), ((MettelSort)tokens[2]).name()});
+						new String[]{((MettelSort)tokens[0]).name(), ((MettelSort)tokens[2]).name()}, s.tokens());
 
 			}else if( (SIZE == 2) &&
 					  (tokens[0] instanceof MettelSort) &&
@@ -162,7 +162,7 @@ public class MettelANTLRGrammarGenerator {
 				grammar.addRule(new MettelANTLRRule(s1,st));
 
 				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, s.identifier(),
-						new String[]{((MettelSort)tokens[0]).name()});
+						new String[]{((MettelSort)tokens[0]).name()}, s.tokens());
 
 
 			}else{ //if(tokens[0] instanceof MettelStringLiteral){
@@ -190,7 +190,8 @@ public class MettelANTLRGrammarGenerator {
 
 				grammar.addRule(new MettelANTLRRule(s1,st));
 
-				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, s.identifier(), sortStrings.toArray(new String[sortStrings.size()]));
+				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, s.identifier(), sortStrings.toArray(new String[sortStrings.size()]),
+						s.tokens());
 
 			}//TODO other alternatives
 			s0 = s1;

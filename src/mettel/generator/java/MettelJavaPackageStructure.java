@@ -22,12 +22,14 @@ package mettel.generator.java;
 
 //import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.List;
 //import java.io.InputStream;
 //import java.io.InputStreamReader;
 
 import mettel.generator.antlr.MettelANTLRGrammar;
 //import mettel.generator.antlr.MettelANTLRHeader;
 //import mettel.util.MettelIndentedStringBuilder;
+import mettel.language.MettelToken;
 
 /**
  * @author Dmitry Tishkovsky
@@ -72,7 +74,7 @@ public class MettelJavaPackageStructure {
 
 	public void appendStandardClasses(String prefix, String[] sorts){
 		langPackage.add(new MettelReplacementJavaInterfaceFile(prefix,langPackage,sorts));
-		langPackage.add(new MettelSubstitutionJavaInterfaceFile(prefix,langPackage));
+		langPackage.add(new MettelSubstitutionJavaInterfaceFile(prefix,langPackage,sorts));
 		langPackage.add(new MettelReplacementJavaClassFile(prefix,langPackage,sorts));
 		langPackage.add(new MettelSubstitutionJavaClassFile(prefix,langPackage,sorts));
 
@@ -84,8 +86,10 @@ public class MettelJavaPackageStructure {
 		}
 	}
 
-	public void appendConnectiveClass(String prefix, String sort, String name, String[] sorts){
-		langPackage.add(new MettelComplexExpressionJavaClassFile(prefix,sort,name,sorts,langPackage));
+	public void appendConnectiveClass(String prefix, String sort, String name, String[] sorts, List<MettelToken> tokens){
+		MettelComplexExpressionJavaClassFile f = new MettelComplexExpressionJavaClassFile(prefix,sort,name,sorts,langPackage);
+		f.addToStringMethod(tokens);
+		langPackage.add(f);
 		factory.addCreateMethod(sort, name, sorts);
 		iFactory.addCreateMethod(sort, name, sorts);
 	}

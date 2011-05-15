@@ -42,7 +42,7 @@ public class MettelFile extends MettelIndentedStringBuilder{
 	 *
 	 */
 	MettelFile(String fileName, String extension, MettelJavaPackage pack) {
-		super(new StringBuilder(), "    ");
+		super(new StringBuilder(), "    ", 0);
 		this.fileName = fileName;
 		this.extension = extension;
 		this.pack = pack;

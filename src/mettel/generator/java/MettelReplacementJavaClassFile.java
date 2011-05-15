@@ -16,6 +16,8 @@
  */
 package mettel.generator.java;
 
+import mettel.util.MettelJavaNames;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -29,40 +31,45 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 			MettelJavaPackage pack, String[] sorts) {
 		super(prefix+"TreeReplacement", pack, "public", null,
 				new String[]{"Comparable<"+prefix+"Replacement>"});
+		this.prefix = prefix;
 		body(sorts);
 	}
 
 	void imports(){
-		append("import java.util.Iterator;");appendEOL();
+		appendLine("import java.util.Map;");
+		appendLine("import java.util.TreeMap;");
+		appendLine("import java.util.Set;");
+		appendLine("import java.util.TreeSet;");
+		appendEOL();
 	}
 
 	private void body(String[] sorts){
 		for(String sort:sorts){
-			final String TYPE = prefix+sort;
-			appendLine("private final Map<"+TYPE+", "+TYPE+"> r"+sort+" = new TreeMap<"+TYPE+", "+TYPE+">();");
+			final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(sort);
+			appendLine("protected final Map<"+TYPE+", "+TYPE+"> "+sort+"Map = new TreeMap<"+TYPE+", "+TYPE+">();");
 
-			appendLine("public " + TYPE+" get"+sort+'('+TYPE+"e){");
+			appendLine("public " + TYPE+" get"+MettelJavaNames.firstCharToUpperCase(sort)+'('+TYPE+" e){");
 			incrementIndentLevel();
-				appendLine("return r"+sort+".get(e);");
+				appendLine("return "+sort+"Map.get(e);");
 			decrementIndentLevel();
 			appendLine('}');
 			appendEOL();
 
-			appendLine("Map<"+TYPE+", "+TYPE+"> "+sort+"Map(){");
+			appendLine("public Map<"+TYPE+", "+TYPE+"> "+sort+"Map(){");
 			incrementIndentLevel();
-				appendLine("return r"+sort+';');
+				appendLine("return "+sort+"Map;");
 			decrementIndentLevel();
 			appendLine('}');
 			appendEOL();
 
 
-			appendLine("public boolean append("+TYPE+"e0, "+TYPE+"e1){");
+			appendLine("public boolean append("+TYPE+" e0, "+TYPE+" e1){");
 			incrementIndentLevel();
-				appendLine("if(e0==null || e1==null){return false;}");
-				appendLine("final "+TYPE+" e = r"+sort+".get(e0);");
+				appendLine("if(e0 == null || e1 == null){ return false; }");
+				appendLine("final "+TYPE+" e = "+sort+"Map.get(e0);");
 				appendLine("if(e == null){");
 				incrementIndentLevel();
-					appendLine("if(!e0.equals(e1)){ r"+sort+".put(e0,e1); };");
+					appendLine("if(!e0.equals(e1)){ "+sort+"Map.put(e0,e1); };");
 					appendLine("return true;");
 				decrementIndentLevel();
 				appendLine("}else{");
@@ -78,16 +85,16 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 		appendLine("public boolean append("+prefix+"Replacement r){");
 		incrementIndentLevel();
 			for(String sort:sorts){
-				final String TYPE = prefix+sort;
-				appendLine("final Map<"+TYPE+", "+TYPE+"> m = r."+sort+"Map();");
-				appendLine("boolean result = true;");
-				appendLine("for("+TYPE+" key:m.keySet()){");
+				final String uSort = MettelJavaNames.firstCharToUpperCase(sort);
+				final String TYPE = prefix+uSort;
+				appendLine("final Map<"+TYPE+", "+TYPE+"> m"+uSort+" = r."+sort+"Map();");
+				appendLine("for("+TYPE+" key:m"+uSort+".keySet()){");
 				incrementIndentLevel();
-					appendLine("result &= append(key,r.get"+sort+"(e));");
+					appendLine("if(!append(key,r.get"+uSort+"(key))){ return false; }");
 				decrementIndentLevel();
-				appendLine("return result;");
 				appendLine('}');
 			}
+			appendLine("return true;");
 		decrementIndentLevel();
 		appendLine('}');
 		appendEOL();
@@ -98,7 +105,7 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 		incrementIndentLevel();
 			appendLine("hashCode = 1;");
 			for(String sort:sorts){
-				appendLine("hashCode = 31*hashCode + r" +sort +".hashCode();");
+				appendLine("hashCode = 31*hashCode + " +sort +"Map.hashCode();");
 			}
 			appendLine("return hashCode;");
 		decrementIndentLevel();
@@ -107,31 +114,32 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 
 		appendLine("public int compareTo("+prefix+"Replacement r){");
 		incrementIndentLevel();
-			appendLine("if(o==this){return 0;}");
+			appendLine("if(r == this){ return 0; }");
 			for(String sort:sorts){
-				final String TYPE = prefix + sort;
-				appendLine("final Set<"+TYPE+"> keys0 = r"+sort+".keySet();");
-				appendLine("final Set<"+TYPE+"> keys1 = r."+sort+"keySet();");
-				appendLine("final TreeSet<"+TYPE+"> keys = new TreeSet<"+TYPE+">(keys0);");//Note: this is a sorted set!
-				appendLine("keys.addAll(keys1);");
-				appendLine("for("+TYPE +" key:keys){");
+				final String uSort = MettelJavaNames.firstCharToUpperCase(sort);
+				final String TYPE = prefix+uSort;
+				appendLine("final Set<"+TYPE+"> keys"+uSort+"0 = "+sort+"Map.keySet();");
+				appendLine("final Set<"+TYPE+"> keys"+uSort+"1 = r."+sort+"Map().keySet();");
+				appendLine("final TreeSet<"+TYPE+"> keys"+uSort+" = new TreeSet<"+TYPE+">(keys"+uSort+"0);");//Note: this is a sorted set!
+				appendLine("keys"+uSort+".addAll(keys"+uSort+"1);");
+				appendLine("for("+TYPE +" key:keys"+uSort+"){");
 				incrementIndentLevel();
-					appendLine("if(!key0.contains(key){");
+					appendLine("if(!keys"+uSort+"0.contains(key)){");
 						incrementIndentLevel();
 							appendLine("return 1;");
 						decrementIndentLevel();
 					appendLine("}else{");
 						incrementIndentLevel();
-						appendLine("if(!key1.contains(key){");
+						appendLine("if(!keys"+uSort+"1.contains(key)){");
 							incrementIndentLevel();
 								appendLine("return -1;");
 							decrementIndentLevel();
 						appendLine("}else{");
 							incrementIndentLevel();
-								appendLine("final "+TYPE + "v0 = r"+sort+".get(key);");
-								appendLine("final "+TYPE + "v1 = r.get"+sort+"(key);");
+								appendLine("final "+TYPE + " v0 = "+sort+"Map.get(key);");
+								appendLine("final "+TYPE + " v1 = r.get"+uSort+"(key);");
 								appendLine("final int result = v0.compareTo(v1);");
-								appendLine("if(result != 0){return result;}");
+								appendLine("if(result != 0){ return result; }");
 							decrementIndentLevel();
 						appendLine('}');
 						decrementIndentLevel();
@@ -146,14 +154,21 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 
 		appendLine("public boolean equals(Object o){");
 		incrementIndentLevel();
-			appendLine("if(o==this){return true;}");
-			appendLine("if(!(o instanceof "+prefix+"Replacement){return false;}");
+			appendLine("if(o == this){ return true; }");
+			appendLine("if(!(o instanceof "+prefix+"Replacement)){ return false; }");
 			appendLine("final "+prefix+"Replacement r = ("+prefix+"Replacement)o;");
+			boolean notFirst = false;
+			indent();append("return ");
 			for(String sort:sorts){
-				appendLine("boolean result = r"+sort+".equals(r.r"+sort+");");
-				appendLine("if(!result){return false;}");
+				if(notFirst){
+					append(" && ");
+				}else{
+					notFirst = true;
+				}
+				append(sort+"Map.equals(r."+sort+"Map())");
 			}
-			appendLine("return true;");
+			append(';');
+			appendEOL();
 		decrementIndentLevel();
 		appendLine('}');
 		appendEOL();

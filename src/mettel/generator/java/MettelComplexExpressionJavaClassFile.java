@@ -41,7 +41,8 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 	 * @param pack
 	 */
 	public MettelComplexExpressionJavaClassFile(String prefix, String sort, String name, String[] sorts, MettelJavaPackage pack){
-		super(prefix+MettelJavaNames.firstCharToUpperCase(name)+MettelJavaNames.firstCharToUpperCase(sort), pack, "public", prefix+"AbstractExpression", new String[]{prefix+sort});
+		super(prefix+MettelJavaNames.firstCharToUpperCase(name)+MettelJavaNames.firstCharToUpperCase(sort), pack, "public",
+				prefix+"AbstractExpression", new String[]{prefix+MettelJavaNames.firstCharToUpperCase(sort)});
 		priority = ++counter;
 
 		this.prefix = prefix;
@@ -57,16 +58,16 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 		appendLine("static final int PRIORITY = "+priority+';');
 
 		for(int i = 0; i < SIZE; i++){
-			appendLine("protected "+prefix+sorts[i]+" e"+i+" = null;");
+			appendLine("protected "+prefix+MettelJavaNames.firstCharToUpperCase(sorts[i])+" e"+i+" = null;");
 		}
 		appendEOL();
 
 		indent();
 		append("public "+TYPE+'(');
 		if(SIZE>0){
-			append(prefix+sorts[0]+" e"+0);
+			append(prefix+MettelJavaNames.firstCharToUpperCase(sorts[0])+" e"+0);
 			for(int i = 1; i<SIZE; i++){
-				append(", "+prefix+sorts[0]+" e"+i);
+				append(", "+prefix+MettelJavaNames.firstCharToUpperCase(sorts[i])+" e"+i);
 			}
 		}
 		append(", "+prefix+"ObjectFactory f){");
@@ -80,56 +81,68 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 		appendLine('}');
 		appendEOL();
 
-		appendLine("static int sortId(){ return SORTID; }");
+		appendLine("int sortId(){ return SORTID; }");
+
+		appendEOL();
+
+		appendLine("int priority(){ return PRIORITY; }");
 
 		appendEOL();
 
 		appendLine("public "+prefix+"Substitution match("+prefix+"Expression e){");
-			incrementIndentLevel();
-				appendLine("if(!(e instanceof "+TYPE+")){ return null;}");
-				if(SIZE > 0){
-					appendLine(prefix+"Substitution s = new "+prefix+"Substitution(factory);");
-					appendLine("if(match(("+TYPE+")e,s)){");
-						incrementIndentLevel();
-							appendLine("return factory.getSubstitution(s);");
-						decrementIndentLevel();
-					appendLine('}');
-				}else{
-					appendLine("return factory.getSubstitution(new "+prefix+"Substitution(factory));");
-				}
-			decrementIndentLevel();
+		incrementIndentLevel();
+			appendLine(prefix+"Substitution s = new "+prefix+"TreeSubstitution();");
+			appendLine("if(match(e,s)){");
+				incrementIndentLevel();
+					appendLine("return factory.getSubstitution(s);");
+				decrementIndentLevel();
+			appendLine("}else{ return null; }");
+		decrementIndentLevel();
 		appendLine('}');
 
 		appendEOL();
 
-		if(SIZE > 0){
-			appendLine("public boolean match("+TYPE+"e, "+prefix+"Substitution s){");
-			incrementIndentLevel();
+		appendLine("public boolean match("+prefix+"Expression e, "+prefix+"Substitution s){");
+		incrementIndentLevel();
+		    appendLine("if(!(e instanceof "+TYPE+")){ return false;}");
+		    if(SIZE > 0){
+			    appendLine("final "+TYPE+" ee = ("+TYPE+")e;");
 				indent();
-				append("return e"+0+".match(e.e"+0+", s) ");
+				append("return e"+0+".match(ee.e"+0+", s)");
 				for(int i = 1; i < SIZE; i++){
-					append("&& e"+i+".match(e.e"+i+", s) ");
+					append(" && e"+i+".match(ee.e"+i+", s)");
 				}
 				append(';');
-			decrementIndentLevel();
-			appendLine('}');
+				appendEOL();
+		    }else{
+		    	appendLine("return true;");
+		    }
+		decrementIndentLevel();
+		appendLine('}');
 
-			appendEOL();
-		}
+		appendEOL();
 
 		appendLine("public "+prefix+"Expression substitute("+prefix+"Substitution s){");
 			incrementIndentLevel();
 				if(SIZE > 0){
 					indent();
-					append("return factory.create"+name+sort+'(');
+					append("return factory.create"+MettelJavaNames.firstCharToUpperCase(name)+MettelJavaNames.firstCharToUpperCase(sort)+'(');
+					append('(');
+					append(prefix+MettelJavaNames.firstCharToUpperCase(sorts[0]));
+					append(')');
 					append("e0.substitute(s)");
 					for(int i = 1; i < SIZE; i++){
-						append(", e"+i+".substitute(s)");
+						append(", ");
+						append('(');
+						append(prefix+MettelJavaNames.firstCharToUpperCase(sorts[i]));
+						append(')');
+						append("e"+i+".substitute(s)");
 					}
 					append(");");
 				}else{
 					appendLine("return this;");
 				}
+				appendEOL();
 			decrementIndentLevel();
 		appendLine('}');
 
@@ -137,19 +150,27 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 
 		appendLine("public "+prefix+"Expression replace("+prefix+"Replacement s){");
 		incrementIndentLevel();
-			appendLine(prefix+"Expression e = s.get"+sort+"(this);");
+			appendLine(prefix+"Expression e = s.get"+MettelJavaNames.firstCharToUpperCase(sort)+"(this);");
 			appendLine("if(e != null){ return e; }");
 			if(SIZE > 0){
 				indent();
-				append("return factory.create"+name+sort+'(');
+				append("return factory.create"+MettelJavaNames.firstCharToUpperCase(name)+MettelJavaNames.firstCharToUpperCase(sort)+'(');
+				append('(');
+				append(prefix+MettelJavaNames.firstCharToUpperCase(sorts[0]));
+				append(')');
 				append("e0.replace(s)");
 				for(int i = 1; i < SIZE; i++){
-					append(", e"+i+".replace(s)");
+					append(", ");
+					append('(');
+					append(prefix+MettelJavaNames.firstCharToUpperCase(sorts[i]));
+					append(')');
+					append("e"+i+".replace(s)");
 				}
 				append(");");
 			}else{
 				appendLine("return this;");
 			}
+			appendEOL();
 		decrementIndentLevel();
 		appendLine('}');
 
@@ -176,11 +197,18 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 		incrementIndentLevel();
 			appendLine("if(o == this){ return true; }");
 			appendLine("if(!(o instanceof "+TYPE+")){ return false; }");
-			appendLine(TYPE+" e = ("+TYPE+") o;");
-			for(int i = 0; i < SIZE; i++){
-				appendLine("if(!(e"+i+".equals(e.e"+i+"))){ return false; }");
+			if(SIZE > 0){
+				appendLine(TYPE+" e = ("+TYPE+") o;");
+				indent();
+				append("return (e0.equals(e.e0))");
+				for(int i = 1; i < SIZE; i++){
+					append(" && (e"+i+".equals(e.e"+i+"))");
+				}
+				append(';');
+				appendEOL();
+			}else{
+				appendLine("return true;");
 			}
-			appendLine("return true;");
 		decrementIndentLevel();
 		appendLine('}');
 
@@ -189,9 +217,11 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 		appendLine("public int compareTo("+prefix+"Expression e){");
 		incrementIndentLevel();
 			appendLine("if(e == this){ return 0; }");
-			appendLine("if(!(e instanceof "+prefix+sort+"){ return SORTID - e.SORTID; }");
-			appendLine("if(e instanceof "+prefix+sort+"Variable){ return 1; }");
-			appendLine("if(!(e instanceof "+TYPE+")){ return PRIORITY - e.PRIORITY; }");
+			appendLine("if(!(e instanceof "+prefix+MettelJavaNames.firstCharToUpperCase(sort)+")){ return SORTID - (("+
+					prefix+"AbstractExpression)e).sortId(); }");
+			appendLine("if(e instanceof "+prefix+MettelJavaNames.firstCharToUpperCase(sort)+"Variable){ return 1; }");
+			appendLine("if(!(e instanceof "+TYPE+")){ return PRIORITY - (("+
+					prefix+"AbstractExpression)e).priority(); }");
 			if(SIZE >0 ){
 				appendLine(TYPE+" ee = ("+TYPE+") e;");
 				appendLine("int result = 0;");
@@ -207,6 +237,7 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 	}
 
 	public void addToStringMethod(List<MettelToken> tokens){
+		appendEOL();
 		appendLine("private String str = null;");
 		appendLine("public String toString(){");
 		incrementIndentLevel();
@@ -216,13 +247,19 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 				appendLine("b.append('(');");
 				int i = 0;
 				for(MettelToken t:tokens){
+					appendLine("b.append(' ');");
 					if(t instanceof MettelStringLiteral){
-						appendLine("b.append("+t+");");
+						String s = t.toString();
+						if(s.length() > 3){
+							s = s.replace('\'', '"');
+						}
+						appendLine("b.append("+s+");");
 					}else{
 						appendLine("b.append(e"+i+");");
 						i++;
 					}
 				}
+				appendLine("b.append(' ');");
 				appendLine("b.append(')');");
 				appendLine("str = b.toString();");
 			decrementIndentLevel();

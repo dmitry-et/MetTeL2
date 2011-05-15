@@ -29,19 +29,21 @@ public class MettelJavaInterfaceFile extends MettelJavaFile {
 	 */
 	public MettelJavaInterfaceFile(String fileName, MettelJavaPackage pack, String[] interfaces) {
 		super(fileName, pack);
-		if(interfaces != null)	declaration(interfaces);
+		declaration(interfaces);
 	}
 
 	void declaration(String[] interfaces){
 		append("public interface ");
 		append(fileName);
-		final int SIZE = interfaces.length;
-		if(SIZE > 0){
-			append(" extends ");
-			append(interfaces[0]);
-			for(int i = 1; i < SIZE; i++){
-				append(',');append(' ');
-				append(interfaces[i]);
+		if(interfaces != null){
+			final int SIZE = interfaces.length;
+			if(SIZE > 0){
+				append(" extends ");
+				append(interfaces[0]);
+				for(int i = 1; i < SIZE; i++){
+					append(',');append(' ');
+					append(interfaces[i]);
+				}
 			}
 		}
 		opening();

@@ -52,6 +52,12 @@ public class MettelObjectFactoryJavaClassFile extends MettelJavaClassFile {
 	}
 */
 
+	void imports(){
+		appendLine("import java.util.Map;");
+		appendLine("import java.util.TreeMap;");
+		appendEOL();
+	}
+
 	public void addCreateMethod(String type, String name, String[] types){
 		final String ltype = name + MettelJavaNames.firstCharToUpperCase(type);
 		final String TYPE = prefix + MettelJavaNames.firstCharToUpperCase(name) + MettelJavaNames.firstCharToUpperCase(type);
@@ -87,7 +93,7 @@ public class MettelObjectFactoryJavaClassFile extends MettelJavaClassFile {
 				appendLine("final "+TYPE+" old = "+ltype+"s.get(e);");
 				appendLine("if(old == null){ ");
 				incrementIndentLevel();
-					appendLine(type+"s.put(e,e);");
+					appendLine(ltype+"s.put(e,e);");
 					appendLine("return e;");
 				decrementIndentLevel();
 				appendLine("}else{ return old; }");
@@ -106,11 +112,11 @@ public class MettelObjectFactoryJavaClassFile extends MettelJavaClassFile {
 		appendLine("public "+PTYPE + " create" + MettelJavaNames.firstCharToUpperCase(TYPE) + "(String name){");
 
 		incrementIndentLevel();
-			appendLine(PTYPE + " v = " + TYPE + "Variables(name);");
+			appendLine(PTYPE + " v = " + TYPE + "s.get(name);");
 			appendLine("if(v == null){");
 			incrementIndentLevel();
 				appendLine("v = new " + PTYPE + "(name, this);");
-				appendLine(TYPE + "Variables.put(name, v);");
+				appendLine(TYPE + "s.put(name, v);");
 			decrementIndentLevel();
 			appendLine('}');
 			appendLine("return v;");

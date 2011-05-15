@@ -26,6 +26,8 @@ import mettel.util.MettelJavaNames;
 public class MettelComplexExpressionJavaInterfaceFile extends MettelJavaInterfaceFile {
 
 //	private String prefix = "Mettel";
+//	private String sort = null;
+
 	private static int counter = 0;
 	private int sortid = -1;
 	/**
@@ -37,11 +39,16 @@ public class MettelComplexExpressionJavaInterfaceFile extends MettelJavaInterfac
 		super(prefix+MettelJavaNames.firstCharToUpperCase(sort), pack, new String[]{prefix+"Expression"});
 		sortid = ++counter;
 //		this.prefix = prefix;
+//		this.sort = sort;
 		body();
 	}
 
 	private void body(){
-		appendLine("static final int SORTID = "+sortid+';');
+		appendLine("final int SORTID = "+sortid+';');
+
+//		appendEOL();
+
+//		appendLine("boolean match("+prefix+MettelJavaNames.firstCharToUpperCase(sort)+" e, "+prefix+"Substitution s);");
 	}
 
 }

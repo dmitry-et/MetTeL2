@@ -29,7 +29,7 @@ public class MettelVariableJavaInterfaceFile extends MettelJavaInterfaceFile {
 	 * @param pack
 	 */
 	public MettelVariableJavaInterfaceFile(String prefix, MettelJavaPackage pack){
-		super(prefix+"Variable", pack, new String[]{prefix+"Variable"});
+		super(prefix+"Variable", pack, null);
 		appendLine("String name();");
 	}
 

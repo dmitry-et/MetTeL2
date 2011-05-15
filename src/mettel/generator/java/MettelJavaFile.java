@@ -38,6 +38,7 @@ public class MettelJavaFile extends MettelFile {
 		append(pack.path());
 		append(';');
 		appendEOL();
+		appendEOL();
 
 		imports();
 	}
@@ -47,14 +48,15 @@ public class MettelJavaFile extends MettelFile {
 	}
 
 	void opening(){
-		append('{');appendEOL();
-		this.incrementIndentLevel();
+		append('{');appendEOL();appendEOL();
+		incrementIndentLevel();
 	}
 
 	private boolean closed = false;
 
 	void  closing(){
 		if(! closed){
+			decrementIndentLevel();
 			append('}');appendEOL();
 			closed = true;
 		}

@@ -55,7 +55,7 @@ public class MettelAbstractExpressionJavaClassFile extends MettelJavaClassFile {
 
 		 appendLine(prefix + "AbstractExpression(){");
 		 incrementIndentLevel();
-		 	appendLine("this(" + prefix +"MettelObjectFactory.DEFAULT);");
+		 	appendLine("this(" + prefix +"ObjectFactory.DEFAULT);");
 		 decrementIndentLevel();
 		 appendLine('}');
 
@@ -65,12 +65,16 @@ public class MettelAbstractExpressionJavaClassFile extends MettelJavaClassFile {
 
 		 appendEOL();
 
-		 appendLine(prefix + "ObjectFactory factory = null;");
+		 //appendLine(prefix + "ObjectFactory factory = null;");
 		 appendLine("public " + prefix + "ObjectFactory factory(){ return factory; }");
 
 		 appendEOL();
 
 		 appendLine("abstract int sortId();");
+
+		 appendEOL();
+
+		 appendLine("abstract int priority();");
 
 /*		 appendEOL();
 
