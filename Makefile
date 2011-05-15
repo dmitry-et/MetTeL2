@@ -343,6 +343,9 @@ $(RESOURCE_FILES): $(CLASSES_DIR) $(SRC_RESOURCE_FILES)
 	@ echo $(DELIM1)
 	@ cd $(RESOURCE_DIR) && cp -R --parents $(shell cd $(RESOURCE_DIR) && find . -type f ! -path '*.svn*') $(CLASSES_DIR)
 	
+#	echo $(RESOURCE_FILES)
+#	echo $(SRC_RESOURCE_FILES)
+	
 #/ && cp -v -R --parents $(shell find . -type f ! -name '*.svn*') $(CLASSES_DIR)
 #@ cd $(BASE_DIR) 
 	
