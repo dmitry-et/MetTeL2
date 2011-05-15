@@ -57,12 +57,12 @@ BIN_DIR := $(BASE_DIR)/bin
 SRC_DIR := $(BASE_DIR)/src
 LIB_DIR := $(BASE_DIR)/lib
 CLASSES_DIR := $(BASE_DIR)/classes
-RESOURCE_DIR := $(BASE_DIR)/resources
+RESOURCE_DIR := $(BASE_DIR)/rsrc
 #AST_CLASSES_DIR := 
 
 # Resources
 SRC_RESOURCE_FILES := $(shell find $(RESOURCE_DIR) -type f ! -path '*.svn*') 
-RESOURCE_FILES := $(shell echo $(SRC_RESOURCE_FILES) | sed -e 's/resources/classes/g')
+RESOURCE_FILES := $(shell echo $(SRC_RESOURCE_FILES) | sed -e 's/rsc/classes/g')
 
 # Doc paths
 DOC_DIR := $(BASE_DIR)/doc
@@ -342,9 +342,8 @@ $(RESOURCE_FILES): $(CLASSES_DIR) $(SRC_RESOURCE_FILES)
 	@ echo "Copying resources"
 	@ echo $(DELIM1)
 	@ cd $(RESOURCE_DIR) && cp -R --parents $(shell cd $(RESOURCE_DIR) && find . -type f ! -path '*.svn*') $(CLASSES_DIR)
-	
-#	echo $(RESOURCE_FILES)
-#	echo $(SRC_RESOURCE_FILES)
+	echo $(RESOURCE_FILES)
+	echo $(SRC_RESOURCE_FILES)
 	
 #/ && cp -v -R --parents $(shell find . -type f ! -name '*.svn*') $(CLASSES_DIR)
 #@ cd $(BASE_DIR) 
