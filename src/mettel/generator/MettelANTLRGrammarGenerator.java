@@ -91,6 +91,18 @@ public class MettelANTLRGrammarGenerator {
 //		lexerHeader.addStatement(s);
 		grammar.addToLexerHeader(s);
 
+		grammar.addToMembers("private "+name+"ObjectFactory factory = "+name+"ObjectFactory.DEFAULT;");
+
+		grammar.addToMembers("public "+name+"Parser(TokenStream input, "+name+"ObjectFactory factory){");
+        grammar.addToMembers("    this(input);");
+        grammar.addToMembers("    this.factory = factory;");
+        grammar.addToMembers("}");
+
+		grammar.addToMembers("public "+name+"Parser(TokenStream input, RecognizerSharedState state, "+name+"ObjectFactory factory){");
+        grammar.addToMembers("    this(input,state);");
+        grammar.addToMembers("    this.factory = factory;");
+        grammar.addToMembers("}");
+
 		final Collection<MettelSort> sorts = syn.sorts();//TODO refactoring needed
 		final int SIZE = sorts.size();
 		String[] sortStrings = new String[SIZE];

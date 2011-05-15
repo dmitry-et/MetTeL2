@@ -59,12 +59,18 @@ public class MettelANTLRGrammar {
 	 //TODO split on parser and lexer to allow inheritance
 	 private MettelANTLRHeader lexerHeader = new MettelANTLRHeader(MettelANTLRHeader.LEXER);
 
+	 private MettelANTLRMembers members = new MettelANTLRMembers(MettelANTLRMembers.PARSER);
+
 	 public void addToHeader(String statement){
 		 header.addStatement(statement);
 	 }
 
 	 public void addToLexerHeader(String statement){
 		 lexerHeader.addStatement(statement);
+	 }
+
+	 public void addToMembers(String statement){
+		 members.addStatement(statement);
 	 }
 
 	 public void toStringBuilder(StringBuilder b){
@@ -81,6 +87,8 @@ public class MettelANTLRGrammar {
 		 options.toStringBuilder(ib);
 		 header.toStringBuilder(ib);
 		 lexerHeader.toStringBuilder(ib);
+
+		 members.toStringBuilder(ib);
 
 		 for(MettelANTLRRule rule:rules){
 			 rule.toStringBuilder(ib);
