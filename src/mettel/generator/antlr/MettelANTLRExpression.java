@@ -34,7 +34,8 @@ abstract class MettelANTLRExpression {
 		blockBefore.append(csq);
 	}
 
-	void appendJavaToPostfix(CharSequence csq){
+	public void appendJavaToPostfix(CharSequence csq){
+		if(blockAfter == null) blockAfter = new MettelANTLRJavaBlock();
 		blockAfter.append(csq);
 	}
 

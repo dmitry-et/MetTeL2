@@ -32,26 +32,49 @@ public class MettelANTLRRule {
 
 	private MettelANTLRExpression e = null;
 
-	private boolean fragment = false;
+//	private boolean fragment = false;
 
 	private String[] argumentTypes = null;
 
-	private String[] returns =null;
+	private String[] returnTypes =null;
 
 	public MettelANTLRRule(String name, MettelANTLRExpression e){
+		this(name,e,/*false,*/null,null);
+	}
+
+/*	public MettelANTLRRule(String name, MettelANTLRExpression e, boolean fragment){
+		this(name,e,fragment,null,null);
+	}
+*/
+
+	public MettelANTLRRule(String name, MettelANTLRExpression e, String[] returnTypes){
+		this(name,e,/*false,*/null,returnTypes);
+	}
+
+/*	public MettelANTLRRule(String name, MettelANTLRExpression e, boolean fragment, String[] returnTypes){
+		this(name,e,fragment,null,returnTypes);
+	}
+*/
+
+	public MettelANTLRRule(String name, MettelANTLRExpression e, /*boolean fragment,*/ String[] argumentTypes, String[] returnTypes){
 		super();
 		this.name = name;
 		this.e = e;
+//		this.fragment = fragment;
+		this.argumentTypes = argumentTypes;
+		this.returnTypes = returnTypes;
 	}
+
 
 	/**
 	 * @param b
 	 */
 	void toStringBuilder(MettelIndentedStringBuilder b){
-		if(fragment){
+/*		if(fragment){
 			b.append("fragment");
 			b.append(' ');
 		}
+*/
 		b.appendLine(name);
 		if(argumentTypes != null){
 			final int SIZE = argumentTypes.length;
@@ -65,6 +88,22 @@ public class MettelANTLRRule {
 					b.append("a"+i);
 				}
 				b.append(']');
+				b.appendEOL();
+			}
+		}
+		if(returnTypes != null){
+			final int SIZE = returnTypes.length;
+			if(SIZE > 0){
+				b.append("returns [");
+				b.append(returnTypes[0]);
+				b.append(" r0");
+				for(int i = 1; i < SIZE; i++){
+					b.append(", ");
+					b.append(returnTypes[i]);
+					b.append("r"+i);
+				}
+				b.append(']');
+				b.appendEOL();
 			}
 		}
 		MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);

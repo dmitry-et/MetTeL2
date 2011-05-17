@@ -86,6 +86,8 @@ public class MettelANTLRGrammarGenerator {
 
 		//new java.io.File("dir").
 		grammar.addToHeader(s);
+		grammar.addToHeader("");
+		grammar.addToHeader("import java.util.Collection;");
 
 //		MettelANTLRHeader lexerHeader = new MettelANTLRHeader(MettelANTLRHeader.LEXER);
 //		lexerHeader.addStatement(s);
@@ -144,17 +146,17 @@ public class MettelANTLRGrammarGenerator {
 					){
 
 				MettelANTLRMultiaryBNFStatement st = new MettelANTLRMultiaryBNFStatement();
-				st.addExpression(new MettelANTLRRuleReference(s0));
+				st.addExpression(new MettelANTLRRuleReference(s0,"e0"));
 
 				MettelANTLRMultiaryBNFStatement st1 = new MettelANTLRMultiaryBNFStatement();
 				st1.addExpression(new MettelANTLRToken(tokens[1].toString()));
-				st1.addExpression(new MettelANTLRRuleReference(s0));
+				st1.addExpression(new MettelANTLRRuleReference(s0,"e1"));
 
 				MettelANTLRUnaryBNFStatement st0 = new MettelANTLRUnaryBNFStatement(
 						st1,MettelANTLRUnaryBNFStatement.STAR);
 				st.addExpression(st0);
 
-				grammar.addRule(new MettelANTLRRule(s1,st));
+				grammar.addRule(new MettelANTLRRule(s1,st,/*true,*/new String[]{grammar.name()+"Expression"}));
 
 				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, s.identifier(),
 						new String[]{((MettelSort)tokens[0]).name(), ((MettelSort)tokens[2]).name()}, s.tokens());
@@ -165,13 +167,13 @@ public class MettelANTLRGrammarGenerator {
 					  (tokens[1] instanceof MettelStringLiteral)
 					){
 				MettelANTLRMultiaryBNFStatement st = new MettelANTLRMultiaryBNFStatement();
-				st.addExpression(new MettelANTLRRuleReference(s0));
+				st.addExpression(new MettelANTLRRuleReference(s0,"e0"));
 
 				MettelANTLRUnaryBNFStatement st0 = new MettelANTLRUnaryBNFStatement(
 						new MettelANTLRToken(tokens[1].toString()),MettelANTLRUnaryBNFStatement.STAR);
 				st.addExpression(st0);
 
-				grammar.addRule(new MettelANTLRRule(s1,st));
+				grammar.addRule(new MettelANTLRRule(s1,st,/*true,*/new String[]{grammar.name()+"Expression"}));
 
 				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, s.identifier(),
 						new String[]{((MettelSort)tokens[0]).name()}, s.tokens());
@@ -180,27 +182,28 @@ public class MettelANTLRGrammarGenerator {
 			}else{ //if(tokens[0] instanceof MettelStringLiteral){
 				MettelANTLRMultiaryBNFStatement st = new MettelANTLRMultiaryBNFStatement(
 						MettelANTLRMultiaryBNFStatement.OR);
-				st.addExpression(new MettelANTLRRuleReference(s0));
+				st.addExpression(new MettelANTLRRuleReference(s0,"e0"));
 				MettelANTLRMultiaryBNFStatement st0 = new MettelANTLRMultiaryBNFStatement();
 				//st0.addExpression(new MettelANTLRToken(tokens[0].toString()));
 
 				ArrayList<String> sortStrings = new ArrayList<String>();
-				for(int i = 0; i < SIZE; i++){
+				for(int i = 0, j = 0; i < SIZE; i++){
 					if(tokens[i] instanceof MettelStringLiteral){
 						st0.addExpression(new MettelANTLRToken(tokens[i].toString()));
 					}else if(tokens[i] instanceof MettelSort){
 						String name = ((MettelSort)tokens[i]).name();
 						sortStrings.add(name);
 						if(SORT_NAME.equals(name)){
-							st0.addExpression(new MettelANTLRRuleReference(s0));
+							st0.addExpression(new MettelANTLRRuleReference(s0,"e"+j));
 						}else{
-							st0.addExpression(new MettelANTLRRuleReference(tokens[i].toString()));
+							st0.addExpression(new MettelANTLRRuleReference(tokens[i].toString(),"e"+j));
 						}
+						j++;
 					}
 				}
 				st.addExpression(st0);
 
-				grammar.addRule(new MettelANTLRRule(s1,st));
+				grammar.addRule(new MettelANTLRRule(s1,st,/*true,*/new String[]{grammar.name()+"Expression"}));
 
 				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, s.identifier(), sortStrings.toArray(new String[sortStrings.size()]),
 						s.tokens());
@@ -208,7 +211,8 @@ public class MettelANTLRGrammarGenerator {
 			}//TODO other alternatives
 			s0 = s1;
 		}
-		grammar.addRule(new MettelANTLRRule(SORT_NAME,new MettelANTLRRuleReference(s0)));
+		grammar.addRule(new MettelANTLRRule(SORT_NAME,new MettelANTLRRuleReference(s0),
+				new String[]{grammar.name()+"Expression"}));
 
 	}
 
@@ -218,7 +222,7 @@ public class MettelANTLRGrammarGenerator {
 	 */
 	private void processSort(MettelANTLRGrammar grammar, MettelSort sort) {
 
-		grammar.addRule(makeANTLREntryRule(sort));
+		grammar.addRule(makeANTLREntryRule(grammar.name(), sort));
 		grammar.addRule(makeANTLRVariableRule(sort));
 		grammar.addRule(makeANTLRBasicRule(sort));
 
@@ -232,13 +236,13 @@ public class MettelANTLRGrammarGenerator {
 		final String NAME = sort.name();
 		MettelANTLRMultiaryBNFStatement s = new MettelANTLRMultiaryBNFStatement(
 				MettelANTLRMultiaryBNFStatement.OR);
-		s.addExpression(new MettelANTLRRuleReference(NAME+VARIABLE_STRING));
+		s.addExpression(new MettelANTLRRuleReference(NAME+VARIABLE_STRING,"e0"));
 		MettelANTLRMultiaryBNFStatement s0 = new MettelANTLRMultiaryBNFStatement();
 		s0.addExpression(MettelANTLRToken.LBRACE);
-		s0.addExpression(new MettelANTLRRuleReference(NAME));
+		s0.addExpression(new MettelANTLRRuleReference(NAME,"e0"));
 		s0.addExpression(MettelANTLRToken.RBRACE);
 		s.addExpression(s0);
-		return new MettelANTLRRule(BASIC_STRING+MettelJavaNames.firstCharToUpperCase(NAME),s);
+		return new MettelANTLRRule(BASIC_STRING+MettelJavaNames.firstCharToUpperCase(NAME),s/*,true*/);
 	}
 
 	/**
@@ -246,20 +250,22 @@ public class MettelANTLRGrammarGenerator {
 	 * @return
 	 */
 	private MettelANTLRRule makeANTLRVariableRule(MettelSort sort) {
-		return new MettelANTLRRule(sort.name()+VARIABLE_STRING,MettelANTLRToken.ID);
+		return new MettelANTLRRule(sort.name()+VARIABLE_STRING,MettelANTLRToken.ID/*,true*/);
 	}
 
 	/**
 	 * @param sort
 	 * @return
 	 */
-	private MettelANTLRRule makeANTLREntryRule(MettelSort sort) {
+	private MettelANTLRRule makeANTLREntryRule(String grammarName, MettelSort sort) {
 		final String NAME = sort.name();
 		MettelANTLRMultiaryBNFStatement s = new MettelANTLRMultiaryBNFStatement();
+		MettelANTLRRuleReference ruleRef = new MettelANTLRRuleReference(NAME,"e0");
+		ruleRef.appendJavaToPostfix("a0.add(e0);");
 		s.addExpression(new MettelANTLRUnaryBNFStatement(
-						new MettelANTLRRuleReference(NAME),MettelANTLRUnaryBNFStatement.STAR));
+						ruleRef,MettelANTLRUnaryBNFStatement.STAR));
 		s.addExpression(MettelANTLRToken.EOF);
-		return new MettelANTLRRule(NAME+'s',s);
+		return new MettelANTLRRule(NAME+'s',s/*,false*/,new String[]{"Collection<"+grammarName+"Expression>"},null);
 	}
 
 	/**
