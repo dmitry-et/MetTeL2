@@ -32,6 +32,12 @@ public class MettelANTLRRule {
 
 	private MettelANTLRExpression e = null;
 
+	private boolean fragment = false;
+
+	private String[] argumentTypes = null;
+
+	private String[] returns =null;
+
 	public MettelANTLRRule(String name, MettelANTLRExpression e){
 		super();
 		this.name = name;
@@ -42,7 +48,25 @@ public class MettelANTLRRule {
 	 * @param b
 	 */
 	void toStringBuilder(MettelIndentedStringBuilder b){
+		if(fragment){
+			b.append("fragment");
+			b.append(' ');
+		}
 		b.appendLine(name);
+		if(argumentTypes != null){
+			final int SIZE = argumentTypes.length;
+			if(SIZE > 0){
+				b.append('[');
+				b.append(argumentTypes[0]);
+				b.append(" a0");
+				for(int i = 1; i < SIZE; i++){
+					b.append(", ");
+					b.append(argumentTypes[i]);
+					b.append("a"+i);
+				}
+				b.append(']');
+			}
+		}
 		MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
 		ib.appendLine(':');
 		e.toStringBuilder(ib);
