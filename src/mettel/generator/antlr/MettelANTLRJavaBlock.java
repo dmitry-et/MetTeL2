@@ -16,8 +16,6 @@
  */
 package mettel.generator.antlr;
 
-import java.util.ArrayList;
-
 import mettel.util.MettelIndentedStringBuilder;
 
 /**
@@ -25,18 +23,19 @@ import mettel.util.MettelIndentedStringBuilder;
  * @version $Revision$ $Date$
  *
  */
-class MettelANTLRJavaBlock {
+class MettelANTLRJavaBlock extends MettelIndentedStringBuilder{
 
-	private ArrayList<CharSequence> statements = new ArrayList<CharSequence>();
+/*	private ArrayList<CharSequence> statements = new ArrayList<CharSequence>();
 
 	void append(CharSequence statement){
 		statements.add(statement);
 	}
+*/
 	/**
 	 *
 	 */
 	MettelANTLRJavaBlock() {
-		super();
+		super(new StringBuilder());
 	}
 	/**
 	 * @param ib
@@ -44,9 +43,11 @@ class MettelANTLRJavaBlock {
 	public void toStringBuilder(MettelIndentedStringBuilder b) {
 		MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
 		ib.appendLine('{');
-		for(CharSequence s:statements){
+		ib.indent();ib.append(this.builder());
+/*		for(CharSequence s:statements){
 			ib.appendLine(s);
 		}
+*/
 		ib.appendLine('}');
 	}
 

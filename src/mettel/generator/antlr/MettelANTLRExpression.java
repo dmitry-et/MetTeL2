@@ -30,14 +30,31 @@ abstract class MettelANTLRExpression {
 
 //	abstract void toStringBuilder(StringBuilder b);
 
-	void appendJavaToPrefix(CharSequence csq){
+/*	private void appendToPrefix(CharSequence csq){
 		blockBefore.append(csq);
 	}
+*/
 
-	public void appendJavaToPostfix(CharSequence csq){
+	public void appendLineToPostfix(CharSequence csq){
+		if(blockAfter == null) blockAfter = new MettelANTLRJavaBlock();
+		blockAfter.appendLine(csq);
+	}
+
+	public void appendToPostfix(CharSequence csq){
 		if(blockAfter == null) blockAfter = new MettelANTLRJavaBlock();
 		blockAfter.append(csq);
 	}
+
+	public void appendLineToPostfix(char c){
+		if(blockAfter == null) blockAfter = new MettelANTLRJavaBlock();
+		blockAfter.appendLine(c);
+	}
+
+	public void appendToPostfix(char c){
+		if(blockAfter == null) blockAfter = new MettelANTLRJavaBlock();
+		blockAfter.append(c);
+	}
+
 
 /*	void prefixOutput(MettelIndentedStringBuilder ib){
 		if(blockBefore != null){

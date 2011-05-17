@@ -66,6 +66,36 @@ public class MettelANTLRRule {
 	}
 
 
+	private MettelIndentedStringBuilder after = null;
+
+	public void appendToAfterBlock(CharSequence csq) {
+		if(after == null){
+			after = new MettelIndentedStringBuilder(new StringBuilder());
+		}
+		after.append(csq);
+	}
+
+	public void appendToAfterBlock(char c) {
+		if(after == null){
+			after = new MettelIndentedStringBuilder(new StringBuilder());
+		}
+		after.append(c);
+	}
+
+	public void appendLineToAfterBlock(CharSequence csq) {
+		if(after == null){
+			after = new MettelIndentedStringBuilder(new StringBuilder());
+		}
+		after.appendLine(csq);
+	}
+
+	public void appendLineToAfterBlock(char c) {
+		if(after == null){
+			after = new MettelIndentedStringBuilder(new StringBuilder());
+		}
+		after.appendLine(c);
+	}
+
 	/**
 	 * @param b
 	 */
@@ -105,6 +135,12 @@ public class MettelANTLRRule {
 				b.append(']');
 				b.appendEOL();
 			}
+		}
+		if(after != null){
+			b.appendLine("@after{");
+			b.append(after.builder());
+			//b.appendEOL();
+			b.appendLine('}');
 		}
 		MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
 		ib.appendLine(':');

@@ -30,18 +30,26 @@ public class MettelANTLRToken extends MettelANTLRExpression{
 
 
 	public static final MettelANTLRToken EOF = new MettelANTLRToken(EOF_STRING);
-	public static final MettelANTLRToken ID = new MettelANTLRToken(ID_STRING);
+	public static final MettelANTLRToken ID = new MettelANTLRToken(ID_STRING,true);
 	public static final MettelANTLRToken LBRACE = new MettelANTLRToken(LBRACE_STRING);
 	public static final MettelANTLRToken RBRACE = new MettelANTLRToken(RBRACE_STRING);
 
 	private String token = null;
 
+	private boolean returns = false;
+
 	/**
 	 *
 	 */
-	public MettelANTLRToken(String token) {
+	public MettelANTLRToken(String token){
+		this(token,false);
+	}
+
+	public MettelANTLRToken(String token, boolean returns) {
 		super();
 		this.token  = token;
+		this.returns = returns;
+		//appendJavaToPostfix("r0 = t.getText();");
 	}
 
 	/* (non-Javadoc)
@@ -51,6 +59,7 @@ public class MettelANTLRToken extends MettelANTLRExpression{
 	void toStringBuilder0(MettelIndentedStringBuilder b) {
 		//eMettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
 		//prefixOutput(ib);
+		if(returns) b.append("t = ");
 		b.append(token);
 		//postfixOutput(ib);
 
