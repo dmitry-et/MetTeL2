@@ -62,7 +62,7 @@ RESOURCE_DIR := $(BASE_DIR)/rsrc
 
 # Resources
 SRC_RESOURCE_FILES := $(shell find $(RESOURCE_DIR) -type f ! -path '*.svn*') 
-RESOURCE_FILES := $(shell echo $(SRC_RESOURCE_FILES) | sed -e 's/rsc/classes/g')
+RESOURCE_FILES := $(shell echo $(SRC_RESOURCE_FILES) | sed -e 's/rsrc/classes/g')
 
 # Doc paths
 DOC_DIR := $(BASE_DIR)/doc
