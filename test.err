@@ -1,0 +1,12 @@
+java.lang.ClassNotFoundException: ALCO.test.ALCOParserTest
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:217)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:205)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:321)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:294)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:266)
+	at java.lang.Class.forName0(Native Method)
+	at java.lang.Class.forName(Class.java:186)
+	at mettel.generator.AllTests.suite(AllTests.java:18)
+	at mettel.AllTests.suite(AllTests.java:23)
+	at mettel.AllTests.main(AllTests.java:10)
