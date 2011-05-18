@@ -142,12 +142,12 @@ RUNTIME_CLASSPATH:=$(LIB_DIR)/antlr.jar:$(JAR_FILE)
 
 TEST_DIR := $(BASE_DIR)/test
 TEST_JAR_FILE:=$(LIB_DIR)/test.jar
-TEST_COMPILE_CLASSPATH:=$(LIB_DIR)/antlr.jar:$(LIB_DIR)/junit.jar:$(JAR_FILE)
+TEST_COMPILE_CLASSPATH:=$(COMPILE_CLASSPATH):$(LIB_DIR)/junit.jar:$(JAR_FILE)
 TEST_CLASSPATH:=$(TEST_COMPILE_CLASSPATH):$(TEST_JAR_FILE)
 TEST_CLASSES_DIR:=$(TEST_DIR)/classes
 TEST_SRC_DIR:=$(TEST_DIR)/src
-#TEST_SOURCES := $(shell find $(TEST_SRC_DIR) -name '*.java')
-#TEST_CLASSES := $(shell echo $(TEST_SOURCES) | sed -e 's/\.java/\.class/g; s/src/classes/g')
+TEST_SOURCES := $(shell find $(TEST_SRC_DIR) -name '*.java')
+TEST_CLASSES := $(shell echo $(TEST_SOURCES) | sed -e 's/\.java/\.class/g; s/src/classes/g')
 
 TEST_FILE := $(TEST_DIR)/Test
 EXAMPLES_DIR := $(BASE_DIR)/examples
@@ -367,7 +367,7 @@ $(TEST_CLASSES): $(TEST_SOURCES) $(JAR_FILE) $(TEST_CLASSES_DIR)
 	@ echo $(DELIM0)
 	@ echo "Compiling test"
 	@ echo $(DELIM1)
-	@ $(JAVAC) -Xlint:unchecked -classpath $(TEST_COMPILE_CLASSPATH) -d "$(TEST_CLASSES_DIR)" $(TEST_SOURCES) 2>$(TEST_JAVAC_LOG_FILE) || (cat $(TEST_JAVAC_LOG_FILE) && exit 1)
+	@ $(JAVAC) -classpath $(TEST_COMPILE_CLASSPATH) -d "$(TEST_CLASSES_DIR)" $(TEST_SOURCES) 2>$(TEST_JAVAC_LOG_FILE) || (cat $(TEST_JAVAC_LOG_FILE) && exit 1)
     
 #$(TEST_FILE).class: $(TEST_FILE).java $(JAR_FILE)
 #	@ echo $(DELIM0)
