@@ -31,7 +31,7 @@ public class MettelJavaPackage {
 
 	private String path = "";
 
-	String path(){
+	public String path(){
 		return path;
 	}
 

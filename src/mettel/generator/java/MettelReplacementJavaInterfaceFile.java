@@ -35,9 +35,9 @@ public class MettelReplacementJavaInterfaceFile extends MettelJavaInterfaceFile 
 		body(sorts);
 	}
 
-	void imports(){
-		appendLine("import java.util.Map;");
-		appendEOL();
+	protected void imports(){
+		headings.appendLine("import java.util.Map;");
+		headings.appendEOL();
 	}
 
 	private void body(String[] sorts){

@@ -31,6 +31,8 @@ import mettel.generator.antlr.MettelANTLRGrammar;
 //import mettel.util.MettelIndentedStringBuilder;
 import mettel.language.MettelToken;
 
+import mettel.generator.java.test.MettelParserTestJavaClassFile;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -41,16 +43,19 @@ public class MettelJavaPackageStructure {
 	@SuppressWarnings("unused")
 	private MettelJavaPackageStructure(){}
 
-	private MettelJavaPackage grammarPackage = null, langPackage = null;
+	private MettelJavaPackage grammarPackage = null, langPackage = null, testPackage = null;
 
 	private MettelObjectFactoryJavaInterfaceFile iFactory = null;
 	private MettelObjectFactoryJavaClassFile factory = null;
+
+	//private MettelParserTestJavaClassFile testFile = null;
 
 	public MettelJavaPackageStructure(String base){
 		super();
 
 		grammarPackage = new MettelJavaPackage(base);// +'.'+GRAMMAR_STRING);
 		langPackage = new MettelJavaPackage(base);
+		testPackage = new MettelJavaPackage(base+".test");
 
 	}
 
@@ -77,6 +82,8 @@ public class MettelJavaPackageStructure {
 		langPackage.add(new MettelSubstitutionJavaInterfaceFile(prefix,langPackage,sorts));
 		langPackage.add(new MettelReplacementJavaClassFile(prefix,langPackage,sorts));
 		langPackage.add(new MettelSubstitutionJavaClassFile(prefix,langPackage,sorts));
+
+		if(sorts.length > 0) testPackage.add(new MettelParserTestJavaClassFile(prefix,sorts[0],testPackage));
 
 		for(String sort:sorts){
 			langPackage.add(new MettelComplexExpressionJavaInterfaceFile(prefix,sort,langPackage));
@@ -125,6 +132,7 @@ public class MettelJavaPackageStructure {
 	public void flush(String outputPath) throws IOException {
 		langPackage.flush(outputPath);
 		grammarPackage.flush(outputPath);
+		testPackage.flush(outputPath);
 	}
 
 }

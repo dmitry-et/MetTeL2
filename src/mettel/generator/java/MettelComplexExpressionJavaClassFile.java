@@ -69,8 +69,9 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 			for(int i = 1; i<SIZE; i++){
 				append(", "+prefix+MettelJavaNames.firstCharToUpperCase(sorts[i])+" e"+i);
 			}
+			append(", ");
 		}
-		append(", "+prefix+"ObjectFactory f){");
+		append(prefix+"ObjectFactory f){");
 		appendEOL();
 			incrementIndentLevel();
 				appendLine("super(f);");

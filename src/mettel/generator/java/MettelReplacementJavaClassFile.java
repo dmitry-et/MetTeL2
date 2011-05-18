@@ -35,12 +35,12 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 		body(sorts);
 	}
 
-	void imports(){
-		appendLine("import java.util.Map;");
-		appendLine("import java.util.TreeMap;");
-		appendLine("import java.util.Set;");
-		appendLine("import java.util.TreeSet;");
-		appendEOL();
+	protected void imports(){
+		headings.appendLine("import java.util.Map;");
+		headings.appendLine("import java.util.TreeMap;");
+		headings.appendLine("import java.util.Set;");
+		headings.appendLine("import java.util.TreeSet;");
+		headings.appendEOL();
 	}
 
 	private void body(String[] sorts){

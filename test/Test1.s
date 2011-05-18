@@ -6,8 +6,10 @@ syntax ALCO{
 	sort concept;
 	sort role;
 
+	concept true = 'true';
+	concept false = 'false';
 	concept singleton = '{' individual '}';
-    concept	negation = '~' concept;
+        concept	negation = '~' concept;
 	concept	conjunction = concept '&' concept;
 	concept	disjunction = concept '|' concept;
 	concept	implication = concept '->' concept;

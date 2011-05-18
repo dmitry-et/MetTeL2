@@ -18,6 +18,7 @@ package mettel.generator.java;
 
 import java.io.IOException;
 
+import mettel.util.MettelIndentedStringBuilder;
 import mettel.util.MettelStrings;
 
 /**
@@ -33,17 +34,17 @@ public class MettelJavaFile extends MettelFile {
 	 */
 	public MettelJavaFile(String fileName, MettelJavaPackage pack) {
 		super(fileName, "java", pack);
-		append(MettelStrings.PACKAGE_STRING);
-		append(' ');
-		append(pack.path());
-		append(';');
-		appendEOL();
-		appendEOL();
-
-		imports();
+		headings.append(MettelStrings.PACKAGE_STRING);
+		headings.append(' ');
+		headings.append(pack.path());
+		headings.append(';');
+		headings.appendEOL();
+		headings.appendEOL();
 	}
 
-	void imports(){
+	protected MettelIndentedStringBuilder headings = new MettelIndentedStringBuilder(new StringBuilder());
+
+	protected void imports(){
 
 	}
 
@@ -62,7 +63,28 @@ public class MettelJavaFile extends MettelFile {
 		}
 	}
 
+/*	private boolean initialised = false;
+
+	private void init(){
+		if(!initialised){
+			imports();
+			initialised = true;
+		}
+	}
+
+	public StringBuilder append(CharSequence csq, int start, int end) {
+		init();
+		return b.append(csq,start,end);
+	}
+
+	public StringBuilder append(char c) {
+		init();
+		return b.append(c);
+	}
+*/
 	public void flush(String outputPath) throws IOException {
+		imports();
+		this.b.insert(0, headings);
 		closing();
 		super.flush(outputPath);
 	}

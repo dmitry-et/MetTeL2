@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="mettel/language/Mettel.tokens|mettel/language/grammar" kind="src" path="src"/>
+	<classpathentry excluding="mettel/language/Mettel.tokens|mettel/language/grammar" kind="src" output="classes" path="src"/>
+	<classpathentry kind="src" output="test/classes" path="test/src"/>
+	<classpathentry kind="src" output="test/classes" path="test/output"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/antlr3-runtime.jar"/>
+	<classpathentry kind="lib" path="lib/junit.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

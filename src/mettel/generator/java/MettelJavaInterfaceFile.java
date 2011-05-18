@@ -32,7 +32,8 @@ public class MettelJavaInterfaceFile extends MettelJavaFile {
 		declaration(interfaces);
 	}
 
-	void declaration(String[] interfaces){
+	private void declaration(String[] interfaces){
+		//imports();
 		append("public interface ");
 		append(fileName);
 		if(interfaces != null){
@@ -41,7 +42,7 @@ public class MettelJavaInterfaceFile extends MettelJavaFile {
 				append(" extends ");
 				append(interfaces[0]);
 				for(int i = 1; i < SIZE; i++){
-					append(',');append(' ');
+					append(',');headings.append(' ');
 					append(interfaces[i]);
 				}
 			}

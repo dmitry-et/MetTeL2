@@ -52,42 +52,40 @@ public class MettelObjectFactoryJavaClassFile extends MettelJavaClassFile {
 	}
 */
 
-	void imports(){
-		appendLine("import java.util.Map;");
-		appendLine("import java.util.TreeMap;");
-		appendEOL();
+	protected void imports(){
+		headings.appendLine("import java.util.Map;");
+		headings.appendLine("import java.util.TreeMap;");
+		headings.appendEOL();
 	}
 
 	public void addCreateMethod(String type, String name, String[] types){
 		final String ltype = name + MettelJavaNames.firstCharToUpperCase(type);
 		final String TYPE = prefix + MettelJavaNames.firstCharToUpperCase(name) + MettelJavaNames.firstCharToUpperCase(type);
 
-		appendLine("private Map<"+TYPE+", "+TYPE+"> "+ ltype + "s = new TreeMap<"+TYPE+", "+TYPE+">();");
-		appendEOL();
-
-		indent();
 		final int SIZE = types.length;
 		if(SIZE > 0){
+			appendLine("private Map<"+TYPE+", "+TYPE+"> "+ ltype + "s = new TreeMap<"+TYPE+", "+TYPE+">();");
+			appendEOL();
+
+			indent();
+
 			append("public "+TYPE+" create"+MettelJavaNames.firstCharToUpperCase(ltype) + '(');
 			append(prefix+MettelJavaNames.firstCharToUpperCase(types[0])+" e"+0);
 			for(int i = 1; i < SIZE; i++){
 				append(", "+prefix+MettelJavaNames.firstCharToUpperCase(types[i])+" e"+i);
 			}
-		}else{
-			append("public "+TYPE+' '+ltype+"Constant(e");
-		}
-		append("){");
-		appendEOL();
+			append("){");
+			appendEOL();
+
 			incrementIndentLevel();
 				indent();
 				append("final "+TYPE+" e = new "+TYPE+'(');
-				if(SIZE > 0){
 					append("e0");
 					for(int i = 1; i < SIZE; i++){
 						append(", e"+i);
 					}
-				}
-				append(", this);");
+					append(", ");
+				append("this);");
 				appendEOL();
 
 				appendLine("final "+TYPE+" old = "+ltype+"s.get(e);");
@@ -98,8 +96,19 @@ public class MettelObjectFactoryJavaClassFile extends MettelJavaClassFile {
 				decrementIndentLevel();
 				appendLine("}else{ return old; }");
 			decrementIndentLevel();
-		appendLine('}');
-		appendEOL();
+			appendLine('}');
+			appendEOL();
+
+		}else{
+			appendLine("private "+TYPE+' '+ltype+"Constant = new "+TYPE+"(this);");
+			appendEOL();
+
+			appendLine("public "+TYPE+" create"+MettelJavaNames.firstCharToUpperCase(ltype) + "(){");
+			incrementIndentLevel();
+				appendLine("return "+ltype+"Constant;");
+			decrementIndentLevel();
+			appendLine('}');
+		}
 	}
 
 	public void addVariableMethod(String type){

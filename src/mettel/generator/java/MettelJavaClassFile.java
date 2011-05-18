@@ -32,20 +32,23 @@ public class MettelJavaClassFile extends MettelJavaFile {
 		declaration(modifiers, superClass, interfaces);
 	}
 
-	void declaration(String modifiers, String superClass, String[] interfaces){
+	private void declaration(String modifiers, String superClass, String[] interfaces){
+		//imports();
 		append(modifiers == null? "class ": modifiers + " class ");
 		append(fileName);
 		if(superClass != null && !"".equals(superClass)){
 			append(" extends ");
 			append(superClass);
 		}
-		final int SIZE =  interfaces.length;
-		if(SIZE > 0){
-			append(" implements ");
-			append(interfaces[0]);
-			for(int i = 1; i < SIZE; i++){
-				append(',');append(' ');
-				append(interfaces[i]);
+		if(interfaces != null){
+			final int SIZE =  interfaces.length;
+			if(SIZE > 0){
+				append(" implements ");
+				append(interfaces[0]);
+				for(int i = 1; i < SIZE; i++){
+					append(',');headings.append(' ');
+					append(interfaces[i]);
+				}
 			}
 		}
 		opening();

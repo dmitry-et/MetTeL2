@@ -227,8 +227,8 @@ public class MettelANTLRGrammarGenerator {
 					for(int j = 1; j < jSIZE; j++){
 						st0.appendToPostfix(", e1"+j);
 					}
-					st0.appendLineToPostfix(");");
 				}
+				st0.appendLineToPostfix(");");
 				st.addExpression(st0);
 
 				MettelANTLRRule r = new MettelANTLRRule(s1,st,/*true,*/new String[]{grammar.name()+

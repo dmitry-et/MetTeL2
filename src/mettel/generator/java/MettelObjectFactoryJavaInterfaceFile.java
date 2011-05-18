@@ -70,7 +70,7 @@ public class MettelObjectFactoryJavaInterfaceFile extends MettelJavaInterfaceFil
 			}
 			append(");");
 		}else if(SIZE == 0){
-			append(TYPE + ' ' + ltype + "Constant();");
+			append(TYPE + " create" + MettelJavaNames.firstCharToUpperCase(ltype) +"();");
 		}
 		appendEOL();
 		appendEOL();
