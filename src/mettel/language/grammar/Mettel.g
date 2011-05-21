@@ -66,7 +66,7 @@ package mettel.language;
                                 Parser section
 *****************************************************************************************/
 specification
-    returns [MettelSpecification spec = null;]
+    returns [MettelSpecification spec = null]
     :
     SPECIFICATION
     p = path
@@ -80,7 +80,7 @@ specification
     ;
 
 /*specificationDeclaration
-	returns [List r = null;]
+	returns [List r = null]
 	:
 	SPECIFICATION
 	p = path
@@ -100,7 +100,7 @@ importDeclaration
 	;
 
 path
-	returns [String p = null;]
+	returns [String p = null]
 	@init{StringBuffer buf = new StringBuffer();}
 	@after{p = buf.toString();}
 	:
@@ -122,13 +122,13 @@ block
     ;
 
 syntax
-    returns [MettelSyntax syn =null;]
+    returns [MettelSyntax syn =null]
     :
     SYNTAX id = IDENTIFIER
+    	(paths = extendsBlock)?
     	{
-    	syn = new MettelSyntax(id.getText());
+    	syn = new MettelSyntax(id.getText(), paths);
     	}
- //TODO   		(extendsBlock)?
     	LBRACE
 		    (
 		    syntaxStatement[syn]
@@ -141,18 +141,16 @@ syntax
 		RBRACE
     ;
 
-/*TODO
-   extendsBlock
-   returns [List<String> paths = new ArrayList<String>();]
+extendsBlock
+   returns [List<String> paths = new ArrayList<String>()]
    :
    EXTENDS
    p = path
-   {paths.add($p.text);}
+   {paths.add(p);}
    (COMMA path
-   {paths.add($p.text);}
+   {paths.add(p);}
    )*
    ;
-*/
 
 syntaxStatement
     [MettelSyntax syn]
