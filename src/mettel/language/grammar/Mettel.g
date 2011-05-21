@@ -116,18 +116,18 @@ path
 block
     [MettelSpecification spec]
     :
-    (syn  = syntax
+    (syn  = syntax[spec]
      {spec.addSyntax(syn);}
     )
     ;
 
-syntax
+syntax[MettelSpecification spec]
     returns [MettelSyntax syn =null]
     :
     SYNTAX id = IDENTIFIER
     	(paths = extendsBlock)?
     	{
-    	syn = new MettelSyntax(id.getText(), paths);
+    	syn = new MettelSyntax(id.getText(), spec.get(paths));
     	}
     	LBRACE
 		    (

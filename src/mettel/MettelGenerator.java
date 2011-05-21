@@ -111,6 +111,7 @@ public class MettelGenerator {
         	MettelANTLRGrammarGenerator gen = new MettelANTLRGrammarGenerator(spec);
 //        	StringBuilder buf = new StringBuilder();
         	for(MettelJavaPackageStructure pStructure:gen.processSyntaxes()){
+        		System.out.println('#');
         		pStructure.flush(outputPath);
         	}
 /*        	out.print(buf);

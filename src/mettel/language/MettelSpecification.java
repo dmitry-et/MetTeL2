@@ -16,8 +16,9 @@
  */
 package mettel.language;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static mettel.util.MettelStrings.LINE_SEPARATOR;
 
@@ -29,6 +30,8 @@ import static mettel.util.MettelStrings.LINE_SEPARATOR;
 public class MettelSpecification {
 
 	private String path = null;
+
+	private ArrayList<MettelSyntax> syntaxes = new ArrayList<MettelSyntax>();
 
 	private HashMap<String,MettelSyntax> syntaxTable = new HashMap<String,MettelSyntax>();
 
@@ -60,7 +63,7 @@ public class MettelSpecification {
 		buf.append(path);
 		buf.append(';');
 		buf.append(LINE_SEPARATOR);
-		for(MettelSyntax syn:syntaxTable.values()){
+		for(MettelSyntax syn:syntaxes){
 			buf.append(LINE_SEPARATOR);
 			syn.toBuffer(buf);
 		}
@@ -70,16 +73,30 @@ public class MettelSpecification {
 	/**
 	 * @param syn
 	 */
-	void addSyntax(MettelSyntax syn) {
+	boolean addSyntax(MettelSyntax syn) {
+		MettelSyntax s = syntaxTable.get(syn.name());
+		if(s != null) return false;
+		syntaxes.add(syn);
 		syntaxTable.put(syn.name(), syn);
+		return true;
+	}
 
+	List<MettelSyntax> get(List<String> syntaxNames){
+		if(syntaxNames == null) return null;
+		ArrayList<MettelSyntax> syntaxList = new ArrayList<MettelSyntax>();
+		for(String s:syntaxNames){
+			MettelSyntax syn = syntaxTable.get(s);
+			if(syn == null) return null;
+			syntaxList.add(syn);
+		}
+		return syntaxList;
 	}
 
 	/**
 	 * @return
 	 */
-	public Collection<MettelSyntax> syntaxes() {
-		return syntaxTable.values();
+	public List<MettelSyntax> syntaxes() {
+		return syntaxes;
 	}
 
 }

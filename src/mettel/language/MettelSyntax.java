@@ -18,6 +18,7 @@ package mettel.language;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static mettel.util.MettelStrings.LINE_SEPARATOR;
@@ -31,7 +32,7 @@ public class MettelSyntax implements MettelBlock {
 
 	private String name = null;
 
-	private List<String> parents = null;
+	private List<MettelSyntax> parents = null;
 
 	public String name(){
 		return name;
@@ -46,7 +47,7 @@ public class MettelSyntax implements MettelBlock {
 
     private HashMap<String,MettelSort> sortMap = new HashMap<String,MettelSort>();
 
-    private HashMap<MettelSort,ArrayList<MettelBNFStatement>> bnfs = new HashMap<MettelSort,ArrayList<MettelBNFStatement>>();
+    private LinkedHashMap<MettelSort,ArrayList<MettelBNFStatement>> bnfs = new LinkedHashMap<MettelSort,ArrayList<MettelBNFStatement>>();
 	/**
 	 *
 	 */
@@ -57,7 +58,7 @@ public class MettelSyntax implements MettelBlock {
 		this(name, null);
 	}
 
-	MettelSyntax(String name, List<String> parents) {
+	MettelSyntax(String name, List<MettelSyntax> parents) {
 		super();
 		this.name = name;
 		this.parents = parents;
@@ -92,7 +93,7 @@ public class MettelSyntax implements MettelBlock {
 	 * @param sortName A sort name to add
 	 */
 	boolean addSort(String sortName) {
-		MettelSort sort = sortMap.get(sortName);
+		MettelSort sort = getSort(sortName);
 		if(sort != null) return false;
 		final MettelSort SORT = new MettelSort(sortName);
 		sorts.add(SORT);
@@ -107,7 +108,7 @@ public class MettelSyntax implements MettelBlock {
 	 * @returns true if the sort exists
 	 */
 	boolean sortExists(String sortName) {
-		return (sortMap.get(sortName) != null);
+		return (getSort(sortName) != null);
 	}
 
 	/**
@@ -115,7 +116,16 @@ public class MettelSyntax implements MettelBlock {
 	 * @returns sort
 	 */
 	MettelSort getSort(String sortName) {
-		return sortMap.get(sortName);
+		MettelSort s = sortMap.get(sortName);
+		if(s == null){
+			if(parents != null){
+				for(MettelSyntax syn:parents){
+					s = syn.getSort(sortName);
+					if(s != null) return s;
+				}
+			}
+		}
+		return s;
 	}
 
 	/**
@@ -146,14 +156,16 @@ public class MettelSyntax implements MettelBlock {
 	/**
 	 * @param statement A BNF statement to add
 	 */
-	void addBNF(MettelSort sort,MettelBNFStatement statement) {
-		if(statement == null) return;
-		ArrayList<MettelBNFStatement> statements = bnfs.get(sort);
-//		if(statements == null){
-//			statements = new ArrayList<MettelBNFStatement>();
-			bnfs.put(sort,statements);
-//		}
-		statements.add(statement);
+	void addBNF(MettelSort sort, MettelBNFStatement statement) {
+		if(statement == null || sort == null) return;
+		if(sort.equals(getSort(sort.name()))){
+			ArrayList<MettelBNFStatement> statements = bnfs.get(sort);
+			if(statements == null){
+				statements = new ArrayList<MettelBNFStatement>();
+				bnfs.put(sort,statements);
+			}
+			statements.add(statement);
+		}
 	}
 
 	/**
@@ -174,10 +186,10 @@ public class MettelSyntax implements MettelBlock {
 			final int SIZE = parents.size();
 			if(SIZE >0){
 				buf.append(" extends ");
-				buf.append(parents.get(0));
+				buf.append(parents.get(0).name);
 				for(int i = 1; i < SIZE; i++){
 					buf.append(", ");
-					buf.append(parents.get(i));
+					buf.append(parents.get(i).name);
 				}
 			}
 		}
@@ -200,7 +212,7 @@ public class MettelSyntax implements MettelBlock {
 			buf.append(LINE_SEPARATOR);
 		}
 
-		for(MettelSort sort:sorts){
+		for(MettelSort sort:bnfs.keySet()){
 			ArrayList<MettelBNFStatement> statements = bnfs.get(sort);
 			final int SIZE = statements.size();
 			if(SIZE > 0){
@@ -237,6 +249,24 @@ public class MettelSyntax implements MettelBlock {
 	 */
 	public List<MettelBNFStatement> getBNFs(MettelSort sort) {
 		return bnfs.get(sort);
+	}
+
+	public MettelSyntax unravel(){
+		if(parents == null) return this;
+		MettelSyntax syn = new MettelSyntax(name);
+		for(MettelSyntax s:parents){
+			MettelSyntax s0 = s.unravel();
+			for(MettelSort sort:s0.sorts){
+				if(! syn.sortExists(sort.name())){
+					syn.sorts.add(sort);
+				}
+			}
+			for(MettelSort sort:s0.bnfs.keySet()){
+				List<MettelBNFStatement> statements = s0.getBNFs(sort);
+				syn.bnfs.put(sort,new ArrayList<MettelBNFStatement>(statements));
+			}
+		}
+		return syn;
 	}
 
 

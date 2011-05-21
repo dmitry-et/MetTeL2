@@ -30,3 +30,9 @@ syntax ALCO{
 	role = 'empty' role '.' concept;
 
 }
+
+syntax ALCOTableau extends ALCO{
+
+	individual skolemFunction = 'f' '(' individual ',' role ',' concept ')';
+
+}

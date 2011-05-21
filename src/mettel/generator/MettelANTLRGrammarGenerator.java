@@ -73,6 +73,7 @@ public class MettelANTLRGrammarGenerator {
 	public MettelJavaPackageStructure processSyntax(String name){
 		MettelSyntax syn = spec.getSyntax(name);
 		if(syn == null) return null;
+		syn = syn.unravel();
 
 		MettelANTLRGrammar grammar = new MettelANTLRGrammar(name);
 		final String PATH = spec.path();
@@ -132,6 +133,7 @@ public class MettelANTLRGrammarGenerator {
 		final String SORT_NAME = sort.name();
 		String s0 = BASIC_STRING + MettelJavaNames.firstCharToUpperCase(SORT_NAME);
 		String s1 = null;
+		System.out.println(bnfs);
 		for(MettelBNFStatement s:bnfs){
 			s1 = SORT_NAME + MettelJavaNames.firstCharToUpperCase(s.identifier());
 
