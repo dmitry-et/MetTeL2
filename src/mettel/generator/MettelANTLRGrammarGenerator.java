@@ -70,6 +70,63 @@ public class MettelANTLRGrammarGenerator {
 	private MettelJavaPackage langPackage = null;
 	private MettelJavaPackage grammarPackage = null;
 */
+	private MettelANTLRGrammar processSyntax0(MettelJavaPackageStructure pStructure, String name){
+		final String PATH = spec.path();
+		final String s = PACKAGE_STRING+' '+PATH+';';
+
+		MettelANTLRGrammar grammar = new MettelANTLRGrammar(name);
+
+		MettelSyntax syn = spec.getSyntax(name);
+		if(syn == null) return null;
+
+		List<MettelSyntax> parents = syn.parents();
+		if(parents != null){
+			for(MettelSyntax ps:parents){
+				MettelJavaPackageStructure pStr = new MettelJavaPackageStructure(PATH);
+				MettelANTLRGrammar g = processSyntax0(pStr,ps.name());
+				for(MettelANTLRRule r:g.rules()){
+					grammar.addRule(r);
+				}//TODO Do smth with factories
+			}
+		}
+
+		pStructure.appendStandardClasses(name);
+
+		grammar.addToHeader(s);
+		grammar.addToHeader("");
+		grammar.addToHeader("import java.util.Collection;");
+
+		grammar.addToLexerHeader(s);
+
+		grammar.addToMembers("private "+name+"ObjectFactory factory = "+name+"ObjectFactory.DEFAULT;");
+
+		grammar.addToMembers("public "+name+"Parser(TokenStream input, "+name+"ObjectFactory factory){");
+        grammar.addToMembers("    this(input);");
+        grammar.addToMembers("    this.factory = factory;");
+        grammar.addToMembers("}");
+
+		grammar.addToMembers("public "+name+"Parser(TokenStream input, RecognizerSharedState state, "+name+"ObjectFactory factory){");
+        grammar.addToMembers("    this(input,state);");
+        grammar.addToMembers("    this.factory = factory;");
+        grammar.addToMembers("}");
+
+		final Collection<MettelSort> sorts = syn.allSorts();//TODO refactoring needed
+		final int SIZE = sorts.size();
+		String[] sortStrings = new String[SIZE];
+		int i = 0;
+		for(MettelSort sort:sorts){
+			sortStrings[i++] = sort.name();
+			processSort(grammar,sort);
+			processBNFs(grammar,pStructure,sort,syn.getBNFs(sort));
+		}
+		pStructure.appendStandardClasses(name,sortStrings);
+
+		pStructure.appendParser(grammar);
+
+		return grammar;
+	}
+
+
 	public MettelJavaPackageStructure processSyntax(String name){
 		MettelSyntax syn = spec.getSyntax(name);
 		if(syn == null) return null;
@@ -133,7 +190,7 @@ public class MettelANTLRGrammarGenerator {
 		final String SORT_NAME = sort.name();
 		String s0 = BASIC_STRING + MettelJavaNames.firstCharToUpperCase(SORT_NAME);
 		String s1 = null;
-		System.out.println(bnfs);
+		//System.out.println(bnfs);
 		for(MettelBNFStatement s:bnfs){
 			s1 = SORT_NAME + MettelJavaNames.firstCharToUpperCase(s.identifier());
 

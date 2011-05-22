@@ -38,6 +38,10 @@ public class MettelSyntax implements MettelBlock {
 		return name;
 	}
 
+	public List<MettelSyntax> parents(){
+		return parents;
+	}
+
 	/*TODO implement hierarchical extension mechanism
 	 *
     private MettelSyntax parent = null;
@@ -269,6 +273,25 @@ public class MettelSyntax implements MettelBlock {
 		return syn;
 	}
 
+	public List<MettelSort> allSorts(){
+		if(parents == null) return sorts;
+		HashMap<String, MettelSort> map = new HashMap<String, MettelSort>();
+		ArrayList<MettelSort> list = new ArrayList<MettelSort>();
+		for(MettelSort sort:sorts){
+			list.add(sort);
+			map.put(sort.name(), sort);
+		}
+		for(MettelSyntax s:parents){
+			for(MettelSort sort:s.allSorts()){
+				MettelSort s0 = map.get(sort.name());
+				if(s0 == null){
+					list.add(sort);
+					map.put(sort.name(), sort);
+				}
+			}
+		}
+		return list;
+	}
 
 //	/**
 //	 * @return the statements

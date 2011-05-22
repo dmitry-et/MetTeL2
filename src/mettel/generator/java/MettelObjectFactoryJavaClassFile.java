@@ -16,6 +16,8 @@
  */
 package mettel.generator.java;
 
+import java.util.LinkedHashMap;
+
 import mettel.util.MettelJavaNames;
 
 /**
@@ -57,6 +59,9 @@ public class MettelObjectFactoryJavaClassFile extends MettelJavaClassFile {
 		headings.appendLine("import java.util.TreeMap;");
 		headings.appendEOL();
 	}
+
+
+	private LinkedHashMap<String, StringBuffer> createMethodMap = new LinkedHashMap<String, StringBuffer>();
 
 	public void addCreateMethod(String type, String name, String[] types){
 		final String ltype = name + MettelJavaNames.firstCharToUpperCase(type);

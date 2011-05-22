@@ -20,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 import mettel.util.MettelIndentedStringBuilder;
 
@@ -51,6 +52,10 @@ public class MettelANTLRGrammar {
 	  */
 	 public void addRule(MettelANTLRRule rule){
 		 rules.add(rule);
+	 }
+
+	 public List<MettelANTLRRule> rules(){
+		 return rules;
 	 }
 
 	 private MettelANTLRGrammarOptions options = new MettelANTLRGrammarOptions();

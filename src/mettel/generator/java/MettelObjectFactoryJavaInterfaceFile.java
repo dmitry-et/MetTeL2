@@ -56,12 +56,12 @@ public class MettelObjectFactoryJavaInterfaceFile extends MettelJavaInterfaceFil
 		appendEOL();
 	}
 
-	public void addCreateMethod(String type, String name, String[] types){
+	public String methodSignature(String type, String name, String[] types){
 		final String ltype = name + MettelJavaNames.firstCharToUpperCase(type);
 		final String TYPE = prefix + MettelJavaNames.firstCharToUpperCase(ltype);
 		final int SIZE = types.length;
 
-		indent();
+		StringBuilder b  = new StringBuilder();
 		if(SIZE > 0){
 			append(TYPE + " create" + MettelJavaNames.firstCharToUpperCase(ltype) + '(');
 			append(prefix + MettelJavaNames.firstCharToUpperCase(types[0]) +" e0");
@@ -72,7 +72,13 @@ public class MettelObjectFactoryJavaInterfaceFile extends MettelJavaInterfaceFil
 		}else if(SIZE == 0){
 			append(TYPE + " create" + MettelJavaNames.firstCharToUpperCase(ltype) +"();");
 		}
-		appendEOL();
+
+		return b.toString();
+	}
+
+	public void addCreateMethod(String type, String name, String[] types){
+		indent();
+		appendLine(methodSignature(type,name,types));
 		appendEOL();
 	}
 
