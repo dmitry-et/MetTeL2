@@ -58,6 +58,7 @@ public class MettelGenerator {
         	  	if("-i".equals(args[i])||"--input".equals(args[i])){
         	        if(i < SIZE-1){
             		    in = new ANTLRFileStream(args[++i]);
+            		    System.out.println("Input file: "+args[i]);
                     }else{
                         System.out.println("Input file name required");
                     }
@@ -67,6 +68,7 @@ public class MettelGenerator {
                     if(i < SIZE-1){
                       outFileName = args[++i];
             		  out = new PrintWriter(new FileWriter(outFileName),true);
+            		  System.out.println("Output file: "+outFileName);
                     }else{
                         System.out.println("Output file name required");
                     }
@@ -75,6 +77,7 @@ public class MettelGenerator {
 
                     if(i < SIZE-1){
             		  err = new PrintWriter(new FileWriter(args[++i]),true);
+            		  System.out.println("Using error file: "+args[i]);
                     }else{
                         System.out.println("Error file name required");
                     }
@@ -82,6 +85,7 @@ public class MettelGenerator {
 
                     if(i < SIZE-1){
             		  outputPath = args[++i];
+            		  System.out.println("Output path: "+outputPath);
                     }else{
                         System.out.println("Output directory name required");
                     }

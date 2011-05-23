@@ -138,7 +138,7 @@ CLASSES := $(shell echo $(SOURCES) | sed -e 's/\.java/\.class/g; s/src/classes/g
 
 ### Test ###########################################################################
 
-RUNTIME_CLASSPATH:=$(LIB_DIR)/antlr.jar:$(JAR_FILE)
+RUNTIME_CLASSPATH:=$(ANTLR3_RUNTIME_JAR):$(JAR_FILE)
 
 TEST_DIR := $(BASE_DIR)/test
 TEST_JAR_FILE:=$(LIB_DIR)/test.jar
@@ -162,6 +162,12 @@ JAVA_TEST_OPTIONS := -Xfuture -Xbatch -Xms256M -Xmx400M
 #-Xprof -agentlib:hprof=heap=sites
 #-Xnoclassgc
 
+TEST_EXAMPLES_DIR = $(TEST_DIR)/examples
+TEST_OUTPUT_DIR = $(TEST_DIR)/output
+TEST_LOGIC_DIRS = "ALCO"
+TEST_LOGIC_PARSERS = $(shell find $(TEST_OUTPUT_DIR) -name '*.g')
+TEST_LOGIC_SOURCES = $(shell find $(TEST_OUTPUT_DIR) -name '*.java')
+
 DFG_FILE := $(EXAMPLES_DIR)/formulae2dfg.dfg
 TO_DFG_FILE := $(EXAMPLES_DIR)/formulae2dfg.in
 SPASS_LOG_FILE := $(BASE_DIR)/SPASS.log
@@ -173,7 +179,7 @@ clear clean clear-ast-classes compile compile-ast clear-parser-files clear prepa
 clear-log only-lexer only-parser parser lexer-doc parser-doc doc resources test \
 all compile-test packages-file java-doc clear-test-log clear-doc clear-test clear-test-jar \
 clear-test-classes test-jar old-test junit-test junit SPASS clear-spass-log statistics \
-libantlr tableau-bin clear-bin
+libantlr tableau-bin clear-bin generateLogics generateParsers compileLogics generate
 
 $(NAME): jar
 
@@ -363,6 +369,28 @@ $(JAR_FILE): $(CLASSES) $(RESOURCE_FILES) $(MANIFEST_FILE)
 	@ cd $(CLASSES_DIR) && $(JAR) cvfm $(JAR_FILE) $(MANIFEST_FILE) *
 	@ cd $(BASE_DIR)
 
+generateLogics: $(JAR_FILE) $(TEST_CLASSES_DIR)
+	@ echo $(DELIM0)
+	@ echo "Generating logics"
+	@ echo $(DELIM1)
+	@ for D in $(TEST_LOGIC_DIRS); do java -cp $(RUNTIME_CLASSPATH) mettel.MettelGenerator -i "$(TEST_EXAMPLES_DIR)/$$D/$$D.s" -d "test/output"; done
+	
+generateParsers: generateLogics
+#	@ TEST_LOGIC_PARSERS = $(shell find $(TEST_OUTPUT_DIR) -name '*.g')
+#	@ TEST_LOGIC_SOURCES = $(shell find $(TEST_OUTPUT_DIR) -name '*.java')
+	@ echo $(DELIM0)
+	@ echo "Generating parsers for logics"
+	@ echo $(DELIM1)
+	@ for P in $(shell find $(TEST_OUTPUT_DIR) -name '*.g'); do java -cp $(COMPILE_CLASSPATH) org.antlr.Tool "$$P"; done
+	
+compileLogics: generateParsers
+	@ echo $(DELIM0)
+	@ echo "Compiling sources for logics"
+	@ echo $(DELIM1)
+	@ $(JAVAC) -classpath $(COMPILE_CLASSPATH):$(LIB_DIR)/junit.jar -d $(TEST_CLASSES_DIR) $(shell find $(TEST_OUTPUT_DIR) -name '*.java')
+
+generate: compileLogics
+
 $(TEST_CLASSES): $(TEST_SOURCES) $(JAR_FILE) $(TEST_CLASSES_DIR)
 	@ echo $(DELIM0)
 	@ echo "Compiling test"
@@ -379,7 +407,7 @@ $(TEST_CLASSES): $(TEST_SOURCES) $(JAR_FILE) $(TEST_CLASSES_DIR)
 
 compile-test: $(TEST_CLASSES)
 
-$(TEST_JAR_FILE): $(TEST_CLASSES)
+$(TEST_JAR_FILE): $(TEST_CLASSES) generate
 	@ echo $(DELIM0)
 	@ echo "Building runtime jar (test.jar)"
 	@ echo $(DELIM1)
