@@ -50,7 +50,7 @@ public class MettelGeneralTableauRule<T extends MettelExpression, S extends Mett
 			//TODO nomalise the rule to avoid empty branches
 			HashSet<T> rb = new HashSet<T>(b.size());
 			for(T t:b){
-				rb.add((T)t.substitute(s));
+				rb.add((T)t.substitute(s));//XXX: Wrong!
 			}
 			r.add(rb);
 		}
