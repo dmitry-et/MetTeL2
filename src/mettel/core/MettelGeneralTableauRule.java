@@ -19,43 +19,43 @@ package mettel.core;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.List;
 
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public class MettelGeneralTableauRule<T extends MettelExpression, S extends MettelSubstitution> {
+public class MettelGeneralTableauRule {
 
 	/**
 	 *
 	 */
-	public MettelGeneralTableauRule(Set<T> premises, Set<Set<T>> branches) {
+	public MettelGeneralTableauRule(Set<MettelExpression> premises, Set<? extends Set<MettelExpression>> branches) {
 		super();
 //		if(premises == null || premises.size() == 0) throw new MettelCoreRuntimeException("Empty premises in tableau rule");
-		this.premises = new ArrayList<T>(premises);
+		this.premises = new ArrayList<MettelExpression>(premises);
 //		if(conclusions != null && conclusions.size() > 0){
 			this.branches = branches;
 //		}
 	}
 
-	private List<T> premises = null;
-	private Set<Set<T>> branches = null;
+	private ArrayList<MettelExpression> premises = null;
+	private Set<? extends Set<MettelExpression>> branches = null;
 
-	HashSet<HashSet<T>> result(S s){
+	HashSet<HashSet<MettelExpression>> result(MettelSubstitution s){
 		if(branches == null) return null;
-		HashSet<HashSet<T>> r = new HashSet<HashSet<T>>(branches.size());
-		for(Set<T> b:branches){
+		HashSet<HashSet<MettelExpression>> r = new HashSet<HashSet<MettelExpression>>(branches.size());
+		for(Set<MettelExpression> b:branches){
 			//TODO nomalise the rule to avoid empty branches
-			HashSet<T> rb = new HashSet<T>(b.size());
-			for(T t:b){
-				rb.add((T)t.substitute(s));//XXX: Wrong!
+			HashSet<MettelExpression> rb = new HashSet<MettelExpression>(b.size());
+			for(MettelExpression t:b){
+				rb.add(t.substitute(s));
 			}
 			r.add(rb);
 		}
 		return r;
 	}
 
+	
 
 }

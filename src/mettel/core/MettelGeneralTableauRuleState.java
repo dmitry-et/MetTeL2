@@ -16,13 +16,19 @@
  */
 package mettel.core;
 
+import java.util.Queue;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public interface MettelTableauRuleState {
-
-	void expand();
+public class MettelGeneralTableauRuleState {
+    
+    	Queue<MettelAnnotatedExpression> expressionsQueue = null;
+    	
+    	MettelAnnotatedExpression e = null;
+    	
+    	MettelSubstitution[][] subs = null;
 
 }
