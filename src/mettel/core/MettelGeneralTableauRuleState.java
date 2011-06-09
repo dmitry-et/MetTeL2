@@ -26,7 +26,7 @@ import java.util.Queue;
  */
 public class MettelGeneralTableauRuleState {
 
-    	Queue<MettelAnnotatedExpression> expressionsQueue = null;
+    	Queue<MettelAnnotatedExpression> expressionQueue = null;
 
     	MettelAnnotatedExpression e = null;
 
