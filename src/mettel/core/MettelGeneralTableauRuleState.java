@@ -38,8 +38,10 @@ public class MettelGeneralTableauRuleState {
     		super();
     		this.rule = rule;
     		final int SIZE = rule.arity();
-    		this.subs = new ArrayList[];
-    		subs[0] = new ArrayList<MettelSubstitution>();
+    		this.subs = new ArrayList[SIZE];
+    		for(int i = 0; i < SIZE; i++){
+    			subs[i] = new ArrayList<MettelSubstitution>();
+    		}
     	}
 
 }
