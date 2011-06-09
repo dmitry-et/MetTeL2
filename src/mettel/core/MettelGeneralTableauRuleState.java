@@ -16,6 +16,7 @@
  */
 package mettel.core;
 
+import java.util.ArrayList;
 import java.util.Queue;
 
 /**
@@ -24,11 +25,21 @@ import java.util.Queue;
  *
  */
 public class MettelGeneralTableauRuleState {
-    
+
     	Queue<MettelAnnotatedExpression> expressionsQueue = null;
-    	
+
     	MettelAnnotatedExpression e = null;
-    	
-    	MettelSubstitution[][] subs = null;
+
+    	ArrayList<MettelSubstitution>[] subs = null;
+
+    	MettelGeneralTableauRule rule = null;
+
+    	MettelGeneralTableauRuleState(MettelGeneralTableauRule rule){
+    		super();
+    		this.rule = rule;
+    		final int SIZE = rule.arity();
+    		this.subs = new ArrayList[];
+    		subs[0] = new ArrayList<MettelSubstitution>();
+    	}
 
 }

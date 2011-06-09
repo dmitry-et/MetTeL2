@@ -42,6 +42,10 @@ public class MettelGeneralTableauRule {
 	private ArrayList<MettelExpression> premises = null;
 	private Set<? extends Set<MettelExpression>> branches = null;
 
+	public int arity(){
+		return premises.size();
+	}
+
 	HashSet<HashSet<MettelExpression>> result(MettelSubstitution s){
 		if(branches == null) return null;
 		HashSet<HashSet<MettelExpression>> r = new HashSet<HashSet<MettelExpression>>(branches.size());
@@ -56,6 +60,6 @@ public class MettelGeneralTableauRule {
 		return r;
 	}
 
-	
+
 
 }
