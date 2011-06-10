@@ -18,6 +18,7 @@ package mettel.core;
 
 import java.util.ArrayList;
 import java.util.Queue;
+import java.util.Set;
 
 /**
  * @author Dmitry Tishkovsky
@@ -26,22 +27,73 @@ import java.util.Queue;
  */
 public class MettelGeneralTableauRuleState {
 
-    	Queue<MettelAnnotatedExpression> expressionQueue = null;
+    	private Queue<MettelAnnotatedExpression> queue = null;
 
-    	MettelAnnotatedExpression e = null;
+    	private MettelAnnotatedExpression e = null;
 
-    	ArrayList<MettelSubstitution>[] subs = null;
+    	//TODO change the structure for substitutions
+    	private ArrayList<MettelSubstitution>[] subs = null;
 
-    	MettelGeneralTableauRule rule = null;
+//    	private MettelGeneralTableauRule rule = null;
 
-    	MettelGeneralTableauRuleState(MettelGeneralTableauRule rule){
+    	private MettelExpression[] premises = null;
+    	private Set<? extends Set<MettelExpression>> branches = null;
+
+    	private int index = 0;
+    	private int[] subIndexes = null;
+
+    	private MettelSubstitution s = null;
+
+    	private final int SIZE;
+
+    	@SuppressWarnings("unused")
+		private MettelGeneralTableauRuleState(){}
+
+    	MettelGeneralTableauRuleState(MettelGeneralTableauRule rule, Queue<MettelAnnotatedExpression> queue){
     		super();
-    		this.rule = rule;
-    		final int SIZE = rule.arity();
+    		this.premises = rule.premises;
+    		this.branches = rule.branches;
+    		this.queue = queue;
+
+    		SIZE = this.premises.length;
     		this.subs = new ArrayList[SIZE];
     		for(int i = 0; i < SIZE; i++){
     			subs[i] = new ArrayList<MettelSubstitution>();
     		}
+
+    		subIndexes = new int[SIZE];
+    	}
+
+    	private void expand(){
+    		if(e == null){
+    			e = queue.poll();
+    			if(e == null) return;
+    		}
+    		MettelSubstitution s = null;
+    		while(s == null && index < SIZE){
+    			s = premises[index].match(e.expression());
+    			index++;
+    		}
+    		if(s == null) return;
+    		for(int i = 0; i < SIZE; i++){
+    			if(i != index-1){
+    				MettelSubstitution si = null;
+    				final int SIZEi = subs[i].size();
+    				while(!s.isCompatible(si) && subIndexes[i] < SIZEi){
+    					si = subs[i].get(subIndexes[i]);
+    					subIndexes[i]++;
+    				}
+    				if(s.isCompatible(si)){
+    					s = s.append(si);
+    				}
+    			}
+    		}
+
+    		if(index == SIZE){
+    			index = 0;
+    			e = null;
+    		}
+
     	}
 
 }

@@ -25,4 +25,6 @@ public interface MettelExpression {
 
 	MettelExpression substitute(MettelSubstitution s);
 
+	MettelSubstitution match(MettelExpression e);
+
 }
