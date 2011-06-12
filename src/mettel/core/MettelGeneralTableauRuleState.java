@@ -17,6 +17,8 @@
 package mettel.core;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
@@ -38,22 +40,28 @@ public class MettelGeneralTableauRuleState {
 
     	private MettelExpression[] premises = null;
     	private Set<? extends Set<MettelExpression>> branches = null;
+    	private List<? extends Set<MettelExpression>> result = null;
+
+    	private Queue<MettelSubstitution[]> newSubstitutions = null;
+    	private Set<MettelSubstitution[]> oldSubstitutions = null;
 
     	private int index = 0;
-    	private int[] subIndexes = null;
+//    	private int[] subIndexes = null;
 
-    	private MettelSubstitution s = null;
+//    	private MettelSubstitution s = null;
 
     	private final int SIZE;
 
     	@SuppressWarnings("unused")
 		private MettelGeneralTableauRuleState(){}
 
-    	MettelGeneralTableauRuleState(MettelGeneralTableauRule rule, Queue<MettelAnnotatedExpression> queue){
+    	MettelGeneralTableauRuleState(MettelGeneralTableauRule rule, Queue<MettelAnnotatedExpression> queue,
+    			List<? extends Set<MettelExpression>> result){
     		super();
     		this.premises = rule.premises;
     		this.branches = rule.branches;
     		this.queue = queue;
+    		this.result = result;
 
     		SIZE = this.premises.length;
     		this.subs = new ArrayList[SIZE];
@@ -61,30 +69,117 @@ public class MettelGeneralTableauRuleState {
     			subs[i] = new ArrayList<MettelSubstitution>();
     		}
 
-    		subIndexes = new int[SIZE];
+//    		subIndexes = new int[SIZE];
     	}
 
-    	private void expand(){
+    	private boolean dead = false;
+
+    	private void step(){
+    		for(Set<MettelExpression> set:result){
+    			set.clear();
+    		}
+
+    		if(dead) return;
+    		MettelSubstitution[] tuple = newSubstitutions.poll();
+    		if(tuple == null){
+    			processExpression();
+    			tuple = newSubstitutions.poll();
+    			if(tuple == null){
+    				dead = true;
+    				return;
+    			}
+    		}
+
+    		MettelSubstitution s = tuple[0].merge(tuple);
+    		while(s == null || !oldSubstitutions.add(tuple)){
+    			tuple = newSubstitutions.poll();
+    			if(tuple == null){
+    				dead = true;
+    				return;
+    			}
+    			s = tuple[0].merge(tuple);
+    		}
+
+			Iterator<? extends Set<MettelExpression>> i = result.iterator();
+			for(Set<MettelExpression> set:branches){
+				Set<MettelExpression> rset = i.next();
+				for(MettelExpression e:set){
+					rset.add(e.substitute(s));
+				}
+			}
+
+    	}
+
+    	private void processExpression(){
     		if(e == null){
     			e = queue.poll();
     			if(e == null) return;
     		}
-    		MettelSubstitution s = null;
-    		while(s == null && index < SIZE){
-    			s = premises[index].match(e.expression());
-    			index++;
+
+		    MettelSubstitution s = null;
+			while(s == null && index < SIZE){
+				s = premises[index].match(e.expression());
+				index++;
+			}
+
+			if(index == SIZE){
+				e = null;
+				index = 0;
+				if(s == null) return;
+			}
+
+			for(MettelSubstitution[] oldTuple:oldSubstitutions){
+				MettelSubstitution[] subs = new MettelSubstitution[SIZE];
+				final int ind = index - 1;
+				System.arraycopy(oldTuple, 0, subs, 0, ind);
+				subs[ind] = s;
+				System.arraycopy(oldTuple, index, subs, index, SIZE - index);
+				newSubstitutions.add(subs);
+			}
+    	}
+
+/*    	private void expand(){
+
+    		for(Set<MettelExpression> set:result){
+    			set.clear();
     		}
-    		if(s == null) return;
+
+    		if(s == null){
+
+    			if(e == null){
+    				e = queue.poll();
+    				if(e == null) return;
+    			}
+
+    			while(s == null && index < SIZE){
+    				s = premises[index].match(e.expression());
+    				index++;
+    			}
+    			if(s == null) return;
+    		}
+
+    		MettelSubstitution s0 = s;
     		for(int i = 0; i < SIZE; i++){
-    			if(i != index-1){
+    			if(i != index - 1){
     				MettelSubstitution si = null;
     				final int SIZEi = subs[i].size();
-    				while(!s.isCompatible(si) && subIndexes[i] < SIZEi){
+    				while((s0 = s0.append(si)) == null && subIndexes[i] < SIZEi){
     					si = subs[i].get(subIndexes[i]);
     					subIndexes[i]++;
     				}
-    				if(s.isCompatible(si)){
-    					s = s.append(si);
+    				if(s0 == null) break;
+    			}
+    		}
+
+    		if(s0 == null){
+
+
+    		}else{
+    			Iterator<? extends Set<MettelExpression>> i = result.iterator();
+    			for(Set<MettelExpression> set:branches){
+    				Set<MettelExpression> rset = i.next();
+    				for(MettelExpression e:set){
+    					rset.add(e.substitute(s0));
     				}
     			}
     		}
@@ -95,5 +190,5 @@ public class MettelGeneralTableauRuleState {
     		}
 
     	}
-
+*/
 }
