@@ -21,10 +21,12 @@ package mettel.core;
  * @version $Revision$ $Date$
  *
  */
-public interface MettelSubstitution {
+public interface MettelSubstitution{
 
 	boolean isCompatible(MettelSubstitution s);
 
 	MettelSubstitution append(MettelSubstitution s);
+
+	MettelSubstitution merge(MettelSubstitution[] subs);
 
 }
