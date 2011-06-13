@@ -27,4 +27,7 @@ public interface MettelExpression {
 
 	MettelSubstitution match(MettelExpression e);
 
+	MettelAnnotatedExpression substitute(MettelAnnotatedSubstitution s);
+
+	MettelAnnotatedSubstitution match(MettelAnnotatedExpression e);
 }

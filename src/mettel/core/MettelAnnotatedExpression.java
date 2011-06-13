@@ -23,8 +23,10 @@ package mettel.core;
  */
 public interface MettelAnnotatedExpression {
     
-    MettelExpression expression();
+//    MettelExpression expression();
     
+//    MettelTableauAnnotation annotation();
     
+    MettelAnnotatedExpression substitute(MettelAnnotatedSubstitution s);
 
 }

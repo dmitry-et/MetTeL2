@@ -18,15 +18,9 @@ package mettel.core;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision$ $Date$
+ * @version $Revision: $ $Date: $
  *
  */
-public interface MettelSubstitution{
-
-//	boolean isCompatible(MettelSubstitution s);
-
-//	MettelSubstitution append(MettelSubstitution s);
-
-	MettelSubstitution merge(MettelSubstitution[] subs);
+public interface MettelTableauAnnotation {
 
 }
