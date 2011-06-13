@@ -31,4 +31,6 @@ public interface MettelAnnotatedSubstitution {
 
     public MettelAnnotatedSubstitution merge(MettelAnnotatedSubstitution[] subs);
 
+    public MettelAnnotatedSubstitution mergeArray(MettelAnnotatedSubstitution[] subs);
+
 }

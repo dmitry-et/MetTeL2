@@ -74,7 +74,7 @@ public class MettelGeneralTableauRuleState {
     	private boolean dead = false;
 
     	public boolean evolve(){
-    	    
+
     		for(Set<MettelAnnotatedExpression> set:result){
     		    set.clear();
     		}
@@ -90,37 +90,37 @@ public class MettelGeneralTableauRuleState {
     		    	default:
     		    	    tuple = newSubstitutions.poll();
     		    	    if(tuple == null){
-    		    		dead = true;
-    		    		return false;
+    		    	    	dead = true;
+    		    	    	return false;
     		    	    }
     		    }
     		}
 
-    		MettelAnnotatedSubstitution s = tuple[0].merge(tuple);
+    		MettelAnnotatedSubstitution s = tuple[0].mergeArray(tuple);
     		while(s == null || !oldSubstitutions.add(tuple)){
     		    tuple = newSubstitutions.poll();
     		    if(tuple == null){
-    			dead = true;
-    			return false;
+    		    	dead = true;
+    		    	return false;
     		    }
-    		    s = tuple[0].merge(tuple);
+    		    s = tuple[0].mergeArray(tuple);
     		}
 
     		Iterator<? extends Set<MettelAnnotatedExpression>> i = result.iterator();
     		for(Set<MettelExpression> set:branches){
     		    Set<MettelAnnotatedExpression> rset = i.next();
     		    for(MettelExpression e:set){
-    			rset.add(e.substitute(s));
+    		    	rset.add(e.substitute(s));
     		    }
     		}
-    		
+
     		return true;
 
     	}
 
     	private final int EMPTY_QUEUE = -1;
     	private final int DOES_NOT_MATCH = -2;
-    	
+
     	private int processExpression(){
     		if(e == null){
     		    e = queue.poll();
@@ -147,7 +147,7 @@ public class MettelGeneralTableauRuleState {
     		    System.arraycopy(oldTuple, index, subs, index, SIZE - index);
     		    newSubstitutions.add(subs);
     		}
-    		
+
     		return 0;
     	}
 

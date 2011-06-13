@@ -29,5 +29,8 @@ public interface MettelTableauAnnotation {
 
 	public MettelTableauAnnotation merge(MettelTableauAnnotation a);
 
+	public MettelTableauAnnotation mergeArray(MettelTableauAnnotation[] anns);
+
 	public MettelTableauAnnotation merge(MettelTableauAnnotation[] anns);
+
 }
