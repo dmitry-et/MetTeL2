@@ -23,4 +23,11 @@ package mettel.core;
  */
 public interface MettelTableauAnnotation {
 
+	public MettelAnnotatedExpression annotate(MettelExpression e);
+
+	public MettelAnnotatedSubstitution annotate(MettelSubstitution s);
+
+	public MettelTableauAnnotation merge(MettelTableauAnnotation a);
+
+	public MettelTableauAnnotation merge(MettelTableauAnnotation[] anns);
 }

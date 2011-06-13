@@ -18,17 +18,32 @@ package mettel.core;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision: $ $Date: $
+ * @version $Revision$ $Date$
  *
  */
-public interface MettelAnnotatedSubstitution {
+public class MettelAbstractAnnotatedExpresssion implements
+		MettelAnnotatedExpression {
 
-    public MettelSubstitution substitution();
+	@SuppressWarnings("unused")
+	private MettelAbstractAnnotatedExpresssion() {}
 
-    //public MettelAnnotatedExpression annotatedExpression();
+	public MettelAbstractAnnotatedExpresssion(MettelExpression e, MettelTableauAnnotation a) {
+		super();
+		this.e = e;
+		this.a = a;
+	}
 
-    public MettelTableauAnnotation annotation();
+	private MettelExpression e = null;
 
-    public MettelAnnotatedSubstitution merge(MettelAnnotatedSubstitution[] subs);
+	private MettelTableauAnnotation a = null;
+
+	/* (non-Javadoc)
+	 * @see mettel.core.MettelAnnotatedExpression#substitute(mettel.core.MettelAnnotatedSubstitution)
+	 */
+	@Override
+	public MettelAnnotatedExpression substitute(MettelAnnotatedSubstitution s) {
+		MettelExpression e0 = e.substitute(s.substitution());
+		return a.merge(s.annotation()).annotate(e0);
+	}
 
 }
