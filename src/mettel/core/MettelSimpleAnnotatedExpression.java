@@ -21,8 +21,16 @@ package mettel.core;
  * @version $Revision$ $Date$
  *
  */
-public interface MettelTableauRule {
+public class MettelSimpleAnnotatedExpression extends
+		MettelAbstractAnnotatedExpresssion {
 
-//	void apply(MettelTableauState state);
+	/**
+	 * @param e
+	 * @param a
+	 */
+	public MettelSimpleAnnotatedExpression(MettelExpression e,
+			MettelTableauAnnotation a) {
+		super(e, a);
+	}
 
 }

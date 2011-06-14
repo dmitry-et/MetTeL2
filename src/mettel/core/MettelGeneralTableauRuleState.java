@@ -16,7 +16,6 @@
  */
 package mettel.core;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
@@ -52,7 +51,7 @@ public class MettelGeneralTableauRuleState {
     	private final int SIZE;
 
     	@SuppressWarnings("unused")
-	private MettelGeneralTableauRuleState(){ SIZE = 0;}
+    	private MettelGeneralTableauRuleState(){ SIZE = 0;}
 
     	MettelGeneralTableauRuleState(MettelGeneralTableauRule rule, Queue<MettelAnnotatedExpression> queue,
     			List<? extends Set<MettelAnnotatedExpression>> result){

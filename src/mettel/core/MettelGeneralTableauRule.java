@@ -16,8 +16,6 @@
  */
 package mettel.core;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -43,11 +41,11 @@ public class MettelGeneralTableauRule {
 	MettelExpression[] premises = null;
 	Set<? extends Set<MettelExpression>> branches = null;
 
-	public int arity(){
-		return premises.length;
-	}
+//	public int arity(){
+//		return premises.length;
+//	}
 
-	HashSet<HashSet<MettelExpression>> result(MettelSubstitution s){
+/*	HashSet<HashSet<MettelExpression>> result(MettelSubstitution s){
 		if(branches == null) return null;
 		HashSet<HashSet<MettelExpression>> r = new HashSet<HashSet<MettelExpression>>(branches.size());
 		for(Set<MettelExpression> b:branches){
@@ -59,7 +57,7 @@ public class MettelGeneralTableauRule {
 			r.add(rb);
 		}
 		return r;
-	}
+	}*/
 
 	/*MettelExpression[] premises(){
 		return premises;
