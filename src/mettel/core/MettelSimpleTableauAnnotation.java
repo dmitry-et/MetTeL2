@@ -23,12 +23,21 @@ package mettel.core;
  */
 public class MettelSimpleTableauAnnotation implements MettelTableauAnnotation {
 
+	private MettelTableauState state = null;
+
+	@SuppressWarnings("unused")
+	private MettelSimpleTableauAnnotation(){}
+
+	public MettelSimpleTableauAnnotation(MettelTableauState state){
+		super();
+		this.state = state;
+	}
+
 	/* (non-Javadoc)
 	 * @see mettel.core.MettelTableauAnnotation#annotate(mettel.core.MettelExpression)
 	 */
 	@Override
 	public MettelAnnotatedExpression annotate(MettelExpression e) {
-		// TODO Auto-generated method stub
 		return new MettelSimpleAnnotatedExpression(e,this);
 	}
 
@@ -66,6 +75,14 @@ public class MettelSimpleTableauAnnotation implements MettelTableauAnnotation {
 	public MettelTableauAnnotation merge(MettelTableauAnnotation[] anns) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see mettel.core.MettelTableauAnnotation#state()
+	 */
+	@Override
+	public MettelTableauState state() {
+		return state;
 	}
 
 }

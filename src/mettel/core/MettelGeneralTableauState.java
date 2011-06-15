@@ -19,6 +19,8 @@ package mettel.core;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
@@ -35,13 +37,14 @@ public class MettelGeneralTableauState {
 
 //	private final int ID = counter++;
 
+	final int SIZE;
 	private MettelGeneralTableauRuleState[] ruleStates = null;
 
 	private IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>> sets = null;
 
 	public MettelGeneralTableauState(Set<MettelGeneralTableauRule> calculus, Set<MettelAnnotatedExpression> input) {
 		super();
-		final int SIZE = calculus.size();
+		SIZE = calculus.size();
 		ruleStates = new MettelGeneralTableauRuleState[SIZE];
 		int i = 0;
 		for(MettelGeneralTableauRule r:calculus){
@@ -54,23 +57,54 @@ public class MettelGeneralTableauState {
 			ruleStates[i] = new MettelGeneralTableauRuleState(r, q, l);
 		}
 		sets = new IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>>(1);
-		sets.put(this, new TreeSet<MettelAnnotatedExpression>(input));
+		sets.put(this, new TreeSet<MettelAnnotatedExpression>());
+		addAll(input);
 	}
 
 	public MettelGeneralTableauState(MettelGeneralTableauState state, Set<MettelAnnotatedExpression> input) {
 		super();
-		this.ruleStates = state.ruleStates;
+		ruleStates = state.ruleStates;
+		SIZE = ruleStates.length;
 		final IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>> sets = state.sets;
-		this.sets = new IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>>(sets.size());
+		this.sets = new IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>>(sets.size()+1);
 		this.sets.putAll(sets);
-		this.sets.put(this, new TreeSet<MettelAnnotatedExpression>(input));
-
+		this.sets.put(this, new TreeSet<MettelAnnotatedExpression>());
+		addAll(input);
 	}
 
+	public void addAll(Set<MettelAnnotatedExpression> expressions){
+		final Iterator<MettelAnnotatedExpression> i = expressions.iterator();
+		while(i.hasNext()){
+			MettelAnnotatedExpression e = i.next();
+			if(!sets.get(e.annotation().state()).add(e)){
+				i.remove();
+			}
+		}
+		for(int j = 0; j < SIZE; j++){
+			ruleStates[j].addAll(expressions);
+		}
+	}
+
+
+	private int index = 0;
+
 	public boolean evolve(){
-	    
-	    	java.util.Random
-	    
+		MettelGeneralTableauRuleState rs = ruleStates[index];
+		if(rs.evolve()){
+			index++;
+			if(index == SIZE){ index = 0; }
+			List<? extends Set<MettelAnnotatedExpression>> result = rs.result;
+			final int RESULT_SIZE = result.size();
+			if(RESULT_SIZE == 1){
+				addAll(result.get(0));
+			}else if(RESULT_SIZE > 1){
+				ArrayList<MettelGeneralTableauState> children = new ArrayList<MettelGeneralTableauState>(RESULT_SIZE);
+				for(int i = 0; i < RESULT_SIZE; i++){
+					children.add(new MettelGeneralTableauState(this,result.get(i)));
+				}
+			}
+			return true;
+		}
 		return false;
 	}
 

@@ -38,7 +38,7 @@ public class MettelGeneralTableauRuleState {
 
     	private MettelExpression[] premises = null;
     	private Set<? extends Set<MettelExpression>> branches = null;
-    	private List<? extends Set<MettelAnnotatedExpression>> result = null;
+    	List<? extends Set<MettelAnnotatedExpression>> result = null;
 
     	private Queue<MettelAnnotatedSubstitution[]> newSubstitutions = null;
     	private Set<MettelAnnotatedSubstitution[]> oldSubstitutions = null;
@@ -149,6 +149,13 @@ public class MettelGeneralTableauRuleState {
 
     		return 0;
     	}
+
+		/**
+		 * @param expressions
+		 */
+		public void addAll(Set<MettelAnnotatedExpression> expressions) {
+			queue.addAll(expressions);
+		}
 
 /*    	private void expand(){
 

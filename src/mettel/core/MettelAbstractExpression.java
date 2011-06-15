@@ -18,21 +18,17 @@ package mettel.core;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision: $ $Date: $
+ * @version $Revision$ $Date$
  *
  */
-public interface MettelTableauAnnotation {
+public abstract class MettelAbstractExpression implements MettelExpression {
 
-	public MettelAnnotatedExpression annotate(MettelExpression e);
+	public MettelAnnotatedExpression substitute(MettelAnnotatedSubstitution s){
+		return s.annotation().annotate(substitute(s.substitution()));
+	}
 
-	public MettelAnnotatedSubstitution annotate(MettelSubstitution s);
-
-	public MettelTableauAnnotation merge(MettelTableauAnnotation a);
-
-	public MettelTableauAnnotation mergeArray(MettelTableauAnnotation[] anns);
-
-	public MettelTableauAnnotation merge(MettelTableauAnnotation[] anns);
-
-	public MettelTableauState state();
+	public MettelAnnotatedSubstitution match(MettelAnnotatedExpression e){
+		return e.annotation().annotate(match(e.expression()));
+	}
 
 }

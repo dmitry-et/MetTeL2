@@ -37,6 +37,10 @@ public class MettelAbstractAnnotatedExpresssion implements
 
 	private MettelTableauAnnotation a = null;
 
+    public MettelExpression expression() { return e; }
+
+    public MettelTableauAnnotation annotation() { return a; }
+
 	/* (non-Javadoc)
 	 * @see mettel.core.MettelAnnotatedExpression#substitute(mettel.core.MettelAnnotatedSubstitution)
 	 */

@@ -22,11 +22,11 @@ package mettel.core;
  *
  */
 public interface MettelAnnotatedExpression {
-    
-//    MettelExpression expression();
-    
-//    MettelTableauAnnotation annotation();
-    
+
+    MettelExpression expression();
+
+    MettelTableauAnnotation annotation();
+
     MettelAnnotatedExpression substitute(MettelAnnotatedSubstitution s);
 
 }
