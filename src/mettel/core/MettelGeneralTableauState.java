@@ -31,9 +31,9 @@ import java.util.TreeSet;
  */
 public class MettelGeneralTableauState {
 
-	private static int counter = 0;
+//	private static int counter = 0;
 
-	private final int ID = counter++;
+//	private final int ID = counter++;
 
 	private MettelGeneralTableauRuleState[] ruleStates = null;
 
@@ -63,11 +63,14 @@ public class MettelGeneralTableauState {
 		final IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>> sets = state.sets;
 		this.sets = new IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>>(sets.size());
 		this.sets.putAll(sets);
-		this.sets.put(this,new TreeSet<MettelAnnotatedExpression>(input));
+		this.sets.put(this, new TreeSet<MettelAnnotatedExpression>(input));
 
 	}
 
 	public boolean evolve(){
+	    
+	    	java.util.Random
+	    
 		return false;
 	}
 
