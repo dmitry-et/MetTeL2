@@ -21,8 +21,6 @@ import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -51,12 +49,12 @@ public class MettelGeneralTableauState {
 		int i = 0;
 		for(MettelGeneralTableauRule r:calculus){
 			ArrayList<HashSet<MettelAnnotatedExpression>> l = new ArrayList<HashSet<MettelAnnotatedExpression>>(r.branches.size());
-			Queue<MettelAnnotatedExpression> q = new PriorityQueue<MettelAnnotatedExpression>(input);
+//			Queue<MettelAnnotatedExpression> q = new PriorityQueue<MettelAnnotatedExpression>(input);
 /*			for(MettelExpression e:input){
 				q.add(new MettelSimpleAnnotatedExpression(e, new MettelSimpleTableauAnnotation()));
 			}
 */
-			ruleStates[i] = new MettelGeneralTableauRuleState(r, q, l);
+			ruleStates[i] = new MettelGeneralTableauRuleState(r, /*q,*/ l);
 		}
 		sets = new IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>>(1);
 		sets.put(this, new TreeSet<MettelAnnotatedExpression>());
@@ -72,9 +70,13 @@ public class MettelGeneralTableauState {
 	public MettelGeneralTableauState(MettelGeneralTableauState state,
 			MettelRuleChoiceStrategy ruleChoice, Set<MettelAnnotatedExpression> input) {
 		super();
-		ruleStates = state.ruleStates;
+		SIZE = state.SIZE;
+		ruleStates = new MettelGeneralTableauRuleState[SIZE];
+		final MettelGeneralTableauRuleState[] rstates = state.ruleStates;
+		for(int i = 0; i < SIZE; i++){
+			ruleStates[i] = new MettelGeneralTableauRuleState(rstates[i]);
+		}
 		this.ruleChoice = ruleChoice;
-		SIZE = ruleStates.length;
 		final IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>> sets = state.sets;
 		this.sets = new IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>>(sets.size()+1);
 		this.sets.putAll(sets);
@@ -83,15 +85,7 @@ public class MettelGeneralTableauState {
 	}
 
 	public MettelGeneralTableauState(MettelGeneralTableauState state, Set<MettelAnnotatedExpression> input) {
-		super();
-		ruleStates = state.ruleStates;
-		this.ruleChoice = state.ruleChoice;
-		SIZE = ruleStates.length;
-		final IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>> sets = state.sets;
-		this.sets = new IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>>(sets.size()+1);
-		this.sets.putAll(sets);
-		this.sets.put(this, new TreeSet<MettelAnnotatedExpression>());
-		addAll(input);
+		this(state,state.ruleChoice,input);
 	}
 
 	public void addAll(Set<MettelAnnotatedExpression> expressions){

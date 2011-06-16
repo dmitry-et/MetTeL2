@@ -18,6 +18,7 @@ package mettel.core;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
@@ -53,12 +54,12 @@ public class MettelGeneralTableauRuleState {
     	@SuppressWarnings("unused")
     	private MettelGeneralTableauRuleState(){ SIZE = 0;}
 
-    	MettelGeneralTableauRuleState(MettelGeneralTableauRule rule, Queue<MettelAnnotatedExpression> queue,
+    	MettelGeneralTableauRuleState(MettelGeneralTableauRule rule, //Queue<MettelAnnotatedExpression> queue,
     			List<? extends Set<MettelAnnotatedExpression>> result){
     		super();
     		this.premises = rule.premises;
     		this.branches = rule.branches;
-    		this.queue = queue;
+    		this.queue = new PriorityQueue<MettelAnnotatedExpression>();
     		this.result = result;
 
     		SIZE = this.premises.length;
@@ -68,6 +69,16 @@ public class MettelGeneralTableauRuleState {
     		}
 */
 //    		subIndexes = new int[SIZE];
+    	}
+
+    	MettelGeneralTableauRuleState(MettelGeneralTableauRuleState state){
+    		super();
+    		this.premises = state.premises;
+    		this.branches = state.branches;
+    		this.queue = new PriorityQueue<MettelAnnotatedExpression>(queue);
+    		//TODO make it syncronised
+    		this.result = state.result;
+    		this.SIZE = state.SIZE;
     	}
 
     	private boolean dead = false;
