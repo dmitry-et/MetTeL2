@@ -42,6 +42,8 @@ public class MettelGeneralTableauState {
 
 	private IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>> sets = null;
 
+	private MettelRuleChoiceStrategy ruleChoice = null;
+
 	public MettelGeneralTableauState(Set<MettelGeneralTableauRule> calculus, Set<MettelAnnotatedExpression> input) {
 		super();
 		SIZE = calculus.size();
@@ -61,9 +63,29 @@ public class MettelGeneralTableauState {
 		addAll(input);
 	}
 
+	public MettelGeneralTableauState(Set<MettelGeneralTableauRule> calculus,
+			MettelRuleChoiceStrategy ruleChoice, Set<MettelAnnotatedExpression> input) {
+		this(calculus,input);
+		this.ruleChoice = ruleChoice;
+	}
+
+	public MettelGeneralTableauState(MettelGeneralTableauState state,
+			MettelRuleChoiceStrategy ruleChoice, Set<MettelAnnotatedExpression> input) {
+		super();
+		ruleStates = state.ruleStates;
+		this.ruleChoice = ruleChoice;
+		SIZE = ruleStates.length;
+		final IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>> sets = state.sets;
+		this.sets = new IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>>(sets.size()+1);
+		this.sets.putAll(sets);
+		this.sets.put(this, new TreeSet<MettelAnnotatedExpression>());
+		addAll(input);
+	}
+
 	public MettelGeneralTableauState(MettelGeneralTableauState state, Set<MettelAnnotatedExpression> input) {
 		super();
 		ruleStates = state.ruleStates;
+		this.ruleChoice = state.ruleChoice;
 		SIZE = ruleStates.length;
 		final IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>> sets = state.sets;
 		this.sets = new IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>>(sets.size()+1);
@@ -89,10 +111,15 @@ public class MettelGeneralTableauState {
 	private int index = 0;
 
 	public boolean evolve(){
-		MettelGeneralTableauRuleState rs = ruleStates[index];
-		if(rs.evolve()){
+		MettelGeneralTableauRuleState rs;
+		if(ruleChoice == null){
+			rs = ruleStates[index];
 			index++;
 			if(index == SIZE){ index = 0; }
+		}else{
+			rs = ruleChoice.select(ruleStates);
+		}
+		if(rs.evolve()){
 			List<? extends Set<MettelAnnotatedExpression>> result = rs.result;
 			final int RESULT_SIZE = result.size();
 			if(RESULT_SIZE == 1){
