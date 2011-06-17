@@ -50,9 +50,10 @@ public class MettelGeneralTableauRuleState {
 //    	private MettelSubstitution s = null;
 
     	private final int SIZE;
+    	private final boolean TERMINAL;
 
     	@SuppressWarnings("unused")
-    	private MettelGeneralTableauRuleState(){ SIZE = 0;}
+    	private MettelGeneralTableauRuleState(){ SIZE = 0; TERMINAL = false;}
 
     	MettelGeneralTableauRuleState(MettelGeneralTableauRule rule, //Queue<MettelAnnotatedExpression> queue,
     			List<? extends Set<MettelAnnotatedExpression>> result){
@@ -63,6 +64,7 @@ public class MettelGeneralTableauRuleState {
     		this.result = result;
 
     		SIZE = this.premises.length;
+    		TERMINAL = (this.branches.size() == 0);
 /*    		this.subs = new ArrayList[SIZE];
     		for(int i = 0; i < SIZE; i++){
     			subs[i] = new ArrayList<MettelSubstitution>();
@@ -79,9 +81,14 @@ public class MettelGeneralTableauRuleState {
     		//TODO make it syncronised
     		this.result = state.result;
     		this.SIZE = state.SIZE;
+    		this.TERMINAL = state.TERMINAL;
     	}
 
     	private boolean dead = false;
+
+    	public boolean isDead() { return dead; }
+
+    	public boolean isTerminal() { return TERMINAL; }
 
     	public boolean evolve(){
 
@@ -165,6 +172,7 @@ public class MettelGeneralTableauRuleState {
 		 * @param expressions
 		 */
 		public void addAll(Set<MettelAnnotatedExpression> expressions) {
+			dead = false;
 			queue.addAll(expressions);
 		}
 

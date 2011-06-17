@@ -104,29 +104,48 @@ public class MettelGeneralTableauState {
 
 	private int index = 0;
 
-	public boolean evolve(){
+//	private static int UNSAT = -1;
+//	private static int SAT = 1;
+
+	public boolean isSatisfiable(){
 		MettelGeneralTableauRuleState rs;
-		if(ruleChoice == null){
-			rs = ruleStates[index];
-			index++;
-			if(index == SIZE){ index = 0; }
-		}else{
-			rs = ruleChoice.select(ruleStates);
-		}
-		if(rs.evolve()){
-			List<? extends Set<MettelAnnotatedExpression>> result = rs.result;
-			final int RESULT_SIZE = result.size();
-			if(RESULT_SIZE == 1){
-				addAll(result.get(0));
-			}else if(RESULT_SIZE > 1){
-				ArrayList<MettelGeneralTableauState> children = new ArrayList<MettelGeneralTableauState>(RESULT_SIZE);
-				for(int i = 0; i < RESULT_SIZE; i++){
-					children.add(new MettelGeneralTableauState(this,result.get(i)));
+		while(true){
+			if(ruleChoice == null){
+				rs = ruleStates[index];
+				index++;
+				if(index == SIZE){ index = 0; }
+			}else{
+				rs = ruleChoice.select(ruleStates);
+			}
+			if(rs.evolve()){
+				if(rs.isTerminal()) return false;
+				List<? extends Set<MettelAnnotatedExpression>> result = rs.result;
+				final int RESULT_SIZE = result.size();
+				if(RESULT_SIZE == 1){
+					addAll(result.get(0));
+				}else if(RESULT_SIZE > 1){
+					ArrayList<MettelGeneralTableauState> children = new ArrayList<MettelGeneralTableauState>(RESULT_SIZE);
+					for(int i = 0; i < RESULT_SIZE; i++){
+						children.add(new MettelGeneralTableauState(this,result.get(i)));
+					}
+					for(MettelGeneralTableauState child:children){//TODO branch choice strategy
+						if(child.isSatisfiable()) return true;//TODO model set
+					}
+					return false;//TODO dependency set
+				}
+//				return true;
+			}else{
+				boolean dead = rs.isDead();
+				if(dead){
+					for(int i = 0; i < SIZE; i++){
+						dead &= ruleStates[i].isDead();
+						if(!dead) break;
+					}
+					if(dead) return true;
 				}
 			}
-			return true;
+//			return false;
 		}
-		return false;
 	}
 
 }
