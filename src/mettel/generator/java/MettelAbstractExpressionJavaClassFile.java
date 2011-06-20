@@ -31,9 +31,13 @@ public class MettelAbstractExpressionJavaClassFile extends MettelJavaClassFile {
 	 * @param interfaces
 	 */
 	public MettelAbstractExpressionJavaClassFile(String prefix,	MettelJavaPackage pack) {
-		super(prefix + "AbstractExpression", pack, "abstract", null, new String[]{prefix + "Expression"});
+		super(prefix + "AbstractExpression", pack, "abstract", "MettelAbstractExpression", new String[]{prefix + "Expression"});
 		this.prefix = prefix;
 		body();
+	}
+	
+	private void imports(){
+	    headings.appendLine("import mettel.core.MettelAbstractExpression;");
 	}
 
 	private void body(){

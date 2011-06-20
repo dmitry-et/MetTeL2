@@ -139,6 +139,8 @@ CLASSES := $(shell echo $(SOURCES) | sed -e 's/\.java/\.class/g; s/src/classes/g
 ### Test ###########################################################################
 
 RUNTIME_CLASSPATH:=$(ANTLR3_RUNTIME_JAR):$(JAR_FILE)
+LOGIC_GENERATION_CLASSPATH:=$(RUNTIME_CLASSPATH)
+#$(COMPILE_CLASSPATH):$(JAR_FILE)
 
 TEST_DIR := $(BASE_DIR)/test
 TEST_JAR_FILE:=$(LIB_DIR)/test.jar
@@ -387,7 +389,7 @@ compileLogics: generateParsers
 	@ echo $(DELIM0)
 	@ echo "Compiling sources for logics"
 	@ echo $(DELIM1)
-	@ $(JAVAC) -classpath $(COMPILE_CLASSPATH):$(LIB_DIR)/junit.jar -d $(TEST_CLASSES_DIR) $(shell find $(TEST_OUTPUT_DIR) -name '*.java')
+	@ $(JAVAC) -classpath $(LOGIC_GENERATION_CLASSPATH):$(LIB_DIR)/junit.jar -d $(TEST_CLASSES_DIR) $(shell find $(TEST_OUTPUT_DIR) -name '*.java')
 
 generate: compileLogics
 

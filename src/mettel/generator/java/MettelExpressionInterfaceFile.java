@@ -29,9 +29,13 @@ public class MettelExpressionInterfaceFile extends MettelJavaInterfaceFile {
 	 * @param pack
 	 */
 	public MettelExpressionInterfaceFile(String prefix, MettelJavaPackage pack) {
-		super(prefix+"Expression", pack, new String[]{"Comparable<"+prefix+"Expression>"});
+		super(prefix+"Expression", pack, new String[]{"MettelExpression", "Comparable<"+prefix+"Expression>"});
 		this.prefix = prefix;
 		body();
+	}
+	
+	protected void imports(){
+	    headings.appendLine("import mettel.core.MettelExpression;");
 	}
 
 	void body(){
