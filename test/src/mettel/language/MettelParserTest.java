@@ -15,7 +15,7 @@ import org.antlr.runtime.RecognitionException;
 
 public class MettelParserTest extends TestCase{
 
-	private static final String[] inFiles = new String[]{"test/examples/ALCO/ALCO"};
+	private static final String[] inFiles = new String[]{"test/examples/ALCO/ALCO","test/examples/Boolean/Boolean" };
 
     //final static String inFile = "test/examples/ALCO/ALCO.s";
     //final static String outFile = "test/examples/ALCO/ALCO-test-output.s";
