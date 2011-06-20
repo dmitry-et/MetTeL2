@@ -4,7 +4,7 @@ import junit.framework.*;
 
 public class AllTests {
 
-	private static final String[] classNames = new String[]{"ALCO.test.ALCOParserTest"};
+	private static final String[] classNames = new String[]{"ALCO.test.ALCOParserTest", "Boolean.test.BooleanParserTest"};
 
 	public static void main(String[] args) {
 		junit.textui.TestRunner.run(suite());
