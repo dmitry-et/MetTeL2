@@ -1,3 +1,9 @@
+20/05/2011 Integration of the tableau core with AST generation.
+
+19/05/2011 Initial tableau core.
+
+01/05/2011 Generation of AST for ANTLR grammar.
+
 17/03/2011 ANTLR grammar generation. No AST.
 
 11/08/2009 Initial tests with the grammar for the prover generator.

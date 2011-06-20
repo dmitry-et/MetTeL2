@@ -30,9 +30,13 @@ public class MettelSubstitutionJavaInterfaceFile extends MettelJavaInterfaceFile
 	public MettelSubstitutionJavaInterfaceFile(String prefix,
 			MettelJavaPackage pack, String[] sorts) {
 		super(prefix+"Substitution", pack,
-				new String[]{prefix+"Replacement"});
+				new String[]{"MettelSubstitution", prefix+"Replacement"});
 		this.prefix = prefix;
 		body(sorts);
+	}
+
+	protected void imports(){
+		headings.appendLine("import mettel.core.MettelSubstitution;");
 	}
 
 	private void body(String[] sorts){

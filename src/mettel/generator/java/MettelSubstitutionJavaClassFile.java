@@ -35,6 +35,13 @@ public class MettelSubstitutionJavaClassFile extends MettelJavaClassFile {
 		body(sorts);
 	}
 
+	protected void imports(){
+		headings.appendLine("import java.util.Map.Entry;");
+		headings.appendLine("import java.util.Set;");
+		headings.appendEOL();
+		headings.appendLine("import mettel.core.MettelSubstitution;");
+	}
+
 	private void body(String[] sorts){
 		for(String sort:sorts){
 			final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(sort);
@@ -93,6 +100,50 @@ public class MettelSubstitutionJavaClassFile extends MettelJavaClassFile {
 		appendLine('}');
 		appendEOL();
 
+		appendLine("private static "+prefix+"TreeSubstitution appendArray("+prefix+"TreeSubstitution s, MettelSubstitution[] array){");
+	    incrementIndentLevel();
+			appendLine("if(array == null) return null;");
+			appendLine("final int SIZE = array.length;");
+	    	appendLine("if(SIZE == 0) return null;");
+	    	appendLine("for(int i = 0; i < SIZE; i++){");
+	    	incrementIndentLevel();
+	    	for(String sort:sorts){
+	    		final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(sort);
+	    		final String ENTRY_SET = "entry"+MettelJavaNames.firstCharToUpperCase(sort)+"Set";
+	    		appendLine("Set<Entry<"+TYPE+", "+TYPE+">> "+ENTRY_SET+" = (("+prefix+"Substitution)array[i])."+sort+"Map().entrySet();");
+	    		appendLine("for(Entry<"+TYPE+", "+TYPE+"> entry:"+ENTRY_SET+"){");
+	    		incrementIndentLevel();
+	    			appendLine("if(!s.append(entry.getKey(),entry.getValue())) return null;");
+	    		decrementIndentLevel();
+	    		appendLine('}');
+	    	}
+	    	decrementIndentLevel();
+	    	appendLine('}');
+	    	appendLine("return s;");
+	    decrementIndentLevel();
+	    appendLine('}');
+
+	    appendEOL();
+
+	    appendLine("public MettelSubstitution mergeArray(MettelSubstitution[] array){");
+	    incrementIndentLevel();
+	    	appendLine("return appendArray(new "+prefix+"TreeSubstitution(),array);");
+	    decrementIndentLevel();
+		appendLine('}');
+
+		appendEOL();
+
+	    appendLine("public MettelSubstitution merge(MettelSubstitution[] array){");
+	    incrementIndentLevel();
+	    	appendLine(prefix+"TreeSubstitution s = new "+prefix+"TreeSubstitution();");
+	    	for(String sort:sorts){
+	    		appendLine("s."+sort+"Map().putAll("+sort+"Map);");
+	    	}
+	    	appendLine("return appendArray(s,array);");
+	    decrementIndentLevel();
+		appendLine('}');
+
+		appendEOL();
 	}
 
 }

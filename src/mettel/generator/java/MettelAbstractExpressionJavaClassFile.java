@@ -35,9 +35,11 @@ public class MettelAbstractExpressionJavaClassFile extends MettelJavaClassFile {
 		this.prefix = prefix;
 		body();
 	}
-	
-	private void imports(){
-	    headings.appendLine("import mettel.core.MettelAbstractExpression;");
+
+	protected void imports(){
+	    headings.appendLine("import mettel.core.MettelExpression;");
+	    headings.appendLine("import mettel.core.MettelSubstitution;");
+		headings.appendLine("import mettel.core.MettelAbstractExpression;");
 	}
 
 	private void body(){
@@ -88,6 +90,23 @@ public class MettelAbstractExpressionJavaClassFile extends MettelJavaClassFile {
 
 		 appendLine("public int compareTo(" + prefix + "Expression e) {return (id - e.id());}");
 */
+		 appendEOL();
+
+		 appendLine("public MettelSubstitution match(MettelExpression e){");
+		 incrementIndentLevel();
+		 appendLine("if(e instanceof "+prefix+"Expression) return match(("+prefix+"Expression)e);");
+		 appendLine("return null;");
+		 decrementIndentLevel();
+		 appendLine('}');
+
+		 appendEOL();
+
+		 appendLine("public MettelExpression substitute(MettelSubstitution s){");
+		 incrementIndentLevel();
+		 appendLine("if(s instanceof "+prefix+"Substitution) return substitute(("+prefix+"Substitution)s);");
+		 appendLine("return null;");
+		 decrementIndentLevel();
+		 appendLine('}');
 	}
 
 }
