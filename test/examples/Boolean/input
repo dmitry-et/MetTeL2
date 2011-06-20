@@ -1,0 +1,7 @@
+true
+false
+~p
+p&q
+p|q
+p->q
+p<->q

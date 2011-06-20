@@ -164,7 +164,7 @@ JAVA_TEST_OPTIONS := -Xfuture -Xbatch -Xms256M -Xmx400M
 
 TEST_EXAMPLES_DIR = $(TEST_DIR)/examples
 TEST_OUTPUT_DIR = $(TEST_DIR)/output
-TEST_LOGIC_DIRS = "ALCO"
+TEST_LOGIC_DIRS = "ALCO Boolean"
 TEST_LOGIC_PARSERS = $(shell find $(TEST_OUTPUT_DIR) -name '*.g')
 TEST_LOGIC_SOURCES = $(shell find $(TEST_OUTPUT_DIR) -name '*.java')
 
@@ -373,7 +373,7 @@ generateLogics: $(JAR_FILE) $(TEST_CLASSES_DIR)
 	@ echo $(DELIM0)
 	@ echo "Generating logics"
 	@ echo $(DELIM1)
-	@ for D in $(TEST_LOGIC_DIRS); do java -cp $(RUNTIME_CLASSPATH) mettel.MettelGenerator -i "$(TEST_EXAMPLES_DIR)/$$D/$$D.s" -d "test/output"; done
+	@ for D in "$(TEST_LOGIC_DIRS)"; do echo "Generating $${D}"; java -cp $(RUNTIME_CLASSPATH) mettel.MettelGenerator -i "$(TEST_EXAMPLES_DIR)/$${D}/$${D}.s" -d "test/output"; done
 	
 generateParsers: generateLogics
 #	@ TEST_LOGIC_PARSERS = $(shell find $(TEST_OUTPUT_DIR) -name '*.g')

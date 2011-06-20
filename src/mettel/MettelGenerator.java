@@ -105,13 +105,13 @@ public class MettelGenerator {
     				new OutputStreamWriter(System.out),true);
          	if(err == null) err = new PrintWriter(
     				new OutputStreamWriter(System.err),true);
-
+       	
         	MettelSpecification spec = parser.specification();
 
         	//StringBuilder buf = new StringBuilder();
         	//spec.toBuffer(buf);
         	//System.out.print(buf);
-
+    	
         	MettelANTLRGrammarGenerator gen = new MettelANTLRGrammarGenerator(spec);
 //        	StringBuilder buf = new StringBuilder();
         	for(MettelJavaPackageStructure pStructure:gen.processSyntaxes()){
@@ -139,7 +139,7 @@ public class MettelGenerator {
         } catch(Exception e) {
 
     	    	err.println("==Exception==========================");
-           		e.printStackTrace(err);
+           	e.printStackTrace(err);
             	err.println("=====================================");
             	System.exit(-1);
 
