@@ -15,10 +15,8 @@ import org.antlr.runtime.RecognitionException;
 
 public class MettelParserTest extends TestCase{
 
-	private static final String[] inFiles = new String[]{"test/examples/ALCO/ALCO","test/examples/Boolean/Boolean" };
+	private static final String[] inFiles = new String[]{"test/examples/ALCO/ALCO","test/examples/bool/Boolean" };
 
-    //final static String inFile = "test/examples/ALCO/ALCO.s";
-    //final static String outFile = "test/examples/ALCO/ALCO-test-output.s";
     public void testParser() throws IOException, RecognitionException{
     	final int SIZE = inFiles.length;
     	for(int i = 0; i< SIZE; i++){
