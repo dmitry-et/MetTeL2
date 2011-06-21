@@ -1,6 +1,6 @@
-specification Boolean;
+specification bool;
 
-syntax Boolean{
+syntax boolean{
 	sort formula;
 
 	//Connectives in a decreasing priority order

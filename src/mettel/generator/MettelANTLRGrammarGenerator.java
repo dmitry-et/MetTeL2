@@ -131,8 +131,10 @@ public class MettelANTLRGrammarGenerator {
 		MettelSyntax syn = spec.getSyntax(name);
 		if(syn == null) return null;
 		syn = syn.unravel();
+		
+		final String NAME = MettelJavaNames.firstCharToUpperCase(name);
 
-		MettelANTLRGrammar grammar = new MettelANTLRGrammar(name);
+		MettelANTLRGrammar grammar = new MettelANTLRGrammar(NAME);
 		final String PATH = spec.path();
 		final String s = PACKAGE_STRING+' '+PATH+';';
 
@@ -140,7 +142,7 @@ public class MettelANTLRGrammarGenerator {
 		grammarPackage = new MettelJavaPackage(PATH+'.'+GRAMMAR_STRING);
 */
 		MettelJavaPackageStructure pStructure = new MettelJavaPackageStructure(PATH);
-		pStructure.appendStandardClasses(name);
+		pStructure.appendStandardClasses(NAME);
 
 		//new java.io.File("dir").
 		grammar.addToHeader(s);
@@ -151,14 +153,14 @@ public class MettelANTLRGrammarGenerator {
 //		lexerHeader.addStatement(s);
 		grammar.addToLexerHeader(s);
 
-		grammar.addToMembers("private "+name+"ObjectFactory factory = "+name+"ObjectFactory.DEFAULT;");
+		grammar.addToMembers("private "+NAME+"ObjectFactory factory = "+NAME+"ObjectFactory.DEFAULT;");
 
-		grammar.addToMembers("public "+name+"Parser(TokenStream input, "+name+"ObjectFactory factory){");
+		grammar.addToMembers("public "+NAME+"Parser(TokenStream input, "+NAME+"ObjectFactory factory){");
         grammar.addToMembers("    this(input);");
         grammar.addToMembers("    this.factory = factory;");
         grammar.addToMembers("}");
 
-		grammar.addToMembers("public "+name+"Parser(TokenStream input, RecognizerSharedState state, "+name+"ObjectFactory factory){");
+		grammar.addToMembers("public "+NAME+"Parser(TokenStream input, RecognizerSharedState state, "+NAME+"ObjectFactory factory){");
         grammar.addToMembers("    this(input,state);");
         grammar.addToMembers("    this.factory = factory;");
         grammar.addToMembers("}");
@@ -172,7 +174,7 @@ public class MettelANTLRGrammarGenerator {
 			processSort(grammar,sort);
 			processBNFs(grammar,pStructure,sort,syn.getBNFs(sort));
 		}
-		pStructure.appendStandardClasses(name,sortStrings);
+		pStructure.appendStandardClasses(NAME,sortStrings);
 
 //		grammarPackage.createFile(name+".g").append(grammar.toStringBuilder());
 
