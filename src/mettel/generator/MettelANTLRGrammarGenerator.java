@@ -131,7 +131,7 @@ public class MettelANTLRGrammarGenerator {
 		MettelSyntax syn = spec.getSyntax(name);
 		if(syn == null) return null;
 		syn = syn.unravel();
-		
+
 		final String NAME = MettelJavaNames.firstCharToUpperCase(name);
 
 		MettelANTLRGrammar grammar = new MettelANTLRGrammar(NAME);
@@ -148,6 +148,10 @@ public class MettelANTLRGrammarGenerator {
 		grammar.addToHeader(s);
 		grammar.addToHeader("");
 		grammar.addToHeader("import java.util.Collection;");
+		grammar.addToHeader("import java.util.ArrayList;");
+		grammar.addToHeader("import java.util.LinkedHashSet;");
+		grammar.addToHeader("");
+		grammar.addToHeader("import mettel.core.MettelGeneralTableauRule;");
 
 //		MettelANTLRHeader lexerHeader = new MettelANTLRHeader(MettelANTLRHeader.LEXER);
 //		lexerHeader.addStatement(s);
@@ -176,6 +180,10 @@ public class MettelANTLRGrammarGenerator {
 		}
 		pStructure.appendStandardClasses(NAME,sortStrings);
 
+		grammar.addRule(makeANTLRExpressionListRule(NAME));
+		grammar.addRule(makeANTLRExpressionRule(NAME,sorts));
+		grammar.addRule(makeANTLRTableauRule(grammar.name()));
+
 //		grammarPackage.createFile(name+".g").append(grammar.toStringBuilder());
 
 		pStructure.appendParser(grammar);
@@ -183,6 +191,61 @@ public class MettelANTLRGrammarGenerator {
 
 		return pStructure;
 	}
+
+	/*private void addTableauRule(MettelANTLRGrammar grammar){
+		MettelANTLRRule r = new
+	}*/
+
+	private MettelANTLRRule makeANTLRExpressionListRule(String grammarName) {
+		final String NAME = "expression";
+		MettelANTLRMultiaryBNFStatement s = new MettelANTLRMultiaryBNFStatement();
+		MettelANTLRRuleReference ruleRef = new MettelANTLRRuleReference(NAME,"e0");
+		ruleRef.appendLineToPostfix("r0.add(e0);");
+		s.addExpression(new MettelANTLRUnaryBNFStatement(
+						ruleRef,MettelANTLRUnaryBNFStatement.STAR));
+		MettelANTLRRule r = new MettelANTLRRule(NAME+'s',s/*,false*/,
+				new String[]{"ArrayList<"+grammarName+"Expression>"});
+		r.appendLineToInitBlock("r0 = new ArrayList<"+grammarName+"Expression>();");
+		//r.appendLineToAfterBlock("r0 = e0;");
+		return r;
+	}
+
+	private MettelANTLRRule makeANTLRExpressionRule(String grammarName,Collection<MettelSort> sorts){
+		MettelANTLRMultiaryBNFStatement s = new MettelANTLRMultiaryBNFStatement(MettelANTLRMultiaryBNFStatement.OR);
+		for(MettelSort sort:sorts){
+			MettelANTLRRuleReference ruleRef = new MettelANTLRRuleReference(sort.name(),sort.name()+"Expression",true);
+			ruleRef.appendLineToPostfix("r0 = "+sort.name()+"Expression;");
+			s.addExpression(ruleRef);
+		}
+		MettelANTLRRule r = new MettelANTLRRule("expression",s,
+				new String[]{grammarName+"Expression"});
+		//r.appendLineToAfterBlock("r0 = e0;");
+		return r;
+	}
+
+	private MettelANTLRRule makeANTLRTableauRule(String grammarName){//TODO make tableau rule flexibly specifiable
+		MettelANTLRMultiaryBNFStatement s = new MettelANTLRMultiaryBNFStatement();
+		final String EXPRESSIONS = "expressions";
+		s.addExpression(new MettelANTLRRuleReference(EXPRESSIONS,"premises"));
+		s.addExpression(new MettelANTLRToken("'/'"));
+
+		MettelANTLRRuleReference ruleRef = new MettelANTLRRuleReference(EXPRESSIONS,"conclusion");
+		ruleRef.appendLineToPostfix("branches.add(new LinkedHashSet<"+grammarName+"Expression>(conclusion));");
+		s.addExpression(ruleRef);
+
+		MettelANTLRMultiaryBNFStatement s0 = new MettelANTLRMultiaryBNFStatement();
+		s0.addExpression(new MettelANTLRToken("'||'"));
+		s0.addExpression(ruleRef);
+		s.addExpression(new MettelANTLRUnaryBNFStatement(s0,MettelANTLRUnaryBNFStatement.STAR));
+
+		MettelANTLRRule r = new MettelANTLRRule("tableauRule",s,
+				new String[]{"MettelGeneralTableauRule"});
+		r.appendLineToInitBlock("LinkedHashSet<LinkedHashSet<"+grammarName+
+				"Expression>> branches = new LinkedHashSet<LinkedHashSet<"+grammarName+"Expression>>();");
+		r.appendLineToAfterBlock("r0 = new MettelGeneralTableauRule(new LinkedHashSet<"+grammarName+"Expression>(premises),branches);");
+		return r;
+	}
+
 
 	/**
 	 * @param grammar

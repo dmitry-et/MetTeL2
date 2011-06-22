@@ -66,6 +66,37 @@ public class MettelANTLRRule {
 	}
 
 
+	private MettelIndentedStringBuilder init = null;
+
+	public void appendToInitBlock(CharSequence csq) {
+		if(init == null){
+			init = new MettelIndentedStringBuilder(new StringBuilder());
+		}
+		init.append(csq);
+	}
+
+	public void appendToInitrBlock(char c) {
+		if(init == null){
+			init = new MettelIndentedStringBuilder(new StringBuilder());
+		}
+		init.append(c);
+	}
+
+	public void appendLineToInitBlock(CharSequence csq) {
+		if(init == null){
+			init = new MettelIndentedStringBuilder(new StringBuilder());
+		}
+		init.appendLine(csq);
+	}
+
+	public void appendLineToInitBlock(char c) {
+		if(init == null){
+			init = new MettelIndentedStringBuilder(new StringBuilder());
+		}
+		init.appendLine(c);
+	}
+
+
 	private MettelIndentedStringBuilder after = null;
 
 	public void appendToAfterBlock(CharSequence csq) {
@@ -135,6 +166,12 @@ public class MettelANTLRRule {
 				b.append(']');
 				b.appendEOL();
 			}
+		}
+		if(init != null){
+			b.appendLine("@init{");
+			b.append(init.builder());
+			//b.appendEOL();
+			b.appendLine('}');
 		}
 		if(after != null){
 			b.appendLine("@after{");

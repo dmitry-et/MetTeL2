@@ -38,7 +38,7 @@ public class MettelGeneralTableauRuleState {
 //    	private MettelGeneralTableauRule rule = null;
 
     	private MettelExpression[] premises = null;
-    	private Set<? extends Set<MettelExpression>> branches = null;
+    	private Set<? extends Set<? extends MettelExpression>> branches = null;
     	List<? extends Set<MettelAnnotatedExpression>> result = null;
 
     	private Queue<MettelAnnotatedSubstitution[]> newSubstitutions = null;
@@ -124,7 +124,7 @@ public class MettelGeneralTableauRuleState {
     		}
 
     		Iterator<? extends Set<MettelAnnotatedExpression>> i = result.iterator();
-    		for(Set<MettelExpression> set:branches){
+    		for(Set<? extends MettelExpression> set:branches){
     		    Set<MettelAnnotatedExpression> rset = i.next();
     		    for(MettelExpression e:set){
     		    	rset.add(e.substitute(s));

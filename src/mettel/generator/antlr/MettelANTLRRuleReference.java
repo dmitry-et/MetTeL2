@@ -29,6 +29,8 @@ public class MettelANTLRRuleReference extends MettelANTLRExpression {
 
 	private String returnVariable = null;
 
+	private boolean syntacticPredicate = false;
+
 	@SuppressWarnings("unused")
 	private MettelANTLRRuleReference(){}
 
@@ -36,13 +38,18 @@ public class MettelANTLRRuleReference extends MettelANTLRExpression {
 	 *
 	 */
 	public MettelANTLRRuleReference(String name) {
-		this(name, null);
+		this(name, null, false);
 	}
 
 	public MettelANTLRRuleReference(String name, String returnVariable) {
+		this(name,returnVariable,false);
+	}
+
+	public MettelANTLRRuleReference(String name, String returnVariable, boolean syntacticPredicate) {
 		super();
 		this.name = name;
 		this.returnVariable = returnVariable;
+		this.syntacticPredicate = syntacticPredicate;
 	}
 
 	/* (non-Javadoc)
@@ -50,6 +57,14 @@ public class MettelANTLRRuleReference extends MettelANTLRExpression {
 	 */
 	@Override
 	void toStringBuilder0(MettelIndentedStringBuilder b) {
+		if(syntacticPredicate){
+			b.append('(');
+			b.append(name);
+			b.append(')');
+			b.append('=');
+			b.append('>');
+			b.append(' ');
+		}
 		if(returnVariable != null){
 			b.append(returnVariable);
 			b.append(" = ");

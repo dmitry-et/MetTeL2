@@ -28,7 +28,7 @@ public class MettelGeneralTableauRule {
 	/**
 	 *
 	 */
-	public MettelGeneralTableauRule(Set<MettelExpression> premises, Set<? extends Set<MettelExpression>> branches) {
+	public MettelGeneralTableauRule(Set<? extends MettelExpression> premises, Set<? extends Set<? extends MettelExpression>> branches) {
 		super();
 //		if(premises == null || premises.size() == 0) throw new MettelCoreRuntimeException("Empty premises in tableau rule");
 		this.premises = new MettelExpression[premises.size()];
@@ -39,7 +39,7 @@ public class MettelGeneralTableauRule {
 	}
 
 	MettelExpression[] premises = null;
-	Set<? extends Set<MettelExpression>> branches = null;
+	Set<? extends Set<? extends MettelExpression>> branches = null;
 
 //	public int arity(){
 //		return premises.length;
