@@ -32,6 +32,7 @@ import mettel.generator.antlr.MettelANTLRGrammar;
 import mettel.language.MettelToken;
 
 import mettel.generator.java.test.MettelParserTestJavaClassFile;
+import mettel.generator.java.test.MettelTableauTestJavaClassFile;
 
 /**
  * @author Dmitry Tishkovsky
@@ -83,7 +84,10 @@ public class MettelJavaPackageStructure {
 		langPackage.add(new MettelReplacementJavaClassFile(prefix,langPackage,sorts));
 		langPackage.add(new MettelSubstitutionJavaClassFile(prefix,langPackage,sorts));
 
-		if(sorts.length > 0) testPackage.add(new MettelParserTestJavaClassFile(prefix,sorts[0],testPackage));
+		if(sorts.length > 0){
+			testPackage.add(new MettelParserTestJavaClassFile(prefix,sorts[0],testPackage));
+			testPackage.add(new MettelTableauTestJavaClassFile(prefix,sorts[0],testPackage));
+		}
 
 		for(String sort:sorts){
 			langPackage.add(new MettelComplexExpressionJavaInterfaceFile(prefix,sort,langPackage));

@@ -183,6 +183,7 @@ public class MettelANTLRGrammarGenerator {
 		grammar.addRule(makeANTLRExpressionListRule(NAME));
 		grammar.addRule(makeANTLRExpressionRule(NAME,sorts));
 		grammar.addRule(makeANTLRTableauRule(grammar.name()));
+		grammar.addRule(makeANTLRTableauCalculusRule(grammar.name()));
 
 //		grammarPackage.createFile(name+".g").append(grammar.toStringBuilder());
 
@@ -195,6 +196,21 @@ public class MettelANTLRGrammarGenerator {
 	/*private void addTableauRule(MettelANTLRGrammar grammar){
 		MettelANTLRRule r = new
 	}*/
+
+	private MettelANTLRRule makeANTLRTableauCalculusRule(String grammarName) {
+		final String NAME = "tableauRule";
+		MettelANTLRMultiaryBNFStatement s = new MettelANTLRMultiaryBNFStatement();
+		MettelANTLRRuleReference ruleRef = new MettelANTLRRuleReference(NAME,"e0");
+		ruleRef.appendLineToPostfix("a0.add(e0);");
+		MettelANTLRMultiaryBNFStatement s0 = new MettelANTLRMultiaryBNFStatement();
+		s0.addExpression(new MettelANTLRToken("'$;'"));
+		s0.addExpression(ruleRef);
+		s.addExpression(new MettelANTLRUnaryBNFStatement(
+						s0,MettelANTLRUnaryBNFStatement.STAR));
+		s.addExpression(MettelANTLRToken.EOF);
+		return new MettelANTLRRule("tableauCalculus",s/*,false*/,
+				new String[]{"Collection<MettelGeneralTableauRule>"},null);
+	}
 
 	private MettelANTLRRule makeANTLRExpressionListRule(String grammarName) {
 		final String NAME = "expression";
@@ -234,7 +250,7 @@ public class MettelANTLRGrammarGenerator {
 		s.addExpression(ruleRef);
 
 		MettelANTLRMultiaryBNFStatement s0 = new MettelANTLRMultiaryBNFStatement();
-		s0.addExpression(new MettelANTLRToken("'||'"));
+		s0.addExpression(new MettelANTLRToken("'$|'"));
 		s0.addExpression(ruleRef);
 		s.addExpression(new MettelANTLRUnaryBNFStatement(s0,MettelANTLRUnaryBNFStatement.STAR));
 

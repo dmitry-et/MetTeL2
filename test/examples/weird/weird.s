@@ -1,6 +1,6 @@
-specification ALCO;
+specification weird;
 
-syntax ALCO{
+syntax WeirdALCO{
 
 	sort concept; //The first sort is the main sort
 	sort individual;
@@ -26,13 +26,7 @@ syntax ALCO{
 	role converse = role '-';
 
 	//Additional connectives for test purposes
-	//role weirdRole = 'weird' '(' role ',' individual ';' concept ')';
-	//role = 'empty' role '.' concept;
-
-}
-
-syntax ALCOTableau extends ALCO{
-
-	individual skolemFunction = 'f' '(' individual ',' role ',' concept ')';
+	role weirdRole = 'weird' '(' role ',' individual ';' concept ')';
+	role = 'empty' role '.' concept;
 
 }

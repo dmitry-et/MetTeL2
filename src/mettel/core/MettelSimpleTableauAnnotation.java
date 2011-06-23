@@ -16,6 +16,8 @@
  */
 package mettel.core;
 
+import java.util.Collection;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -83,6 +85,17 @@ public class MettelSimpleTableauAnnotation implements MettelTableauAnnotation {
 	@Override
 	public MettelTableauState state() {
 		return state;
+	}
+
+	/* (non-Javadoc)
+	 * @see mettel.core.MettelTableauAnnotation#annotate(java.util.Collection, java.util.Collection)
+	 */
+	@Override
+	public void annotate(Collection<MettelAnnotatedExpression> out,
+			Collection<? extends MettelExpression> in) {
+		for(MettelExpression e:in){
+			out.add(annotate(e));
+		}
 	}
 
 }

@@ -29,7 +29,7 @@ import java.util.TreeSet;
  * @version $Revision$ $Date$
  *
  */
-public class MettelGeneralTableauState {
+public class MettelGeneralTableauState implements MettelTableauState {
 
 //	private static int counter = 0;
 
@@ -42,7 +42,7 @@ public class MettelGeneralTableauState {
 
 	private MettelRuleChoiceStrategy ruleChoice = null;
 
-	public MettelGeneralTableauState(Set<MettelGeneralTableauRule> calculus, Set<MettelAnnotatedExpression> input) {
+	public MettelGeneralTableauState(Set<MettelGeneralTableauRule> calculus) {
 		super();
 		SIZE = calculus.size();
 		ruleStates = new MettelGeneralTableauRuleState[SIZE];
@@ -58,6 +58,10 @@ public class MettelGeneralTableauState {
 		}
 		sets = new IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>>(1);
 		sets.put(this, new TreeSet<MettelAnnotatedExpression>());
+	}
+
+	public MettelGeneralTableauState(Set<MettelGeneralTableauRule> calculus, Set<MettelAnnotatedExpression> input) {
+		this(calculus);
 		addAll(input);
 	}
 

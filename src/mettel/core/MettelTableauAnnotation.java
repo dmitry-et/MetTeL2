@@ -16,12 +16,16 @@
  */
 package mettel.core;
 
+import java.util.Collection;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision: $ $Date: $
  *
  */
 public interface MettelTableauAnnotation {
+
+	public void annotate(Collection<MettelAnnotatedExpression> out, Collection<? extends MettelExpression> in);
 
 	public MettelAnnotatedExpression annotate(MettelExpression e);
 
