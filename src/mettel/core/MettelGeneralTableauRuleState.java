@@ -166,12 +166,12 @@ public class MettelGeneralTableauRuleState {
     		    e = queue.poll();
     		    if(e == null) return EMPTY_QUEUE;
     		}
-System.out.println("Chosen expression: "+e);
+//System.out.println("Chosen expression: "+e);
 
     		MettelAnnotatedSubstitution s = null;
     		while(s == null && index < SIZE){
     			s = premises[index].match(e);
-System.out.println("Match is "+(s != null) +": "+premises[index]+" vs "+e);
+//System.out.println("Match is "+(s != null) +": "+premises[index]+" vs "+e);
     			index++;
     		}
 
@@ -183,7 +183,7 @@ System.out.println("Match is "+(s != null) +": "+premises[index]+" vs "+e);
     		    }
     		}
 
-System.out.println("Substitution is "+s+" index = "+index);
+//System.out.println("Substitution is "+s+" index = "+index);
 
 
 			LinkedHashSet<MettelAnnotatedSubstitution> rsubs =
@@ -212,14 +212,14 @@ System.out.println("To merge with "+s0);
 			}
 */
 			for(MettelAnnotatedSubstitution s0:rsubs){
-System.out.println("Merged: "+s0);
+//System.out.println("Merged: "+s0);
 				newSubstitutions.add(s0);
 			}
 
 			oldSubstitutions[index-1].add(s);
-for(int i=0; i < SIZE; i++){
-System.out.println("oldSubstitutions["+i+"] = "+oldSubstitutions[i]);
-}
+//for(int i=0; i < SIZE; i++){
+//System.out.println("oldSubstitutions["+i+"] = "+oldSubstitutions[i]);
+//}
     		if(index == SIZE) index = 0;
 
 

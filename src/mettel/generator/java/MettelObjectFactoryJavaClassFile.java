@@ -148,7 +148,7 @@ public class MettelObjectFactoryJavaClassFile extends MettelJavaClassFile {
 			appendLine("final "+prefix+"Substitution old = subs.get(s);");
 			appendLine("if(old == null){ ");
 			incrementIndentLevel();
-appendLine("System.out.println(\"Old = \"+old+\", s = \"+s);");
+//appendLine("System.out.println(\"Old = \"+old+\", s = \"+s);");
 				appendLine("subs.put(s,s);");
 				appendLine("return s;");
 			decrementIndentLevel();

@@ -94,11 +94,11 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		this.sets = new IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>>(sts.size()+1);
 		this.sets.putAll(sts);
 		this.sets.put(this, new TreeSet<MettelAnnotatedExpression>());
-System.out.println("NEW "+this+" from "+state);
+//System.out.println("NEW "+this+" from "+state);
 		for(MettelAnnotatedExpression e:input){
 			add(e.annotation().newInstance(this).annotate(e.expression()));
 		}
-System.out.println(this.sets);
+//System.out.println(this.sets);
 	}
 
 	public MettelGeneralTableauState(MettelGeneralTableauState state, Set<MettelAnnotatedExpression> input) {
@@ -114,7 +114,7 @@ System.out.println(this.sets);
 	}
 
 	public void addAll(Set<MettelAnnotatedExpression> expressions){
-System.out.println("Expressions to add: "+expressions);
+//System.out.println("Expressions to add: "+expressions);
 		final Iterator<MettelAnnotatedExpression> i = expressions.iterator();
 		while(i.hasNext()){
 			MettelAnnotatedExpression e = i.next();
@@ -125,7 +125,7 @@ System.out.println("Expressions to add: "+expressions);
 		for(int j = 0; j < SIZE; j++){
 			ruleStates[j].addAll(expressions);
 		}
-System.out.println("Added expressions: "+expressions);
+//System.out.println("Added expressions: "+expressions);
 	}
 
 
@@ -146,11 +146,11 @@ System.out.println("Added expressions: "+expressions);
 			}else{
 				rs = ruleChoice.select(ruleStates);
 			}
-System.out.println(rs);
+//System.out.println(rs);
 
 			if(rs.evolve()){
 				if(rs.isTerminal()){
-System.out.println("Unsatisfiable: terminal rule.");
+//System.out.println("Unsatisfiable: terminal rule.");
 					return false;
 				}
 				List<? extends Set<MettelAnnotatedExpression>> result = rs.result;
@@ -165,10 +165,10 @@ System.out.println("Unsatisfiable: terminal rule.");
 					}
 					for(MettelGeneralTableauState child:children){//TODO branch choice strategy
 						if(child.isSatisfiable()){
-System.out.println("Satisfiable: a child is satisfiable.");
+//System.out.println("Satisfiable: a child is satisfiable.");
 							return true;//TODO model set
 						}
-System.out.println("BACKTRACKING");
+//System.out.println("BACKTRACKING");
 					}
 					return false;//TODO dependency set
 				}
@@ -181,7 +181,7 @@ System.out.println("BACKTRACKING");
 						if(!dead) break;
 					}
 					if(dead){
-System.out.println("Satisfiable: all rules are dead.");
+//System.out.println("Satisfiable: all rules are dead.");
 						return true;
 					}
 				}
