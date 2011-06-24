@@ -70,6 +70,7 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 				appendLine("if(e == null){");
 				incrementIndentLevel();
 					appendLine("if(!e0.equals(e1)){ "+sort+"Map.put(e0,e1); };");
+appendLine("System.out.println(\"Good replacement\");");
 					appendLine("return true;");
 				decrementIndentLevel();
 				appendLine("}else{");

@@ -17,6 +17,7 @@
 package mettel.core;
 
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -41,8 +42,8 @@ public class MettelGeneralTableauRuleState {
     	private Set<? extends Set<? extends MettelExpression>> branches = null;
     	List<? extends Set<MettelAnnotatedExpression>> result = null;
 
-    	private Queue<MettelAnnotatedSubstitution[]> newSubstitutions = null;
-    	private Set<MettelAnnotatedSubstitution[]> oldSubstitutions = null;
+    	private PriorityQueue<MettelAnnotatedSubstitution[]> newSubstitutions = new PriorityQueue<MettelAnnotatedSubstitution[]>();
+    	private LinkedHashSet<MettelAnnotatedSubstitution[]> oldSubstitutions = new LinkedHashSet<MettelAnnotatedSubstitution[]>();
 
     	private int index = 0;
 //    	private int[] subIndexes = null;
@@ -65,6 +66,7 @@ public class MettelGeneralTableauRuleState {
 
     		SIZE = this.premises.length;
     		TERMINAL = (this.branches.size() == 0);
+//if(TERMINAL) System.out.println("Terminal rule!");
 /*    		this.subs = new ArrayList[SIZE];
     		for(int i = 0; i < SIZE; i++){
     			subs[i] = new ArrayList<MettelSubstitution>();
@@ -101,10 +103,13 @@ public class MettelGeneralTableauRuleState {
     		if(tuple == null){
     		    switch(processExpression()){
     		    	case EMPTY_QUEUE:
+System.out.println("Empty queue");
     		    	    dead = true;
     		    	case DOES_NOT_MATCH:
-    		    	    return false;
+System.out.println("Does not match");
+						return false;
     		    	default:
+System.out.println("Processed");
     		    	    tuple = newSubstitutions.poll();
     		    	    if(tuple == null){
     		    	    	dead = true;
@@ -146,8 +151,9 @@ public class MettelGeneralTableauRuleState {
 
     		MettelAnnotatedSubstitution s = null;
     		while(s == null && index < SIZE){
-    		    s = premises[index].match(e);
-    		    index++;
+    			s = premises[index].match(e);
+System.out.println("Match is "+(s != null) +": "+premises[index]+" vs "+e);
+    			index++;
     		}
 
     		if(index == SIZE){

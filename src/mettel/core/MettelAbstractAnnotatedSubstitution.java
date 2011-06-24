@@ -25,6 +25,15 @@ public class MettelAbstractAnnotatedSubstitution implements
 		MettelAnnotatedSubstitution {
 
 
+	@SuppressWarnings("unused")
+	private MettelAbstractAnnotatedSubstitution() {}
+
+	public MettelAbstractAnnotatedSubstitution(MettelSubstitution s, MettelTableauAnnotation a) {
+		super();
+		this.s = s;
+		this.a = a;
+	}
+
 	private MettelSubstitution s = null;
 
 	/* (non-Javadoc)

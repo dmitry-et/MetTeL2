@@ -199,9 +199,13 @@ public class MettelANTLRGrammarGenerator {
 
 	private MettelANTLRRule makeANTLRTableauCalculusRule(String grammarName) {
 		final String NAME = "tableauRule";
+
 		MettelANTLRMultiaryBNFStatement s = new MettelANTLRMultiaryBNFStatement();
 		MettelANTLRRuleReference ruleRef = new MettelANTLRRuleReference(NAME,"e0");
 		ruleRef.appendLineToPostfix("a0.add(e0);");
+
+		s.addExpression(ruleRef);
+
 		MettelANTLRMultiaryBNFStatement s0 = new MettelANTLRMultiaryBNFStatement();
 		s0.addExpression(new MettelANTLRToken("'$;'"));
 		s0.addExpression(ruleRef);
@@ -389,7 +393,7 @@ public class MettelANTLRGrammarGenerator {
 				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, s.identifier(), sortStrings.toArray(new String[sortStrings.size()]),
 						s.tokens());
 
-			}//TODO other alternatives
+			}//TODO other alternatives: ~~P, etc
 			s0 = s1;
 		}
 		MettelANTLRRule r = new MettelANTLRRule(SORT_NAME,new MettelANTLRRuleReference(s0,"e0"),

@@ -25,10 +25,6 @@ syntax ALCO{
 	role union = role '|' role;
 	role converse = role '-';
 
-	//Additional connectives for test purposes
-	//role weirdRole = 'weird' '(' role ',' individual ';' concept ')';
-	//role = 'empty' role '.' concept;
-
 }
 
 syntax ALCOTableau extends ALCO{

@@ -21,13 +21,13 @@ package mettel.core;
  * @version $Revision$ $Date$
  *
  */
-public class MettelAbstractAnnotatedExpresssion implements
+public class MettelAbstractAnnotatedExpression implements
 		MettelAnnotatedExpression {
 
 	@SuppressWarnings("unused")
-	private MettelAbstractAnnotatedExpresssion() {}
+	private MettelAbstractAnnotatedExpression() {}
 
-	public MettelAbstractAnnotatedExpresssion(MettelExpression e, MettelTableauAnnotation a) {
+	public MettelAbstractAnnotatedExpression(MettelExpression e, MettelTableauAnnotation a) {
 		super();
 		this.e = e;
 		this.a = a;
@@ -48,6 +48,10 @@ public class MettelAbstractAnnotatedExpresssion implements
 	public MettelAnnotatedExpression substitute(MettelAnnotatedSubstitution s) {
 		MettelExpression e0 = e.substitute(s.substitution());
 		return a.merge(s.annotation()).annotate(e0);
+	}
+
+	public String toString(){
+		return e.toString();
 	}
 
 }

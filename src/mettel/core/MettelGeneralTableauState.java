@@ -45,6 +45,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	public MettelGeneralTableauState(Set<MettelGeneralTableauRule> calculus) {
 		super();
 		SIZE = calculus.size();
+		//System.out.println(calculus);
 		ruleStates = new MettelGeneralTableauRuleState[SIZE];
 		int i = 0;
 		for(MettelGeneralTableauRule r:calculus){
@@ -55,6 +56,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 			}
 */
 			ruleStates[i] = new MettelGeneralTableauRuleState(r, /*q,*/ l);
+			i++;
 		}
 		sets = new IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>>(1);
 		sets.put(this, new TreeSet<MettelAnnotatedExpression>());
@@ -112,6 +114,8 @@ public class MettelGeneralTableauState implements MettelTableauState {
 //	private static int SAT = 1;
 
 	public boolean isSatisfiable(){
+		//System.out.println(ruleStates);
+		//System.out.println(SIZE);
 		MettelGeneralTableauRuleState rs;
 		while(true){
 			if(ruleChoice == null){
@@ -124,6 +128,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 			if(rs.evolve()){
 				if(rs.isTerminal()) return false;
 				List<? extends Set<MettelAnnotatedExpression>> result = rs.result;
+System.out.println(result);
 				final int RESULT_SIZE = result.size();
 				if(RESULT_SIZE == 1){
 					addAll(result.get(0));

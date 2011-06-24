@@ -85,6 +85,8 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
     	    appendLine("LinkedHashSet<MettelGeneralTableauRule> calculus = new LinkedHashSet<MettelGeneralTableauRule>();");
     	    appendLine("parser.tableauCalculus(calculus);");
 
+//appendLine("System.out.println(calculus);");
+
     	    appendEOL();
 
     	    appendLine("File problemDir = new File(inDir);");
@@ -102,9 +104,9 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
     	        		appendLine("int j = name.lastIndexOf('-');");
     	        		appendLine("if(j != -1){");
     	        		incrementIndentLevel();
-    	        			appendLine("boolean result = name.substring(i+1).equals(\"sat\");");
+    	        			appendLine("boolean result = name.substring(j+1).equals(\"sat\");");
 
-    	        			appendLine("CharStream in = new ANTLRFileStream(fileName);");
+    	        			appendLine("CharStream in = new ANTLRFileStream(inDir+System.getProperty(\"file.separator\")+fileName);");
     	        		    appendLine("lexer = new "+prefix+"Lexer(in);");
     	        		    appendLine("tokens.setTokenSource(lexer);");
 

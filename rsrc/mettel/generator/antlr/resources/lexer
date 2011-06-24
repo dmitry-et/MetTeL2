@@ -15,6 +15,7 @@ WS  :   ( ' '
         ) {$channel=HIDDEN;}
     ;
 
+/*
 STRING
     :  '"' ( ESC_SEQ | ~('\\'|'"') )* '"'
     ;
@@ -43,3 +44,4 @@ fragment
 UNICODE_ESC
     :   '\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
     ;
+*/

@@ -11,4 +11,5 @@ syntax boolean{
 	formula	disjunction = formula '|' formula;
 	formula	implication = formula '->' formula;
 	formula	equivalence = formula '<->' formula;
+
 }

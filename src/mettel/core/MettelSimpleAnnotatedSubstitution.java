@@ -21,16 +21,16 @@ package mettel.core;
  * @version $Revision$ $Date$
  *
  */
-public class MettelSimpleAnnotatedExpression extends
-		MettelAbstractAnnotatedExpression {
+public class MettelSimpleAnnotatedSubstitution extends
+		MettelAbstractAnnotatedSubstitution {
 
 	/**
 	 * @param e
 	 * @param a
 	 */
-	public MettelSimpleAnnotatedExpression(MettelExpression e,
+	public MettelSimpleAnnotatedSubstitution(MettelSubstitution s,
 			MettelTableauAnnotation a) {
-		super(e, a);
+		super(s, a);
 	}
 
 }

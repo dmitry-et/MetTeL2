@@ -16,6 +16,7 @@
  */
 package mettel.core;
 
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -33,6 +34,11 @@ public class MettelGeneralTableauRule {
 //		if(premises == null || premises.size() == 0) throw new MettelCoreRuntimeException("Empty premises in tableau rule");
 		this.premises = new MettelExpression[premises.size()];
 		premises.toArray(this.premises);
+
+		Iterator<? extends Set<? extends MettelExpression>> i = branches.iterator();
+		while(i.hasNext()){
+			if(i.next().isEmpty()) i.remove();
+		}
 //		if(conclusions != null && conclusions.size() > 0){
 			this.branches = branches;
 //		}

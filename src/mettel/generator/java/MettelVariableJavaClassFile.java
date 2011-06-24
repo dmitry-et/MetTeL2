@@ -56,6 +56,7 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 			appendLine(prefix+"Substitution s = new "+prefix+"TreeSubstitution();");
 			appendLine("if(match(e,s)){");
 				incrementIndentLevel();
+appendLine("System.out.println(\"match\");");
 					appendLine("return factory.getSubstitution(s);");
 				decrementIndentLevel();
 			appendLine("}else{ return null; }");

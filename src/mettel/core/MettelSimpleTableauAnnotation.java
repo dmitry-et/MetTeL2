@@ -48,8 +48,7 @@ public class MettelSimpleTableauAnnotation implements MettelTableauAnnotation {
 	 */
 	@Override
 	public MettelAnnotatedSubstitution annotate(MettelSubstitution s) {
-		// TODO Auto-generated method stub
-		return null;
+		return new MettelSimpleAnnotatedSubstitution(s,this);
 	}
 
 	/* (non-Javadoc)
