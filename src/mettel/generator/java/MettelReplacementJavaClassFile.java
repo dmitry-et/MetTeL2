@@ -40,6 +40,7 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 		headings.appendLine("import java.util.TreeMap;");
 		headings.appendLine("import java.util.Set;");
 		headings.appendLine("import java.util.TreeSet;");
+		headings.appendLine("import java.util.Map.Entry;");
 		headings.appendEOL();
 	}
 
@@ -69,8 +70,9 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 				appendLine("final "+TYPE+" e = "+sort+"Map.get(e0);");
 				appendLine("if(e == null){");
 				incrementIndentLevel();
-					appendLine("if(!e0.equals(e1)){ "+sort+"Map.put(e0,e1); };");
-appendLine("System.out.println(\"Good replacement\");");
+//					appendLine("if(!e0.equals(e1)){ "+sort+"Map.put(e0,e1); };");
+					appendLine(sort+"Map.put(e0,e1);");
+//appendLine("System.out.println(\"Good replacement\");");
 					appendLine("return true;");
 				decrementIndentLevel();
 				appendLine("}else{");
@@ -174,6 +176,38 @@ appendLine("System.out.println(\"Good replacement\");");
 		appendLine('}');
 		appendEOL();
 
+	    appendLine("public String toString(){");
+	    incrementIndentLevel();
+	    	appendLine("StringBuilder b = new StringBuilder();");
+	    	appendLine("b.append(\"$[\");");
+
+	    	appendLine("boolean notFirst = false;");
+	    	for(String sort:sorts){
+	    		final String NAME = prefix+MettelJavaNames.firstCharToUpperCase(sort);
+
+	    		appendLine("Set<Entry<"+NAME+", "+NAME+">> "+sort+"EntrySet = "+sort+"Map.entrySet();");
+		    	appendLine("for(Entry<"+NAME+", "+NAME+"> entry:"+sort+"EntrySet){");
+		    	incrementIndentLevel();
+		    		appendLine("if(notFirst){");
+		    		incrementIndentLevel();
+		    			appendLine("b.append(\", \");");
+		    		decrementIndentLevel();
+		    		appendLine("}else{");
+		    		incrementIndentLevel();
+		    			appendLine("notFirst = true;");
+		    		decrementIndentLevel();
+		    		appendLine('}');
+		    		appendLine("b.append(entry.getKey());");
+		    		appendLine("b.append('/');");
+		    		appendLine("b.append(entry.getValue());");
+		    	decrementIndentLevel();
+		    	appendLine('}');
+	    	}
+	    	appendLine("b.append(']');");
+	    	appendLine("return b.toString();");
+	    decrementIndentLevel();
+	    appendLine('}');
+	    appendEOL();
 	}
 
 }

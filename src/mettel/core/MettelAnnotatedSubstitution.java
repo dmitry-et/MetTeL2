@@ -29,6 +29,8 @@ public interface MettelAnnotatedSubstitution {
 
     public MettelTableauAnnotation annotation();
 
+    public MettelAnnotatedSubstitution merge(MettelAnnotatedSubstitution s);
+
     public MettelAnnotatedSubstitution merge(MettelAnnotatedSubstitution[] subs);
 
     public MettelAnnotatedSubstitution mergeArray(MettelAnnotatedSubstitution[] subs);

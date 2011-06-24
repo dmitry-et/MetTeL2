@@ -21,7 +21,7 @@ package mettel.core;
  * @version $Revision: $ $Date: $
  *
  */
-public interface MettelAnnotatedExpression {
+public interface MettelAnnotatedExpression extends Comparable<MettelAnnotatedExpression>{
 
     MettelExpression expression();
 

@@ -56,8 +56,12 @@ public class MettelSimpleTableauAnnotation implements MettelTableauAnnotation {
 	 */
 	@Override
 	public MettelTableauAnnotation merge(MettelTableauAnnotation a) {
-		// TODO Auto-generated method stub
-		return null;
+		final MettelTableauState astate = a.state();
+		if(this.state.id() < astate.id()){
+			return new MettelSimpleTableauAnnotation(this.state);
+		}else{
+			return new MettelSimpleTableauAnnotation(astate);
+		}
 	}
 
 	/* (non-Javadoc)
@@ -65,8 +69,13 @@ public class MettelSimpleTableauAnnotation implements MettelTableauAnnotation {
 	 */
 	@Override
 	public MettelTableauAnnotation mergeArray(MettelTableauAnnotation[] anns) {
-		// TODO Auto-generated method stub
-		return null;
+		final int SIZE = anns.length;
+		if(SIZE == 0) return null;
+		MettelTableauAnnotation a = anns[0];
+		for(int i = 1; i < SIZE; i++){
+			a = a.merge(anns[i]);
+		}
+		return a;
 	}
 
 	/* (non-Javadoc)
@@ -74,8 +83,13 @@ public class MettelSimpleTableauAnnotation implements MettelTableauAnnotation {
 	 */
 	@Override
 	public MettelTableauAnnotation merge(MettelTableauAnnotation[] anns) {
-		// TODO Auto-generated method stub
-		return null;
+		final int SIZE = anns.length;
+		if(SIZE == 0) return null;
+		MettelTableauAnnotation a = this;
+		for(int i = 0; i < SIZE; i++){
+			a = a.merge(anns[i]);
+		}
+		return a;
 	}
 
 	/* (non-Javadoc)
@@ -95,6 +109,14 @@ public class MettelSimpleTableauAnnotation implements MettelTableauAnnotation {
 		for(MettelExpression e:in){
 			out.add(annotate(e));
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see mettel.core.MettelTableauAnnotation#newInstance(mettel.core.MettelTableauState)
+	 */
+	@Override
+	public MettelTableauAnnotation newInstance(MettelTableauState state) {
+		return new MettelSimpleTableauAnnotation(state);
 	}
 
 }

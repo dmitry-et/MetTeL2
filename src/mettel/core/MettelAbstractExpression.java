@@ -28,7 +28,9 @@ public abstract class MettelAbstractExpression implements MettelExpression {
 	}
 
 	public MettelAnnotatedSubstitution match(MettelAnnotatedExpression e){
-		return e.annotation().annotate(match(e.expression()));
+		MettelSubstitution s = match(e.expression());
+		if(s == null) return null;
+		return e.annotation().annotate(s);
 	}
 
 }

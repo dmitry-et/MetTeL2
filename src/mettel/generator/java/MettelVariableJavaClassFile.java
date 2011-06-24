@@ -36,6 +36,11 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 		body();
 	}
 
+	protected void imports(){
+		headings.appendLine("import mettel.core.MettelExpression;");
+		headings.appendEOL();
+	}
+
 	private void body(){
 		final String TYPE = prefix + MettelJavaNames.firstCharToUpperCase(type);
 
@@ -56,7 +61,7 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 			appendLine(prefix+"Substitution s = new "+prefix+"TreeSubstitution();");
 			appendLine("if(match(e,s)){");
 				incrementIndentLevel();
-appendLine("System.out.println(\"match\");");
+//appendLine("System.out.println(\"match\");");
 					appendLine("return factory.getSubstitution(s);");
 				decrementIndentLevel();
 			appendLine("}else{ return null; }");
@@ -121,7 +126,7 @@ appendLine("System.out.println(\"match\");");
 
 		appendEOL();
 
-		appendLine("public int compareTo(" + prefix + "Expression e){");
+		appendLine("public int compareTo(MettelExpression e){");
 		incrementIndentLevel();
 			appendLine("if(e instanceof " +TYPE +"Variable) return name.compareTo((("+TYPE+"Variable)e).name());");
 			appendLine("if(e instanceof " +TYPE +") return -1;");

@@ -21,7 +21,7 @@ package mettel.core;
  * @version $Revision$ $Date$
  *
  */
-public interface MettelExpression {
+public interface MettelExpression extends Comparable<MettelExpression>{
 
 	MettelExpression substitute(MettelSubstitution s);
 

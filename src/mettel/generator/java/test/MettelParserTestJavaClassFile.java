@@ -85,7 +85,6 @@ public class MettelParserTestJavaClassFile extends MettelJavaClassFile {
 
         appendLine("PrintWriter w = new PrintWriter(new FileWriter(outFile));");
         appendLine("w.println(b);");
-        appendLine("w.close();");
 
         appendLine("in = new ANTLRReaderStream(new StringReader(b.toString()));");
         appendLine("lexer = new "+prefix+"Lexer(in);");
@@ -104,7 +103,9 @@ public class MettelParserTestJavaClassFile extends MettelJavaClassFile {
         			incrementIndentLevel();
         				appendLine("assertEquals(list.get(i).compareTo(list.get(j)), -list.get(j).compareTo(list.get(i)));");
         				appendLine("if(list.get(i).compareTo(list.get(j)) == 0){ assertEquals(list.get(i),list.get(j)); }");
+appendLine("w.println(\"Matching \"+list.get(i)+\" with \"+list.get(j));");
         				appendLine(prefix+"Substitution s = list.get(i).match(list.get(j));");
+appendLine("w.println(\"Substitution: \"+s);");
         				appendLine("if(s != null){");
         					incrementIndentLevel();
         						//appendLine("System.out.println(\"Match \"+list.get(i)+' '+list.get(j));");
@@ -122,6 +123,9 @@ public class MettelParserTestJavaClassFile extends MettelJavaClassFile {
         		appendLine('}');
         	decrementIndentLevel();
         appendLine('}');
+
+        appendLine("w.close();");
+
 
         decrementIndentLevel();
     	appendLine('}');

@@ -27,6 +27,8 @@ public interface MettelSubstitution{
 
 //	MettelSubstitution append(MettelSubstitution s);
 
+	MettelSubstitution merge(MettelSubstitution s);
+
 	MettelSubstitution merge(MettelSubstitution[] subs);
 
 	MettelSubstitution mergeArray(MettelSubstitution[] subs);

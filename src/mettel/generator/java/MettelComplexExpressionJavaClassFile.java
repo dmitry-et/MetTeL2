@@ -51,6 +51,11 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 		body(sorts);
 	}
 
+	protected void imports(){
+		headings.appendLine("import mettel.core.MettelExpression;");
+		headings.appendEOL();
+	}
+
 	private void body(String[] sorts){
 		final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(name)+MettelJavaNames.firstCharToUpperCase(sort);
 		final int SIZE = sorts.length;
@@ -215,7 +220,7 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 
 		appendEOL();
 
-		appendLine("public int compareTo("+prefix+"Expression e){");
+		appendLine("public int compareTo(MettelExpression e){");
 		incrementIndentLevel();
 			appendLine("if(e == this){ return 0; }");
 			appendLine("if(!(e instanceof "+prefix+MettelJavaNames.firstCharToUpperCase(sort)+")){ return SORTID - (("+

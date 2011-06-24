@@ -71,6 +71,23 @@ public class MettelSubstitutionJavaClassFile extends MettelJavaClassFile {
 			appendEOL();
 		}
 
+		appendLine("public MettelSubstitution merge(MettelSubstitution s){");
+		incrementIndentLevel();
+			appendLine(prefix+"TreeSubstitution result = new "+prefix+"TreeSubstitution();");
+			appendLine("result.append(this);");
+			appendLine("if(result.append(("+prefix+"TreeSubstitution)s)){");
+			incrementIndentLevel();
+				appendLine("return result;");
+			decrementIndentLevel();
+			appendLine("}else{");
+			incrementIndentLevel();
+				appendLine("return null;");
+			decrementIndentLevel();
+			appendLine('}');
+		decrementIndentLevel();
+		appendLine('}');
+		appendEOL();
+
 		appendLine("public int compareTo("+prefix+"Replacement r){");
 		incrementIndentLevel();
 			appendLine("if(!(r instanceof "+prefix+"Substitution)){ return 1; };");//throw an exception?

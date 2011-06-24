@@ -16,6 +16,7 @@
  */
 package mettel.core;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -72,5 +73,53 @@ public class MettelGeneralTableauRule {
 	Set<? extends Set<MettelExpression>> branches(){
 		return branches;
 	}*/
+
+	private volatile String str = null;
+    public String toString(){
+    	if(str == null) str = toString(premises,branches);
+    	return str;
+    }
+
+    public static String toString(MettelExpression[] premises, Collection<? extends Set<? extends MettelExpression>> branches){
+	     StringBuilder buf = new StringBuilder();
+	     addToStringBuffer(buf,premises);
+	     buf.append('/');
+	     Iterator<? extends Set<? extends MettelExpression>> ib = branches.iterator();
+	     if(ib.hasNext()){
+	        //buf.append('{');
+	        addToStringBuffer(buf,ib.next());
+	        //buf.append('}');
+	        while(ib.hasNext()){
+		    buf.append(" $| ");
+		    //buf.append('{');
+		    addToStringBuffer(buf,ib.next());
+		    //buf.append('}');
+	        }
+	     }
+	    return buf.toString();
+    }
+
+    private static void addToStringBuffer(StringBuilder buf, MettelExpression[] ff){
+    	final int SIZE = ff.length;
+    	if(SIZE > 0){
+    	    buf.append(ff[0]);
+                for(int i = 1; i < SIZE; i++) {
+    		buf.append(' ');
+    		buf.append(ff[i]);
+    	    }
+    	}
+    }
+
+    private static void addToStringBuffer(StringBuilder buf,Collection<? extends MettelExpression> c){
+		final int SIZE = c.size();
+		if(SIZE > 0){
+		    MettelExpression[] ff = c.toArray(new MettelExpression[SIZE]);
+		    buf.append(ff[0]);
+	            for(int i = 1; i < SIZE; i++) {
+			buf.append(' ');
+			buf.append(ff[i]);
+		    }
+		}
+    }
 
 }

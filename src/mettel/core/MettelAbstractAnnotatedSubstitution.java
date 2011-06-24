@@ -55,6 +55,16 @@ public class MettelAbstractAnnotatedSubstitution implements
 	}
 
 	/* (non-Javadoc)
+	 * @see mettel.core.MettelAnnotatedSubstitution#merge(mettel.core.MettelAnnotatedSubstitution)
+	 */
+	@Override
+	public MettelAnnotatedSubstitution merge(MettelAnnotatedSubstitution s0) {
+		MettelSubstitution s1 = s.merge(s0.substitution());
+		if(s1 == null) return null;
+		return a.merge(s0.annotation()).annotate(s1);
+	}
+
+	/* (non-Javadoc)
 	 * @see mettel.core.MettelAnnotatedSubstitution#merge(mettel.core.MettelAnnotatedSubstitution[])
 	 */
 	@Override
@@ -84,4 +94,7 @@ public class MettelAbstractAnnotatedSubstitution implements
 		return a.mergeArray(anns0).annotate(s.mergeArray(subs0));
 	}
 
+	public String toString(){
+		return s.toString();
+	}
 }

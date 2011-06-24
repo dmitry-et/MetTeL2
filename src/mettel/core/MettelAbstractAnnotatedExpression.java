@@ -54,4 +54,12 @@ public class MettelAbstractAnnotatedExpression implements
 		return e.toString();
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(MettelAnnotatedExpression e0) {
+		return this.e.compareTo(e0.expression());
+	}
+
 }

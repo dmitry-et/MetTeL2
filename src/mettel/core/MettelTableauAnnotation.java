@@ -39,4 +39,6 @@ public interface MettelTableauAnnotation {
 
 	public MettelTableauState state();
 
+	public MettelTableauAnnotation newInstance(MettelTableauState state);
+
 }

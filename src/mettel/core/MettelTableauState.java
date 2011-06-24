@@ -23,4 +23,6 @@ package mettel.core;
  */
 public interface MettelTableauState {
 
+	int id();
+
 }
