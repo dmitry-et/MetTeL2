@@ -17,6 +17,7 @@
 package mettel.core;
 
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * @author Dmitry Tishkovsky
@@ -26,6 +27,8 @@ import java.util.Collection;
 public class MettelSimpleTableauAnnotation implements MettelTableauAnnotation {
 
 	private MettelTableauState state = null;
+
+//	private Set<MettelTableauState> dependencySet = null;
 
 	@SuppressWarnings("unused")
 	private MettelSimpleTableauAnnotation(){}

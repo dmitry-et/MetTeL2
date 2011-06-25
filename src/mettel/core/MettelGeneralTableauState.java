@@ -16,11 +16,10 @@
  */
 package mettel.core;
 
-import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -40,7 +39,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	final int SIZE;
 	private MettelGeneralTableauRuleState[] ruleStates = null;
 
-	private IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>> sets = null;
+	private LinkedHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>> sets = null;
 
 	private MettelRuleChoiceStrategy ruleChoice = null;
 
@@ -51,21 +50,22 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		ruleStates = new MettelGeneralTableauRuleState[SIZE];
 		int i = 0;
 		for(MettelGeneralTableauRule r:calculus){
-			ArrayList<LinkedHashSet<MettelAnnotatedExpression>> l = new ArrayList<LinkedHashSet<MettelAnnotatedExpression>>(r.branches.size());
+/*			ArrayList<LinkedHashSet<MettelAnnotatedExpression>> l = new ArrayList<LinkedHashSet<MettelAnnotatedExpression>>(r.branches.size());
 			final int BSIZE = r.branches.size();
 //System.out.println("BSIZE = "+BSIZE);
 			for(int j = 0; j < BSIZE; j++){
 				l.add(new LinkedHashSet<MettelAnnotatedExpression>());
 			}
+*/
 //			Queue<MettelAnnotatedExpression> q = new PriorityQueue<MettelAnnotatedExpression>(input);
 /*			for(MettelExpression e:input){
 				q.add(new MettelSimpleAnnotatedExpression(e, new MettelSimpleTableauAnnotation()));
 			}
 */
-			ruleStates[i] = new MettelGeneralTableauRuleState(r, /*q,*/ l);
+			ruleStates[i] = new MettelGeneralTableauRuleState(r);//, /*q,*/ l);
 			i++;
 		}
-		sets = new IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>>(1);
+		sets = new LinkedHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>>(1);
 		sets.put(this, new TreeSet<MettelAnnotatedExpression>());
 	}
 
@@ -90,15 +90,15 @@ public class MettelGeneralTableauState implements MettelTableauState {
 			ruleStates[i] = new MettelGeneralTableauRuleState(rstates[i]);
 		}
 		this.ruleChoice = ruleChoice;
-		final IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>> sts = state.sets;
-		this.sets = new IdentityHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>>(sts.size()+1);
+		final LinkedHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>> sts = state.sets;
+		this.sets = new LinkedHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>>(sts.size()+1);
 		this.sets.putAll(sts);
 		this.sets.put(this, new TreeSet<MettelAnnotatedExpression>());
-//System.out.println("NEW "+this+" from "+state);
+System.out.println("NEW "+this+" from "+state);
 		for(MettelAnnotatedExpression e:input){
-			add(e.annotation().newInstance(this).annotate(e.expression()));
+			addAndReannotate(e);
 		}
-//System.out.println(this.sets);
+System.out.println(this.sets);
 	}
 
 	public MettelGeneralTableauState(MettelGeneralTableauState state, Set<MettelAnnotatedExpression> input) {
@@ -106,21 +106,55 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	}
 
 	public void add(MettelAnnotatedExpression e){
-		if(sets.get(e.annotation().state()).add(e)){
+		MettelGeneralTableauState state0 = (MettelGeneralTableauState)e.annotation().state();
+		boolean exists = false;
+		for(TreeSet<MettelAnnotatedExpression> value:state0.sets.values()){
+			if(value.contains(e)){
+				exists = true;
+				break;
+			}
+		}
+		if(!exists){
+			sets.get(state0).add(e);
 			for(int j = 0; j < SIZE; j++){
 				ruleStates[j].add(e);
 			}
 		}
 	}
 
+	public void addAndReannotate(MettelAnnotatedExpression e){
+		boolean exists = false;
+		for(TreeSet<MettelAnnotatedExpression> value:sets.values()){
+			if(value.contains(e)){
+				exists = true;
+				break;
+			}
+		}
+		if(!exists){
+			MettelAnnotatedExpression ae = e.annotation().newInstance(this).annotate(e.expression());
+			sets.get(this).add(ae);
+			for(int j = 0; j < SIZE; j++){
+				ruleStates[j].add(ae);
+			}
+		}
+	}
+
 	public void addAll(Set<MettelAnnotatedExpression> expressions){
 //System.out.println("Expressions to add: "+expressions);
+
 		final Iterator<MettelAnnotatedExpression> i = expressions.iterator();
 		while(i.hasNext()){
 			MettelAnnotatedExpression e = i.next();
-			if(!sets.get(e.annotation().state()).add(e)){
-				i.remove();
+			MettelGeneralTableauState state0 = (MettelGeneralTableauState)e.annotation().state();
+			boolean exists = false;
+			for(TreeSet<MettelAnnotatedExpression> value:state0.sets.values()){
+				if(value.contains(e)){
+					i.remove();
+					exists = true;
+					break;
+				}
 			}
+			if(!exists) sets.get(state0).add(e);
 		}
 		for(int j = 0; j < SIZE; j++){
 			ruleStates[j].addAll(expressions);
@@ -128,6 +162,15 @@ public class MettelGeneralTableauState implements MettelTableauState {
 //System.out.println("Added expressions: "+expressions);
 	}
 
+	public boolean contains(MettelAnnotatedExpression e){
+		MettelGeneralTableauState state0 = (MettelGeneralTableauState)e.annotation().state();
+		for(TreeSet<MettelAnnotatedExpression> value:state0.sets.values()){
+			if(value.contains(e)){
+				return true;
+			}
+		}
+		return false;
+	}
 
 	private int index = 0;
 
@@ -146,31 +189,41 @@ public class MettelGeneralTableauState implements MettelTableauState {
 			}else{
 				rs = ruleChoice.select(ruleStates);
 			}
-//System.out.println(rs);
+System.out.println(rs);
 
 			if(rs.evolve()){
 				if(rs.isTerminal()){
-//System.out.println("Unsatisfiable: terminal rule.");
+System.out.println("Unsatisfiable: terminal rule at "+this);
 					return false;
 				}
-				List<? extends Set<MettelAnnotatedExpression>> result = rs.result;
+				Set<MettelAnnotatedExpression>[] result = rs.result;
 //System.out.println(result);
-				final int RESULT_SIZE = result.size();
+				final int RESULT_SIZE = rs.BRANCHES_SIZE;
 				if(RESULT_SIZE == 1){
-					addAll(result.get(0));
+					addAll(result[0]);
 				}else if(RESULT_SIZE > 1){
-					ArrayList<MettelGeneralTableauState> children = new ArrayList<MettelGeneralTableauState>(RESULT_SIZE);
+					boolean useOtherRule = false;
 					for(int i = 0; i < RESULT_SIZE; i++){
-						children.add(new MettelGeneralTableauState(this,result.get(i)));//TODO change annotations
-					}
-					for(MettelGeneralTableauState child:children){//TODO branch choice strategy
-						if(child.isSatisfiable()){
-//System.out.println("Satisfiable: a child is satisfiable.");
-							return true;//TODO model set
+//System.out.println("Result["+i+"] = "+result[i]+ ' '+RESULT_SIZE);
+						MettelGeneralTableauState child = new MettelGeneralTableauState(this,result[i]);
+						if(child.sets.get(child).isEmpty()){
+							child = null;
+							useOtherRule = true;
+//							if(this.isSatisfiable()){
+//								return true;
+//							}
+						}else{
+							if(child.isSatisfiable()){
+								return true;//TODO Model set
+							}
+System.out.println("BACKTRACKING AT "+this);
 						}
-//System.out.println("BACKTRACKING");
 					}
-					return false;//TODO dependency set
+					if(!useOtherRule){
+System.out.println("Unsatisfiable. Childern are all unsatisfiable at "+this);
+						return false;//TODO dependency set
+					}
+System.out.println("PROCEEDING WITH SAME "+this);
 				}
 //				return true;
 			}else{
