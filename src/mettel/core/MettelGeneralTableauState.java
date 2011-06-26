@@ -16,10 +16,8 @@
  */
 package mettel.core;
 
-import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -234,7 +232,7 @@ System.out.println("PROCEEDING WITH SAME "+this);
 						if(!dead) break;
 					}
 					if(dead){
-//System.out.println("Satisfiable: all rules are dead.");
+System.out.println("Satisfiable: all rules are dead.");
 						return true;
 					}
 				}

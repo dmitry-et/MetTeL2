@@ -94,7 +94,7 @@ public class MettelGeneralTableauRuleState {
     		this.branches = state.branches;
     		this.queue = new PriorityQueue<MettelAnnotatedExpression>(state.queue);
     		//TODO make it syncronised
-    		//this.result = state.result;
+//    		this.result = state.result;
     		this.SIZE = state.SIZE;
     		this.BRANCHES_SIZE = state.BRANCHES_SIZE;
     		this.TERMINAL = state.TERMINAL;
@@ -102,6 +102,7 @@ public class MettelGeneralTableauRuleState {
     		for(int i = 0; i< BRANCHES_SIZE; i++){
     			this.result[i] = new LinkedHashSet<MettelAnnotatedExpression>();
     		}
+
     		oldSubstitutions = (LinkedHashSet<MettelAnnotatedSubstitution>[]) new LinkedHashSet[SIZE];
     		for(int i = 0; i < SIZE; i++){
     			oldSubstitutions[i] = new LinkedHashSet<MettelAnnotatedSubstitution>(state.oldSubstitutions[i]);
@@ -133,7 +134,7 @@ public class MettelGeneralTableauRuleState {
     		    	case EMPTY_QUEUE:
 //System.out.println("Empty queue");
     		    	    dead = true;
-    		    	case DOES_NOT_MATCH:
+//    		    	case DOES_NOT_MATCH:
 //System.out.println("Does not match");
 						return false;
     		    	default:
@@ -172,7 +173,7 @@ public class MettelGeneralTableauRuleState {
 
 //************************************************************************************
     	private final int EMPTY_QUEUE = -1;
-    	private final int DOES_NOT_MATCH = -2;
+//    	private final int DOES_NOT_MATCH = -2;
 
     	private int processExpression(){
     		MettelAnnotatedSubstitution s = null;
@@ -189,21 +190,21 @@ public class MettelGeneralTableauRuleState {
 
 	    		while(s == null && index < SIZE){
 	    			s = premises[index].match(e);
-	//System.out.println("Match is "+(s != null) +": "+premises[index]+" vs "+e);
+//System.out.println("Match is "+(s != null) +": "+premises[index]+" vs "+e);
 	    			index++;
 	    		}
 
 	    		if(index == SIZE){
 	    		    e = null;
 	    		    if(s == null){
-	    		    	index = 0;
+	    		    	//index = 0;
 	    		    	//return DOES_NOT_MATCH;
 	    		    	doesNotMatch = true;
 	    		    }
 	    		}
     		}while(doesNotMatch);
 
-//System.out.println("Substitution is "+s+" index = "+index);
+System.out.println("Substitution is "+s+" index = "+index);
 
 
 			LinkedHashSet<MettelAnnotatedSubstitution> rsubs =
@@ -240,7 +241,8 @@ System.out.println("To merge with "+s0);
 //for(int i=0; i < SIZE; i++){
 //System.out.println("oldSubstitutions["+i+"] = "+oldSubstitutions[i]);
 //}
-    		if(index == SIZE) index = 0;
+
+//    		if(index == SIZE) index = 0;
 
 
 /*			for(MettelAnnotatedSubstitution[] oldTuple:oldSubstitutions){
