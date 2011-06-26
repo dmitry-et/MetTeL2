@@ -104,6 +104,9 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
     	        		appendLine("int j = name.lastIndexOf('-');");
     	        		appendLine("if(j != -1){");
     	        		incrementIndentLevel();
+appendLine("System.out.println();");
+appendLine("System.out.print(\"Problem set from \"+fileName+\"...\");");
+
     	        			appendLine("boolean result = name.substring(j+1).equals(\"sat\");");
 
     	        			appendLine("CharStream in = new ANTLRFileStream(inDir+System.getProperty(\"file.separator\")+fileName);");
@@ -122,7 +125,7 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
     	        		    appendLine("state.addAll(annotated);");
 
     	        		    appendLine("assertEquals(result,state.isSatisfiable());");
-
+appendLine("System.out.print(\"OK\");");
 						decrementIndentLevel();
     	        		appendLine('}');
 					decrementIndentLevel();
@@ -131,6 +134,7 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
     	        appendLine('}');
 			decrementIndentLevel();
     	    appendLine('}');
+appendLine("System.out.println();");
 		decrementIndentLevel();
     	appendLine('}');
 	}

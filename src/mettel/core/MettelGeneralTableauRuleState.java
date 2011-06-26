@@ -204,7 +204,7 @@ public class MettelGeneralTableauRuleState {
 	    		}
     		}while(doesNotMatch);
 
-System.out.println("Substitution is "+s+" index = "+index);
+//System.out.println("Substitution is "+s+" index = "+index);
 
 
 			LinkedHashSet<MettelAnnotatedSubstitution> rsubs =

@@ -92,11 +92,11 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		this.sets = new LinkedHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>>(sts.size()+1);
 		this.sets.putAll(sts);
 		this.sets.put(this, new TreeSet<MettelAnnotatedExpression>());
-System.out.println("NEW "+this+" from "+state);
+//System.out.println("NEW "+this+" from "+state);
 		for(MettelAnnotatedExpression e:input){
 			addAndReannotate(e);
 		}
-System.out.println(this.sets);
+//System.out.println(this.sets);
 	}
 
 	public MettelGeneralTableauState(MettelGeneralTableauState state, Set<MettelAnnotatedExpression> input) {
@@ -187,11 +187,11 @@ System.out.println(this.sets);
 			}else{
 				rs = ruleChoice.select(ruleStates);
 			}
-System.out.println(rs);
+//System.out.println(rs);
 
 			if(rs.evolve()){
 				if(rs.isTerminal()){
-System.out.println("Unsatisfiable: terminal rule at "+this);
+//System.out.println("Unsatisfiable: terminal rule at "+this);
 					return false;
 				}
 				Set<MettelAnnotatedExpression>[] result = rs.result;
@@ -214,14 +214,14 @@ System.out.println("Unsatisfiable: terminal rule at "+this);
 							if(child.isSatisfiable()){
 								return true;//TODO Model set
 							}
-System.out.println("BACKTRACKING AT "+this);
+//System.out.println("BACKTRACKING AT "+this);
 						}
 					}
 					if(!useOtherRule){
-System.out.println("Unsatisfiable. Childern are all unsatisfiable at "+this);
+//System.out.println("Unsatisfiable. Childern are all unsatisfiable at "+this);
 						return false;//TODO dependency set
 					}
-System.out.println("PROCEEDING WITH SAME "+this);
+//System.out.println("PROCEEDING WITH SAME "+this);
 				}
 //				return true;
 			}else{
@@ -232,7 +232,7 @@ System.out.println("PROCEEDING WITH SAME "+this);
 						if(!dead) break;
 					}
 					if(dead){
-System.out.println("Satisfiable: all rules are dead.");
+//System.out.println("Satisfiable: all rules are dead.");
 						return true;
 					}
 				}
