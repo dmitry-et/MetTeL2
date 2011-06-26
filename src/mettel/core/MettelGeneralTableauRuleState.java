@@ -199,6 +199,8 @@ public class MettelGeneralTableauRuleState {
 	    		    e = queue.poll();
 	    		    index = 0;
 	    		    if(e == null) return EMPTY_QUEUE;
+	    		    MettelGeneralTableauRuleState st = states.get(e.annotation().state());
+	    		    if(st != null) st.queue.remove(e);
 	    		}
 //System.out.println("Chosen expression: "+e);
 
