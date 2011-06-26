@@ -17,6 +17,7 @@
 package mettel.core;
 
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -28,6 +29,10 @@ import java.util.Set;
  *
  */
 public class MettelGeneralTableauRuleState {
+
+		private MettelGeneralTableauState tstate = null;
+
+		private LinkedHashMap<MettelGeneralTableauState,MettelGeneralTableauRuleState> states = null;
 
     	private Queue<MettelAnnotatedExpression> queue = null;
     	private MettelAnnotatedExpression e = null;
@@ -41,6 +46,8 @@ public class MettelGeneralTableauRuleState {
     	private Set<? extends Set<? extends MettelExpression>> branches = null;
 //    	List<? extends Set<MettelAnnotatedExpression>> result = null;
     	LinkedHashSet<MettelAnnotatedExpression>[] result = null;
+    	LinkedHashSet<MettelAnnotatedSubstitution> rsubs = new LinkedHashSet<MettelAnnotatedSubstitution>();
+    	MettelAnnotatedSubstitution s = null;
 
     	private LinkedHashSet<MettelAnnotatedSubstitution> newSubstitutions = null;
     	private LinkedHashSet<MettelAnnotatedSubstitution>[] oldSubstitutions = null;
@@ -58,9 +65,10 @@ public class MettelGeneralTableauRuleState {
     	private MettelGeneralTableauRuleState(){ SIZE = 0; BRANCHES_SIZE = 0; TERMINAL = false;}
 
     	@SuppressWarnings("unchecked")
-		MettelGeneralTableauRuleState(MettelGeneralTableauRule rule){//, //Queue<MettelAnnotatedExpression> queue,
+		MettelGeneralTableauRuleState(MettelGeneralTableauState tstate, MettelGeneralTableauRule rule){//, //Queue<MettelAnnotatedExpression> queue,
     			//List<? extends Set<MettelAnnotatedExpression>> result){
     		super();
+    		this.tstate = tstate;
     		this.premises = rule.premises;
     		this.branches = rule.branches;
     		this.queue = new PriorityQueue<MettelAnnotatedExpression>();
@@ -85,11 +93,14 @@ public class MettelGeneralTableauRuleState {
     			oldSubstitutions[i] = new LinkedHashSet<MettelAnnotatedSubstitution>();
     		}
     		newSubstitutions = new LinkedHashSet<MettelAnnotatedSubstitution>();
+
+    		states = new LinkedHashMap<MettelGeneralTableauState,MettelGeneralTableauRuleState>();
     	}
 
     	@SuppressWarnings("unchecked")
-		MettelGeneralTableauRuleState(MettelGeneralTableauRuleState state){
+		MettelGeneralTableauRuleState(MettelGeneralTableauState tstate, MettelGeneralTableauRuleState state){
     		super();
+    		this.tstate = tstate;
     		this.premises = state.premises;
     		this.branches = state.branches;
     		this.queue = new PriorityQueue<MettelAnnotatedExpression>(state.queue);
@@ -110,6 +121,10 @@ public class MettelGeneralTableauRuleState {
     		newSubstitutions = new LinkedHashSet<MettelAnnotatedSubstitution>(state.newSubstitutions);
     		this.index = state.index;
     		this.e = state.e;
+
+    		states = new LinkedHashMap<MettelGeneralTableauState,MettelGeneralTableauRuleState>(state.states.size()+1);
+    		states.putAll(state.states);
+    		states.put(tstate, state);
     	}
 
     	private boolean dead = false;
@@ -128,8 +143,8 @@ public class MettelGeneralTableauRuleState {
 //System.out.println("Dead");
     			return false;
     		}
-    		MettelAnnotatedSubstitution s = newSubstitutionsPoll();
-    		if(s == null){
+    		MettelAnnotatedSubstitution s0 = newSubstitutionsPoll();
+    		if(s0 == null){
     		    switch(processExpression()){
     		    	case EMPTY_QUEUE:
 //System.out.println("Empty queue");
@@ -139,8 +154,8 @@ public class MettelGeneralTableauRuleState {
 						return false;
     		    	default:
 //System.out.println("Processed");
-    		    	    s = newSubstitutionsPoll();
-    		    	    if(s == null){
+    		    	    s0 = newSubstitutionsPoll();
+    		    	    if(s0 == null){
 //    		    	    	dead = true;
     		    	    	return false;
     		    	    }
@@ -162,7 +177,7 @@ public class MettelGeneralTableauRuleState {
     		int i = 0;
     		for(Set<? extends MettelExpression> set:branches){
     		    for(MettelExpression e:set){
-    		    	result[i].add(e.substitute(s));
+    		    	result[i].add(e.substitute(s0));
     		    }
 //System.out.println(result[i]);
     		    i++;
@@ -176,7 +191,6 @@ public class MettelGeneralTableauRuleState {
 //    	private final int DOES_NOT_MATCH = -2;
 
     	private int processExpression(){
-    		MettelAnnotatedSubstitution s = null;
 
     		boolean doesNotMatch = false;
     		do{
@@ -186,8 +200,9 @@ public class MettelGeneralTableauRuleState {
 	    		    index = 0;
 	    		    if(e == null) return EMPTY_QUEUE;
 	    		}
-	//System.out.println("Chosen expression: "+e);
+//System.out.println("Chosen expression: "+e);
 
+	    		s = null;
 	    		while(s == null && index < SIZE){
 	    			s = premises[index].match(e);
 //System.out.println("Match is "+(s != null) +": "+premises[index]+" vs "+e);
@@ -207,8 +222,7 @@ public class MettelGeneralTableauRuleState {
 //System.out.println("Substitution is "+s+" index = "+index);
 
 
-			LinkedHashSet<MettelAnnotatedSubstitution> rsubs =
-				new LinkedHashSet<MettelAnnotatedSubstitution>();
+			rsubs.clear();
 			rsubs.add(s);
 			for(int i = 0; i < SIZE; i++){
 				if(i != index - 1){
@@ -256,6 +270,24 @@ System.out.println("To merge with "+s0);
 */
     		return 0;
     	}
+
+
+    	public void addSubstitutions(Set<MettelAnnotatedSubstitution> ss0, MettelAnnotatedSubstitution s, int index){
+    		for(MettelAnnotatedSubstitution s0:ss0){
+				newSubstitutions.add(s0);
+			}
+			oldSubstitutions[index-1].add(s);
+    	}
+
+    	public void addSubstitutions(){
+    		MettelGeneralTableauRuleState state = states.get(s.annotation().state());
+    		if(state != null) state.oldSubstitutions[index-1].add(s);
+
+    		for(MettelAnnotatedSubstitution s0:rsubs){
+    			state = states.get(s0.annotation().state());
+				if(state != null) state.newSubstitutions.add(s0);
+			}
+		}
 
 		/**
 		 * @param expressions

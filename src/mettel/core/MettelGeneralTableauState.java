@@ -17,8 +17,8 @@
 package mettel.core;
 
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
@@ -26,7 +26,7 @@ import java.util.TreeSet;
  * @version $Revision$ $Date$
  *
  */
-public class MettelGeneralTableauState implements MettelTableauState {
+public class MettelGeneralTableauState implements MettelTableauState, Comparable<MettelTableauState> {
 
 	private static int counter = 0;
 
@@ -37,7 +37,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	final int SIZE;
 	private MettelGeneralTableauRuleState[] ruleStates = null;
 
-	private LinkedHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>> sets = null;
+	private TreeMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>> sets = null;
 
 	private MettelRuleChoiceStrategy ruleChoice = null;
 
@@ -60,10 +60,10 @@ public class MettelGeneralTableauState implements MettelTableauState {
 				q.add(new MettelSimpleAnnotatedExpression(e, new MettelSimpleTableauAnnotation()));
 			}
 */
-			ruleStates[i] = new MettelGeneralTableauRuleState(r);//, /*q,*/ l);
+			ruleStates[i] = new MettelGeneralTableauRuleState(this, r);//, /*q,*/ l);
 			i++;
 		}
-		sets = new LinkedHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>>(1);
+		sets = new TreeMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>>();
 		sets.put(this, new TreeSet<MettelAnnotatedExpression>());
 	}
 
@@ -85,12 +85,12 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		ruleStates = new MettelGeneralTableauRuleState[SIZE];
 		final MettelGeneralTableauRuleState[] rstates = state.ruleStates;
 		for(int i = 0; i < SIZE; i++){
-			ruleStates[i] = new MettelGeneralTableauRuleState(rstates[i]);
+			ruleStates[i] = new MettelGeneralTableauRuleState(this, rstates[i]);
 		}
 		this.ruleChoice = ruleChoice;
-		final LinkedHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>> sts = state.sets;
-		this.sets = new LinkedHashMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>>(sts.size()+1);
-		this.sets.putAll(sts);
+		final TreeMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>> sts = state.sets;
+		this.sets = new TreeMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>>(sts);
+		//this.sets.putAll(sts);
 		this.sets.put(this, new TreeSet<MettelAnnotatedExpression>());
 //System.out.println("NEW "+this+" from "+state);
 		for(MettelAnnotatedExpression e:input){
@@ -103,7 +103,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		this(state,state.ruleChoice,input);
 	}
 
-	public void add(MettelAnnotatedExpression e){
+	/*public void add(MettelAnnotatedExpression e){
 		MettelGeneralTableauState state0 = (MettelGeneralTableauState)e.annotation().state();
 		boolean exists = false;
 		for(TreeSet<MettelAnnotatedExpression> value:state0.sets.values()){
@@ -118,7 +118,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 				ruleStates[j].add(e);
 			}
 		}
-	}
+	}*/
 
 	public void addAndReannotate(MettelAnnotatedExpression e){
 		boolean exists = false;
@@ -138,29 +138,49 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	}
 
 	public void addAll(Set<MettelAnnotatedExpression> expressions){
+//System.out.println(this.sets);
 //System.out.println("Expressions to add: "+expressions);
 
 		final Iterator<MettelAnnotatedExpression> i = expressions.iterator();
 		while(i.hasNext()){
 			MettelAnnotatedExpression e = i.next();
 			MettelGeneralTableauState state0 = (MettelGeneralTableauState)e.annotation().state();
-			boolean exists = false;
-			for(TreeSet<MettelAnnotatedExpression> value:state0.sets.values()){
-				if(value.contains(e)){
+//System.out.println("Expression "+e+" must go into "+state0);
+			//boolean exists = false;
+/*			for(Entry<MettelGeneralTableauState,TreeSet<MettelAnnotatedExpression>> entry:state0.sets.entrySet()){
+				if(entry.getValue().contains(e)){
 					i.remove();
-					exists = true;
+					//exists = true;
 					break;
 				}
+				MettelGeneralTableauState state1 = entry.getKey();
+System.out.println("Expression "+e+" goes into "+state1);
+				sets.get(state1).add(e);
+				for(int j = 0; j < SIZE; j++){
+					state1.ruleStates[j].add(e);
+				}
 			}
-			if(!exists) sets.get(state0).add(e);
+			//if(!exists) sets.get(state0).add(e);
+*/
+			if(sets.get(state0).add(e)){
+				for(MettelGeneralTableauState key:sets.tailMap(state0).keySet()){
+					for(int j = 0; j < SIZE; j++){
+						key.ruleStates[j].add(e);
+					}
+				}
+			}else{
+				i.remove();
+			}
+
 		}
-		for(int j = 0; j < SIZE; j++){
+/*		for(int j = 0; j < SIZE; j++){
 			ruleStates[j].addAll(expressions);
 		}
-//System.out.println("Added expressions: "+expressions);
+System.out.println("Added expressions: "+expressions);
+*/
 	}
 
-	public boolean contains(MettelAnnotatedExpression e){
+	/*public boolean contains(MettelAnnotatedExpression e){
 		MettelGeneralTableauState state0 = (MettelGeneralTableauState)e.annotation().state();
 		for(TreeSet<MettelAnnotatedExpression> value:state0.sets.values()){
 			if(value.contains(e)){
@@ -168,7 +188,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 			}
 		}
 		return false;
-	}
+	}*/
 
 	private int index = 0;
 
@@ -199,6 +219,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 				final int RESULT_SIZE = rs.BRANCHES_SIZE;
 				if(RESULT_SIZE == 1){
 					addAll(result[0]);
+					rs.addSubstitutions();
 				}else if(RESULT_SIZE > 1){
 					boolean useOtherRule = false;
 					for(int i = 0; i < RESULT_SIZE; i++){
@@ -222,6 +243,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 						return false;//TODO dependency set
 					}
 //System.out.println("PROCEEDING WITH SAME "+this);
+//System.out.println(this.sets);
 				}
 //				return true;
 			}else{
@@ -245,4 +267,14 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		return "TableauState #"+ID;
 	}
 
+	public int compareTo(MettelTableauState state){
+		if(this == state) return 0;
+		return (ID - state.id());
+	}
+
+	public boolean equals(MettelTableauState state){
+		if(this == state) return true;
+		if(state == null) return false;
+		return (ID - state.id()) == 0;
+	}
 }

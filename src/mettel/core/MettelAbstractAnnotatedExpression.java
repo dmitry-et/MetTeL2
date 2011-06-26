@@ -62,4 +62,8 @@ public class MettelAbstractAnnotatedExpression implements
 		return this.e.compareTo(e0.expression());
 	}
 
+	public boolean equals(MettelAnnotatedExpression e0) {
+		return this.e.equals(e0.expression());
+	}
+
 }
