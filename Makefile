@@ -179,7 +179,7 @@ SPASS_LOG_FILE := $(BASE_DIR)/SPASS.log
 .PHONY : $(NAME) jar clear-lexer-log clear-parser-log clear-javac-log clear-jar clear-classes \
 clear clean clear-ast-classes compile compile-ast clear-parser-files clear prepare \
 clear-log only-lexer only-parser parser lexer-doc parser-doc doc resources test \
-all compile-test packages-file java-doc clear-test-log clear-doc clear-test clear-test-jar \
+all compile-test packages-file java-doc clear-test-log clear-doc clear-test clear-test-jar clear-test-output\
 clear-test-classes test-jar old-test junit-test junit SPASS clear-spass-log statistics \
 libantlr tableau-bin clear-bin generateLogics generateParsers compileLogics generate
 
@@ -262,7 +262,13 @@ clear-doc:
 	@ rm -f -v -r $(JAVADOC_DIR)
 	@ rm -f -v -r $(DOC_DIR)/grammar
 
-clear-test: clear-test-log clear-test-jar clear-test-classes
+clear-test: clear-test-log clear-test-jar clear-test-classes clear-test-output
+
+clear-test-output:
+	@ echo $(DELIM0)
+	@ echo "Clearing test output directory"
+	@ echo $(DELIM1)
+	@ rm -f -r -v $(TEST_OUTPUT_DIR)
 
 clear-test-jar: 
 	@ echo $(DELIM0)
