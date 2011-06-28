@@ -27,7 +27,7 @@ import java.util.TreeSet;
  *
  */
 public class MettelGeneralTableauState implements MettelTableauState, Comparable<MettelTableauState> {
-
+	
 	private static int counter = 0;
 
 	private final int ID = counter++;
