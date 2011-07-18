@@ -8,7 +8,8 @@ public class AllTests {
 		"ALCO.test.ALCOParserTest",
 	    "bool.test.BooleanParserTest",
 		//"ALCO.test.ALCOParserTest",
-		"bool.test.BooleanTableauTest"
+		"bool.test.BooleanTableauTest",
+		"S4.test.S4ParserTest"
 	     };
 
 	public static void main(String[] args) {

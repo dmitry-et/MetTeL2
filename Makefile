@@ -166,7 +166,7 @@ JAVA_TEST_OPTIONS := -Xfuture -Xbatch -Xms256M -Xmx400M
 
 TEST_EXAMPLES_DIR = $(TEST_DIR)/examples
 TEST_OUTPUT_DIR = $(TEST_DIR)/output
-TEST_LOGIC_DIRS = "ALCO bool"
+TEST_LOGIC_DIRS = "ALCO bool S4"
 TEST_LOGIC_PARSERS = $(shell find $(TEST_OUTPUT_DIR) -name '*.g')
 TEST_LOGIC_SOURCES = $(shell find $(TEST_OUTPUT_DIR) -name '*.java')
 
