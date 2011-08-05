@@ -92,11 +92,11 @@ public class MettelGeneralTableauState implements MettelTableauState, Comparable
 		this.sets = new TreeMap<MettelGeneralTableauState, TreeSet<MettelAnnotatedExpression>>(sts);
 		//this.sets.putAll(sts);
 		this.sets.put(this, new TreeSet<MettelAnnotatedExpression>());
-//System.out.println("NEW "+this+" from "+state);
+System.out.println("NEW "+this+" from "+state);
 		for(MettelAnnotatedExpression e:input){
 			addAndReannotate(e);
 		}
-//System.out.println(this.sets);
+System.out.println(this.sets);
 	}
 
 	public MettelGeneralTableauState(MettelGeneralTableauState state, Set<MettelAnnotatedExpression> input) {
@@ -134,18 +134,21 @@ public class MettelGeneralTableauState implements MettelTableauState, Comparable
 			for(int j = 0; j < SIZE; j++){
 				ruleStates[j].add(ae);
 			}
+//System.out.println("Reannotating "+e+" to "+ae);
+//System.out.println("\t changing state "+e.annotation().state()+" to "+ae.annotation().state());
 		}
 	}
 
 	public void addAll(Set<MettelAnnotatedExpression> expressions){
-//System.out.println(this.sets);
+System.out.println("addAll "+this);
+System.out.println(this.sets);
 //System.out.println("Expressions to add: "+expressions);
 
 		final Iterator<MettelAnnotatedExpression> i = expressions.iterator();
 		while(i.hasNext()){
 			MettelAnnotatedExpression e = i.next();
 			MettelGeneralTableauState state0 = (MettelGeneralTableauState)e.annotation().state();
-//System.out.println("Expression "+e+" must go into "+state0);
+System.out.println("Expression "+e+" must go into "+state0);
 			//boolean exists = false;
 /*			for(Entry<MettelGeneralTableauState,TreeSet<MettelAnnotatedExpression>> entry:state0.sets.entrySet()){
 				if(entry.getValue().contains(e)){
@@ -162,7 +165,10 @@ System.out.println("Expression "+e+" goes into "+state1);
 			}
 			//if(!exists) sets.get(state0).add(e);
 */
-			if(sets.get(state0).add(e)){
+
+			final TreeSet<MettelAnnotatedExpression> fSet = sets.get(state0);
+System.out.println("fSet = "+fSet);
+			if(fSet.add(e)){
 				for(MettelGeneralTableauState key:sets.tailMap(state0).keySet()){
 					for(int j = 0; j < SIZE; j++){
 						key.ruleStates[j].add(e);
@@ -210,6 +216,7 @@ System.out.println("Added expressions: "+expressions);
 //System.out.println(rs);
 
 			if(rs.evolve()){
+System.out.println(rs);
 				if(rs.isTerminal()){
 //System.out.println("Unsatisfiable: terminal rule at "+this);
 					return false;
@@ -218,8 +225,9 @@ System.out.println("Added expressions: "+expressions);
 //System.out.println(result);
 				final int RESULT_SIZE = rs.BRANCHES_SIZE;
 				if(RESULT_SIZE == 1){
+//System.out.println("Result[0]="+result[0]);
 					addAll(result[0]);
-					rs.addSubstitutions();
+//					rs.addSubstitutions();
 				}else if(RESULT_SIZE > 1){
 					boolean useOtherRule = false;
 					for(int i = 0; i < RESULT_SIZE; i++){

@@ -159,9 +159,10 @@ public class MettelGeneralTableauRuleState {
 //    		    	    	dead = true;
     		    	    	return false;
     		    	    }
-//System.out.println("New substitution "+s);
     		    }
     		}
+//System.out.println("New substitution "+s0);
+
 
 /*    		MettelAnnotatedSubstitution s = tuple[0].mergeArray(tuple);
     		while(s == null || !oldSubstitutions.add(tuple)){
@@ -254,6 +255,11 @@ System.out.println("To merge with "+s0);
 			}
 
 			oldSubstitutions[index-1].add(s);
+
+			if(BRANCHES_SIZE == 1){
+				addSubstitutions();
+			}
+
 //for(int i=0; i < SIZE; i++){
 //System.out.println("oldSubstitutions["+i+"] = "+oldSubstitutions[i]);
 //}
@@ -282,6 +288,7 @@ System.out.println("To merge with "+s0);
     	}
 
     	public void addSubstitutions(){
+//System.out.println("Substitution "+s);
     		MettelGeneralTableauRuleState state = states.get(s.annotation().state());
     		if(state != null) state.oldSubstitutions[index-1].add(s);
 

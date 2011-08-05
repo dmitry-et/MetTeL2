@@ -2,14 +2,14 @@ true
 false
 ~p
 p|q
-dia q
-dia (q|(~P))
+<> q
+<> (q|(~P))
 ~ ( ~P )
 
 ~ P | Q
 ~ (~P | Q)
 
-(~Q | dia (R))
+(~Q | <> (R))
 
 (Q | (P | Z | (R | S)))
 

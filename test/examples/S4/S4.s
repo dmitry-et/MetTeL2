@@ -7,6 +7,7 @@ syntax S4{
 
 	concept true = 'true';
 	concept false = 'false';
+	concept singleton = '{' nominal '}';
 	concept	negation = '~' concept;
 	concept diamond = '<>' concept;
 	concept satisfactory= '@' nominal concept;

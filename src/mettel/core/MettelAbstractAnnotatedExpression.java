@@ -50,10 +50,10 @@ public class MettelAbstractAnnotatedExpression implements
 		return a.merge(s.annotation()).annotate(e0);
 	}
 
-	public String toString(){
+/*	public String toString(){
 		return e.toString();
 	}
-
+*/
 	/* (non-Javadoc)
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
@@ -66,4 +66,7 @@ public class MettelAbstractAnnotatedExpression implements
 		return this.e.equals(e0.expression());
 	}
 
+	public String toString(){
+		return e.toString()+'_'+a.toString();
+	}
 }

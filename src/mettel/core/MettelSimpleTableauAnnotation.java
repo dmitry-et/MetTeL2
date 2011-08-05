@@ -122,4 +122,8 @@ public class MettelSimpleTableauAnnotation implements MettelTableauAnnotation {
 		return new MettelSimpleTableauAnnotation(state);
 	}
 
+	public String toString(){
+		return "Ann("+state+')';
+	}
+
 }

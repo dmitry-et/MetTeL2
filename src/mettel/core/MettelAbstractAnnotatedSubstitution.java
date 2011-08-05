@@ -95,6 +95,6 @@ public class MettelAbstractAnnotatedSubstitution implements
 	}
 
 	public String toString(){
-		return s.toString();
+		return s.toString()+'_'+a.toString();
 	}
 }
