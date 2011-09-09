@@ -16,13 +16,15 @@
  */
 package mettel.core;
 
+import mettel.util.MettelAnnotatedObject;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public class MettelAbstractAnnotatedExpression implements
-		MettelAnnotatedExpression {
+public abstract class MettelAbstractAnnotatedExpression
+		implements MettelAnnotatedExpression, MettelAnnotatedObject<MettelTableauState> {
 
 	@SuppressWarnings("unused")
 	private MettelAbstractAnnotatedExpression() {}
@@ -69,4 +71,5 @@ public class MettelAbstractAnnotatedExpression implements
 	public String toString(){
 		return e.toString()+'_'+a.toString();
 	}
+
 }

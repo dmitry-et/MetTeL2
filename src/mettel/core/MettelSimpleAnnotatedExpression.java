@@ -33,4 +33,12 @@ public class MettelSimpleAnnotatedExpression extends
 		super(e, a);
 	}
 
+	/* (non-Javadoc)
+	 * @see mettel.util.MettelAnnotatedObject#key()
+	 */
+	@Override
+	public MettelTableauState key() {
+		return this.annotation().state();
+	}
+
 }

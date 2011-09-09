@@ -16,13 +16,15 @@
  */
 package mettel.core;
 
+import mettel.util.MettelAnnotatedObject;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public class MettelAbstractAnnotatedSubstitution implements
-		MettelAnnotatedSubstitution {
+public abstract class MettelAbstractAnnotatedSubstitution implements
+		MettelAnnotatedSubstitution, MettelAnnotatedObject<MettelTableauState> {
 
 
 	@SuppressWarnings("unused")

@@ -33,4 +33,13 @@ public class MettelSimpleAnnotatedSubstitution extends
 		super(s, a);
 	}
 
+	/* (non-Javadoc)
+	 * @see mettel.util.MettelAnnotatedObject#key()
+	 */
+	@Override
+	public MettelTableauState key() {
+		return this.annotation().state();
+	}
+
+
 }

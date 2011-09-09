@@ -17,7 +17,6 @@
 package mettel.core;
 
 import java.util.Collection;
-import java.util.Set;
 
 /**
  * @author Dmitry Tishkovsky
