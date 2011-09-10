@@ -23,18 +23,8 @@ import java.util.Set;
  * @version $Revision$ $Date$
  *
  */
-public interface MettelTableauState {
+public interface MettelBranchChoiceStrategy {
 
-	int id();
-
-	boolean isSatisfiable();
-
-	boolean isComplete();
-
-	MettelTableauState[] expand();
-
-	boolean add(MettelAnnotatedExpression e);
-
-	boolean addAll(Set<MettelAnnotatedExpression> s);
+	MettelTableauState chooseTableauState(Set<MettelTableauState> s);
 
 }

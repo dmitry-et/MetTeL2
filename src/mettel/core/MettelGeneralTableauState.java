@@ -27,7 +27,7 @@ import java.util.TreeSet;
  *
  */
 public class MettelGeneralTableauState implements MettelTableauState, Comparable<MettelTableauState> {
-	
+
 	private static int counter = 0;
 
 	private final int ID = counter++;
@@ -41,13 +41,13 @@ public class MettelGeneralTableauState implements MettelTableauState, Comparable
 
 	private MettelRuleChoiceStrategy ruleChoice = null;
 
-	public MettelGeneralTableauState(Set<MettelGeneralTableauRule> calculus) {
+	public MettelGeneralTableauState(Set<MettelTableauRule> calculus) {
 		super();
 		SIZE = calculus.size();
 		//System.out.println(calculus);
 		ruleStates = new MettelGeneralTableauRuleState[SIZE];
 		int i = 0;
-		for(MettelGeneralTableauRule r:calculus){
+		for(MettelTableauRule r:calculus){
 /*			ArrayList<LinkedHashSet<MettelAnnotatedExpression>> l = new ArrayList<LinkedHashSet<MettelAnnotatedExpression>>(r.branches.size());
 			final int BSIZE = r.branches.size();
 //System.out.println("BSIZE = "+BSIZE);
@@ -67,12 +67,12 @@ public class MettelGeneralTableauState implements MettelTableauState, Comparable
 		sets.put(this, new TreeSet<MettelAnnotatedExpression>());
 	}
 
-	public MettelGeneralTableauState(Set<MettelGeneralTableauRule> calculus, Set<MettelAnnotatedExpression> input) {
+	public MettelGeneralTableauState(Set<MettelTableauRule> calculus, Set<MettelAnnotatedExpression> input) {
 		this(calculus);
 		addAll(input);
 	}
 
-	public MettelGeneralTableauState(Set<MettelGeneralTableauRule> calculus,
+	public MettelGeneralTableauState(Set<MettelTableauRule> calculus,
 			MettelRuleChoiceStrategy ruleChoice, Set<MettelAnnotatedExpression> input) {
 		this(calculus,input);
 		this.ruleChoice = ruleChoice;

@@ -23,18 +23,10 @@ import java.util.Set;
  * @version $Revision$ $Date$
  *
  */
-public interface MettelTableauState {
+public interface MettelTableauManager {
 
-	int id();
+	boolean isSatisfiable(MettelAnnotatedExpression e);
+	boolean isSatisfiable(Set<MettelAnnotatedExpression> s);
 
-	boolean isSatisfiable();
-
-	boolean isComplete();
-
-	MettelTableauState[] expand();
-
-	boolean add(MettelAnnotatedExpression e);
-
-	boolean addAll(Set<MettelAnnotatedExpression> s);
-
+//	boolean isSatisfiable(InputStream stream);
 }
