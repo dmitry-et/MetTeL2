@@ -25,8 +25,8 @@ import java.util.Set;
  */
 public interface MettelTableauManager {
 
-	boolean isSatisfiable(MettelAnnotatedExpression e);
-	boolean isSatisfiable(Set<MettelAnnotatedExpression> s);
+	boolean isSatisfiable(MettelExpression e);
+	boolean isSatisfiable(Set<MettelExpression> s);
 
 //	boolean isSatisfiable(InputStream stream);
 }

@@ -50,7 +50,7 @@ public class MettelAbstractTableauManager implements MettelTableauManager {
 	 * @see mettel.core.MettelTableauManager#isSatisfiable(mettel.core.MettelAnnotatedExpression)
 	 */
 	@Override
-	public boolean isSatisfiable(MettelAnnotatedExpression e) {
+	public boolean isSatisfiable(MettelExpression e) {
 		Set<MettelAnnotatedExpression> set = new HashSet<MettelAnnotatedExpression>(1);
 		if(set.add(e)) return isSatisfiable(set);
 		throw new MettelCoreRuntimeException("Failed to create a set containing "+e);

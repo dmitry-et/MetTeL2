@@ -23,6 +23,6 @@ package mettel.core;
  */
 public interface MettelRuleChoiceStrategy {
 
-	MettelGeneralTableauRuleState select(MettelGeneralTableauRuleState[] ruleStates);
+	MettelTableauRuleState select(MettelTableauRuleState[] ruleStates);
 
 }

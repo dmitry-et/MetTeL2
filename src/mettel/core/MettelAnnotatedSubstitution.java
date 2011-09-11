@@ -16,12 +16,14 @@
  */
 package mettel.core;
 
+import mettel.util.MettelAnnotatedObject;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision: $ $Date: $
  *
  */
-public interface MettelAnnotatedSubstitution {
+public interface MettelAnnotatedSubstitution extends MettelAnnotatedObject<MettelTableauState>{
 
     public MettelSubstitution substitution();
 

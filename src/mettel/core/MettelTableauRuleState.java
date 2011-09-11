@@ -16,19 +16,40 @@
  */
 package mettel.core;
 
-import mettel.util.MettelAnnotatedObject;
+import java.util.Set;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision: $ $Date: $
+ * @version $Revision$ $Date$
  *
  */
-public interface MettelAnnotatedExpression extends Comparable<MettelAnnotatedExpression>, MettelAnnotatedObject<MettelTableauState>{
+public interface MettelTableauRuleState {
 
-    MettelExpression expression();
+//	public boolean isDead();
 
-    MettelTableauAnnotation annotation();
+	public boolean isTerminal();
 
-    MettelAnnotatedExpression substitute(MettelAnnotatedSubstitution s);
+//	public boolean evolve();
 
+//	public void addSubstitutions(Set<MettelAnnotatedSubstitution> ss0,
+//			MettelAnnotatedSubstitution s, int index);
+
+//	public void addSubstitutions();
+
+	/**
+	 * @param expressions
+	 */
+	public void addAll(Set<MettelAnnotatedExpression> expressions);
+
+	public void add(MettelAnnotatedExpression e);
+
+	/**
+	 * @return
+	 */
+	public Set<MettelAnnotatedExpression>[] apply();
+
+	/**
+	 * @return
+	 */
+	public boolean isApplicable();
 }

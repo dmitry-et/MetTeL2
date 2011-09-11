@@ -16,19 +16,21 @@
  */
 package mettel.core;
 
-import mettel.util.MettelAnnotatedObject;
+import java.util.TreeSet;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision: $ $Date: $
+ * @version $Revision$ $Date$
  *
  */
-public interface MettelAnnotatedExpression extends Comparable<MettelAnnotatedExpression>, MettelAnnotatedObject<MettelTableauState>{
+public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 
-    MettelExpression expression();
-
-    MettelTableauAnnotation annotation();
-
-    MettelAnnotatedExpression substitute(MettelAnnotatedSubstitution s);
+	/**
+	 *
+	 */
+	public MettelSimpleTableauManager() {
+		unexpandedStates = new TreeSet<MettelTableauState>();
+		state = new MettelGeneralTableauState();
+	}
 
 }

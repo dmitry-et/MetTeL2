@@ -16,19 +16,38 @@
  */
 package mettel.core;
 
-import mettel.util.MettelAnnotatedObject;
+import java.util.Set;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision: $ $Date: $
+ * @version $Revision$ $Date$
  *
  */
-public interface MettelAnnotatedExpression extends Comparable<MettelAnnotatedExpression>, MettelAnnotatedObject<MettelTableauState>{
+public interface MettelAnnotator {
 
-    MettelExpression expression();
+	MettelAnnotatedExpression substitute(MettelExpression e, MettelAnnotatedSubstitution s);
 
-    MettelTableauAnnotation annotation();
+	/**
+	 * @param s0
+	 * @param s1
+	 * @return
+	 */
+	MettelAnnotatedSubstitution merge(MettelAnnotatedSubstitution s0, MettelAnnotatedSubstitution s1);
 
-    MettelAnnotatedExpression substitute(MettelAnnotatedSubstitution s);
+	/**
+	 * @param mettelExpression
+	 * @param e
+	 * @return
+	 */
+	MettelAnnotatedSubstitution match(MettelExpression e, MettelAnnotatedExpression ae);
+
+	/**
+	 * @param set
+	 * @param mettelGeneralTableauState
+	 * @return
+	 */
+	Set<MettelAnnotatedExpression> reannotate(
+			Set<MettelAnnotatedExpression> set,
+			MettelTableauState state);
 
 }

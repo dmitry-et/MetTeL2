@@ -119,7 +119,7 @@ appendLine("System.out.print(\"Problem set from \"+fileName+\"...\");");
 
     	        		    appendLine("TreeSet<MettelAnnotatedExpression> annotated = new TreeSet<MettelAnnotatedExpression>();");
 
-    	        		    appendLine("MettelGeneralTableauState state = new MettelGeneralTableauState(calculus);");
+    	        		    appendLine("MettelSimpleTableauManager m = new MettelMettelTableauManager();");
     	        		    appendLine("MettelSimpleTableauAnnotation a = new MettelSimpleTableauAnnotation(state);");
     	        		    appendLine("a.annotate(annotated,list);");
     	        		    appendLine("state.addAll(annotated);");
