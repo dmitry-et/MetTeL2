@@ -23,7 +23,7 @@ import java.util.Set;
  * @version $Revision$ $Date$
  *
  */
-public interface MettelTableauState {
+public interface MettelTableauState extends Comparable<MettelTableauState>{
 
 	int id();
 

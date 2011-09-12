@@ -98,8 +98,8 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 
 		private MettelSetMapIterator(){
 			super();
-			if(ki.hasNext()){
-				kNext = ki.next();
+			while(ki.hasNext() && (next == null)){
+				kCurrent = (kNext = ki.next());
 				i = iterator(kNext);
 				if(i.hasNext()) next = i.next();
 			}
@@ -116,6 +116,7 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
                 throw new ConcurrentModificationException();
 
         	MettelAbstractSetMap.this.remove(kCurrent,current);
+//System.out.println(kCurrent);
         	current = null;
         	expectedModCount = modCount;
         }
@@ -130,13 +131,14 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
         	if(i.hasNext()){
         		next = i.next();
         	}else{
-        		if(ki.hasNext()){
+        		next = null;
+        		while(ki.hasNext() && (next == null)){
         			kCurrent = kNext;
         			kNext = ki.next();
         			i = iterator(kNext);
-    				if(i.hasNext()) next = i.next();
-        		}else{
-        			next = null;
+    				if(i.hasNext()){
+    					next = i.next();
+    				}
         		}
         	}
         	return current;

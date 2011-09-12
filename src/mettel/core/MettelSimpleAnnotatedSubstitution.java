@@ -41,5 +41,4 @@ public class MettelSimpleAnnotatedSubstitution extends
 		return this.annotation().state();
 	}
 
-
 }

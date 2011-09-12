@@ -50,6 +50,7 @@ public class MettelSimpleAnnotator implements MettelAnnotator {
 	@Override
 	public MettelAnnotatedSubstitution merge(MettelAnnotatedSubstitution s0,
 			MettelAnnotatedSubstitution s1) {
+//System.out.println("s0="+s0+", s1="+s1);
 		MettelSubstitution s = s0.substitution().merge(s1.substitution());
 		if(s == null) return null;
 		return new MettelSimpleAnnotatedSubstitution(s,s0.annotation().merge(s1.annotation()));
@@ -61,7 +62,9 @@ public class MettelSimpleAnnotator implements MettelAnnotator {
 	@Override
 	public MettelAnnotatedSubstitution match(MettelExpression e,
 			MettelAnnotatedExpression ae) {
-		return new MettelSimpleAnnotatedSubstitution(e.match(ae.expression()),ae.annotation());
+//System.out.println("e="+e+", ae="+ae);
+		final MettelSubstitution s = e.match(ae.expression());
+		return s == null? null: new MettelSimpleAnnotatedSubstitution(s,ae.annotation());
 	}
 
 	/* (non-Javadoc)

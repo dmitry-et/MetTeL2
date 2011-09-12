@@ -40,7 +40,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
     	private MettelExpression[] premises = null;
     	private Set<? extends Set<? extends MettelExpression>> branches = null;
 
-    	MettelAnnotatedSubstitution s = null;
+//    	MettelAnnotatedSubstitution s = null;
 
     	private MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution> newSubstitutions = null;
     	private MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution>[] oldSubstitutions = null;
@@ -141,7 +141,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
     		while(s0 == null){
     		    switch(processExpression()){
     		    	case EMPTY_QUEUE:
-System.out.println("Empty queue");
+//System.out.println("Empty queue");
     		    	    applicable = false;
 						return null;
     		    	default:
@@ -152,7 +152,7 @@ System.out.println("Empty queue");
 System.out.println("New substitution "+s0);
 
     		if(TERMINAL){
-System.out.println("Terminal state");
+//System.out.println("Terminal state");
     			terminal = true;
     			return null;
     		}else{
@@ -178,6 +178,7 @@ System.out.println("Terminal state");
 
     	private int processExpression(){
 
+    		MettelAnnotatedSubstitution s = null;
     		boolean doesNotMatch = false;
     		do{
     			doesNotMatch = false;
@@ -189,16 +190,19 @@ System.out.println("Terminal state");
 //	    		    MettelGeneralTableauRuleState st = states.get(e.annotation().state());
 //	    		    if(st != null) st.queue.remove(e);
 	    		}
-//System.out.println("Chosen expression: "+e);
+System.out.println("Chosen expression: "+e);
 
-	    		s = null;
+//	    		s = null;
 	    		while(s == null && index < PREMISES_NUMBER){
 	    			s = annotator.match(premises[index],e);
 //System.out.println("Match is "+(s != null) +": "+premises[index]+" vs "+e);
+//System.out.println("##Substitution is "+s+" index = "+index);
 	    			index++;
 	    		}
 
 	    		if(index == PREMISES_NUMBER){
+
+//System.out.println("#Substitution is "+s+" index = "+index);
 	    		    e = null;
 	    		    if(s == null){
 	    		    	doesNotMatch = true;
@@ -232,6 +236,7 @@ System.out.println("Terminal state");
 					}
 				}
 			}
+System.out.println("Merged: " + result);
 			return result;
     	}
 
@@ -270,6 +275,7 @@ System.out.println("Terminal state");
 			if(i.hasNext()){
 				MettelAnnotatedExpression s = i.next();
 				i.remove();
+//System.out.println(pool);
 				return s;
 			}else{
 				return null;

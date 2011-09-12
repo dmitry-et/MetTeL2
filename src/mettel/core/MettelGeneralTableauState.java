@@ -49,9 +49,9 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	public MettelGeneralTableauState(Collection<? extends MettelTableauRule> calculus,
 			Set<MettelAnnotatedExpression> set) {
 		super();
-		expressions.addAll(set);
 		ruleChoiceStrategy  = new MettelSimpleRuleChoiceStrategy();
 		initRuleStates(calculus);
+		expressions.addAll(set);
 	}
 
 	/**
@@ -62,9 +62,9 @@ public class MettelGeneralTableauState implements MettelTableauState {
 			Set<MettelAnnotatedExpression> set,
 			MettelRuleChoiceStrategy strategy) {
 		super();
-		expressions.addAll(set);
 		ruleChoiceStrategy  = strategy;
 		initRuleStates(calculus);
+		expressions.addAll(set);
 	}
 
 	/**
@@ -72,9 +72,9 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	 */
 	public MettelGeneralTableauState(MettelGeneralTableauState state){
 		super();
-		expressions.embed(state.expressions);// first to embed
 		ruleChoiceStrategy = state.ruleChoiceStrategy;
 		initRuleStates(state.ruleStates);
+		expressions.embed(state.expressions);// first to embed
 	}
 
 	/**
@@ -97,10 +97,10 @@ public class MettelGeneralTableauState implements MettelTableauState {
 			Set<MettelAnnotatedExpression> set,
 			MettelRuleChoiceStrategy strategy) {
 		super();
-		expressions.embed(state.expressions);// first to embed
-		expressions.addAll(set);
 		ruleChoiceStrategy  = strategy;
 		initRuleStates(state.ruleStates);
+		expressions.embed(state.expressions);// first to embed
+		expressions.addAll(set);
 	}
 
 
@@ -196,12 +196,14 @@ System.out.println("None of rules are applicable");
 			complete = true;
 			return null;
 		}
+System.out.println(rs);
+
 
 		Set<MettelAnnotatedExpression>[] branches = rs.apply();
 		if(rs.isTerminal()){
 System.out.println("Unsatisfiable: terminal rule at "+this);
 			satisfiable = false;
-//			return null;
+			return null;
 		}
 
 		if(branches == null) return null; //Cannot be applied or terminal
@@ -213,10 +215,10 @@ System.out.println("Unsatisfiable: terminal rule at "+this);
 			result[0] = this;
 		}else{
 			for(int i = 0; i < BRANCHES_NUMBER; i++){
-//System.out.println("Result["+i+"] = "+result[i]+ ' '+RESULT_SIZE);
 				MettelGeneralTableauState ts = new MettelGeneralTableauState(this);
 				ts.addAll(annotator.reannotate(branches[i],this));
 				result[i] = ts;
+System.out.println("branches["+i+"] = "+branches[i]);
 			}
 		}
 		return result;
@@ -227,7 +229,7 @@ System.out.println("Unsatisfiable: terminal rule at "+this);
 	 */
 	@Override
 	public boolean add(MettelAnnotatedExpression e) {
-RuleStates
+		for(MettelTableauRuleState rs:ruleStates) rs.add(e);
 		return expressions.add(e);
 	}
 
@@ -236,6 +238,7 @@ RuleStates
 	 */
 	@Override
 	public boolean addAll(Set<MettelAnnotatedExpression> s) {
+		for(MettelTableauRuleState rs:ruleStates) rs.addAll(s);
 		return expressions.addAll(s);
 	}
 

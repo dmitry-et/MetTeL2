@@ -21,7 +21,7 @@ package mettel.core;
  * @version $Revision$ $Date$
  *
  */
-public interface MettelSubstitution{
+public interface MettelSubstitution extends Comparable<MettelSubstitution>{
 
 //	boolean isCompatible(MettelSubstitution s);
 

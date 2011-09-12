@@ -30,12 +30,13 @@ public class MettelSubstitutionJavaInterfaceFile extends MettelJavaInterfaceFile
 	public MettelSubstitutionJavaInterfaceFile(String prefix,
 			MettelJavaPackage pack, String[] sorts) {
 		super(prefix+"Substitution", pack,
-				new String[]{"MettelSubstitution", prefix+"Replacement"});
+				new String[]{"MettelSubstitution"});//, prefix+"Replacement"});
 		this.prefix = prefix;
 		body(sorts);
 	}
 
 	protected void imports(){
+		headings.appendLine("import java.util.Map;");
 		headings.appendLine("import mettel.core.MettelSubstitution;");
 	}
 
@@ -44,6 +45,7 @@ public class MettelSubstitutionJavaInterfaceFile extends MettelJavaInterfaceFile
 			final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(sort);
 			appendLine(TYPE+" get"+MettelJavaNames.firstCharToUpperCase(sort)+'('+TYPE+"Variable e);");appendEOL();
 //			appendLine("Iterator<"+TYPE+"> "+sort+"Iterator();");appendEOL();
+			appendLine("Map<"+TYPE+"Variable, "+TYPE+"> "+sort+"Map();");appendEOL();
 			appendLine("boolean append("+TYPE+"Variable e0, "+TYPE+" e1);");appendEOL();
 		}
 	}

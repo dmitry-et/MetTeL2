@@ -97,6 +97,14 @@ public abstract class MettelAbstractAnnotatedSubstitution implements
 	}
 
 	public String toString(){
-		return s.toString()+'_'+a.toString();
+		return (s == null? "null" : s.toString())+'_' +(a == null? "null": a.toString());
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(MettelAnnotatedSubstitution s0) {
+		return this.s.compareTo(s0.substitution());
 	}
 }
