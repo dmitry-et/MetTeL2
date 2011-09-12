@@ -8,9 +8,9 @@ public class AllTests {
 		"ALCO.test.ALCOParserTest",
 	    "bool.test.BooleanParserTest",
 		//"ALCO.test.ALCOParserTest",
-//		"bool.test.BooleanTableauTest",
-		"S4.test.S4ParserTest",
-		"S4.test.S4TableauTest"
+		"bool.test.BooleanTableauTest",
+		"S4.test.S4ParserTest"//,
+//		"S4.test.S4TableauTest"
 	     };
 
 	public static void main(String[] args) {

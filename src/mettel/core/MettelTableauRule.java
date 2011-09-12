@@ -16,6 +16,8 @@
  */
 package mettel.core;
 
+import java.util.Set;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -24,5 +26,9 @@ package mettel.core;
 public interface MettelTableauRule {
 
 //	void apply(MettelTableauState state);
+
+	public MettelExpression[] premises();
+
+	public Set<? extends Set<? extends MettelExpression>> branches();
 
 }

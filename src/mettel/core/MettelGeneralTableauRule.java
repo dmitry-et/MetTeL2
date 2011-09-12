@@ -25,7 +25,7 @@ import java.util.Set;
  * @version $Revision$ $Date$
  *
  */
-public class MettelGeneralTableauRule {
+public class MettelGeneralTableauRule implements MettelTableauRule{
 
 	/**
 	 *
@@ -66,13 +66,13 @@ public class MettelGeneralTableauRule {
 		return r;
 	}*/
 
-	/*MettelExpression[] premises(){
+	public MettelExpression[] premises(){
 		return premises;
 	}
 
-	Set<? extends Set<MettelExpression>> branches(){
+	public Set<? extends Set<? extends MettelExpression>> branches(){
 		return branches;
-	}*/
+	}
 
 	private volatile String str = null;
     public String toString(){

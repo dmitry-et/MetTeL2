@@ -16,6 +16,7 @@
  */
 package mettel.core;
 
+import java.util.Collection;
 import java.util.TreeSet;
 
 /**
@@ -28,9 +29,9 @@ public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 	/**
 	 *
 	 */
-	public MettelSimpleTableauManager() {
+	public MettelSimpleTableauManager(Collection<? extends MettelTableauRule> calculus) {
 		unexpandedStates = new TreeSet<MettelTableauState>();
-		state = new MettelGeneralTableauState();
+		state = new MettelGeneralTableauState(calculus);
 	}
 
 }

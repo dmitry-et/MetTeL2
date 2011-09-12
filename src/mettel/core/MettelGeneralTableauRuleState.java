@@ -55,11 +55,11 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
     	private MettelGeneralTableauRuleState(){ PREMISES_NUMBER = 0; BRANCHES_NUMBER = 0; TERMINAL = false;}
 
     	@SuppressWarnings("unchecked")
-		MettelGeneralTableauRuleState(MettelGeneralTableauRule rule){
+		MettelGeneralTableauRuleState(MettelTableauRule rule){
     		super();
 
-    		this.premises = rule.premises;
-    		this.branches = rule.branches;
+    		this.premises = rule.premises();
+    		this.branches = rule.branches();
     		this.pool = new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedExpression>();
 
     		BRANCHES_NUMBER = branches.size();
@@ -141,7 +141,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
     		while(s0 == null){
     		    switch(processExpression()){
     		    	case EMPTY_QUEUE:
-//System.out.println("Empty queue");
+System.out.println("Empty queue");
     		    	    applicable = false;
 						return null;
     		    	default:
@@ -149,9 +149,10 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
     		    	    s0 = newSubstitutionsPoll();
     		    }
     		}
-//System.out.println("New substitution "+s0);
+System.out.println("New substitution "+s0);
 
     		if(TERMINAL){
+System.out.println("Terminal state");
     			terminal = true;
     			return null;
     		}else{

@@ -16,6 +16,7 @@
  */
 package mettel.core;
 
+import java.util.Collection;
 import java.util.Set;
 
 import mettel.util.MettelTreeSetLinkedHashMap;
@@ -36,31 +37,34 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	private final MettelTreeSetLinkedHashMap<MettelTableauState, MettelAnnotatedExpression> expressions =
 		new MettelTreeSetLinkedHashMap<MettelTableauState, MettelAnnotatedExpression>();
 
-	public MettelGeneralTableauState() {
+	public MettelGeneralTableauState(Collection<? extends MettelTableauRule> calculus) {
 		super();
 		ruleChoiceStrategy  = new MettelSimpleRuleChoiceStrategy();
+		initRuleStates(calculus);
 	}
 
 	/**
 	 * @param set
 	 */
-	public MettelGeneralTableauState(
+	public MettelGeneralTableauState(Collection<? extends MettelTableauRule> calculus,
 			Set<MettelAnnotatedExpression> set) {
 		super();
 		expressions.addAll(set);
 		ruleChoiceStrategy  = new MettelSimpleRuleChoiceStrategy();
+		initRuleStates(calculus);
 	}
 
 	/**
 	 * @param set
 	 * @param strategy
 	 */
-	public MettelGeneralTableauState(
+	public MettelGeneralTableauState(Collection<? extends MettelTableauRule> calculus,
 			Set<MettelAnnotatedExpression> set,
 			MettelRuleChoiceStrategy strategy) {
 		super();
 		expressions.addAll(set);
 		ruleChoiceStrategy  = strategy;
+		initRuleStates(calculus);
 	}
 
 	/**
@@ -70,6 +74,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		super();
 		expressions.embed(state.expressions);// first to embed
 		ruleChoiceStrategy = state.ruleChoiceStrategy;
+		initRuleStates(state.ruleStates);
 	}
 
 	/**
@@ -95,6 +100,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		expressions.embed(state.expressions);// first to embed
 		expressions.addAll(set);
 		ruleChoiceStrategy  = strategy;
+		initRuleStates(state.ruleStates);
 	}
 
 
@@ -139,6 +145,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 				MettelTableauRuleState[] ruleStates) {
 			final int LENGTH = ruleStates.length;
 			index++;
+			if(index >= LENGTH) index = 0;
 			int i = index;
 			do{
 				final MettelTableauRuleState rs = ruleStates[i];
@@ -155,16 +162,26 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	}
 
 
-	private MettelTableauRuleState[] ruleStates = null;
-	
-	private void initRuleStates(MettelTableauRuleState[] rs){
+	private MettelGeneralTableauRuleState[] ruleStates = null;
+
+	private void initRuleStates(Collection<? extends MettelTableauRule> c){
+		final int LENGTH = c.size();
+		ruleStates = new MettelGeneralTableauRuleState[LENGTH];
+		int i = 0;
+		for(MettelTableauRule r:c){
+			ruleStates[i] = new MettelGeneralTableauRuleState(r);
+			i++;
+		}
+	}
+
+	private void initRuleStates(MettelGeneralTableauRuleState[] rs){
 		final int LENGTH = rs.length;
-		ruleStates = new MettelTableauRuleState[LENGTH]; 
+		ruleStates = new MettelGeneralTableauRuleState[LENGTH];
 		for(int i = 0; i< LENGTH; i++){
 			ruleStates[i] = new MettelGeneralTableauRuleState(rs[i]);
 		}
 	}
-	
+
 	private MettelRuleChoiceStrategy ruleChoiceStrategy = null;
 
 	/* (non-Javadoc)
@@ -175,16 +192,19 @@ public class MettelGeneralTableauState implements MettelTableauState {
 
 		MettelTableauRuleState rs = ruleChoiceStrategy.select(ruleStates);
 		if(rs == null){
+System.out.println("None of rules are applicable");
 			complete = true;
 			return null;
 		}
 
 		Set<MettelAnnotatedExpression>[] branches = rs.apply();
 		if(rs.isTerminal()){
-//System.out.println("Unsatisfiable: terminal rule at "+this);
+System.out.println("Unsatisfiable: terminal rule at "+this);
 			satisfiable = false;
-			return null;
+//			return null;
 		}
+
+		if(branches == null) return null; //Cannot be applied or terminal
 
 		final int BRANCHES_NUMBER = branches.length;
 		MettelTableauState[] result = new MettelGeneralTableauState[BRANCHES_NUMBER];
@@ -207,6 +227,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	 */
 	@Override
 	public boolean add(MettelAnnotatedExpression e) {
+RuleStates
 		return expressions.add(e);
 	}
 

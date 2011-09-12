@@ -27,8 +27,8 @@ import java.util.Set;
  *
  */
 public class MettelAbstractTableauManager implements MettelTableauManager {
-	
-	protected MettelAnnotator annotator = null;
+
+	protected MettelAnnotator annotator = MettelSimpleAnnotator.ANNOTATOR;
 
 	protected Set<MettelTableauState> unexpandedStates = null;
 
@@ -66,7 +66,7 @@ public class MettelAbstractTableauManager implements MettelTableauManager {
 	 * @see mettel.core.MettelTableauManager#isSatisfiable(java.util.Set)
 	 */
 	@Override
-	public boolean isSatisfiable(Collection<MettelExpression> input) {
+	public boolean isSatisfiable(Collection<? extends MettelExpression> input) {
 		Set<MettelAnnotatedExpression> set = new LinkedHashSet<MettelAnnotatedExpression>(1);
 		for(MettelExpression e:input){
 			if(!set.add(annotator.annotate(e,state)))
@@ -74,7 +74,7 @@ public class MettelAbstractTableauManager implements MettelTableauManager {
 		}
 		return isSatisfiable(set);
 	}
-	
+
 	boolean isSatisfiable(Set<MettelAnnotatedExpression> input) {
 
 		if(strategy == null){
@@ -83,15 +83,19 @@ public class MettelAbstractTableauManager implements MettelTableauManager {
 
 		if(state.addAll(input)){
 
+			unexpandedStates.add(state);
+
 			do{
 				final MettelTableauState[] children = state.expand();
 				if(state.isSatisfiable()){
 					if(state.isComplete()) return true;
-					final int LENGTH = children.length - 1;
-					if(LENGTH > 0){
-						unexpandedStates.remove(state);
-						for(int i = LENGTH; i >= 0; i--){
-							unexpandedStates.add(children[i]);
+					if(children != null){//Expanded succesfully (not terminal and rule was applicable)
+						final int LENGTH = children.length - 1;
+						if(LENGTH > 0){
+							unexpandedStates.remove(state);
+							for(int i = LENGTH; i >= 0; i--){
+								unexpandedStates.add(children[i]);
+							}
 						}
 					}
 				}else{
