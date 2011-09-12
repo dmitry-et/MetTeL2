@@ -16,7 +16,8 @@
  */
 package mettel.core;
 
-import java.util.HashSet;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -26,6 +27,8 @@ import java.util.Set;
  *
  */
 public class MettelAbstractTableauManager implements MettelTableauManager {
+	
+	protected MettelAnnotator annotator = null;
 
 	protected Set<MettelTableauState> unexpandedStates = null;
 
@@ -51,8 +54,8 @@ public class MettelAbstractTableauManager implements MettelTableauManager {
 	 */
 	@Override
 	public boolean isSatisfiable(MettelExpression e) {
-		Set<MettelAnnotatedExpression> set = new HashSet<MettelAnnotatedExpression>(1);
-		if(set.add(e)) return isSatisfiable(set);
+		Set<MettelAnnotatedExpression> set = new LinkedHashSet<MettelAnnotatedExpression>(1);
+		if(set.add(annotator.annotate(e,state))) return isSatisfiable(set);
 		throw new MettelCoreRuntimeException("Failed to create a set containing "+e);
 	}
 
@@ -63,7 +66,16 @@ public class MettelAbstractTableauManager implements MettelTableauManager {
 	 * @see mettel.core.MettelTableauManager#isSatisfiable(java.util.Set)
 	 */
 	@Override
-	public boolean isSatisfiable(Set<MettelAnnotatedExpression> input) {
+	public boolean isSatisfiable(Collection<MettelExpression> input) {
+		Set<MettelAnnotatedExpression> set = new LinkedHashSet<MettelAnnotatedExpression>(1);
+		for(MettelExpression e:input){
+			if(!set.add(annotator.annotate(e,state)))
+				throw new MettelCoreRuntimeException("Failed to create a set containing "+e);
+		}
+		return isSatisfiable(set);
+	}
+	
+	boolean isSatisfiable(Set<MettelAnnotatedExpression> input) {
 
 		if(strategy == null){
 			strategy = new MettelSimpleBranchChoiceStrategy();

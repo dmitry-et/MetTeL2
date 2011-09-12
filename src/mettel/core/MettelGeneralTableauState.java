@@ -65,7 +65,6 @@ public class MettelGeneralTableauState implements MettelTableauState {
 
 	/**
 	 * @param state
-	 * @param set
 	 */
 	public MettelGeneralTableauState(MettelGeneralTableauState state){
 		super();
@@ -157,6 +156,15 @@ public class MettelGeneralTableauState implements MettelTableauState {
 
 
 	private MettelTableauRuleState[] ruleStates = null;
+	
+	private void initRuleStates(MettelTableauRuleState[] rs){
+		final int LENGTH = rs.length;
+		ruleStates = new MettelTableauRuleState[LENGTH]; 
+		for(int i = 0; i< LENGTH; i++){
+			ruleStates[i] = new MettelGeneralTableauRuleState(rs[i]);
+		}
+	}
+	
 	private MettelRuleChoiceStrategy ruleChoiceStrategy = null;
 
 	/* (non-Javadoc)

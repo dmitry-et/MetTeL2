@@ -50,4 +50,12 @@ public interface MettelAnnotator {
 			Set<MettelAnnotatedExpression> set,
 			MettelTableauState state);
 
+	/**
+	 * @param e
+	 * @param state
+	 * @return
+	 */
+	MettelAnnotatedExpression annotate(MettelExpression e,
+			MettelTableauState state);
+
 }

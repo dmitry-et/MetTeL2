@@ -119,12 +119,12 @@ appendLine("System.out.print(\"Problem set from \"+fileName+\"...\");");
 
     	        		    appendLine("TreeSet<MettelAnnotatedExpression> annotated = new TreeSet<MettelAnnotatedExpression>();");
 
-    	        		    appendLine("MettelSimpleTableauManager m = new MettelMettelTableauManager();");
-    	        		    appendLine("MettelSimpleTableauAnnotation a = new MettelSimpleTableauAnnotation(state);");
-    	        		    appendLine("a.annotate(annotated,list);");
-    	        		    appendLine("state.addAll(annotated);");
-
-    	        		    appendLine("assertEquals(result,state.isSatisfiable());");
+    	        		    appendLine("MettelSimpleTableauManager m = new MettelSimpleTableauManager();");
+//    	        		    appendLine("MettelSimpleTableauAnnotation a = new MettelSimpleTableauAnnotation(state);");
+//    	        		    appendLine("a.annotate(annotated,list);");
+//    	        		    appendLine("state.addAll(annotated);");
+//
+    	        		    appendLine("assertEquals(result,m.isSatisfiable(list));");
 appendLine("System.out.print(\"OK\");");
 						decrementIndentLevel();
     	        		appendLine('}');
