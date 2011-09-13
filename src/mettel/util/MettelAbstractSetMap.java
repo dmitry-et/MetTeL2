@@ -62,14 +62,26 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 	@Override
 	public boolean contains(Object o) {
 		if(o == null) return false;
-//		if(!(o instanceof MettelAnnotatedObject)) return false;
-//		try{
-//			@SuppressWarnings("unchecked")
-//			final Key key = ((MettelAnnotatedObject<Key>)o).key();//class cast exception can be thown!
-			return contains(((MettelAnnotatedObject<?>)o).key(),o);
-//		}catch(ClassCastException e){
-//			return false;
+
+		@SuppressWarnings("unchecked")
+		final MettelAnnotatedObject<Key> e = (MettelAnnotatedObject<Key>)o;
+
+		final Iterator<Key> ki = keySet().iterator();
+		while(ki.hasNext()){
+			final Key key = ki.next();
+			if(contains(key,e.create(key,e.object()))) return true;
+		}
+
+		return false;
+
+//		@SuppressWarnings("unchecked")
+//		final Object obj = (o instanceof MettelAnnotatedObject<?>)? ((MettelAnnotatedObject<Key>)o).object(): o;
+//		for(Key key:keySet()){
+//			if(contains(key,obj)) return true;
 //		}
+//		return false;
+
+//			return contains(((MettelAnnotatedObject<?>)o).key(),o);
 	}
 
 	/* (non-Javadoc)
@@ -154,6 +166,8 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 	@Override
 	public boolean add(E e) {
 		if(e == null) return false;
+		//final Key key = e.key();
+		if(contains(e)) return false;
 		return add(e.key(),e);
 	}
 

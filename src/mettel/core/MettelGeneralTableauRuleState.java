@@ -149,7 +149,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
     		    	    s0 = newSubstitutionsPoll();
     		    }
     		}
-System.out.println("New substitution "+s0);
+//System.out.println("New substitution "+s0);
 
     		if(TERMINAL){
 //System.out.println("Terminal state");
@@ -190,7 +190,7 @@ System.out.println("New substitution "+s0);
 //	    		    MettelGeneralTableauRuleState st = states.get(e.annotation().state());
 //	    		    if(st != null) st.queue.remove(e);
 	    		}
-System.out.println("Chosen expression: "+e);
+//System.out.println("Chosen expression: "+e);
 
 //	    		s = null;
 	    		while(s == null && index < PREMISES_NUMBER){
@@ -236,7 +236,7 @@ System.out.println("Chosen expression: "+e);
 					}
 				}
 			}
-System.out.println("Merged: " + result);
+//System.out.println("Merged: " + result);
 			return result;
     	}
 

@@ -25,4 +25,8 @@ public interface MettelAnnotatedObject<Key> {
 
 	Key key();
 
+	Object object();
+
+	Object create(Key key, Object o);
+
 }

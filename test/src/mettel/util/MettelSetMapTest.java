@@ -11,7 +11,23 @@ public class MettelSetMapTest extends TestCase{
 
 	private class Entry implements MettelAnnotatedObject<String>, Comparable<Entry>{
 
-		private int e = ++counter;
+		private final int e;// = ++counter;
+
+		/**
+		 * @param e
+		 */
+		public Entry(int e) {
+			super();
+			this.e = e;
+		}
+
+		/**
+		 *
+		 */
+		public Entry() {
+			super();
+			e = ++counter;
+		}
 
 		/* (non-Javadoc)
 		 * @see mettel.util.MettelAnnotatedObject#key()
@@ -31,6 +47,23 @@ public class MettelSetMapTest extends TestCase{
 		@Override
 		public int compareTo(Entry o) {
 			return e - o.e;
+		}
+
+		/* (non-Javadoc)
+		 * @see mettel.util.MettelAnnotatedObject#object()
+		 */
+		@Override
+		public Object object() {
+			return this;
+		}
+
+		/* (non-Javadoc)
+		 * @see mettel.util.MettelAnnotatedObject#create(java.lang.Object, java.lang.Object)
+		 */
+		@Override
+		public Object create(String key, Object o) {
+			final Entry e = (Entry)o;
+			return new Entry(e.e);
 		}
 
 	}

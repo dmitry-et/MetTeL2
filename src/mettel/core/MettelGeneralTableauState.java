@@ -209,16 +209,16 @@ System.out.println("Expanding "+this+" which has the expression pool "+expressio
 
 		MettelTableauRuleState rs = ruleChoiceStrategy.select(ruleStates);
 		if(rs == null){
-System.out.println("None of rules are applicable");
+//System.out.println("None of rules are applicable");
 			complete = true;
 			return null;
 		}
-System.out.println(rs);
+//System.out.println(rs);
 
 
 		Set<MettelAnnotatedExpression>[] branches = rs.apply();
 		if(rs.isTerminal()){
-System.out.println("Unsatisfiable: terminal rule at "+this);
+//System.out.println("Unsatisfiable: terminal rule at "+this);
 			satisfiable = false;
 			return null;
 		}
@@ -237,7 +237,7 @@ System.out.println("Unsatisfiable: terminal rule at "+this);
 				ts.addAll(annotator.reannotate(branches[i],this));
 				result[i] = ts;
 				children.add(ts);
-System.out.println("branches["+i+"] = "+branches[i]);
+//System.out.println("branches["+i+"] = "+branches[i]);
 			}
 		}
 		return result;
