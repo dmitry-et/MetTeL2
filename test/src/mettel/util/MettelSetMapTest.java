@@ -45,19 +45,43 @@ public class MettelSetMapTest extends TestCase{
 			set0.add(e);
 		}
 
-/*		Iterator<Entry> i = set.iterator();
+		assertEquals(set.size(),set0.size());
+
+		Iterator<Entry> i;
+
+/*		i = set.iterator();
 		while(i.hasNext()){
 			System.out.println(i.next());
 		}
 */
 		assertEquals(set,set0);
 
-		Iterator<Entry> i = set.iterator();
+		i = set.iterator();
 		set0.remove(i.next());i.remove();
 		set0.remove(i.next());i.remove();
 		set0.remove(i.next());i.remove();
 
+		assertEquals(set.size(),set0.size());
+
+/*		i = set.iterator();
+		while(i.hasNext()){
+			System.out.println(i.next());
+		}
+*/
 		assertEquals(set,set0);
 
+		i = set0.iterator();
+		set.remove(i.next());i.remove();
+		set.remove(i.next());i.remove();
+		set.remove(i.next());i.remove();
+
+		assertEquals(set.size(),set0.size());
+
+		/*		i = set.iterator();
+				while(i.hasNext()){
+					System.out.println(i.next());
+				}
+		*/
+		assertEquals(set,set0);
     }
 }

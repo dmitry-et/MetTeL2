@@ -18,7 +18,7 @@ package mettel.util;
 
 import java.util.AbstractSet;
 import java.util.Collection;
-import java.util.ConcurrentModificationException;
+//import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -37,9 +37,9 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 	/**
      * The number of structural modifications.
      */
-    private transient int modCount = 0;
+//    private transient int modCount = 0;
 
-	private int size = 0;
+	private transient int size = 0;
 	/* (non-Javadoc)
 	 * @see java.util.Set#size()
 	 */
@@ -83,65 +83,37 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 		Iterator<Key> ki = keySet().iterator();
 		Iterator<E> i = null;
 
-		Key kNext = null;
-		Key kCurrent = null;
-
-		E next = null;
-		E current = null;
-
-		/**
-        * The modCount value that the iterator believes that the backing
-        * List should have.  If this expectation is violated, the iterator
-        * has detected concurrent modification.
-        */
-       int expectedModCount = modCount;
-
 		private MettelSetMapIterator(){
 			super();
-			while(ki.hasNext() && (next == null)){
-				kCurrent = (kNext = ki.next());
-				i = iterator(kNext);
-				if(i.hasNext()) next = i.next();
-			}
+			if(ki.hasNext()) i = iterator(ki.next());
 		}
 
         public boolean hasNext() {
-        	return next != null;
+        	if(i == null) return false;
+        	if(i.hasNext()) return true;
+        	while(ki.hasNext()){
+        		i = iterator(ki.next());
+        		if(i.hasNext()) return true;
+        	}
+        	return false;
         }
 
         public void remove() {
-        	if(current == null)
-                throw new IllegalStateException();
-        	if(modCount != expectedModCount)
-                throw new ConcurrentModificationException();
-
-        	MettelAbstractSetMap.this.remove(kCurrent,current);
-//System.out.println(kCurrent);
-        	current = null;
-        	expectedModCount = modCount;
+        	if(i == null)
+        		throw new IllegalStateException();
+        	i.remove();
+        	size--;
         }
 
         public E next() {
-        	if(modCount != expectedModCount)
-                throw new ConcurrentModificationException();
-        	if(next == null)
-                throw new NoSuchElementException();
-
-        	current = next;
-        	if(i.hasNext()){
-        		next = i.next();
-        	}else{
-        		next = null;
-        		while(ki.hasNext() && (next == null)){
-        			kCurrent = kNext;
-        			kNext = ki.next();
-        			i = iterator(kNext);
-    				if(i.hasNext()){
-    					next = i.next();
-    				}
-        		}
+        	if(i == null)
+        		throw new NoSuchElementException();
+        	if(i.hasNext()) return i.next();
+        	while(ki.hasNext()){
+        		i = iterator(ki.next());
+        		if(i.hasNext()) return i.next();
         	}
-        	return current;
+        	throw new NoSuchElementException();
         }
     }
 
@@ -342,7 +314,7 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 		}
 		if(set.add(e)){
 			size++;
-			modCount++;
+//			modCount++;
 			return true;
 		}else return false;
 	}
@@ -356,7 +328,7 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 		if(set == null) return false;
 		if(set.remove(o)){
 			size--;
-			modCount++;
+//			modCount++;
 			return true;
 		}else return false;
 	}
@@ -385,7 +357,7 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 		final int SIZE0 = set.size();
 		if(set.addAll(c)){
 			size += (set.size()-SIZE0);
-			modCount++;
+//			modCount++;
 			return true;
 		}else return false;
 	}
@@ -400,7 +372,7 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 		final int SIZE0 = set.size();
 		if(set.retainAll(c)){
 			size -= (SIZE0 - set.size());
-			modCount++;
+//			modCount++;
 			return true;
 		}else return false;
 	}
@@ -415,7 +387,7 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 		final int SIZE0 = set.size();
 		if(set.removeAll(c)){
 			size -= (SIZE0 - set.size());
-			modCount++;
+//			modCount++;
 			return true;
 		}else return false;
 	}
@@ -430,7 +402,7 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 			final int SIZE0 = set.size();
 			set.clear();
 			size -= (SIZE0 - set.size());
-			modCount++;
+//			modCount++;
 		}
 	}
 
