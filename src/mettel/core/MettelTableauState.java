@@ -37,4 +37,6 @@ public interface MettelTableauState extends Comparable<MettelTableauState>{
 
 	boolean addAll(Set<MettelAnnotatedExpression> s);
 
+	Set<MettelTableauState> children();
+
 }

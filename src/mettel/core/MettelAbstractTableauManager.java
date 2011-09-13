@@ -86,6 +86,7 @@ public class MettelAbstractTableauManager implements MettelTableauManager {
 			unexpandedStates.add(state);
 
 			do{
+System.out.println("Expanding "+state);
 				final MettelTableauState[] children = state.expand();
 				if(state.isSatisfiable()){
 					if(state.isComplete()) return true;
@@ -99,6 +100,7 @@ public class MettelAbstractTableauManager implements MettelTableauManager {
 						}
 					}
 				}else{
+System.out.println("Removing "+state);
 					unexpandedStates.remove(state);
 				}
 				state = strategy.chooseTableauState(unexpandedStates);
@@ -110,4 +112,17 @@ public class MettelAbstractTableauManager implements MettelTableauManager {
 		throw new MettelCoreRuntimeException("Failed to create a state containing "+input);
 	}
 
+
+	boolean remove(MettelTableauState state){
+		if(unexpandedStates.remove(state)) return true;
+
+		final Set<MettelTableauState> children = state.children();
+		if(children == null) return false;
+
+		boolean result = false;
+		for(MettelTableauState child:children){
+			result |= remove(child);
+		}
+		return result;
+	}
 }
