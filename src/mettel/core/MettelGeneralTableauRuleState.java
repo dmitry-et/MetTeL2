@@ -109,8 +109,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
     	@SuppressWarnings("unused")
     	private MettelGeneralTableauRuleState(){ PREMISES_NUMBER = 0; BRANCHES_NUMBER = 0; TERMINAL = false;}
 
-    	@SuppressWarnings("unchecked")
-		MettelGeneralTableauRuleState(/*MettelTableauState tstate,*/ MettelTableauRule rule){
+    	MettelGeneralTableauRuleState(/*MettelTableauState tstate,*/ MettelTableauRule rule){
     		super();
     		//this.tstate = tstate;
 
@@ -125,8 +124,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 //    		states = new LinkedHashMap<MettelGeneralTableauState,MettelGeneralTableauRuleState>();
     	}
 
-    	@SuppressWarnings("unchecked")
-		MettelGeneralTableauRuleState(/*MettelTableauState tstate,*/ MettelGeneralTableauRuleState state){
+    	MettelGeneralTableauRuleState(/*MettelTableauState tstate,*/ MettelGeneralTableauRuleState state){
     		super();
     		//this.tstate = tstate;
 

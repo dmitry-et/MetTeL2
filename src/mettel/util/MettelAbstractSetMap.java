@@ -349,6 +349,9 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 		if(set == null) return false;
 		if(set.remove(o)){
 			size--;
+			if(set.isEmpty()){
+				map.remove(key);
+			}
 //			modCount++;
 			return true;
 		}else return false;

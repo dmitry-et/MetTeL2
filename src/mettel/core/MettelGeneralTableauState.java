@@ -29,9 +29,7 @@ import mettel.util.MettelTreeSetLinkedHashMap;
  */
 public class MettelGeneralTableauState implements MettelTableauState {
 
-	private MettelTableauManager manager = null;
-
-	private MettelTableauState parent = null;
+	//private MettelTableauManager manager = null;
 
 	private LinkedHashSet<MettelTableauState> children = null;
 
@@ -41,12 +39,12 @@ public class MettelGeneralTableauState implements MettelTableauState {
 
 	private final int ID = idCounter++;
 
-	private final MettelTreeSetLinkedHashMap<MettelTableauState, MettelAnnotatedExpression> expressions =
+	private transient final MettelTreeSetLinkedHashMap<MettelTableauState, MettelAnnotatedExpression> expressions =
 		new MettelTreeSetLinkedHashMap<MettelTableauState, MettelAnnotatedExpression>();
 
-	public MettelGeneralTableauState(MettelTableauManager manager, Collection<? extends MettelTableauRule> calculus) {
+	public MettelGeneralTableauState(/*MettelTableauManager manager,*/ Collection<? extends MettelTableauRule> calculus) {
 		super();
-		this.manager = manager;
+//		this.manager = manager;
 		ruleChoiceStrategy  = new MettelSimpleRuleChoiceStrategy();
 		initRuleStates(calculus);
 	}
@@ -54,10 +52,10 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	/**
 	 * @param set
 	 */
-	public MettelGeneralTableauState(MettelTableauManager manager, Collection<? extends MettelTableauRule> calculus,
+	public MettelGeneralTableauState(/*MettelTableauManager manager,*/ Collection<? extends MettelTableauRule> calculus,
 			Set<MettelAnnotatedExpression> set) {
 		super();
-		this.manager = manager;
+//		this.manager = manager;
 		ruleChoiceStrategy  = new MettelSimpleRuleChoiceStrategy();
 		initRuleStates(calculus);
 		expressions.addAll(set);
@@ -67,12 +65,12 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	 * @param set
 	 * @param strategy
 	 */
-	public MettelGeneralTableauState(MettelTableauManager manager,
+	public MettelGeneralTableauState(/*MettelTableauManager manager,*/
 			Collection<? extends MettelTableauRule> calculus,
 			Set<MettelAnnotatedExpression> set,
 			MettelRuleChoiceStrategy strategy) {
 		super();
-		this.manager = manager;
+//		this.manager = manager;
 		ruleChoiceStrategy  = strategy;
 		initRuleStates(calculus);
 		expressions.addAll(set);
@@ -83,8 +81,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	 */
 	public MettelGeneralTableauState(MettelGeneralTableauState state){
 		super();
-		this.manager = state.manager;
-		this.parent = state;
+//		this.manager = state.manager;
 		ruleChoiceStrategy = state.ruleChoiceStrategy;
 		initRuleStates(state.ruleStates);
 		expressions.embed(state.expressions);// first to embed
@@ -110,8 +107,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 			Set<MettelAnnotatedExpression> set,
 			MettelRuleChoiceStrategy strategy) {
 		super();
-		this.manager = state.manager;
-		this.parent = state;
+//		this.manager = state.manager;
 		ruleChoiceStrategy  = strategy;
 		initRuleStates(state.ruleStates);
 		expressions.embed(state.expressions);// first to embed
@@ -128,7 +124,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		return ID;
 	}
 
-	private boolean satisfiable = true;
+	private transient boolean satisfiable = true;
 
 	/* (non-Javadoc)
 	 * @see mettel.core.MettelTableauState#isSatisfiable()
@@ -138,7 +134,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		return satisfiable;
 	}
 
-	private boolean complete = false;
+	private transient boolean complete = false;
 
 	/* (non-Javadoc)
 	 * @see mettel.core.MettelTableauState#isComplete()
@@ -148,7 +144,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		return complete;
 	}
 
-	private class MettelSimpleRuleChoiceStrategy implements MettelRuleChoiceStrategy{
+	private final class MettelSimpleRuleChoiceStrategy implements MettelRuleChoiceStrategy{
 
 		private int index = -1;
 
@@ -156,7 +152,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		 * @see mettel.core.MettelRuleChoiceStrategy#select(mettel.core.MettelGeneralTableauRuleState[])
 		 */
 		@Override
-		public MettelTableauRuleState select(
+		public final MettelTableauRuleState select(
 				MettelTableauRuleState[] ruleStates) {
 			final int LENGTH = ruleStates.length;
 			index++;
@@ -177,7 +173,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	}
 
 
-	private MettelGeneralTableauRuleState[] ruleStates = null;
+	private transient MettelGeneralTableauRuleState[] ruleStates = null;
 
 	private void initRuleStates(Collection<? extends MettelTableauRule> c){
 		final int LENGTH = c.size();
@@ -239,7 +235,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 				children.add(ts);
 //System.out.println("branches["+i+"] = "+branches[i]);
 			}
-			for(MettelTableauRuleState r:ruleStates) r.setApplicable(true);
+			//for(MettelTableauRuleState r:ruleStates) r.setApplicable(true);
 		}
 //		return result;
 	}
