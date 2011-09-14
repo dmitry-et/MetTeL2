@@ -46,9 +46,12 @@ public class MettelAbstractTableauManager implements MettelTableauManager {
 			Iterator<MettelTableauState> i = s.iterator();
 			while(i.hasNext()){
 				MettelTableauState state = i.next();
+//System.out.println("Looking at state "+state);
 				if(state.isSatisfiable()) return state;
+//System.out.println("The state "+state+" is unsatisfiable");
 				i.remove();
 			}
+//System.out.println("No states to select from");
 			return null;
 		}
 
@@ -91,8 +94,8 @@ public class MettelAbstractTableauManager implements MettelTableauManager {
 			unexpandedStates.add(state);
 
 			do{
-System.out.println("Unexpanded states:"+unexpandedStates);
-System.out.println("Expanding "+state);
+//System.out.println("Unexpanded states:"+unexpandedStates);
+//System.out.println("Expanding "+state);
 				//final MettelTableauState[] children =
 				state.expand();
 				if(state.isSatisfiable()){
@@ -102,7 +105,7 @@ System.out.println("Expanding "+state);
 					//	throw new MettelCoreRuntimeException("Failed to add children of "+state);
 
 				}else{
-System.out.println("Removing "+state);
+//System.out.println("Removing "+state);
 					unexpandedStates.remove(state);
 				}
 				state = strategy.chooseTableauState(unexpandedStates);
@@ -129,9 +132,12 @@ System.out.println("Removing "+state);
 	}
 
 	void addChildren(MettelTableauState state){
+//System.out.println("Unexpanded states:"+unexpandedStates);
 		final Set<MettelTableauState> children = state.children();
+//System.out.println("Children:"+children);
 		if(children == null) return;
 		//Expanded succesfully (not terminal and rule was applicable)
+//System.out.println("Removing state "+state);
 		unexpandedStates.remove(state);
 		for(MettelTableauState child:children){
 			unexpandedStates.add(child);

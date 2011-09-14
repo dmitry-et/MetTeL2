@@ -160,7 +160,7 @@ TEST_OPTIONS :=
 #$(EXAMPLES_DIR)/substitutions.in \
 #$(EXAMPLES_DIR)/substitutions.out \
 #$(EXAMPLES_DIR)/substitutions.err
-JAVA_TEST_OPTIONS := -Xfuture -Xbatch -Xms256M -Xmx400M 
+JAVA_TEST_OPTIONS := -Xfuture -Xbatch -Xms256M -Xmx1024M 
 #-Xprof -agentlib:hprof=heap=sites
 #-Xnoclassgc
 

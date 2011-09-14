@@ -19,6 +19,7 @@ package mettel.core;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import mettel.util.MettelTreeSetLinkedHashMap;
 
@@ -29,13 +30,13 @@ import mettel.util.MettelTreeSetLinkedHashMap;
  */
 public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 
-		private MettelTableauState tstate = null;
+//		private MettelTableauState tstate = null;
 
 		private MettelAnnotator annotator = MettelSimpleAnnotator.ANNOTATOR;
 
 //		private LinkedHashMap<MettelGeneralTableauState,MettelGeneralTableauRuleState> states = null;
 
-    	private MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedExpression> pool = null;
+    	private Set<MettelAnnotatedExpression> pool = null;
     	private MettelAnnotatedExpression e = null;
 
     	//TODO change the structure for substitutions
@@ -44,8 +45,8 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 
 //    	MettelAnnotatedSubstitution s = null;
 
-    	private MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution> newSubstitutions = null;
-    	private MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution>[] oldSubstitutions = null;
+    	private Set<MettelAnnotatedSubstitution> newSubstitutions = null;
+    	private Set<MettelAnnotatedSubstitution>[] oldSubstitutions = null;
 
     	private int index = 0;
 
@@ -53,57 +54,92 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
     	protected final int BRANCHES_NUMBER;
     	private final boolean TERMINAL;
 
+    	@SuppressWarnings("unchecked")
+		private void init(){
+    		if(BRANCHES_NUMBER == 1){
+    			pool = new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedExpression>();
+
+    			oldSubstitutions = new MettelTreeSetLinkedHashMap[PREMISES_NUMBER];
+    			for(int i = 0; i < PREMISES_NUMBER; i++){
+    				oldSubstitutions[i] = new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution>();
+    			}
+    			newSubstitutions = new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution>();
+    		}else{
+    			pool = new TreeSet<MettelAnnotatedExpression>();
+
+    			oldSubstitutions = new TreeSet[PREMISES_NUMBER];
+    			for(int i = 0; i < PREMISES_NUMBER; i++){
+    				oldSubstitutions[i] = new TreeSet<MettelAnnotatedSubstitution>();
+    			}
+    			newSubstitutions = new TreeSet<MettelAnnotatedSubstitution>();
+    		}
+    	}
+
+    	@SuppressWarnings("unchecked")
+		private void init(MettelGeneralTableauRuleState state){
+    		if(BRANCHES_NUMBER == 1){
+    			final MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedExpression> newPool =
+    				new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedExpression>();
+    			newPool.embed((MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedExpression>)state.pool);
+    			pool = newPool;
+
+    			oldSubstitutions = new MettelTreeSetLinkedHashMap[PREMISES_NUMBER];
+        		for(int i = 0; i < PREMISES_NUMBER; i++){
+        			MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution> set =
+        				new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution>();
+        			set.embed((MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution>)state.oldSubstitutions[i]);
+        			oldSubstitutions[i] = set;
+        		}
+
+        		newSubstitutions = new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution>();
+        		((MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution>)newSubstitutions).embed(
+        				(MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution>)state.newSubstitutions);
+    		}else{
+    			pool = new TreeSet<MettelAnnotatedExpression>(state.pool);
+
+    			oldSubstitutions = new TreeSet[PREMISES_NUMBER];
+    			for(int i = 0; i < PREMISES_NUMBER; i++){
+    				oldSubstitutions[i] = new TreeSet<MettelAnnotatedSubstitution>(state.oldSubstitutions[i]);
+    			}
+    			newSubstitutions = new TreeSet<MettelAnnotatedSubstitution>(state.newSubstitutions);
+    		}
+    	}
+
+
     	@SuppressWarnings("unused")
     	private MettelGeneralTableauRuleState(){ PREMISES_NUMBER = 0; BRANCHES_NUMBER = 0; TERMINAL = false;}
 
     	@SuppressWarnings("unchecked")
-		MettelGeneralTableauRuleState(MettelTableauState tstate, MettelTableauRule rule){
+		MettelGeneralTableauRuleState(/*MettelTableauState tstate,*/ MettelTableauRule rule){
     		super();
-    		this.tstate = tstate;
+    		//this.tstate = tstate;
 
     		this.premises = rule.premises();
     		this.branches = rule.branches();
-    		this.pool = new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedExpression>();
 
     		BRANCHES_NUMBER = branches.size();
     		PREMISES_NUMBER = this.premises.length;
     		TERMINAL = (BRANCHES_NUMBER == 0);
 
-    		oldSubstitutions = new MettelTreeSetLinkedHashMap[PREMISES_NUMBER];
-    		for(int i = 0; i < PREMISES_NUMBER; i++){
-    			oldSubstitutions[i] = new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution>();
-    		}
-    		newSubstitutions = new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution>();
-
+    		init();
 //    		states = new LinkedHashMap<MettelGeneralTableauState,MettelGeneralTableauRuleState>();
     	}
 
     	@SuppressWarnings("unchecked")
-		MettelGeneralTableauRuleState(MettelTableauState tstate, MettelGeneralTableauRuleState state){
+		MettelGeneralTableauRuleState(/*MettelTableauState tstate,*/ MettelGeneralTableauRuleState state){
     		super();
-    		this.tstate = tstate;
+    		//this.tstate = tstate;
 
     		this.premises = state.premises;
     		this.branches = state.branches;
 
-    		pool = new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedExpression>();
-    		pool.embed(state.pool);
     		//TODO make it syncronised
 
     		this.PREMISES_NUMBER = state.PREMISES_NUMBER;
     		this.BRANCHES_NUMBER = state.BRANCHES_NUMBER;
     		this.TERMINAL = state.TERMINAL;
 
-    		oldSubstitutions = new MettelTreeSetLinkedHashMap[PREMISES_NUMBER];
-    		for(int i = 0; i < PREMISES_NUMBER; i++){
-    			MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution> set =
-    				new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution>();
-    			set.embed(state.oldSubstitutions[i]);
-    			oldSubstitutions[i] = set;
-    		}
-
-    		newSubstitutions = new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution>();
-    		newSubstitutions.embed(state.newSubstitutions);
+    		init(state);
 
     		this.index = state.index;
     		this.e = state.e;
@@ -195,7 +231,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 //	    		    MettelGeneralTableauRuleState st = states.get(e.annotation().state());
 //	    		    if(st != null) st.queue.remove(e);
 	    		}
-System.out.println("Chosen expression: "+e);
+//System.out.println("Chosen expression: "+e);
 
 //	    		s = null;
 	    		while(s == null && index < PREMISES_NUMBER){

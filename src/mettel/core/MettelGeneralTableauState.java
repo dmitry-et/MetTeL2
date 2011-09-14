@@ -184,7 +184,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		ruleStates = new MettelGeneralTableauRuleState[LENGTH];
 		int i = 0;
 		for(MettelTableauRule r:c){
-			ruleStates[i] = new MettelGeneralTableauRuleState(this,r);
+			ruleStates[i] = new MettelGeneralTableauRuleState(/*this,*/r);
 			i++;
 		}
 	}
@@ -193,7 +193,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		final int LENGTH = rs.length;
 		ruleStates = new MettelGeneralTableauRuleState[LENGTH];
 		for(int i = 0; i< LENGTH; i++){
-			ruleStates[i] = new MettelGeneralTableauRuleState(this,rs[i]);
+			ruleStates[i] = new MettelGeneralTableauRuleState(/*this,*/rs[i]);
 		}
 	}
 
@@ -203,7 +203,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	 * @see mettel.core.MettelTableauState#expand()
 	 */
 	@Override
-	public MettelTableauState[] expand() {
+	public void expand() {
 //System.out.println("Expanding "+this+" which has the expression pool "+expressions);
 
 
@@ -211,7 +211,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		if(rs == null){
 //System.out.println("None of rules are applicable");
 			complete = true;
-			return null;
+			return;// null;
 		}
 //System.out.println(rs);
 
@@ -220,28 +220,28 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		if(rs.isTerminal()){
 //System.out.println("Unsatisfiable: terminal rule at "+this);
 			satisfiable = false;
-			return null;
+			return;// null;
 		}
 
-		if(branches == null) return null; //Cannot be applied or terminal
+		if(branches == null) return;// null; //Cannot be applied or terminal
 
 		final int BRANCHES_NUMBER = branches.length;
-		MettelTableauState[] result = new MettelGeneralTableauState[BRANCHES_NUMBER];
-		this.children = new LinkedHashSet<MettelTableauState>(BRANCHES_NUMBER);
+		//MettelTableauState[] result = new MettelGeneralTableauState[BRANCHES_NUMBER];
 		if(BRANCHES_NUMBER <= 1){
 			this.addAll(branches[0]);
-			result[0] = this;
+			//result[0] = this;
 		}else{
+			children = new LinkedHashSet<MettelTableauState>(BRANCHES_NUMBER);
 			for(int i = 0; i < BRANCHES_NUMBER; i++){
 				MettelGeneralTableauState ts = new MettelGeneralTableauState(this);
 				ts.addAll(annotator.reannotate(branches[i],ts));
-				result[i] = ts;
+				//result[i] = ts;
 				children.add(ts);
 //System.out.println("branches["+i+"] = "+branches[i]);
 			}
 			for(MettelTableauRuleState r:ruleStates) r.setApplicable(true);
 		}
-		return result;
+//		return result;
 	}
 
 	/* (non-Javadoc)
