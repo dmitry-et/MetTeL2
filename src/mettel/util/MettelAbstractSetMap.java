@@ -69,7 +69,10 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 		final Iterator<Key> ki = keySet().iterator();
 		while(ki.hasNext()){
 			final Key key = ki.next();
-			if(contains(key,e.create(key,e.object()))) return true;
+//System.out.println("Contains: key="+key);
+			if(contains(key,e.create(key,e.object()))){
+				return true;
+			}
 		}
 
 		return false;
@@ -167,7 +170,11 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 	public boolean add(E e) {
 		if(e == null) return false;
 		//final Key key = e.key();
-		if(contains(e)) return false;
+		if(contains(e)){
+//System.out.println("add: "+e+" is already in the set ");
+			return false;
+		}
+//System.out.println("add: Adding "+e);
 		return add(e.key(),e);
 	}
 
@@ -426,7 +433,17 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 	@Override
 	public boolean contains(E e) {
 		if(e == null) return false;
-		return contains(e.key(),e);
+//		return contains(e.key(),e);
+
+		final Iterator<Key> ki = keySet().iterator();
+		while(ki.hasNext()){
+			final Key key = ki.next();
+//System.out.println("Contains#2: key="+key);
+			if(contains(key,e.create(key,e.object()))){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/* (non-Javadoc)

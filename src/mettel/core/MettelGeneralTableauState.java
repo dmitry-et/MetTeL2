@@ -184,7 +184,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		ruleStates = new MettelGeneralTableauRuleState[LENGTH];
 		int i = 0;
 		for(MettelTableauRule r:c){
-			ruleStates[i] = new MettelGeneralTableauRuleState(r);
+			ruleStates[i] = new MettelGeneralTableauRuleState(this,r);
 			i++;
 		}
 	}
@@ -193,7 +193,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		final int LENGTH = rs.length;
 		ruleStates = new MettelGeneralTableauRuleState[LENGTH];
 		for(int i = 0; i< LENGTH; i++){
-			ruleStates[i] = new MettelGeneralTableauRuleState(rs[i]);
+			ruleStates[i] = new MettelGeneralTableauRuleState(this,rs[i]);
 		}
 	}
 
@@ -204,7 +204,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	 */
 	@Override
 	public MettelTableauState[] expand() {
-System.out.println("Expanding "+this+" which has the expression pool "+expressions);
+//System.out.println("Expanding "+this+" which has the expression pool "+expressions);
 
 
 		MettelTableauRuleState rs = ruleChoiceStrategy.select(ruleStates);
@@ -234,11 +234,12 @@ System.out.println("Expanding "+this+" which has the expression pool "+expressio
 		}else{
 			for(int i = 0; i < BRANCHES_NUMBER; i++){
 				MettelGeneralTableauState ts = new MettelGeneralTableauState(this);
-				ts.addAll(annotator.reannotate(branches[i],this));
+				ts.addAll(annotator.reannotate(branches[i],ts));
 				result[i] = ts;
 				children.add(ts);
 //System.out.println("branches["+i+"] = "+branches[i]);
 			}
+			for(MettelTableauRuleState r:ruleStates) r.setApplicable(true);
 		}
 		return result;
 	}
@@ -282,5 +283,13 @@ System.out.println("Expanding "+this+" which has the expression pool "+expressio
 	@Override
 	public Set<MettelTableauState> children() {
 		return children;
+	}
+
+	/* (non-Javadoc)
+	 * @see mettel.core.MettelTableauState#expressions()
+	 */
+	@Override
+	public Set<MettelAnnotatedExpression> expressions() {
+		return expressions;
 	}
 }

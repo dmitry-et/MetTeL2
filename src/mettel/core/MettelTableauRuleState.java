@@ -52,4 +52,9 @@ public interface MettelTableauRuleState {
 	 * @return
 	 */
 	public boolean isApplicable();
+
+	/**
+	 * @param b
+	 */
+	public void setApplicable(boolean b);
 }

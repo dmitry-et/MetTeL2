@@ -91,7 +91,8 @@ public class MettelAbstractTableauManager implements MettelTableauManager {
 			unexpandedStates.add(state);
 
 			do{
-//System.out.println("Expanding "+state);
+System.out.println("Unexpanded states:"+unexpandedStates);
+System.out.println("Expanding "+state);
 				//final MettelTableauState[] children =
 				state.expand();
 				if(state.isSatisfiable()){
@@ -101,7 +102,7 @@ public class MettelAbstractTableauManager implements MettelTableauManager {
 					//	throw new MettelCoreRuntimeException("Failed to add children of "+state);
 
 				}else{
-//System.out.println("Removing "+state);
+System.out.println("Removing "+state);
 					unexpandedStates.remove(state);
 				}
 				state = strategy.chooseTableauState(unexpandedStates);

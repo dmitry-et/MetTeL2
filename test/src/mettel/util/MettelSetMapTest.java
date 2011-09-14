@@ -13,12 +13,20 @@ public class MettelSetMapTest extends TestCase{
 
 		private final int e;// = ++counter;
 
+		private String key = null;
+
 		/**
 		 * @param e
 		 */
 		public Entry(int e) {
 			super();
 			this.e = e;
+		}
+
+		public Entry(int e, String key) {
+			super();
+			this.e = e;
+			this.key = key;
 		}
 
 		/**
@@ -34,7 +42,8 @@ public class MettelSetMapTest extends TestCase{
 		 */
 		@Override
 		public String key() {
-			return "Annotation#"+e%3;
+			if(key == null) key = "Annotation#"+e%3;
+			return key;
 		}
 
 		public String toString(){
@@ -46,6 +55,7 @@ public class MettelSetMapTest extends TestCase{
 		 */
 		@Override
 		public int compareTo(Entry o) {
+//System.out.println("Comparing: "+this+ " vs "+o);
 			return e - o.e;
 		}
 
@@ -66,6 +76,12 @@ public class MettelSetMapTest extends TestCase{
 			return new Entry(e.e);
 		}
 
+		public boolean equals(Object o){
+//System.out.println("Equals: "+this+ " vs "+o);
+			if(o == null) return false;
+			return (e == ((Entry)o).e);
+		}
+
 	}
 
 	private MettelTreeSetLinkedHashMap<String,Entry> set = new MettelTreeSetLinkedHashMap<String,Entry>();
@@ -77,6 +93,11 @@ public class MettelSetMapTest extends TestCase{
 			set.add(e);
 			set0.add(e);
 		}
+
+		assertEquals(set.size(),set0.size());
+		assertEquals(set,set0);
+
+		set.add(new Entry(2,"Annotation#0"));
 
 		assertEquals(set.size(),set0.size());
 

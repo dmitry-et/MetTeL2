@@ -29,6 +29,8 @@ import mettel.util.MettelTreeSetLinkedHashMap;
  */
 public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 
+		private MettelTableauState tstate = null;
+
 		private MettelAnnotator annotator = MettelSimpleAnnotator.ANNOTATOR;
 
 //		private LinkedHashMap<MettelGeneralTableauState,MettelGeneralTableauRuleState> states = null;
@@ -55,8 +57,9 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
     	private MettelGeneralTableauRuleState(){ PREMISES_NUMBER = 0; BRANCHES_NUMBER = 0; TERMINAL = false;}
 
     	@SuppressWarnings("unchecked")
-		MettelGeneralTableauRuleState(MettelTableauRule rule){
+		MettelGeneralTableauRuleState(MettelTableauState tstate, MettelTableauRule rule){
     		super();
+    		this.tstate = tstate;
 
     		this.premises = rule.premises();
     		this.branches = rule.branches();
@@ -76,8 +79,10 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
     	}
 
     	@SuppressWarnings("unchecked")
-		MettelGeneralTableauRuleState(MettelGeneralTableauRuleState state){
+		MettelGeneralTableauRuleState(MettelTableauState tstate, MettelGeneralTableauRuleState state){
     		super();
+    		this.tstate = tstate;
+
     		this.premises = state.premises;
     		this.branches = state.branches;
 
@@ -190,7 +195,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 //	    		    MettelGeneralTableauRuleState st = states.get(e.annotation().state());
 //	    		    if(st != null) st.queue.remove(e);
 	    		}
-//System.out.println("Chosen expression: "+e);
+System.out.println("Chosen expression: "+e);
 
 //	    		s = null;
 	    		while(s == null && index < PREMISES_NUMBER){
@@ -274,6 +279,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 			Iterator<MettelAnnotatedExpression> i = pool.iterator();
 			if(i.hasNext()){
 				MettelAnnotatedExpression s = i.next();
+				//if(BRANCHES_NUMBER <= 1 || !s.key().equals(tstate))
 				i.remove();
 //System.out.println(pool);
 				return s;
@@ -288,4 +294,12 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 	    	s += "\nNew Substitutions: "+newSubstitutions;
 	    	return s;
 	    }
+
+		/* (non-Javadoc)
+		 * @see mettel.core.MettelTableauRuleState#setApplicable(boolean)
+		 */
+		@Override
+		public void setApplicable(boolean b) {
+			applicable = b;
+		}
 }

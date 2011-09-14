@@ -39,4 +39,9 @@ public interface MettelTableauState extends Comparable<MettelTableauState>{
 
 	Set<MettelTableauState> children();
 
+	/**
+	 * @return
+	 */
+	Set<MettelAnnotatedExpression> expressions();
+
 }
