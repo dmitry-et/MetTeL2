@@ -97,11 +97,11 @@ public class MettelAbstractTableauManager implements MettelTableauManager {
 //System.out.println("Unexpanded states:"+unexpandedStates);
 //System.out.println("Expanding "+state);
 				//final MettelTableauState[] children =
-				state.expand();
+				final Set<MettelTableauState> children = state.expand();
 				if(state.isSatisfiable()){
 					if(state.isComplete()) return true;
 
-					addChildren(state);
+					addChildren(state,children);
 					//	throw new MettelCoreRuntimeException("Failed to add children of "+state);
 
 				}else{
@@ -131,9 +131,9 @@ public class MettelAbstractTableauManager implements MettelTableauManager {
 		return result;
 	}
 
-	void addChildren(MettelTableauState state){
+	void addChildren(MettelTableauState state, Set<MettelTableauState> children){
 //System.out.println("Unexpanded states:"+unexpandedStates);
-		final Set<MettelTableauState> children = state.children();
+		//final Set<MettelTableauState> children = state.children();
 //System.out.println("Children:"+children);
 		if(children == null) return;
 		//Expanded succesfully (not terminal and rule was applicable)

@@ -31,7 +31,7 @@ public interface MettelTableauState extends Comparable<MettelTableauState>{
 
 	boolean isComplete();
 
-	void expand();
+	Set<MettelTableauState> expand();
 
 	boolean add(MettelAnnotatedExpression e);
 

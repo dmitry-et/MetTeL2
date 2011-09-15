@@ -199,7 +199,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	 * @see mettel.core.MettelTableauState#expand()
 	 */
 	@Override
-	public void expand() {
+	public Set<MettelTableauState> expand() {
 //System.out.println("Expanding "+this+" which has the expression pool "+expressions);
 
 
@@ -207,7 +207,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		if(rs == null){
 //System.out.println("None of rules are applicable");
 			complete = true;
-			return;// null;
+			return null;
 		}
 //System.out.println(rs);
 
@@ -216,18 +216,18 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		if(rs.isTerminal()){
 //System.out.println("Unsatisfiable: terminal rule at "+this);
 			satisfiable = false;
-			return;// null;
+			return null;
 		}
 
-		if(branches == null) return;// null; //Cannot be applied or terminal
+		if(branches == null) return null; //Cannot be applied or terminal
 
 		final int BRANCHES_NUMBER = branches.length;
 		//MettelTableauState[] result = new MettelGeneralTableauState[BRANCHES_NUMBER];
-		if(BRANCHES_NUMBER <= 1){
+		if(BRANCHES_NUMBER == 1){
 			this.addAll(branches[0]);
 			//result[0] = this;
 		}else{
-			children = new LinkedHashSet<MettelTableauState>(BRANCHES_NUMBER);
+			LinkedHashSet<MettelTableauState> children = new LinkedHashSet<MettelTableauState>(BRANCHES_NUMBER);
 			for(int i = 0; i < BRANCHES_NUMBER; i++){
 				MettelGeneralTableauState ts = new MettelGeneralTableauState(this);
 				ts.addAll(annotator.reannotate(branches[i],ts));
@@ -236,8 +236,10 @@ public class MettelGeneralTableauState implements MettelTableauState {
 //System.out.println("branches["+i+"] = "+branches[i]);
 			}
 			//for(MettelTableauRuleState r:ruleStates) r.setApplicable(true);
+			return children;
 		}
 //		return result;
+		return null;
 	}
 
 	/* (non-Javadoc)
