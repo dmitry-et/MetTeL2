@@ -56,7 +56,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 
     	@SuppressWarnings("unchecked")
 		private void init(){
-    		if(BRANCHES_NUMBER == 1){
+    		if(BRANCHES_NUMBER >= 1){
     			pool = new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedExpression>();
 
     			oldSubstitutions = new MettelTreeSetLinkedHashMap[PREMISES_NUMBER];
@@ -77,7 +77,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 
     	@SuppressWarnings("unchecked")
 		private void init(MettelGeneralTableauRuleState state){
-    		if(BRANCHES_NUMBER == 1){
+    		if(BRANCHES_NUMBER >= 1){
     			final MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedExpression> newPool =
     				new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedExpression>();
     			newPool.embed((MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedExpression>)state.pool);
@@ -170,6 +170,8 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
     		return terminal;
     	}
 
+    	private MettelTableauState applicationState = null;
+
     	/* (non-Javadoc)
 		 * @see mettel.core.MettelTableauRuleState#apply()
 		 */
@@ -189,6 +191,8 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
     		    }
     		}
 //System.out.println("New substitution "+s0);
+
+    	    applicationState = s0.key();
 
     		if(TERMINAL){
 //System.out.println("Terminal state");
@@ -335,5 +339,13 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 		@Override
 		public void setApplicable(boolean b) {
 			applicable = b;
+		}
+
+		/* (non-Javadoc)
+		 * @see mettel.core.MettelTableauRuleState#applicationState()
+		 */
+		@Override
+		public MettelTableauState applicationState() {
+			return applicationState;
 		}
 }

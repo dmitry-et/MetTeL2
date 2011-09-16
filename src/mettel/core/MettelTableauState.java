@@ -44,4 +44,32 @@ public interface MettelTableauState extends Comparable<MettelTableauState>{
 	 */
 	Set<MettelAnnotatedExpression> expressions();
 
+	/**
+	 * @param e
+	 */
+	void addToRulePools(MettelAnnotatedExpression e);
+
+	void setSatisfiable(boolean v);
+
+	/**
+	 * @param branches
+	 */
+	Set<MettelTableauState> expand(Set<MettelAnnotatedExpression>[] branches);
+
+	/**
+	 * @return
+	 */
+	Set<MettelTableauAction> actionsToAdd();
+
+	/**
+	 * @param key
+	 * @return
+	 */
+	boolean isChildOf(MettelTableauState key);
+
+	/**
+	 * @return
+	 */
+	Set<MettelTableauAction> actions();
+
 }

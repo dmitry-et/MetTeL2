@@ -16,47 +16,45 @@
  */
 package mettel.core;
 
-import java.util.Set;
+import java.util.Comparator;
+
+import mettel.util.MettelTreeSetLinkedHashMap;
 
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public interface MettelTableauRuleState {
+public class MettelTableauStatePool
+		extends
+		MettelTreeSetLinkedHashMap<MettelTableauState, MettelAnnotatedExpression> {
 
-//	public boolean isDead();
 
-	public boolean isTerminal();
-
-//	public boolean evolve();
-
-//	public void addSubstitutions(Set<MettelAnnotatedSubstitution> ss0,
-//			MettelAnnotatedSubstitution s, int index);
-
-//	public void addSubstitutions();
+//	private MettelTableauState state = null;
 
 	/**
-	 * @param expressions
+	 *
 	 */
-	public void addAll(Set<MettelAnnotatedExpression> expressions);
-
-	public void add(MettelAnnotatedExpression e);
+	public MettelTableauStatePool(/*MettelTableauState state*/) {
+		super();
+//		this.state = state;
+	}
 
 	/**
-	 * @return
+	 * @param comparator
 	 */
-	public Set<MettelAnnotatedExpression>[] apply();
+	public MettelTableauStatePool(/*MettelTableauState state,*/
+			Comparator<? super MettelAnnotatedExpression> comparator) {
+		super(comparator);
+//		this.state = state;
+	}
 
-	/**
-	 * @return
-	 */
-	public boolean isApplicable();
 
-	/**
-	 * @param b
-	 */
-	public void setApplicable(boolean b);
-
-	MettelTableauState applicationState();
+	public boolean add(MettelAnnotatedExpression e) {
+		if(super.add(e)){
+			e.key().addToRulePools(e);
+			return true;
+		}
+		return false;
+	}
 }

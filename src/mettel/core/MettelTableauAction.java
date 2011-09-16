@@ -18,45 +18,29 @@ package mettel.core;
 
 import java.util.Set;
 
+import mettel.util.MettelAnnotatedObject;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public interface MettelTableauRuleState {
+public interface MettelTableauAction extends MettelAnnotatedObject<MettelTableauState>, Comparable<MettelTableauAction>{
 
-//	public boolean isDead();
+	//Set<MettelTableauState> states();
+	int id();
 
-	public boolean isTerminal();
+	boolean isFor(MettelTableauState s);
 
-//	public boolean evolve();
+	boolean remove(MettelTableauState s);
 
-//	public void addSubstitutions(Set<MettelAnnotatedSubstitution> ss0,
-//			MettelAnnotatedSubstitution s, int index);
+	boolean add(MettelTableauState s);
 
-//	public void addSubstitutions();
-
-	/**
-	 * @param expressions
-	 */
-	public void addAll(Set<MettelAnnotatedExpression> expressions);
-
-	public void add(MettelAnnotatedExpression e);
+	Set<MettelTableauState> execute(MettelTableauState s);
 
 	/**
-	 * @return
+	 * @param children
 	 */
-	public Set<MettelAnnotatedExpression>[] apply();
+	boolean addAll(Set<MettelTableauState> children);
 
-	/**
-	 * @return
-	 */
-	public boolean isApplicable();
-
-	/**
-	 * @param b
-	 */
-	public void setApplicable(boolean b);
-
-	MettelTableauState applicationState();
 }

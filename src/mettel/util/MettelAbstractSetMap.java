@@ -97,18 +97,27 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 	private class MettelSetMapIterator implements Iterator<E> {
 		Iterator<Key> ki = keySet().iterator();
 		Iterator<E> i = null;
+		Key key = null;
 
 		private MettelSetMapIterator(){
 			super();
-			if(ki.hasNext()) i = iterator(ki.next());
+			if(ki.hasNext()){
+				key = ki.next();
+				i = iterator(key);
+			}
 		}
 
         public boolean hasNext() {
         	if(i == null) return false;
         	if(i.hasNext()) return true;
+//        	if(map.get(key).isEmpty()){
+//				ki.remove();
+//			}
         	while(ki.hasNext()){
-        		i = iterator(ki.next());
+        		key = ki.next();
+        		i = iterator(key);
         		if(i.hasNext()) return true;
+        		ki.remove();//In fact we should never come here
         	}
         	return false;
         }
@@ -118,15 +127,23 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
         		throw new IllegalStateException();
         	i.remove();
         	size--;
+        	if(map.get(key).isEmpty()){
+				ki.remove();
+			}
         }
 
         public E next() {
         	if(i == null)
         		throw new NoSuchElementException();
         	if(i.hasNext()) return i.next();
+//        	if(map.get(key).isEmpty()){
+//				ki.remove();
+//			}
         	while(ki.hasNext()){
-        		i = iterator(ki.next());
+        		key = ki.next();
+        		i = iterator(key);
         		if(i.hasNext()) return i.next();
+        		ki.remove();//In fact we should never come here
         	}
         	throw new NoSuchElementException();
         }
@@ -396,6 +413,9 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 		final int SIZE0 = set.size();
 		if(set.retainAll(c)){
 			size -= (SIZE0 - set.size());
+			if(set.isEmpty()){
+				map.remove(key);
+			}
 //			modCount++;
 			return true;
 		}else return false;
@@ -411,6 +431,9 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 		final int SIZE0 = set.size();
 		if(set.removeAll(c)){
 			size -= (SIZE0 - set.size());
+			if(set.isEmpty()){
+				map.remove(key);
+			}
 //			modCount++;
 			return true;
 		}else return false;
@@ -426,6 +449,7 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 			final int SIZE0 = set.size();
 			set.clear();
 			size -= (SIZE0 - set.size());
+			map.remove(key);
 //			modCount++;
 		}
 	}
@@ -472,6 +496,9 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
     	Set<?> keySet = c.keySet();
     	for(Object k:keySet){
     		modified |= removeAll(k,c.subset(k));
+//   		if(map.get(k).isEmpty()){
+//				map.remove(k);
+//			}
     	}
 
     	return modified;
@@ -492,6 +519,9 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
         				modified = true;
         			}
         		}
+   				if(map.get(k).isEmpty()){
+					map.remove(k);
+				}
         	}
         }
         return modified;
