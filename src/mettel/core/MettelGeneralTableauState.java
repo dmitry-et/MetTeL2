@@ -266,8 +266,11 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	 */
 	@Override
 	public boolean add(MettelAnnotatedExpression e) {
-		for(MettelTableauRuleState rs:ruleStates) rs.add(e);
-		return expressions.add(e);
+		final boolean result = expressions.add(e);
+		if(result){
+			for(MettelTableauRuleState rs:ruleStates) rs.add(e);
+		}
+		return result;
 	}
 
 	/* (non-Javadoc)
@@ -275,8 +278,11 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	 */
 	@Override
 	public boolean addAll(Set<MettelAnnotatedExpression> s) {
-		for(MettelTableauRuleState rs:ruleStates) rs.addAll(s);
-		return expressions.addAll(s);
+		boolean result = false;
+		for(MettelAnnotatedExpression e:s){
+			result |= add(e);
+		}
+		return result;
 	}
 
 	public String toString(){
