@@ -117,7 +117,7 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
         		key = ki.next();
         		i = iterator(key);
         		if(i.hasNext()) return true;
-        		ki.remove();//In fact we should never come here
+//        		ki.remove();//In fact we should never come here
         	}
         	return false;
         }
@@ -127,9 +127,9 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
         		throw new IllegalStateException();
         	i.remove();
         	size--;
-        	if(map.get(key).isEmpty()){
-				ki.remove();
-			}
+//        	if(map.get(key).isEmpty()){
+//				ki.remove();
+//			}
         }
 
         public E next() {
@@ -143,7 +143,7 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
         		key = ki.next();
         		i = iterator(key);
         		if(i.hasNext()) return i.next();
-        		ki.remove();//In fact we should never come here
+//        		ki.remove();//In fact we should never come here
         	}
         	throw new NoSuchElementException();
         }
@@ -366,9 +366,9 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 		if(set == null) return false;
 		if(set.remove(o)){
 			size--;
-			if(set.isEmpty()){
-				map.remove(key);
-			}
+//			if(set.isEmpty()){
+//				map.remove(key);
+//			}
 //			modCount++;
 			return true;
 		}else return false;
@@ -413,9 +413,9 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 		final int SIZE0 = set.size();
 		if(set.retainAll(c)){
 			size -= (SIZE0 - set.size());
-			if(set.isEmpty()){
-				map.remove(key);
-			}
+//			if(set.isEmpty()){
+//				map.remove(key);
+//			}
 //			modCount++;
 			return true;
 		}else return false;
@@ -431,9 +431,9 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 		final int SIZE0 = set.size();
 		if(set.removeAll(c)){
 			size -= (SIZE0 - set.size());
-			if(set.isEmpty()){
-				map.remove(key);
-			}
+//			if(set.isEmpty()){
+//				map.remove(key);
+//			}
 //			modCount++;
 			return true;
 		}else return false;
@@ -449,7 +449,7 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
 			final int SIZE0 = set.size();
 			set.clear();
 			size -= (SIZE0 - set.size());
-			map.remove(key);
+//			map.remove(key);
 //			modCount++;
 		}
 	}
@@ -519,9 +519,9 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
         				modified = true;
         			}
         		}
-   				if(map.get(k).isEmpty()){
-					map.remove(k);
-				}
+//   				if(map.get(k).isEmpty()){
+//					map.remove(k);
+//				}
         	}
         }
         return modified;

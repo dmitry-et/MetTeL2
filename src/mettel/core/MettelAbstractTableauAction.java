@@ -42,7 +42,7 @@ abstract class MettelAbstractTableauAction implements MettelTableauAction {
 	 */
 	@Override
 	public boolean isFor(MettelTableauState s) {
-		return !states.contains(s);
+		return states.contains(s);
 	}
 
 	/* (non-Javadoc)
@@ -85,4 +85,15 @@ abstract class MettelAbstractTableauAction implements MettelTableauAction {
 		return states.addAll(children);
 	}
 
+	public String toString(){
+		return super.toString()+" for states "+states;
+	}
+
+	public boolean completed(){
+		return states.isEmpty();
+	}
+
+	public boolean retainAll(Set<MettelTableauState> set) {
+		return states.retainAll(set);
+	}
 }

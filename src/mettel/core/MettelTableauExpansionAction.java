@@ -43,7 +43,7 @@ public class MettelTableauExpansionAction extends MettelAbstractTableauAction {
 	@Override
 	public Set<MettelTableauState> execute(MettelTableauState s) {
 		if(isFor(s)){
-			add(s);
+			remove(s);
 			return s.expand(branches);
 		}
 		return null;

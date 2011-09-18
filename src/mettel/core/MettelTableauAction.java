@@ -43,4 +43,14 @@ public interface MettelTableauAction extends MettelAnnotatedObject<MettelTableau
 	 */
 	boolean addAll(Set<MettelTableauState> children);
 
+	/**
+	 * @return
+	 */
+	boolean completed();
+
+	/**
+	 * @param unexpandedStates
+	 */
+	boolean retainAll(Set<MettelTableauState> unexpandedStates);
+
 }

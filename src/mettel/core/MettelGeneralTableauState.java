@@ -17,7 +17,6 @@
 package mettel.core;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -30,6 +29,8 @@ import mettel.util.MettelTreeSetLinkedHashMap;
 public class MettelGeneralTableauState implements MettelTableauState {
 
 	//private MettelTableauManager manager = null;
+
+	private MettelTableauState parent = null;
 
 	private LinkedHashSet<MettelTableauState> children = null;
 
@@ -51,6 +52,8 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		ruleChoiceStrategy  = new MettelSimpleRuleChoiceStrategy();
 		initRuleStates(calculus);
 		expressions = new MettelTableauStatePool(/*this*/);
+		expressions.addAll(this,new LinkedHashSet<MettelAnnotatedExpression>());
+		actions.addAll(this,new LinkedHashSet<MettelTableauAction>());
 	}
 
 	/**
@@ -64,6 +67,8 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		initRuleStates(calculus);
 		expressions = new MettelTableauStatePool(/*this*/);
 		expressions.addAll(set);
+		expressions.addAll(this,new LinkedHashSet<MettelAnnotatedExpression>());
+		actions.addAll(this,new LinkedHashSet<MettelTableauAction>());
 	}
 
 	/**
@@ -80,6 +85,8 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		initRuleStates(calculus);
 		expressions = new MettelTableauStatePool(/*this*/);
 		expressions.addAll(set);
+		expressions.addAll(this,new LinkedHashSet<MettelAnnotatedExpression>());
+		actions.addAll(this,new LinkedHashSet<MettelTableauAction>());
 	}
 
 	/**
@@ -88,11 +95,14 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	public MettelGeneralTableauState(MettelGeneralTableauState state){
 		super();
 //		this.manager = state.manager;
+		parent = state;
 		ruleChoiceStrategy = state.ruleChoiceStrategy;
 		initRuleStates(state.ruleStates);
 		expressions = new MettelTableauStatePool(/*this*/);
 		expressions.embed(state.expressions);// first to embed
+		expressions.addAll(this,new LinkedHashSet<MettelAnnotatedExpression>());
 		actions.embed(state.actions);
+		actions.addAll(this,new LinkedHashSet<MettelTableauAction>());
 	}
 
 	/**
@@ -116,15 +126,16 @@ public class MettelGeneralTableauState implements MettelTableauState {
 			MettelRuleChoiceStrategy strategy) {
 		super();
 //		this.manager = state.manager;
+		parent = state;
 		ruleChoiceStrategy  = strategy;
 		initRuleStates(state.ruleStates);
 		expressions = new MettelTableauStatePool(/*this*/);
 		expressions.embed(state.expressions);// first to embed
 		expressions.addAll(set);
+		expressions.addAll(this,new LinkedHashSet<MettelAnnotatedExpression>());
 		actions.embed(state.actions);
+		actions.addAll(this,new LinkedHashSet<MettelTableauAction>());
 	}
-
-
 
 	/* (non-Javadoc)
 	 * @see mettel.core.MettelTableauState#id()
@@ -190,7 +201,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		ruleStates = new MettelGeneralTableauRuleState[LENGTH];
 		int i = 0;
 		for(MettelTableauRule r:c){
-			ruleStates[i] = new MettelGeneralTableauRuleState(/*this,*/r);
+			ruleStates[i] = new MettelGeneralTableauRuleState(this,r);
 			i++;
 		}
 	}
@@ -199,7 +210,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		final int LENGTH = rs.length;
 		ruleStates = new MettelGeneralTableauRuleState[LENGTH];
 		for(int i = 0; i< LENGTH; i++){
-			ruleStates[i] = new MettelGeneralTableauRuleState(/*this,*/rs[i]);
+			ruleStates[i] = new MettelGeneralTableauRuleState(this,rs[i]);
 		}
 	}
 
@@ -210,7 +221,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	 */
 	@Override
 	public Set<MettelTableauState> expand() {
-System.out.println("Expanding "+this+" which has the expression pool "+expressions);
+//System.out.println("Expanding "+this+" which has the expression pool "+expressions);
 
 /*		Iterator<MettelTableauAction> i = actions.iterator();//TODO replace for an action selection strategy
 		while(i.hasNext()){
@@ -225,16 +236,16 @@ System.out.println("Expanding "+this+" which has the expression pool "+expressio
 
 		final MettelTableauRuleState rs = ruleChoiceStrategy.select(ruleStates);
 		if(rs == null){
-System.out.println("None of rules are applicable");
+//System.out.println("None of rules are applicable");
 			complete = true;
 			return null;
 		}
-System.out.println(rs);
+//System.out.println(rs);
 
 
 		final Set<MettelAnnotatedExpression>[] branches = rs.apply();
 		if(rs.isTerminal()){
-System.out.println("Unsatisfiable: terminal rule at "+this);
+//System.out.println("Unsatisfiable: terminal rule at "+this+"with the expression pool "+expressions);
 			satisfiable = false;
 			actionsToAdd.add(new MettelTableauTerminateAction(rs.applicationState()));
 			return null;
@@ -359,8 +370,19 @@ System.out.println("Unsatisfiable: terminal rule at "+this);
 	 * @see mettel.core.MettelTableauState#isChildOf(mettel.core.MettelTableauState)
 	 */
 	@Override
-	public boolean isChildOf(MettelTableauState key)
-		// TODO Auto-generated method stub
+	public boolean isChildOf(MettelTableauState key){
+//System.out.print("isChildOf for "+key+"...");
+		if(key == null) return false;
+		//MettelTableauState p = parent;
+		MettelTableauState current = this;
+		while(current != null && current.id() >= key.id()){
+			if(current.equals(key)){
+//System.out.println("Done(true)");
+				return true;
+			}
+			current = current.parent();
+		}
+//System.out.println("Done(false)");
 		return false;
 	}
 
@@ -370,5 +392,13 @@ System.out.println("Unsatisfiable: terminal rule at "+this);
 	@Override
 	public Set<MettelTableauAction> actions() {
 		return actions;
+	}
+
+	/* (non-Javadoc)
+	 * @see mettel.core.MettelTableauState#parent()
+	 */
+	@Override
+	public MettelTableauState parent() {
+		return parent;
 	}
 }

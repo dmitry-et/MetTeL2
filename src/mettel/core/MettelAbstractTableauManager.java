@@ -26,7 +26,7 @@ import java.util.Set;
  * @version $Revision$ $Date$
  *
  */
-public class MettelAbstractTableauManager implements MettelTableauManager {
+abstract class MettelAbstractTableauManager implements MettelTableauManager {
 
 	protected MettelAnnotator annotator = MettelSimpleAnnotator.ANNOTATOR;
 
@@ -48,8 +48,8 @@ public class MettelAbstractTableauManager implements MettelTableauManager {
 				MettelTableauState state = i.next();
 //System.out.println("Looking at state "+state);
 				if(state.isSatisfiable()) return state;
-//System.out.println("The state "+state+" is unsatisfiable");
 				i.remove();
+//System.out.println("The state "+state+" is unsatisfiable");
 			}
 //System.out.println("No states to select from");
 			return null;
@@ -75,7 +75,7 @@ public class MettelAbstractTableauManager implements MettelTableauManager {
 	 */
 	@Override
 	public boolean isSatisfiable(Collection<? extends MettelExpression> input) {
-		Set<MettelAnnotatedExpression> set = new LinkedHashSet<MettelAnnotatedExpression>(1);
+		Set<MettelAnnotatedExpression> set = new LinkedHashSet<MettelAnnotatedExpression>(input.size());
 		for(MettelExpression e:input){
 			if(!set.add(annotator.annotate(e,state)))
 				throw new MettelCoreRuntimeException("Failed to create a set containing "+e);
@@ -94,24 +94,34 @@ public class MettelAbstractTableauManager implements MettelTableauManager {
 			unexpandedStates.add(state);
 
 			do{
-System.out.println("Unexpanded states:"+unexpandedStates);
+//System.out.println("Unexpanded states:"+unexpandedStates);
 //System.out.println("Expanding "+state);
 				//final MettelTableauState[] children =
+//System.out.println("Processing actions for "+state+"...");
 				Set<MettelTableauState> children = null;
 				boolean actionExecuted = false;
 				final Set<MettelTableauAction> actions = state.actions();
+//System.out.println("Potential actions "+actions);
 				if(actions != null){
 					final Iterator<MettelTableauAction> ia = actions.iterator();
 					while(ia.hasNext()){
 						final MettelTableauAction a = ia.next();
-						if(a.isFor(state)){
-							children = a.execute(state);
-							actionExecuted = true;
-							break;
+						a.retainAll(unexpandedStates);
+//System.out.println("    Action "+a+"...");
+						if(a.completed()){
+							ia.remove();
+						}else{
+							if(a.isFor(state)){
+								children = a.execute(state);
+								actionExecuted = true;
+								break;
+							}
 						}
 					}
 				}
+//System.out.println("Done");
 				if(!actionExecuted)	children = state.expand();
+				addActions(state);
 				if(state.isSatisfiable()){
 					if(state.isComplete()) return true;
 
@@ -120,10 +130,24 @@ System.out.println("Unexpanded states:"+unexpandedStates);
 					//	throw new MettelCoreRuntimeException("Failed to add children of "+state);
 
 				}else{
-System.out.println("Removing "+state);
+//System.out.println("Removing "+state);
 					unexpandedStates.remove(state);
+//					final Iterator<MettelTableauAction> ia = actions.iterator();
+//					while(ia.hasNext()){
+//						final MettelTableauAction a = ia.next();
+//						a.remove(state);
+//						if(a.completed()) ia.remove();
+//					}
 				}
-				addActions(state);
+
+				cleanUp();
+
+//				final Iterator<MettelTableauAction> ia = actions.iterator();
+//					final MettelTableauAction a = ia.next();
+//					a.retainAll(unexpandedStates);
+//					if(a.completed()) ia.remove();
+//				}
+
 				state = strategy.chooseTableauState(unexpandedStates);
 			}while(state != null);
 
@@ -135,12 +159,19 @@ System.out.println("Removing "+state);
 
 
 	/**
+	 *
+	 */
+	abstract void cleanUp();
+
+	/**
 	 * @param s
 	 */
 	private void addActions(MettelTableauState s) {
 		final Set<MettelTableauAction> actionsToAdd = s.actionsToAdd();
-		final Set<MettelTableauAction> actions = s.actions();
 		if(actionsToAdd == null) return;
+//		Set<MettelTableauAction> actions = s.actions();
+//System.out.println("Adding actions for "+s+"...");
+//System.out.println("Actions to add "+actionsToAdd);
 		Iterator<MettelTableauAction> ia = actionsToAdd.iterator();
 		while(ia.hasNext()){
 			final MettelTableauAction a = ia.next();
@@ -150,9 +181,12 @@ System.out.println("Removing "+state);
 				}
 			}
 			a.remove(s);
-			actions.add(a);
-			actionsToAdd.remove(a);
+//System.out.println("    Adding action "+a+"...");
+			s.actions().add(a);
+//System.out.println("Actions for "+s+" are "+s.actions());
+			ia.remove();
 		}
+//System.out.println("Done");
 	}
 
 	boolean remove(MettelTableauState state){
@@ -185,8 +219,10 @@ System.out.println("Removing "+state);
 			Iterator<MettelTableauAction> ia = actions.iterator();
 			while(ia.hasNext()){
 				final MettelTableauAction a = ia.next();
-				a.remove(state);
-				a.addAll(children);
+				if(a.isFor(state)){
+					a.remove(state);
+					a.addAll(children);
+				};
 			}
 		}
 	}

@@ -59,7 +59,7 @@ public class MettelSimpleTableauAnnotation implements MettelTableauAnnotation {
 	@Override
 	public MettelTableauAnnotation merge(MettelTableauAnnotation a) {
 		final MettelTableauState astate = a.state();
-		if(this.state.id() < astate.id()){
+		if(this.state.id() > astate.id()){
 			return new MettelSimpleTableauAnnotation(this.state);
 		}else{
 			return new MettelSimpleTableauAnnotation(astate);

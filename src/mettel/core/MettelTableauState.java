@@ -72,4 +72,9 @@ public interface MettelTableauState extends Comparable<MettelTableauState>{
 	 */
 	Set<MettelTableauAction> actions();
 
+	/**
+	 * @return
+	 */
+	MettelTableauState parent();
+
 }

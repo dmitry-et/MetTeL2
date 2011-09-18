@@ -40,8 +40,8 @@ public class MettelTableauTerminateAction extends MettelAbstractTableauAction {
 	@Override
 	public Set<MettelTableauState> execute(MettelTableauState s) {
 		if(isFor(s)){
-			s.setSatisfiable(true);
-			add(s);
+			s.setSatisfiable(false);
+			remove(s);
 		}
 		return null;
 	}
