@@ -1,0 +1,31 @@
+//equality rules 
+
+
+@l {l2} / @l2 {l} $;
+@l ~({l2}) / @l2 {l2} $;
+
+@l P / @l {l} $;
+
+@l <> ({l2}) / @l2 {l2} $;
+@l P  @l {l2} /  @l2 P $;
+@l <> ({l2})  @l2 {l3} / @l <> ({l3}) $;
+
+//Decomposition rules 
+
+ @l ~(~P)   / @l P $; 
+ @l (P|Q)   / @l P $| @l Q $;
+ @l ~(P|Q)  / @l ~P @l ~Q $;
+ @l (<> (P)) / @l (<> (f(l,P))), @ f(l,P) P $;  
+ @l ~ (<> (P)) @l2 {l2} /@l ~(<> ({l2})) $| @l2 ~(P) $;
+
+
+
+// Theory rules 
+@l {l} / @l (<> ({l})) $;
+@l {l} @l1 {l1} @l2 {l2} / @l ~(<> ({l2})) $| @l2 ~(<> ({l3})) $| @l1 (<> ({l3})) $;
+
+// Closure rule
+ @l P  @l ~(P) / 
+// last rule should not have $;
+// no comma between formulae
+
