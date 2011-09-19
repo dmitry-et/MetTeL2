@@ -32,11 +32,11 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 
 	protected Set<MettelTableauState> unexpandedStates = null;
 
-	protected MettelBranchChoiceStrategy strategy = null;
+	protected MettelBranchSelectionStrategy strategy = null;
 
 	//protected Set<MettelGeneralTableauRule> calculus = null;
 
-	private class MettelSimpleBranchChoiceStrategy implements MettelBranchChoiceStrategy{
+	private class MettelSimpleBranchSelectionStrategy implements MettelBranchSelectionStrategy{
 
 		/* (non-Javadoc)
 		 * @see mettel.core.MettelBranchChoiceStrategy#chooseTableauState(java.util.Set)
@@ -86,7 +86,7 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 	boolean isSatisfiable(Set<MettelAnnotatedExpression> input) {
 
 		if(strategy == null){
-			strategy = new MettelSimpleBranchChoiceStrategy();
+			strategy = new MettelSimpleBranchSelectionStrategy();
 		}
 
 		if(state.addAll(input)){

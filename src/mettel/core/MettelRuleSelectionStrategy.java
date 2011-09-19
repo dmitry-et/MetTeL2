@@ -21,7 +21,7 @@ package mettel.core;
  * @version $Revision$ $Date$
  *
  */
-public interface MettelRuleChoiceStrategy {
+public interface MettelRuleSelectionStrategy {
 
 	MettelTableauRuleState select(MettelTableauRuleState[] ruleStates);
 

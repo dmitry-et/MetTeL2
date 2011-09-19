@@ -463,6 +463,23 @@ public class MettelANTLRGrammarGenerator {
 				new String[]{"Collection<"+grammarName+MettelJavaNames.firstCharToUpperCase(NAME)+'>'},null);
 	}
 
+	private MettelANTLRRule makeANTLREqualityRule(String grammarName,Collection<MettelSort> sorts){
+		MettelANTLRMultiaryBNFStatement s = new MettelANTLRMultiaryBNFStatement(MettelANTLRMultiaryBNFStatement.OR);
+		for(MettelSort sort:sorts){
+			MettelANTLRMultiaryBNFStatement s0 = new MettelANTLRMultiaryBNFStatement();
+			MettelANTLRRuleReference ruleRef = new MettelANTLRRuleReference(sort.name(),sort.name()+"Expression",true);
+			ruleRef.appendLineToPostfix("r0 = "+sort.name()+"Expression;");
+			s0.addExpression(ruleRef);
+			s0.addExpression(new MettelANTLRToken("'='"));
+			s0.addExpression(ruleRef);
+			s.addExpression(s0);
+		}
+		MettelANTLRRule r = new MettelANTLRRule("expression",s,
+				new String[]{grammarName+"Expression"});
+		//r.appendLineToAfterBlock("r0 = e0;");
+		return r;
+	}
+
 	/**
 	 *
 	 */

@@ -23,7 +23,7 @@ import java.util.Set;
  * @version $Revision$ $Date$
  *
  */
-public interface MettelBranchChoiceStrategy {
+public interface MettelBranchSelectionStrategy {
 
 	MettelTableauState chooseTableauState(Set<MettelTableauState> s);
 

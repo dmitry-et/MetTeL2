@@ -49,7 +49,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	public MettelGeneralTableauState(/*MettelTableauManager manager,*/ Collection<? extends MettelTableauRule> calculus) {
 		super();
 //		this.manager = manager;
-		ruleChoiceStrategy  = new MettelSimpleRuleChoiceStrategy();
+		ruleChoiceStrategy  = new MettelSimpleRuleSelectionStrategy();
 		initRuleStates(calculus);
 		expressions = new MettelTableauStatePool(/*this*/);
 		expressions.addAll(this,new LinkedHashSet<MettelAnnotatedExpression>());
@@ -63,7 +63,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 			Set<MettelAnnotatedExpression> set) {
 		super();
 //		this.manager = manager;
-		ruleChoiceStrategy  = new MettelSimpleRuleChoiceStrategy();
+		ruleChoiceStrategy  = new MettelSimpleRuleSelectionStrategy();
 		initRuleStates(calculus);
 		expressions = new MettelTableauStatePool(/*this*/);
 		expressions.addAll(set);
@@ -78,7 +78,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	public MettelGeneralTableauState(/*MettelTableauManager manager,*/
 			Collection<? extends MettelTableauRule> calculus,
 			Set<MettelAnnotatedExpression> set,
-			MettelRuleChoiceStrategy strategy) {
+			MettelRuleSelectionStrategy strategy) {
 		super();
 //		this.manager = manager;
 		ruleChoiceStrategy  = strategy;
@@ -123,7 +123,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	public MettelGeneralTableauState(
 			MettelGeneralTableauState state,
 			Set<MettelAnnotatedExpression> set,
-			MettelRuleChoiceStrategy strategy) {
+			MettelRuleSelectionStrategy strategy) {
 		super();
 //		this.manager = state.manager;
 		parent = state;
@@ -165,7 +165,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		return complete;
 	}
 
-	private final class MettelSimpleRuleChoiceStrategy implements MettelRuleChoiceStrategy{
+	private final class MettelSimpleRuleSelectionStrategy implements MettelRuleSelectionStrategy{
 
 		private int index = -1;
 
@@ -214,7 +214,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		}
 	}
 
-	private MettelRuleChoiceStrategy ruleChoiceStrategy = null;
+	private MettelRuleSelectionStrategy ruleChoiceStrategy = null;
 
 	/* (non-Javadoc)
 	 * @see mettel.core.MettelTableauState#expand()
