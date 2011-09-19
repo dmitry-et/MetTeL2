@@ -29,7 +29,7 @@ import java.util.Map;
  * @version $Revision$ $Date$
  *
  */
-public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<Key>>
+abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<Key>>
 		extends AbstractSet<E> implements MettelSetMap<Key, E> {
 
 	protected Map<Key,Set<E>> map = null;
@@ -567,4 +567,17 @@ public abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<
    	   b.append(']');
    	   return b.toString();
    }
+
+/* (non-Javadoc)
+ * @see mettel.util.MettelSetMap#init(java.lang.Object)
+ */
+@SuppressWarnings("unchecked")
+@Override
+public void init(Object key) {
+	Set<E> set = map.get(key);
+	if(set == null){
+		set = newsubset();
+		map.put((Key)key,set);
+	}
+}
 }

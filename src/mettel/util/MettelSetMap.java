@@ -44,5 +44,6 @@ public interface MettelSetMap<Key, E extends MettelAnnotatedObject<Key>> extends
 	public boolean removeAll(Object key,Collection<?> c);
 	public void clear(Object key);
 	public Set<E> subset(Object key);
+	public void init(Object key);
 
 }

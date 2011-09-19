@@ -49,11 +49,11 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	public MettelGeneralTableauState(/*MettelTableauManager manager,*/ Collection<? extends MettelTableauRule> calculus) {
 		super();
 //		this.manager = manager;
-		ruleChoiceStrategy  = new MettelSimpleRuleSelectionStrategy();
+		ruleSelectionStrategy  = new MettelSimpleRuleSelectionStrategy();
 		initRuleStates(calculus);
 		expressions = new MettelTableauStatePool(/*this*/);
-		expressions.addAll(this,new LinkedHashSet<MettelAnnotatedExpression>());
-		actions.addAll(this,new LinkedHashSet<MettelTableauAction>());
+		expressions.init(this);
+		actions.init(this);
 	}
 
 	/**
@@ -63,12 +63,28 @@ public class MettelGeneralTableauState implements MettelTableauState {
 			Set<MettelAnnotatedExpression> set) {
 		super();
 //		this.manager = manager;
-		ruleChoiceStrategy  = new MettelSimpleRuleSelectionStrategy();
+		ruleSelectionStrategy  = new MettelSimpleRuleSelectionStrategy();
 		initRuleStates(calculus);
 		expressions = new MettelTableauStatePool(/*this*/);
 		expressions.addAll(set);
-		expressions.addAll(this,new LinkedHashSet<MettelAnnotatedExpression>());
-		actions.addAll(this,new LinkedHashSet<MettelTableauAction>());
+		expressions.init(this);
+		actions.init(this);
+	}
+
+	/**
+	 * @param set
+	 * @param strategy
+	 */
+	public MettelGeneralTableauState(/*MettelTableauManager manager,*/
+			Collection<? extends MettelTableauRule> calculus,
+			MettelRuleSelectionStrategy strategy) {
+		super();
+//		this.manager = manager;
+		ruleSelectionStrategy  = strategy;
+		initRuleStates(calculus);
+		expressions = new MettelTableauStatePool(/*this*/);
+		expressions.init(this);;
+		actions.init(this);
 	}
 
 	/**
@@ -81,12 +97,12 @@ public class MettelGeneralTableauState implements MettelTableauState {
 			MettelRuleSelectionStrategy strategy) {
 		super();
 //		this.manager = manager;
-		ruleChoiceStrategy  = strategy;
+		ruleSelectionStrategy  = strategy;
 		initRuleStates(calculus);
 		expressions = new MettelTableauStatePool(/*this*/);
 		expressions.addAll(set);
-		expressions.addAll(this,new LinkedHashSet<MettelAnnotatedExpression>());
-		actions.addAll(this,new LinkedHashSet<MettelTableauAction>());
+		expressions.init(this);
+		actions.init(this);
 	}
 
 	/**
@@ -96,13 +112,13 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		super();
 //		this.manager = state.manager;
 		parent = state;
-		ruleChoiceStrategy = state.ruleChoiceStrategy;
+		ruleSelectionStrategy = state.ruleSelectionStrategy;
 		initRuleStates(state.ruleStates);
 		expressions = new MettelTableauStatePool(/*this*/);
 		expressions.embed(state.expressions);// first to embed
-		expressions.addAll(this,new LinkedHashSet<MettelAnnotatedExpression>());
+		expressions.init(this);
 		actions.embed(state.actions);
-		actions.addAll(this,new LinkedHashSet<MettelTableauAction>());
+		actions.init(this);
 	}
 
 	/**
@@ -112,7 +128,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	public MettelGeneralTableauState(
 			MettelGeneralTableauState state,
 			Set<MettelAnnotatedExpression> set) {
-		this(state,set,state.ruleChoiceStrategy);
+		this(state,set,state.ruleSelectionStrategy);
 	}
 
 	/**
@@ -127,14 +143,14 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		super();
 //		this.manager = state.manager;
 		parent = state;
-		ruleChoiceStrategy  = strategy;
+		ruleSelectionStrategy  = strategy;
 		initRuleStates(state.ruleStates);
 		expressions = new MettelTableauStatePool(/*this*/);
 		expressions.embed(state.expressions);// first to embed
 		expressions.addAll(set);
-		expressions.addAll(this,new LinkedHashSet<MettelAnnotatedExpression>());
+		expressions.init(this);
 		actions.embed(state.actions);
-		actions.addAll(this,new LinkedHashSet<MettelTableauAction>());
+		actions.init(this);
 	}
 
 	/* (non-Javadoc)
@@ -214,7 +230,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		}
 	}
 
-	private MettelRuleSelectionStrategy ruleChoiceStrategy = null;
+	private MettelRuleSelectionStrategy ruleSelectionStrategy = null;
 
 	/* (non-Javadoc)
 	 * @see mettel.core.MettelTableauState#expand()
@@ -234,7 +250,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		}//XXX: Infinite loop
 */
 
-		final MettelTableauRuleState rs = ruleChoiceStrategy.select(ruleStates);
+		final MettelTableauRuleState rs = ruleSelectionStrategy.select(ruleStates);
 		if(rs == null){
 //System.out.println("None of rules are applicable");
 			complete = true;

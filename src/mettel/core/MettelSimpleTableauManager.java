@@ -19,6 +19,8 @@ package mettel.core;
 import java.util.Collection;
 import java.util.TreeSet;
 
+import mettel.core.strategy.MettelLessBranchingRuleSelectionStrategy;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$

@@ -59,4 +59,9 @@ public interface MettelTableauRuleState {
 	public void setApplicable(boolean b);
 
 	MettelTableauState applicationState();
+
+	/**
+	 * @return
+	 */
+	public int branchingFactor();
 }
