@@ -203,6 +203,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 				LinkedHashSet<MettelAnnotatedExpression>[] result = new LinkedHashSet[BRANCHES_NUMBER];
 	    		int i = 0;
 	    		for(Set<? extends MettelExpression> set:branches){
+//System.out.println("Branch "+set);
 	    			result[i] = new LinkedHashSet<MettelAnnotatedExpression>(set.size());
 	    		    for(MettelExpression e:set){
 	    		    	result[i].add(annotator.substitute(e,s0));
@@ -255,8 +256,10 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 //System.out.println("Substitution is "+s+" index = "+index);
 
     		final int ind = index - 1;
-    		newSubstitutions.addAll(mergeWithOldSubstitutions(s,ind));//first merge, than add to old
-			oldSubstitutions[ind].add(s);
+    		if(!oldSubstitutions[ind].contains(s)){
+    			newSubstitutions.addAll(mergeWithOldSubstitutions(s,ind));//first merge, than add to old
+    			oldSubstitutions[ind].add(s);
+    		}
 
     		return 0;
     	}
