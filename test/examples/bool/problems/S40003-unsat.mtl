@@ -1,4 +1,0 @@
-// ?? example: unsatisfiable
-@i (S | P)
-@i ~S
-@i ~P
