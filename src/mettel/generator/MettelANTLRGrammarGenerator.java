@@ -184,6 +184,7 @@ public class MettelANTLRGrammarGenerator {
 		grammar.addRule(makeANTLRExpressionRule(NAME,sorts));
 		grammar.addRule(makeANTLRTableauRule(grammar.name()));
 		grammar.addRule(makeANTLRTableauCalculusRule(grammar.name()));
+//		grammar.addRule(makeANTLREqualityRule(grammar.name(),sorts));
 
 //		grammarPackage.createFile(name+".g").append(grammar.toStringBuilder());
 
@@ -466,15 +467,18 @@ public class MettelANTLRGrammarGenerator {
 	private MettelANTLRRule makeANTLREqualityRule(String grammarName,Collection<MettelSort> sorts){
 		MettelANTLRMultiaryBNFStatement s = new MettelANTLRMultiaryBNFStatement(MettelANTLRMultiaryBNFStatement.OR);
 		for(MettelSort sort:sorts){
+			final String SORT_NAME = sort.name();
 			MettelANTLRMultiaryBNFStatement s0 = new MettelANTLRMultiaryBNFStatement();
-			MettelANTLRRuleReference ruleRef = new MettelANTLRRuleReference(sort.name(),sort.name()+"Expression",true);
-			ruleRef.appendLineToPostfix("r0 = "+sort.name()+"Expression;");
-			s0.addExpression(ruleRef);
+			MettelANTLRRuleReference ruleRef0 = new MettelANTLRRuleReference(SORT_NAME,SORT_NAME+"E0");
+			MettelANTLRRuleReference ruleRef1 = new MettelANTLRRuleReference(SORT_NAME,SORT_NAME+"E1");
+			s0.addExpression(ruleRef0);
 			s0.addExpression(new MettelANTLRToken("'='"));
-			s0.addExpression(ruleRef);
+			s0.addExpression(ruleRef1);
+			s0.appendLineToPostfix("r0 = factory.create"+MettelJavaNames.firstCharToUpperCase(SORT_NAME)+
+					"Equality("+SORT_NAME+"E0, "+SORT_NAME+"E1);");
 			s.addExpression(s0);
 		}
-		MettelANTLRRule r = new MettelANTLRRule("expression",s,
+		MettelANTLRRule r = new MettelANTLRRule("equality",s,
 				new String[]{grammarName+"Expression"});
 		//r.appendLineToAfterBlock("r0 = e0;");
 		return r;
