@@ -10,7 +10,9 @@ syntax S4{
 	concept singleton = '{' nominal '}';
 	concept	negation = '~' concept;
 	concept diamond = '<>' concept;
-	concept satisfactory= '@' nominal concept;
+	concept at = '@' nominal concept;
 	concept	disjunction  = concept '|' concept;
+	concept conceptEquality = concept '=' concept;
+	concept nominalEquality = nominal '=' nominal;
 	nominal f = 'f' '('  nominal ',' concept  ')'; //Skolem function
 }
