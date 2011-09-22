@@ -9,10 +9,10 @@ syntax S4{
 	formula false = 'false';
 	formula singleton = '{' nominal '}';
 	formula	negation = '~' formula;
-	fromula diamond = '<>' formula;
+	formula diamond = '<>' formula;
 	formula at = '@' nominal formula;
 	formula	disjunction  = formula '|' formula;
-//	formula conceptEquality = concept '=' concept; //Testing some features
+//	formula formulaEquality = formula '=' formula; //Testing some features
 //	formula nominalEquality = nominal '=' nominal;
 	nominal f = 'f' '('  nominal ',' formula  ')'; //Skolem function
 }
