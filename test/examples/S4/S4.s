@@ -12,7 +12,7 @@ syntax S4{
 	concept diamond = '<>' concept;
 	concept at = '@' nominal concept;
 	concept	disjunction  = concept '|' concept;
-	concept conceptEquality = concept '=' concept;
-	concept nominalEquality = nominal '=' nominal;
+//	concept conceptEquality = concept '=' concept; //Testing some features
+//	concept nominalEquality = nominal '=' nominal;
 	nominal f = 'f' '('  nominal ',' concept  ')'; //Skolem function
 }
