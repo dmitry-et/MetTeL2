@@ -21,7 +21,7 @@
 @l<>{l2} @l2<>{l3} / @l1<>{l3} $;
 
 // Closure rule
-@l P  @l~P / 
+@l P  @l~P /  $; $; $;
 // last rule should not have $;
 // no comma between formulae
 

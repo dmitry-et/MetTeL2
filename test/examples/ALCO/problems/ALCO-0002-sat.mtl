@@ -1,0 +1,3 @@
+// ?? example: satisfiable
+@l (S | P)
+@l ~S

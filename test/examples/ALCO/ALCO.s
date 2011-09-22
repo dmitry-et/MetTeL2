@@ -21,14 +21,19 @@ syntax ALCO{
 	concept universalRestriction = 'forall'
 									 role '.'
 									 concept;
+	concept at = '@' individual concept;									 
+									 
 	role composition = role ';' role;
 	role union = role '|' role;
 	role converse = role '-';
+	
+	individual skolemF = 'f' '(' individual ',' role ',' concept ')';
+	individual skolemG = 'g' '(' individual ',' individual ',' role ',' role ')';  
 
 }
 
-syntax ALCOTableau extends ALCO{
+/*syntax ALCOTableau extends ALCO{
 
 	individual skolemFunction = 'f' '(' individual ',' role ',' concept ')';
 
-}
+}*/

@@ -6,8 +6,8 @@ public class AllTests {
 
 	private static final String[] classNames = new String[]{
 		"ALCO.test.ALCOParserTest",
-	    "bool.test.BooleanParserTest",
-		//"ALCO.test.ALCOParserTest",
+		"ALCO.test.ALCOTableauTest",
+		"bool.test.BooleanParserTest",
 		"bool.test.BooleanTableauTest",
 		"S4.test.S4ParserTest",
 		"S4.test.S4TableauTest"

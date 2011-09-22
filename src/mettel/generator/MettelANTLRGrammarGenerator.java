@@ -209,7 +209,8 @@ public class MettelANTLRGrammarGenerator {
 
 		MettelANTLRMultiaryBNFStatement s0 = new MettelANTLRMultiaryBNFStatement();
 		s0.addExpression(new MettelANTLRToken("'$;'"));
-		s0.addExpression(ruleRef);
+		s0.addExpression(new MettelANTLRUnaryBNFStatement(ruleRef,
+							MettelANTLRUnaryBNFStatement.TEST));
 		s.addExpression(new MettelANTLRUnaryBNFStatement(
 						s0,MettelANTLRUnaryBNFStatement.STAR));
 		s.addExpression(MettelANTLRToken.EOF);
