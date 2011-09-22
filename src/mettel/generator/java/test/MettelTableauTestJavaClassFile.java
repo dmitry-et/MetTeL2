@@ -39,19 +39,19 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
 
 	protected void imports(){
 		headings.appendLine("import java.util.ArrayList;");
-		headings.appendLine("import java.util.Set;");
-		headings.appendLine("import java.util.TreeSet;");
+//		headings.appendLine("import java.util.Set;");
+//		headings.appendLine("import java.util.TreeSet;");
 		headings.appendLine("import java.util.LinkedHashSet;");
 		headings.appendLine("import java.io.File;");
-		headings.appendLine("import java.io.FileWriter;");
-		headings.appendLine("import java.io.PrintWriter;");
-		headings.appendLine("import java.io.StringReader;");
+//		headings.appendLine("import java.io.FileWriter;");
+//		headings.appendLine("import java.io.PrintWriter;");
+//		headings.appendLine("import java.io.StringReader;");
 		headings.appendLine("import java.io.IOException;");
 
 		headings.appendLine("import junit.framework.*;");
 
 		headings.appendLine("import org.antlr.runtime.ANTLRFileStream;");
-		headings.appendLine("import org.antlr.runtime.ANTLRReaderStream;");
+//		headings.appendLine("import org.antlr.runtime.ANTLRReaderStream;");
 		headings.appendLine("import org.antlr.runtime.CharStream;");
 		headings.appendLine("import org.antlr.runtime.CommonTokenStream;");
 		headings.appendLine("import org.antlr.runtime.RecognitionException;");
@@ -86,6 +86,10 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
     	    appendLine("parser.tableauCalculus(calculus);");
 
 //appendLine("System.out.println(calculus);");
+appendLine("System.out.println();");
+appendLine(  "System.out.println(\"----------------------------------------------------\");");
+appendLine("System.out.println(\"Testing tableau algorithm for "+prefix+"\");");
+appendLine(  "System.out.print(\"----------------------------------------------------\");");
 
     	    appendEOL();
 
@@ -117,7 +121,7 @@ appendLine("System.out.print(\"Problem set from \"+fileName+\"...\");");
     	        		    		"> list = new ArrayList<"+prefix+MettelJavaNames.firstCharToUpperCase(sort)+">();");
     	        		    appendLine("parser."+sort+"s(list);");
 
-    	        		    appendLine("TreeSet<MettelAnnotatedExpression> annotated = new TreeSet<MettelAnnotatedExpression>();");
+//    	        		    appendLine("TreeSet<MettelAnnotatedExpression> annotated = new TreeSet<MettelAnnotatedExpression>();");
 
     	        		    appendLine("MettelSimpleTableauManager m = new MettelSimpleTableauManager(calculus);");
 //    	        		    appendLine("MettelSimpleTableauAnnotation a = new MettelSimpleTableauAnnotation(state);");
@@ -135,6 +139,7 @@ appendLine("System.out.print(\"OK\");");
 			decrementIndentLevel();
     	    appendLine('}');
 appendLine("System.out.println();");
+appendLine(  "System.out.println(\"----------------------------------------------------\");");
 		decrementIndentLevel();
     	appendLine('}');
 	}
