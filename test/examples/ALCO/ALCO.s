@@ -11,24 +11,25 @@ syntax ALCO{
 	concept false = 'false';
 	concept singleton = '{' individual '}';
 	concept	negation = '~' concept;
-	concept	conjunction = concept '&' concept;
-	concept	disjunction = concept '|' concept;
-	concept	implication = concept '->' concept;
-	concept	equivalence = concept '<->' concept;
 	concept	existentialRestriction = 'exists'
 									 role '.'
 									 concept;
 	concept universalRestriction = 'forall'
 									 role '.'
 									 concept;
-	concept at = '@' individual concept;									 
-									 
+	concept at = '@' individual concept;
+
+	concept	conjunction = concept '&' concept;
+	concept	disjunction = concept '|' concept;
+	concept	implication = concept '->' concept;
+	concept	equivalence = concept '<->' concept;
+
 	role composition = role ';' role;
 	role union = role '|' role;
 	role converse = role '-';
-	
+
 	individual skolemF = 'f' '(' individual ',' role ',' concept ')';
-	individual skolemG = 'g' '(' individual ',' individual ',' role ',' role ')';  
+	individual skolemG = 'g' '(' individual ',' individual ',' role ',' role ')';
 
 }
 

@@ -1,4 +1,4 @@
-//equality rules 
+//equality rules
 
 @l {l2} / @l2 {l} $;
 @l ~{l2} / @l2 {l2} $;
@@ -9,19 +9,29 @@
 @l P  @l {l2} / @l2 P $;
 @l exists r.{l2}  @l2 {l3} / @l exists r.{l3} $;
 
-//Decomposition rules 
+//Decomposition rules
 
-@l ~(~P) / @l P $; 
+@l ~(~P) / @l P $;
 @l (P|Q) / @l P $| @l Q $;
 @l ~(P|Q) / @l ~P @l ~Q $;
-@l exists r.P / @l exists r.{f(l,r,P)} @f(l,r,P) P $;  
+@l (P&Q) / @l P @l Q $;
+@l ~(P&Q) / @l ~P $| @l ~Q $;
+@l (P -> Q) / @l ~P $| @l Q $;
+@l ~(P -> Q) / @l P  @l ~Q $;
+@l (P <-> Q) / @l P @l Q $| @l ~P @l ~Q $;
+@l ~(P <-> Q) / @l P  @l ~Q $| @l ~P @l Q $;
+
+@l forall r.P / @l ~(exists r.~P) $;
+@l ~(forall r.P) / @l exists r.~P $;
+
+@l exists r.P / @l exists r.{f(l,r,P)} @f(l,r,P) P $;
 @l ~(exists r.P) @l exists r.{l2} / @l2 ~P $;
 
 //Roles
 @l exists r;s.{l2} / @l exists r.{g(l,l2,r,s)} @g(l,l2,r,s) {l2} $;
 @l ~(exists r;s.P) / @l ~(exists r.(exists s.P)) $;
 
-@l exists r|s.{l2} / @l exists r.{l2} $| @l exists s.{l2} $; 
+@l exists r|s.{l2} / @l exists r.{l2} $| @l exists s.{l2} $;
 @l ~(exists r|s.P) / @l ~(exists r.P) @l ~(exists s.P) $;
 
 @l exists r-.{l2} / @l2 exists r.{l} $;
@@ -29,7 +39,7 @@
 @l ~(exists (r|s)-.P) / @l ~(exists (r-)|(s-).P) $;
 @l ~(exists (r;s)-.P) / @l ~(exists (s-);(r-).P) $;
 
-// Theory rules 
+// Theory rules
 
 // Closure rule
 @l P  @l ~P /  $;

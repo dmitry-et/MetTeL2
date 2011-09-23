@@ -109,7 +109,7 @@ appendLine(  "System.out.print(\"-----------------------------------------------
     	        		appendLine("if(j != -1){");
     	        		incrementIndentLevel();
 appendLine("System.out.println();");
-appendLine("System.out.print(\"Problem set from \"+fileName+\"...\");");
+appendLine("System.out.print(fileName+\"...\");");
 
     	        			appendLine("boolean result = name.substring(j+1).equals(\"sat\");");
 
