@@ -1,0 +1,9 @@
+//Satisfiable?
+@k 
+~(
+(
+(@i (forall r.(exists r.{i}))) &
+(@i ((exists r.(exists s.{j})) -> (exists s.(exists r.{j}))))
+) ->
+(@i ((exists r.(forall s.{j})) -> (forall s.(exists r.{j}))))
+)

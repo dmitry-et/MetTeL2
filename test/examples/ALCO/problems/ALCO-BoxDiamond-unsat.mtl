@@ -1,0 +1,2 @@
+//Unsatisfiable
+@i ~((forall r.P) <-> ~(exists r.~P))

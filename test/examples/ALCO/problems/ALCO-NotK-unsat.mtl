@@ -1,0 +1,2 @@
+//Unsatisfiable
+@i ~((forall r.(P -> Q)) -> ((forall r.P) -> (forall r.Q)))

@@ -1,0 +1,5 @@
+//Unsatisfiable
+@j P
+@j {i}
+@i P
+@j exists r.(P&~P)
