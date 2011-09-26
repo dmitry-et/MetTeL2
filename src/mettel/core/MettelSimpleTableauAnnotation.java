@@ -60,9 +60,9 @@ public class MettelSimpleTableauAnnotation implements MettelTableauAnnotation {
 	public MettelTableauAnnotation merge(MettelTableauAnnotation a) {
 		final MettelTableauState astate = a.state();
 		if(this.state.id() > astate.id()){
-			return new MettelSimpleTableauAnnotation(this.state);
+			return newInstance(this.state);
 		}else{
-			return new MettelSimpleTableauAnnotation(astate);
+			return newInstance(astate);
 		}
 	}
 
