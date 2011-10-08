@@ -201,6 +201,11 @@ bnfDefinition
    [MettelSyntax syn, MettelBNFStatement statement]
    returns [ArrayList<MettelToken> def = new ArrayList<MettelToken>()]
  //  throws MettelParseException
+    @init{
+    	int argc = 0;
+    	boolean fEquality = statement.identifier().equals("equality");
+    	MettelSort eqSort = null;
+    }
     :
     (
     l = charOrStringLiteral
@@ -210,9 +215,31 @@ bnfDefinition
     {
     MettelSort sort = syn.getSort(t.getText());
     if(sort == null)  throw new MettelUndeclaredSortException(t.getText());
+    argc++;
+    if(fEquality){
+    	switch(argc){
+    		case 1:
+    			eqSort = sort;
+    			break;
+    		case 2:
+    			if(sort != eqSort){
+    				throw new MettelEqualityArgumentTypeException(sort.name(),eqSort.name());
+    			}
+    			break;
+    		default:
+    	    	if(argc>2){
+    				throw new MettelEqualityArgumentNumberException(argc);
+    			}
+    	}
+    }
     statement.addToken(sort);
     }
     )+
+	{
+	 	if(fEquality && argc<2){
+    		throw new MettelEqualityArgumentNumberException(argc);
+    	}
+	}
 
 /*    (
     l = charOrStringLiteral

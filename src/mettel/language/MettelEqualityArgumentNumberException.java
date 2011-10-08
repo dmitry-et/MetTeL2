@@ -16,38 +16,33 @@
  */
 package mettel.language;
 
-import org.antlr.runtime.IntStream;
-import org.antlr.runtime.RecognitionException;
-
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public class MettelRecognitionException extends RecognitionException {
+public class MettelEqualityArgumentNumberException extends MettelRecognitionException {
+
 
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = -6523022868000940084L;
+	private static final long serialVersionUID = 8786426371045211519L;
 
 	/**
 	 *
 	 */
-	public MettelRecognitionException() {
-		// TODO Auto-generated constructor stub
-	}
+	private int argc = -1;
 
 	/**
-	 * @param input
+	 * @param sortName
 	 */
-	public MettelRecognitionException(IntStream input) {
-		super(input);
-		// TODO Auto-generated constructor stub
+	public MettelEqualityArgumentNumberException(int argc) {
+		this.argc =  argc;
 	}
 
 	public String toString(){
-		return "at line "+line+" at position "+charPositionInLine;
+		return "Equality must have two arguments but "+argc+
+		       " arguments are detected "+super.toString();
 	}
-
 }

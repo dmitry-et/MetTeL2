@@ -75,5 +75,14 @@ public class MettelHistoryAnnotation extends MettelSimpleTableauAnnotation {
 		return "Ann("+state+')';
 	}
 */
+	/* (non-Javadoc)
+	 * @see mettel.core.MettelTableauAnnotation#merge(mettel.core.MettelTableauAnnotation)
+	 */
+	@Override
+	public MettelTableauAnnotation merge(MettelTableauAnnotation a) {
+		MettelHistoryAnnotation a0 = (MettelHistoryAnnotation)super.merge(a);
+
+		return a0;
+	}
 
 }

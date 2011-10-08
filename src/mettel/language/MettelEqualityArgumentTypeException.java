@@ -16,38 +16,35 @@
  */
 package mettel.language;
 
-import org.antlr.runtime.IntStream;
-import org.antlr.runtime.RecognitionException;
-
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public class MettelRecognitionException extends RecognitionException {
+public class MettelEqualityArgumentTypeException extends MettelRecognitionException {
 
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = -6523022868000940084L;
+	private static final long serialVersionUID = -7862542364020630201L;
 
 	/**
 	 *
 	 */
-	public MettelRecognitionException() {
-		// TODO Auto-generated constructor stub
-	}
+	private String sortName0 = null;
+
+	private String sortName1 = null;
 
 	/**
-	 * @param input
+	 * @param sortName
 	 */
-	public MettelRecognitionException(IntStream input) {
-		super(input);
-		// TODO Auto-generated constructor stub
+	public MettelEqualityArgumentTypeException(String sortName0, String sortName1) {
+		this.sortName0 =  sortName0;
+		this.sortName1 =  sortName1;
 	}
 
 	public String toString(){
-		return "at line "+line+" at position "+charPositionInLine;
+		return "Expected argument of the sort "+sortName0+
+		       " but the sort "+sortName1+" is detected "+super.toString();
 	}
-
 }

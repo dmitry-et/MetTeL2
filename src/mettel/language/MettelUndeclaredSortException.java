@@ -40,6 +40,6 @@ public class MettelUndeclaredSortException extends MettelRecognitionException {
 	}
 
 	public String toString(){
-		return "The sort "+sortName+" at line "+line+" at position "+charPositionInLine+" is not declared";
+		return "The sort "+sortName+" is not declared "+super.toString();
 	}
 }
