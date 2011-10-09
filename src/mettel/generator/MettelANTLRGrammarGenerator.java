@@ -291,6 +291,12 @@ public class MettelANTLRGrammarGenerator {
 					  (SORT_NAME.equals(((MettelSort)tokens[2]).name()))
 					){
 
+				String id = s.identifier();
+/*				if(id.equals("equality")){
+					id = SORT_NAME+MettelJavaNames.firstCharToUpperCase(id);
+					s1 = SORT_NAME+MettelJavaNames.firstCharToUpperCase(id);
+				}
+*/
 				MettelANTLRMultiaryBNFStatement st = new MettelANTLRMultiaryBNFStatement();
 				st.addExpression(new MettelANTLRRuleReference(s0,"e0"));
 
@@ -298,7 +304,7 @@ public class MettelANTLRGrammarGenerator {
 				st1.addExpression(new MettelANTLRToken(tokens[1].toString()));
 
 				MettelANTLRRuleReference ref = new MettelANTLRRuleReference(s0,"e1");
-				ref.appendLineToPostfix("e0 = factory.create"+MettelJavaNames.firstCharToUpperCase(s.identifier())+
+				ref.appendLineToPostfix("e0 = factory.create"+MettelJavaNames.firstCharToUpperCase(id)+
 						MettelJavaNames.firstCharToUpperCase(SORT_NAME)+"(e0, e1);");
 				st1.addExpression(ref);
 
@@ -312,8 +318,8 @@ public class MettelANTLRGrammarGenerator {
 				r.appendLineToAfterBlock("r0 = e0;");
 				grammar.addRule(r);
 
-				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, s.identifier(),
-						new String[]{((MettelSort)tokens[0]).name(), ((MettelSort)tokens[2]).name()}, s.tokens());
+				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, id,
+						new String[]{SORT_NAME, SORT_NAME}, s.tokens());
 
 			}else if( (SIZE == 2) &&
 					  (tokens[0] instanceof MettelSort) &&
@@ -342,6 +348,9 @@ public class MettelANTLRGrammarGenerator {
 
 
 			}else{ //if(tokens[0] instanceof MettelStringLiteral){
+
+				String id = s.identifier();
+
 				MettelANTLRMultiaryBNFStatement st = new MettelANTLRMultiaryBNFStatement(
 						MettelANTLRMultiaryBNFStatement.OR);
 				MettelANTLRRuleReference ref = new MettelANTLRRuleReference(s0,"e00");
@@ -365,7 +374,12 @@ public class MettelANTLRGrammarGenerator {
 						j++;
 					}
 				}
-				st0.appendToPostfix("r0 = factory.create"+MettelJavaNames.firstCharToUpperCase(s.identifier())+
+/*				if(id.equals("equality")){
+					id = sortStrings.get(0)+MettelJavaNames.firstCharToUpperCase(id);
+					s1 = SORT_NAME+MettelJavaNames.firstCharToUpperCase(id);
+				}
+*/
+				st0.appendToPostfix("r0 = factory.create"+MettelJavaNames.firstCharToUpperCase(id)+
 						MettelJavaNames.firstCharToUpperCase(SORT_NAME)+'(');
 				final int jSIZE = sortStrings.size();
 				if(jSIZE >0 ){
@@ -392,7 +406,7 @@ public class MettelANTLRGrammarGenerator {
 				}
 */				grammar.addRule(r);
 
-				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, s.identifier(), sortStrings.toArray(new String[sortStrings.size()]),
+				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, id , sortStrings.toArray(new String[sortStrings.size()]),
 						s.tokens());
 
 			}//TODO other alternatives: ~~P, etc

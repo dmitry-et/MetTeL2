@@ -12,7 +12,7 @@ syntax S4{
 	formula diamond = '<>' formula;
 	formula at = '@' nominal formula;
 	formula	disjunction  = formula '|' formula;
-//	formula formulaEquality = formula '=' formula; //Testing some features
-//	formula nominalEquality = nominal '=' nominal;
+	formula equivalence = formula  '<->' formula; //Testing some features
+	formula equality = '$' nominal '=' nominal;
 	nominal f = 'f' '('  nominal ',' formula  ')'; //Skolem function
 }

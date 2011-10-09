@@ -50,12 +50,12 @@ tokens{
 
 @header{
 package mettel.language;
-
+}
 //Java imports
-import java.util.HashMap;
+//import java.util.HashMap;
 
 //import mettel.language.MettelSpecification;
-}
+//}
 
 @lexer::header{
 package mettel.language;
@@ -193,7 +193,13 @@ bnfStatement
     {id = t.getText();}
     )?
     EQ
-    {statement = new MettelBNFStatement(id);}
+    {
+    if(MettelEqualityBNFStatement.isEquality(id)){
+    	statement = new MettelEqualityBNFStatement(id);
+    }else{
+    	statement = new MettelBNFStatement(id);
+    }
+    }
     bnfDefinition[syn, statement]
     ;
 
@@ -203,8 +209,7 @@ bnfDefinition
  //  throws MettelParseException
     @init{
     	int argc = 0;
-    	boolean fEquality = statement.identifier().equals("equality");
-    	MettelSort eqSort = null;
+    	boolean fEquality = statement instanceof MettelEqualityBNFStatement;
     }
     :
     (
@@ -219,11 +224,12 @@ bnfDefinition
     if(fEquality){
     	switch(argc){
     		case 1:
-    			eqSort = sort;
+ 	 			((MettelEqualityBNFStatement)statement).setSort(sort);
     			break;
     		case 2:
-    			if(sort != eqSort){
-    				throw new MettelEqualityArgumentTypeException(sort.name(),eqSort.name());
+    			final MettelSort sort0 = ((MettelEqualityBNFStatement)statement).sort();
+    			if(sort != sort0){
+    				throw new MettelEqualityArgumentTypeException(sort.name(),sort0.name());
     			}
     			break;
     		default:

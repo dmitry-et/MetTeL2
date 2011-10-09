@@ -70,6 +70,10 @@ public class MettelBNFStatement{
 		return identifier;
 	}
 
+//	public void setIdentifier(String s){
+//		identifier = s;
+//	}
+
 	/**
 	 *
 	 */
