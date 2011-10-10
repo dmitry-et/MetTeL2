@@ -13,6 +13,6 @@ syntax S4{
 	formula at = '@' nominal formula;
 	formula	disjunction  = formula '|' formula;
 	formula equivalence = formula  '<->' formula; //Testing some features
-	formula equality = '$' nominal '=' nominal;
+	formula equality = '[' nominal '=' nominal ']';
 	nominal f = 'f' '('  nominal ',' formula  ')'; //Skolem function
 }

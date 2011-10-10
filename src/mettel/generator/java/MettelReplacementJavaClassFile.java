@@ -30,7 +30,7 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 	public MettelReplacementJavaClassFile(String prefix,
 			MettelJavaPackage pack, String[] sorts) {
 		super(prefix+"TreeReplacement", pack, "public", null,
-				new String[]{"Comparable<"+prefix+"Replacement>"});
+				new String[]{prefix+"Replacement"});
 		this.prefix = prefix;
 		body(sorts);
 	}
