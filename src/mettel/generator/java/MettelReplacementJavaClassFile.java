@@ -100,6 +100,7 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 
 		appendLine("public boolean append(MettelReplacement r){");
 		incrementIndentLevel();
+			appendLine("if(r == null){ return false; }");
 			appendLine("return append(("+prefix+"Replacement)r);");
 		decrementIndentLevel();
 		appendLine('}');

@@ -29,6 +29,7 @@ import mettel.generator.antlr.MettelANTLRUnaryBNFStatement;
 import mettel.generator.antlr.MettelANTLRMultiaryBNFStatement;
 import mettel.generator.java.MettelJavaPackageStructure;
 
+import mettel.language.MettelEqualityBNFStatement;
 import mettel.language.MettelStringLiteral;
 import mettel.language.MettelToken;
 import mettel.language.MettelBNFStatement;
@@ -319,7 +320,7 @@ public class MettelANTLRGrammarGenerator {
 				grammar.addRule(r);
 
 				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, id,
-						new String[]{SORT_NAME, SORT_NAME}, s.tokens());
+						new String[]{SORT_NAME, SORT_NAME}, s.tokens(), (s instanceof MettelEqualityBNFStatement));
 
 			}else if( (SIZE == 2) &&
 					  (tokens[0] instanceof MettelSort) &&
@@ -344,7 +345,7 @@ public class MettelANTLRGrammarGenerator {
 				grammar.addRule(r);
 
 				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, s.identifier(),
-						new String[]{((MettelSort)tokens[0]).name()}, s.tokens());
+						new String[]{((MettelSort)tokens[0]).name()}, s.tokens(), false);
 
 
 			}else{ //if(tokens[0] instanceof MettelStringLiteral){
@@ -407,7 +408,7 @@ public class MettelANTLRGrammarGenerator {
 */				grammar.addRule(r);
 
 				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, id , sortStrings.toArray(new String[sortStrings.size()]),
-						s.tokens());
+						s.tokens(), (s instanceof MettelEqualityBNFStatement));
 
 			}//TODO other alternatives: ~~P, etc
 			s0 = s1;

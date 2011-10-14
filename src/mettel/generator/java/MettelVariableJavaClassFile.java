@@ -144,6 +144,12 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 			appendLine("return name.equals((("+TYPE+"Variable)o).name());");
 		decrementIndentLevel();
 		appendLine('}');
+
+		appendLine("public boolean isEquality(){");
+		incrementIndentLevel();
+			appendLine("return false;");
+		decrementIndentLevel();
+		appendLine('}');
 	}
 
 }

@@ -100,8 +100,8 @@ public class MettelJavaPackageStructure {
 		}
 	}
 
-	public void appendConnectiveClass(String prefix, String sort, String name, String[] sorts, List<MettelToken> tokens){
-		MettelComplexExpressionJavaClassFile f = new MettelComplexExpressionJavaClassFile(prefix,sort,name,sorts,langPackage);
+	public void appendConnectiveClass(String prefix, String sort, String name, String[] sorts, List<MettelToken> tokens, boolean equality){
+		MettelComplexExpressionJavaClassFile f = new MettelComplexExpressionJavaClassFile(prefix,sort,name,sorts,langPackage,equality);
 		f.addToStringMethod(tokens);
 		langPackage.add(f);
 		factory.addCreateMethod(sort, name, sorts);
