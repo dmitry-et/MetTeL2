@@ -46,63 +46,71 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	private MettelTreeSetLinkedHashMap<MettelTableauState, MettelTableauAction> actions =
 		new MettelTreeSetLinkedHashMap<MettelTableauState, MettelTableauAction>();
 
-	public MettelGeneralTableauState(/*MettelTableauManager manager,*/ Collection<? extends MettelTableauRule> calculus) {
+	private MettelTableauObjectFactory factory = null;
+
+	private MettelReplacement replacement = null;
+
+	public MettelGeneralTableauState(MettelTableauObjectFactory factory, Collection<? extends MettelTableauRule> calculus) {
 		super();
-//		this.manager = manager;
+		this.factory = factory;
 		ruleSelectionStrategy  = new MettelSimpleRuleSelectionStrategy();
 		initRuleStates(calculus);
 		expressions = new MettelTableauStatePool(/*this*/);
 		expressions.init(this);
 		actions.init(this);
+		replacement = factory.createReplacement();
 	}
 
 	/**
 	 * @param set
 	 */
-	public MettelGeneralTableauState(/*MettelTableauManager manager,*/ Collection<? extends MettelTableauRule> calculus,
+	public MettelGeneralTableauState(MettelTableauObjectFactory factory, Collection<? extends MettelTableauRule> calculus,
 			Set<MettelAnnotatedExpression> set) {
 		super();
-//		this.manager = manager;
+		this.factory = factory;
 		ruleSelectionStrategy  = new MettelSimpleRuleSelectionStrategy();
 		initRuleStates(calculus);
 		expressions = new MettelTableauStatePool(/*this*/);
 		expressions.addAll(set);
 		expressions.init(this);
 		actions.init(this);
+		replacement = factory.createReplacement();
 	}
 
 	/**
 	 * @param set
 	 * @param strategy
 	 */
-	public MettelGeneralTableauState(/*MettelTableauManager manager,*/
+	public MettelGeneralTableauState(MettelTableauObjectFactory factory,
 			Collection<? extends MettelTableauRule> calculus,
 			MettelRuleSelectionStrategy strategy) {
 		super();
-//		this.manager = manager;
+		this.factory = factory;
 		ruleSelectionStrategy  = strategy;
 		initRuleStates(calculus);
 		expressions = new MettelTableauStatePool(/*this*/);
 		expressions.init(this);;
 		actions.init(this);
+		replacement = factory.createReplacement();
 	}
 
 	/**
 	 * @param set
 	 * @param strategy
 	 */
-	public MettelGeneralTableauState(/*MettelTableauManager manager,*/
+	public MettelGeneralTableauState(MettelTableauObjectFactory factory,
 			Collection<? extends MettelTableauRule> calculus,
 			Set<MettelAnnotatedExpression> set,
 			MettelRuleSelectionStrategy strategy) {
 		super();
-//		this.manager = manager;
+		this.factory = factory;
 		ruleSelectionStrategy  = strategy;
 		initRuleStates(calculus);
 		expressions = new MettelTableauStatePool(/*this*/);
 		expressions.addAll(set);
 		expressions.init(this);
 		actions.init(this);
+		replacement = factory.createReplacement();
 	}
 
 	/**
@@ -110,7 +118,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	 */
 	public MettelGeneralTableauState(MettelGeneralTableauState state){
 		super();
-//		this.manager = state.manager;
+		this.factory = state.factory;
 		parent = state;
 		ruleSelectionStrategy = state.ruleSelectionStrategy;
 		initRuleStates(state.ruleStates);
@@ -119,6 +127,9 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		expressions.init(this);
 		actions.embed(state.actions);
 		actions.init(this);
+		replacement = factory.createReplacement();
+		replacement.append(state.replacement);
+		state.replacement = null;//Forget about old replacements
 	}
 
 	/**
@@ -141,7 +152,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 			Set<MettelAnnotatedExpression> set,
 			MettelRuleSelectionStrategy strategy) {
 		super();
-//		this.manager = state.manager;
+		this.factory = state.factory;
 		parent = state;
 		ruleSelectionStrategy  = strategy;
 		initRuleStates(state.ruleStates);
@@ -151,6 +162,9 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		expressions.init(this);
 		actions.embed(state.actions);
 		actions.init(this);
+		replacement = factory.createReplacement();
+		replacement.append(state.replacement);
+		state.replacement = null;//Forget about old replacements
 	}
 
 	/* (non-Javadoc)

@@ -23,35 +23,35 @@ import mettel.util.MettelJavaNames;
  * @version $Revision$ $Date$
  *
  */
-public class MettelReplacementJavaInterfaceFile extends MettelJavaInterfaceFile {
+public class MettelTableauObjectFactoryJavaClassFile extends MettelJavaClassFile {
 
 	private String prefix = "Mettel";
-
-	public MettelReplacementJavaInterfaceFile(String prefix,
-			MettelJavaPackage pack, String[] sorts) {
-		super(prefix+"Replacement", pack,
-				new String[]{"MettelReplacement"});
-		this.prefix =prefix;
-		body(sorts);
+	/**
+	 * @param name
+	 * @param pack
+	 */
+	public MettelTableauObjectFactoryJavaClassFile(String prefix, MettelJavaPackage pack) {
+		//if(name == null) throw MettelGeneratorRuntimeException("Name is null");
+		super(prefix + "TableauObjectFactory", pack, "public", null,
+			  new String[]{"MettelTableauObjectFactory"});
+		this.prefix = prefix;
+		body();
 	}
 
 	protected void imports(){
-		headings.appendLine("import java.util.Map;");
+		headings.appendLine("import mettel.core.MettelTableauObjectFactory;");
 		headings.appendLine("import mettel.core.MettelReplacement;");
 		headings.appendEOL();
 	}
 
-	private void body(String[] sorts){
-		for(String sort:sorts){
-			final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(sort);
-			appendLine(TYPE+" get"+MettelJavaNames.firstCharToUpperCase(sort)+'('+TYPE+" e);");appendEOL();
-//			appendLine("Iterator<"+TYPE+"> "+sort+"Iterator();");appendEOL();
-			appendLine("Map<"+TYPE+", "+TYPE+"> "+sort+"Map();");appendEOL();
-			appendLine("boolean append("+TYPE+" e0, "+TYPE+" e1);");appendEOL();
-		}
+	private void body(){
+		appendLine("public MettelReplacement createReplacement(){");
+		incrementIndentLevel();
+			appendLine("return new "+prefix+"TreeReplacement();");
+		decrementIndentLevel();
+		appendLine('}');
 
-		indent();append("boolean append("+prefix+"Replacement r);");appendEOL();appendEOL();
-		    //MettelReplacement compose(MettelReplacement r);
+		appendEOL();
 	}
 
 }

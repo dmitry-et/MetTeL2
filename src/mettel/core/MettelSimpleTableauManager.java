@@ -29,9 +29,9 @@ public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 	/**
 	 *
 	 */
-	public MettelSimpleTableauManager(Collection<? extends MettelTableauRule> calculus) {
+	public MettelSimpleTableauManager(MettelTableauObjectFactory factory, Collection<? extends MettelTableauRule> calculus) {
 		unexpandedStates = new TreeSet<MettelTableauState>(new MettelTableauStateComparator());
-		state = new MettelGeneralTableauState(/*this,*/ calculus);
+		state = new MettelGeneralTableauState(factory, calculus);
 	}
 
 	/* (non-Javadoc)

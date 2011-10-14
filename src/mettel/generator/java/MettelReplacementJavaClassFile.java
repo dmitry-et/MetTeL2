@@ -41,6 +41,8 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 		headings.appendLine("import java.util.Set;");
 		headings.appendLine("import java.util.TreeSet;");
 		headings.appendLine("import java.util.Map.Entry;");
+		headings.appendLine("import mettel.core.MettelReplacement;");
+		headings.appendLine("import mettel.core.MettelExpression;");
 		headings.appendEOL();
 	}
 
@@ -85,6 +87,24 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 			appendEOL();
 		}
 
+		appendLine("public boolean append(MettelExpression e0, MettelExpression e1){");
+		incrementIndentLevel();
+			for(String sort:sorts){
+				final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(sort);
+				appendLine("if(e0 instanceof "+TYPE+"){ return append(("+TYPE+")e0, ("+TYPE+")e1); }");
+			}
+			appendLine("return false;");
+		decrementIndentLevel();
+		appendLine('}');
+		appendEOL();
+
+		appendLine("public boolean append(MettelReplacement r){");
+		incrementIndentLevel();
+			appendLine("return append(("+prefix+"Replacement)r);");
+		decrementIndentLevel();
+		appendLine('}');
+		appendEOL();
+
 		appendLine("public boolean append("+prefix+"Replacement r){");
 		incrementIndentLevel();
 			for(String sort:sorts){
@@ -115,14 +135,14 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 		appendLine('}');
 		appendEOL();
 
-		appendLine("public int compareTo("+prefix+"Replacement r){");
+		appendLine("public int compareTo(MettelReplacement r){");
 		incrementIndentLevel();
 			appendLine("if(r == this){ return 0; }");
 			for(String sort:sorts){
 				final String uSort = MettelJavaNames.firstCharToUpperCase(sort);
 				final String TYPE = prefix+uSort;
 				appendLine("final Set<"+TYPE+"> keys"+uSort+"0 = "+sort+"Map.keySet();");
-				appendLine("final Set<"+TYPE+"> keys"+uSort+"1 = r."+sort+"Map().keySet();");
+				appendLine("final Set<"+TYPE+"> keys"+uSort+"1 = (("+prefix+"Replacement)r)."+sort+"Map().keySet();");
 				appendLine("final TreeSet<"+TYPE+"> keys"+uSort+" = new TreeSet<"+TYPE+">(keys"+uSort+"0);");//Note: this is a sorted set!
 				appendLine("keys"+uSort+".addAll(keys"+uSort+"1);");
 				appendLine("for("+TYPE +" key:keys"+uSort+"){");
@@ -140,7 +160,7 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 						appendLine("}else{");
 							incrementIndentLevel();
 								appendLine("final "+TYPE + " v0 = "+sort+"Map.get(key);");
-								appendLine("final "+TYPE + " v1 = r.get"+uSort+"(key);");
+								appendLine("final "+TYPE + " v1 = (("+prefix+"Replacement)r).get"+uSort+"(key);");
 								appendLine("final int result = v0.compareTo(v1);");
 								appendLine("if(result != 0){ return result; }");
 							decrementIndentLevel();

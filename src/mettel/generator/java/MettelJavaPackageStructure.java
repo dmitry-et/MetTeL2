@@ -48,6 +48,7 @@ public class MettelJavaPackageStructure {
 
 	private MettelObjectFactoryJavaInterfaceFile iFactory = null;
 	private MettelObjectFactoryJavaClassFile factory = null;
+//	private MettelTableauObjectFactoryJavaClassFile tfactory = null;
 
 	//private MettelParserTestJavaClassFile testFile = null;
 
@@ -76,6 +77,8 @@ public class MettelJavaPackageStructure {
 
 		factory = new MettelObjectFactoryJavaClassFile(prefix,langPackage);
 		langPackage.add(factory);
+
+		langPackage.add(new MettelTableauObjectFactoryJavaClassFile(prefix,langPackage));
 	}
 
 	public void appendStandardClasses(String prefix, String[] sorts){

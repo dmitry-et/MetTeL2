@@ -25,7 +25,12 @@ public interface MettelReplacement extends Comparable<MettelReplacement>{
 
 //	boolean isCompatible(MettelSubstitution s);
 
-    MettelReplacement append(MettelExpression e0, MettelExpression e1);
+    boolean append(MettelExpression e0, MettelExpression e1);
+
+	/**
+	 * @param replacement
+	 */
+	boolean append(MettelReplacement replacement);
 
 //    MettelReplacement append(MettelAnnotatedExpression e0, MettelAnnotatedExpression e1);
 
