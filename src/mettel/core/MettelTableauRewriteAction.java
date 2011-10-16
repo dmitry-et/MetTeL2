@@ -60,8 +60,9 @@ public class MettelTableauRewriteAction extends MettelAbstractTableauAction {
 	@Override
 	public int compareTo(MettelTableauAction o) {
 		if(o == null) return 1;
-		if(o instanceof MettelTableauTerminateAction) return o.id() - id();
-		return 1;
+		if(o instanceof MettelTableauTerminateAction) return 1;
+		if(o instanceof MettelTableauExpansionAction) return o.id() - id();
+		return -1;
 	}
 
 }

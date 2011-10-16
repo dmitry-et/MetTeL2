@@ -42,6 +42,7 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 		headings.appendLine("import java.util.TreeSet;");
 		headings.appendLine("import java.util.Map.Entry;");
 		headings.appendLine("import mettel.core.MettelReplacement;");
+		headings.appendLine("import mettel.core.MettelSubstitution;");
 		headings.appendLine("import mettel.core.MettelExpression;");
 		headings.appendEOL();
 	}
@@ -214,6 +215,27 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 		decrementIndentLevel();
 		appendLine('}');
 		appendEOL();
+
+	    appendLine("public MettelSubstitution rewrite(MettelSubstitution s) {");
+	    incrementIndentLevel();
+	    	appendLine("final "+prefix+"Substitution s0 = ("+prefix+"Substitution)s;");
+        	appendLine(prefix+"Substitution res = new "+prefix+"TreeSubstitution();");
+
+	    	for(String sort:sorts){
+				final String uSort = MettelJavaNames.firstCharToUpperCase(sort);
+				final String TYPE = prefix+uSort;
+
+	    		appendLine("final Set<Entry<"+TYPE+"Variable, "+TYPE+">> "+sort+"EntrySet = s0."+sort+"Map().entrySet();");
+	        	appendLine("for(Entry<"+TYPE+"Variable, "+TYPE+"> entry:"+sort+"EntrySet){");
+	        	incrementIndentLevel();
+	        		appendLine("res.append(entry.getKey(),("+TYPE+")rewrite(entry.getValue()));");
+	        	decrementIndentLevel();
+	        	appendLine('}');
+	    	}
+	        appendLine("return res;");
+	    decrementIndentLevel();
+	    appendLine('}');
+	    appendEOL();
 
 		appendLine("public boolean append("+prefix+"Replacement r){");
 		incrementIndentLevel();

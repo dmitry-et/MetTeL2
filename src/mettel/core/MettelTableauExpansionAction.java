@@ -63,7 +63,7 @@ public class MettelTableauExpansionAction extends MettelAbstractTableauAction {
 	@Override
 	public int compareTo(MettelTableauAction o) {
 		if(o == null) return 1;
-		if(o instanceof MettelTableauTerminateAction) return o.id() - id();
+		if(o instanceof MettelTableauExpansionAction) return o.id() - id();
 		return 1;
 	}
 
