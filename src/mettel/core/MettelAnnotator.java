@@ -58,4 +58,12 @@ public interface MettelAnnotator {
 	MettelAnnotatedExpression annotate(MettelExpression e,
 			MettelTableauState state);
 
+	/**
+	 * @param rewrite
+	 * @param s
+	 * @return
+	 */
+	MettelAnnotatedSubstitution annotate(MettelSubstitution sub,
+			MettelTableauState s);
+
 }

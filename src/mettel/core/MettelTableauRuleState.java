@@ -64,4 +64,6 @@ public interface MettelTableauRuleState {
 	 * @return
 	 */
 	public int branchingFactor();
+
+	public void rewrite(MettelTableauState s, MettelReplacement r);
 }

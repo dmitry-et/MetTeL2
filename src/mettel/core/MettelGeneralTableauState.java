@@ -40,7 +40,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 
 	private final int ID = idCounter++;
 
-	private final MettelTableauStatePool expressions;
+	private MettelTableauStatePool expressions = null;
 //		new MettelTableauTreeSetLinkedHashMap<MettelTableauState, MettelAnnotatedExpression>();
 
 	private MettelTreeSetLinkedHashMap<MettelTableauState, MettelTableauAction> actions =
@@ -50,10 +50,13 @@ public class MettelGeneralTableauState implements MettelTableauState {
 
 	private MettelReplacement replacement = null;
 
+	private Collection<? extends MettelTableauRule> calculus = null;
+
 	public MettelGeneralTableauState(MettelTableauObjectFactory factory, Collection<? extends MettelTableauRule> calculus) {
 		super();
 		this.factory = factory;
 		ruleSelectionStrategy  = new MettelSimpleRuleSelectionStrategy();
+		this.calculus = calculus;
 		initRuleStates(calculus);
 		expressions = new MettelTableauStatePool(/*this*/);
 		expressions.init(this);
@@ -69,6 +72,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		super();
 		this.factory = factory;
 		ruleSelectionStrategy  = new MettelSimpleRuleSelectionStrategy();
+		this.calculus = calculus;
 		initRuleStates(calculus);
 		expressions = new MettelTableauStatePool(/*this*/);
 		expressions.addAll(set);
@@ -87,6 +91,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		super();
 		this.factory = factory;
 		ruleSelectionStrategy  = strategy;
+		this.calculus = calculus;
 		initRuleStates(calculus);
 		expressions = new MettelTableauStatePool(/*this*/);
 		expressions.init(this);;
@@ -105,6 +110,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		super();
 		this.factory = factory;
 		ruleSelectionStrategy  = strategy;
+		this.calculus = calculus;
 		initRuleStates(calculus);
 		expressions = new MettelTableauStatePool(/*this*/);
 		expressions.addAll(set);
@@ -121,6 +127,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		this.factory = state.factory;
 		parent = state;
 		ruleSelectionStrategy = state.ruleSelectionStrategy;
+		this.calculus = state.calculus;
 		initRuleStates(state.ruleStates);
 		expressions = new MettelTableauStatePool(/*this*/);
 		expressions.embed(state.expressions);// first to embed
@@ -135,7 +142,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	/**
 	 * @param state
 	 * @param set
-	 */
+	 *
 	public MettelGeneralTableauState(
 			MettelGeneralTableauState state,
 			Set<MettelAnnotatedExpression> set) {
@@ -146,7 +153,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	 * @param state
 	 * @param set
 	 * @param strategy
-	 */
+	 *
 	public MettelGeneralTableauState(
 			MettelGeneralTableauState state,
 			Set<MettelAnnotatedExpression> set,
@@ -155,8 +162,9 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		this.factory = state.factory;
 		parent = state;
 		ruleSelectionStrategy  = strategy;
+		this.calculus = state.calculus;
 		initRuleStates(state.ruleStates);
-		expressions = new MettelTableauStatePool(/*this*/);
+		expressions = new MettelTableauStatePool();
 		expressions.embed(state.expressions);// first to embed
 		expressions.addAll(set);
 		expressions.init(this);
@@ -165,7 +173,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		replacement = factory.createReplacement();
 		replacement.append(state.replacement);
 		state.replacement = null;//Forget about old replacements
-	}
+	}*/
 
 	/* (non-Javadoc)
 	 * @see mettel.core.MettelTableauState#id()
@@ -261,7 +269,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 				if(children != null) a.addAll(children);
 				return children;
 			}
-		}//XXX: Infinite loop
+		}//xXXX: Infinite loop
 */
 
 		final MettelTableauRuleState rs = ruleSelectionStrategy.select(ruleStates);
@@ -299,6 +307,13 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		final boolean result = expressions.add(e);
 		if(result){
 			for(MettelTableauRuleState rs:ruleStates) rs.add(e);
+			final MettelExpression exp = e.expression();
+			if(exp instanceof MettelEqualityExpression){
+				final MettelEqualityExpression eq = (MettelEqualityExpression)exp;
+				if(replacement.append(eq.left(), eq.right())){
+					actionsToAdd.add(new MettelTableauRewriteAction(this));
+				}
+			}
 		}
 		return result;
 	}
@@ -391,6 +406,29 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		return null;
 	}
 
+	public Set<MettelTableauState> rewrite(){
+		if(replacement.isEmpty()) return null;
+		final MettelTableauStatePool pool = expressions;
+		expressions = new MettelTableauStatePool();
+		expressions.init(this);
+		for(MettelAnnotatedExpression ae:pool){
+			expressions.add(annotator.annotate(replacement.rewrite(ae.expression()),this));
+		}
+		final int LENGTH = ruleStates.length;
+		for(int i=0;i<LENGTH;i++){
+			ruleStates[i].rewrite(this, replacement);
+		}
+		return null;
+/*
+		MettelGeneralTableauState ts = new MettelGeneralTableauState(this.factory,this.calculus,this.ruleSelectionStrategy);
+		//ts.initRuleStates(this.ruleStates);
+		for(MettelAnnotatedExpression ae:expressions){
+			ts.add(annotator.annotate(replacement.rewrite(ae.expression()),ts));
+		}
+		final LinkedHashSet<MettelTableauState> children = new LinkedHashSet<MettelTableauState>(1);
+		children.add(ts);
+		return children;
+*/	}
 
 	private Set<MettelTableauAction> actionsToAdd = new LinkedHashSet<MettelTableauAction>();
 

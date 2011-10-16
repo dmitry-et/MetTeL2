@@ -358,4 +358,39 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 		public int branchingFactor() {
 			return BRANCHES_NUMBER;
 		}
+
+		/* (non-Javadoc)
+		 * @see mettel.core.MettelTableauRuleState#rewrite(mettel.core.MettelReplacement)
+		 */
+		@Override
+		public void rewrite(MettelTableauState s,MettelReplacement r) {
+			final MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedExpression> pool0 = pool;
+			pool = new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedExpression>();
+			pool.init(s);
+			for(MettelAnnotatedExpression ae:pool0){
+				final MettelExpression exp = ae.expression();
+				pool.add(annotator.annotate(r.rewrite(exp), s));
+			}
+			if(e != null){
+				e = annotator.annotate(r.rewrite(e.expression()), s);
+			}
+			final MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution> newSubstitutions0 = newSubstitutions;
+			newSubstitutions = new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution>();
+    		newSubstitutions.init(s);
+    		for(MettelAnnotatedSubstitution as:newSubstitutions0){
+    			final MettelSubstitution sub = as.substitution();
+    			newSubstitutions.add(annotator.annotate(r.rewrite(sub), s));
+    		}
+
+//    		oldSubstitutions = new MettelTreeSetLinkedHashMap[PREMISES_NUMBER];
+			for(int i = 0; i < PREMISES_NUMBER; i++){
+				final MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution> subs = oldSubstitutions[i];
+				oldSubstitutions[i] = new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution>();
+				oldSubstitutions[i].init(s);
+	    		for(MettelAnnotatedSubstitution as:subs){
+	    			final MettelSubstitution sub = as.substitution();
+	    			oldSubstitutions[i].add(annotator.annotate(r.rewrite(sub), s));
+	    		}
+			}
+		}
 }

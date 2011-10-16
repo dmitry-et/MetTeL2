@@ -90,4 +90,13 @@ public class MettelSimpleAnnotator implements MettelAnnotator {
 		return new MettelSimpleAnnotatedExpression(e,new MettelSimpleTableauAnnotation(state));
 	}
 
+	/* (non-Javadoc)
+	 * @see mettel.core.MettelAnnotator#annotate(mettel.core.MettelSubstitution, mettel.core.MettelTableauState)
+	 */
+	@Override
+	public MettelAnnotatedSubstitution annotate(MettelSubstitution sub,
+			MettelTableauState state) {
+		return new MettelSimpleAnnotatedSubstitution(sub,new MettelSimpleTableauAnnotation(state));
+	}
+
 }

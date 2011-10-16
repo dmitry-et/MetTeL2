@@ -16,8 +16,6 @@
  */
 package mettel.generator.java;
 
-import mettel.util.MettelJavaNames;
-
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$

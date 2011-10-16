@@ -480,7 +480,7 @@ public class MettelANTLRGrammarGenerator {
 				new String[]{"Collection<"+grammarName+MettelJavaNames.firstCharToUpperCase(NAME)+'>'},null);
 	}
 
-	private MettelANTLRRule makeANTLREqualityRule(String grammarName,Collection<MettelSort> sorts){
+/*	private MettelANTLRRule makeANTLREqualityRule(String grammarName,Collection<MettelSort> sorts){
 		MettelANTLRMultiaryBNFStatement s = new MettelANTLRMultiaryBNFStatement(MettelANTLRMultiaryBNFStatement.OR);
 		for(MettelSort sort:sorts){
 			final String SORT_NAME = sort.name();
@@ -499,6 +499,7 @@ public class MettelANTLRGrammarGenerator {
 		//r.appendLineToAfterBlock("r0 = e0;");
 		return r;
 	}
+*/
 
 	/**
 	 *

@@ -21,39 +21,9 @@ package mettel.core;
  * @version $Revision$ $Date$
  *
  */
-public interface MettelReplacement extends Comparable<MettelReplacement>{
+public interface MettelEqualityExpression extends MettelExpression {
 
-//	boolean isCompatible(MettelSubstitution s);
-
-    boolean append(MettelExpression e0, MettelExpression e1);
-
-	/**
-	 * @param replacement
-	 */
-	boolean append(MettelReplacement replacement);
-
-	/**
-	 * @return
-	 */
-	boolean isEmpty();
-
-	/**
-	 * @return
-	 */
-	MettelExpression rewrite(MettelExpression e);
-
-	/**
-	 * @param sub
-	 * @return
-	 */
-	MettelSubstitution rewrite(MettelSubstitution sub);
-
-//    MettelReplacement append(MettelAnnotatedExpression e0, MettelAnnotatedExpression e1);
-
-//	MettelReplacement merge(MettelReplacement s);
-
-//	MettelReplacement merge(MettelReplacement[] subs);
-
-//	MettelReplacement mergeArray(MettelReplacement[] subs);
+	MettelExpression left();
+	MettelExpression right();
 
 }

@@ -36,7 +36,7 @@ public class MettelReplacementJavaInterfaceFile extends MettelJavaInterfaceFile 
 	}
 
 	protected void imports(){
-		headings.appendLine("import java.util.Map;");
+		headings.appendLine("import java.util.Set;");
 		headings.appendLine("import mettel.core.MettelReplacement;");
 		headings.appendEOL();
 	}
@@ -46,7 +46,7 @@ public class MettelReplacementJavaInterfaceFile extends MettelJavaInterfaceFile 
 			final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(sort);
 			appendLine(TYPE+" get"+MettelJavaNames.firstCharToUpperCase(sort)+'('+TYPE+" e);");appendEOL();
 //			appendLine("Iterator<"+TYPE+"> "+sort+"Iterator();");appendEOL();
-			appendLine("Map<"+TYPE+", "+TYPE+"> "+sort+"Map();");appendEOL();
+			appendLine("Set<"+TYPE+"> "+sort+"Keys();");appendEOL();
 			appendLine("boolean append("+TYPE+" e0, "+TYPE+" e1);");appendEOL();
 		}
 

@@ -25,11 +25,13 @@ public interface MettelExpression extends Comparable<MettelExpression>{
 
 	MettelExpression substitute(MettelSubstitution s);
 
+//	MettelExpression rewrite(MettelReplacement r);
+
 	MettelSubstitution match(MettelExpression e);
 
 	MettelAnnotatedExpression substitute(MettelAnnotatedSubstitution s);
 
 	MettelAnnotatedSubstitution match(MettelAnnotatedExpression e);
 
-	boolean isEquality();
+//	boolean isEquality();
 }

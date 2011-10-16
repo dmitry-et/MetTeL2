@@ -44,7 +44,9 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 	 */
 	public MettelComplexExpressionJavaClassFile(String prefix, String sort, String name, String[] sorts, MettelJavaPackage pack, boolean equality){
 		super(prefix+MettelJavaNames.firstCharToUpperCase(name)+MettelJavaNames.firstCharToUpperCase(sort), pack, "public",
-				prefix+"AbstractExpression", new String[]{prefix+MettelJavaNames.firstCharToUpperCase(sort)});
+				prefix+"AbstractExpression",
+				equality? new String[]{"MettelEqualityExpression", prefix+MettelJavaNames.firstCharToUpperCase(sort)} :
+					      new String[]{prefix+MettelJavaNames.firstCharToUpperCase(sort)});
 		priority = ++counter;
 
 		this.prefix = prefix;
@@ -66,6 +68,9 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 
 	protected void imports(){
 		headings.appendLine("import mettel.core.MettelExpression;");
+		if(equality){
+			headings.appendLine("import mettel.core.MettelEqualityExpression;");
+		}
 		headings.appendEOL();
 	}
 
@@ -253,11 +258,19 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 		decrementIndentLevel();
 		appendLine('}');
 
-		appendLine("public boolean isEquality(){");
-		incrementIndentLevel();
-			appendLine("return "+(equality?"true;":"false;"));
-		decrementIndentLevel();
-		appendLine('}');
+		if(equality){
+			appendLine("public MettelExpression left(){");
+			incrementIndentLevel();
+				appendLine("return e0;");
+			decrementIndentLevel();
+			appendLine('}');
+
+			appendLine("public MettelExpression right(){");
+			incrementIndentLevel();
+				appendLine("return e1;");
+			decrementIndentLevel();
+			appendLine('}');
+		}
 
 	}
 

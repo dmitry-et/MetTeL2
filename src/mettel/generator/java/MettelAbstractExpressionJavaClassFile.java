@@ -107,6 +107,16 @@ public class MettelAbstractExpressionJavaClassFile extends MettelJavaClassFile {
 		 appendLine("return null;");
 		 decrementIndentLevel();
 		 appendLine('}');
+
+/*		 appendEOL();
+
+		 appendLine("public MettelExpression rewrite(MettelReplacement r){");
+		 incrementIndentLevel();
+		 appendLine("if(s instanceof "+prefix+"Replacement) return rewrite(("+prefix+"Replacement)s);");
+		 appendLine("return null;");
+		 decrementIndentLevel();
+		 appendLine('}');
+*/
 	}
 
 }

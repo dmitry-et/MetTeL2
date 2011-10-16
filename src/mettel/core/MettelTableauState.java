@@ -77,4 +77,9 @@ public interface MettelTableauState extends Comparable<MettelTableauState>{
 	 */
 	MettelTableauState parent();
 
+	/**
+	 * @return
+	 */
+	Set<MettelTableauState> rewrite();
+
 }
