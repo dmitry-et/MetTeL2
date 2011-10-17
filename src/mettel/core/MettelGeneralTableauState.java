@@ -391,16 +391,22 @@ public class MettelGeneralTableauState implements MettelTableauState {
 			this.addAll(branches[0]);
 			//result[0] = this;
 		}else{
-			LinkedHashSet<MettelTableauState> children = new LinkedHashSet<MettelTableauState>(BRANCHES_NUMBER);
+			boolean redundant = false;
 			for(int i = 0; i < BRANCHES_NUMBER; i++){
-				MettelGeneralTableauState ts = new MettelGeneralTableauState(this);
-				ts.addAll(annotator.reannotate(branches[i],ts));
-				//result[i] = ts;
-				children.add(ts);
-//System.out.println("branches["+i+"] = "+branches[i]);
+				redundant |= expressions.containsAll(branches[i]);
 			}
-			//for(MettelTableauRuleState r:ruleStates) r.setApplicable(true);
-			return children;
+			if(!redundant){
+				LinkedHashSet<MettelTableauState> children = new LinkedHashSet<MettelTableauState>(BRANCHES_NUMBER);
+				for(int i = 0; i < BRANCHES_NUMBER; i++){
+					MettelGeneralTableauState ts = new MettelGeneralTableauState(this);
+					ts.addAll(annotator.reannotate(branches[i],ts));
+					//result[i] = ts;
+					children.add(ts);
+//System.out.println("branches["+i+"] = "+branches[i]);
+				}
+				//for(MettelTableauRuleState r:ruleStates) r.setApplicable(true);
+				return children;
+			}
 		}
 //		return result;
 		return null;
