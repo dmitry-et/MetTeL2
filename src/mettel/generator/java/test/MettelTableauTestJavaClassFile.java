@@ -96,6 +96,7 @@ appendLine(  "System.out.print(\"-----------------------------------------------
     	    appendLine("File problemDir = new File(inDir);");
     	    appendLine("String[] fileNames = problemDir.list();");
 
+    	    appendLine("int counter = 0;");
     	    appendLine("for(String fileName:fileNames){");
     	    incrementIndentLevel();
     	        appendLine("int i = fileName.lastIndexOf('.');");
@@ -108,10 +109,11 @@ appendLine(  "System.out.print(\"-----------------------------------------------
     	        		appendLine("int j = name.lastIndexOf('-');");
     	        		appendLine("if(j != -1){");
     	        		incrementIndentLevel();
+    	        		appendLine("counter++;");
 appendLine("System.out.println();");
-appendLine("System.out.print(fileName+\"...\");");
+appendLine("System.out.print(\"\"+counter+\". \"+fileName+\"...\");");
 
-    	        			appendLine("boolean result = name.substring(j+1).equals(\"sat\");");
+    	        			appendLine("boolean expected = name.substring(j+1).equals(\"sat\");");
 
     	        			appendLine("CharStream in = new ANTLRFileStream(inDir+System.getProperty(\"file.separator\")+fileName);");
     	        		    appendLine("lexer = new "+prefix+"Lexer(in);");
@@ -130,9 +132,12 @@ appendLine("System.out.print(fileName+\"...\");");
 //    	        		    appendLine("a.annotate(annotated,list);");
 //    	        		    appendLine("state.addAll(annotated);");
 //
-    	        		    appendLine("assertEquals(result,m.isSatisfiable(list));");
+    	        		    appendLine("final boolean result = m.isSatisfiable(list);");
     	        		    appendLine("final long finish = System.currentTimeMillis();");
-appendLine("System.out.print(\"OK (\"+(finish-start)+\" msec)\");");
+appendLine("System.out.print(\"\"+(finish-start)+\" msec...\");");
+
+    	        		    appendLine("assertEquals(expected,result);");
+appendLine("System.out.print(\"OK\");");
 						decrementIndentLevel();
     	        		appendLine('}');
 					decrementIndentLevel();
