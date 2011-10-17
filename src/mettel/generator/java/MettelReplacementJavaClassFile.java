@@ -74,7 +74,8 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 
 			appendLine("public " + TYPE+" get"+MettelJavaNames.firstCharToUpperCase(sort)+'('+TYPE+" e){");
 			incrementIndentLevel();
-				appendLine("return "+sort+"Map.get(e).expression;");
+				appendLine("final Pointer<"+TYPE+"> p = "+sort+"Map.get(e);");
+				appendLine("return p == null? null: p.expression;");
 			decrementIndentLevel();
 			appendLine('}');
 			appendEOL();
@@ -90,7 +91,9 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 			incrementIndentLevel();
 				appendLine("if(e0 == null || e1 == null){ return false; }");
 
-			    appendLine("final int res = e0.compareTo(e1);");
+				appendLine("final int ID0 = e0.id();");
+				appendLine("int ID1 = e1.id();");
+			    appendLine("final int res = ID0-ID1;");
 			    appendLine("if(res == 0) return false;");
 			    incrementIndentLevel();
 			    	appendLine(TYPE+" left = null;");
@@ -104,9 +107,11 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 			        incrementIndentLevel();
 			        	appendLine("left = e1;");
 			        	appendLine("right = e0;");
+			        	appendLine("ID1 = ID0;");
 			        decrementIndentLevel();
 					appendLine('}');
 					//appendEOL();
+//appendLine("System.out.println(\"Left=\"+left+\", right=\"+right);");
 
 			        appendLine("final Pointer<"+TYPE+"> entry = "+sort+"Map.get(left);");
 			        appendLine("if(entry == null){");
@@ -117,7 +122,7 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 			        appendLine("}else{");
 			        incrementIndentLevel();
 			        	appendLine("final "+TYPE+" third = entry.expression;");
-			        	appendLine("final int r = right.compareTo(third);");
+			        	appendLine("final int r = ID1-third.id();");
 			        	appendLine("if(r == 0) return false;");
 			        	appendLine("if(r > 0){");
 			        	incrementIndentLevel();

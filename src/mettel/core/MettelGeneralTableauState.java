@@ -304,6 +304,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	 */
 	@Override
 	public boolean add(MettelAnnotatedExpression e) {
+//System.out.println("Adding "+e);
 		final boolean result = expressions.add(e);
 		if(result){
 			for(MettelTableauRuleState rs:ruleStates) rs.add(e);
@@ -311,7 +312,10 @@ public class MettelGeneralTableauState implements MettelTableauState {
 			if(exp instanceof MettelEqualityExpression){
 				final MettelEqualityExpression eq = (MettelEqualityExpression)exp;
 				if(replacement.append(eq.left(), eq.right())){
-					actionsToAdd.add(new MettelTableauRewriteAction(this));
+					final MettelTableauRewriteAction action = new MettelTableauRewriteAction(this);
+					action.add(this);
+					actions.add(action);
+//System.out.println("Rewriting action added");
 				}
 			}
 		}
@@ -413,7 +417,9 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	}
 
 	public Set<MettelTableauState> rewrite(){
+//System.out.println("Rewrite action execution");
 		if(replacement.isEmpty()) return null;
+//System.out.println("Rewriting: "+replacement);
 		final MettelTableauStatePool pool = expressions;
 		expressions = new MettelTableauStatePool();
 		expressions.init(this);
