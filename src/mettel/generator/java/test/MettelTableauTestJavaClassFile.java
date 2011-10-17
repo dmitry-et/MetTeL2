@@ -123,7 +123,7 @@ appendLine("System.out.print(fileName+\"...\");");
 
 //    	        		    appendLine("TreeSet<MettelAnnotatedExpression> annotated = new TreeSet<MettelAnnotatedExpression>();");
 
-
+    	        		    appendLine("final long start = System.currentTimeMillis();");
     	        		    appendLine("MettelTableauObjectFactory tfactory = new "+prefix+"TableauObjectFactory();");
     	        		    appendLine("MettelSimpleTableauManager m = new MettelSimpleTableauManager(tfactory, calculus);");
 //    	        		    appendLine("MettelSimpleTableauAnnotation a = new MettelSimpleTableauAnnotation(state);");
@@ -131,7 +131,8 @@ appendLine("System.out.print(fileName+\"...\");");
 //    	        		    appendLine("state.addAll(annotated);");
 //
     	        		    appendLine("assertEquals(result,m.isSatisfiable(list));");
-appendLine("System.out.print(\"OK\");");
+    	        		    appendLine("final long finish = System.currentTimeMillis();");
+appendLine("System.out.print(\"OK (\"+(finish-start)+\" msec)\");");
 						decrementIndentLevel();
     	        		appendLine('}');
 					decrementIndentLevel();
