@@ -98,6 +98,9 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 //System.out.println("Expanding "+state);
 				//final MettelTableauState[] children =
 //System.out.println("Processing actions for "+state+"...");
+
+				unexpandedStates.remove(state);
+
 				Set<MettelTableauState> children = null;
 				boolean actionExecuted = false;
 				final Set<MettelTableauAction> actions = state.actions();
@@ -106,7 +109,9 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 					final Iterator<MettelTableauAction> ia = actions.iterator();
 					while(ia.hasNext()){
 						final MettelTableauAction a = ia.next();
+						final boolean f = a.isFor(state);
 						a.retainAll(unexpandedStates);
+						if(f){ a.add(state); }
 //System.out.println("    Action "+a+"...");
 						if(a.completed()){
 							ia.remove();
@@ -129,7 +134,8 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 
 					//	throw new MettelCoreRuntimeException("Failed to add children of "+state);
 
-				}else{
+				}
+/*				else{
 //System.out.println("Removing "+state);
 					unexpandedStates.remove(state);
 //					final Iterator<MettelTableauAction> ia = actions.iterator();
@@ -141,6 +147,7 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 				}
 
 				cleanUp();
+*/
 
 //				final Iterator<MettelTableauAction> ia = actions.iterator();
 //					final MettelTableauAction a = ia.next();
@@ -206,10 +213,12 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 //System.out.println("Unexpanded states:"+unexpandedStates);
 		//final Set<MettelTableauState> children = state.children();
 //System.out.println("Children:"+children);
-		if(children == null) return;
+		if(children == null){
+			unexpandedStates.add(state);
+			return;
+		}
 		//Expanded succesfully (not terminal and rule was applicable)
 //System.out.println("Removing state "+state);
-		unexpandedStates.remove(state);
 		for(MettelTableauState child:children){
 			unexpandedStates.add(child);
 		}
