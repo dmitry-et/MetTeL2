@@ -1,0 +1,4 @@
+//Unsatisfiable
+@l (C U D)
+@l (C U ~D)
+@l ~C
