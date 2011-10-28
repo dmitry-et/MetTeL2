@@ -4,24 +4,37 @@
 
 @l P / @l{l} $;
 
-@l<>{l2} / @l2{l2} $;
+//@l<>{l2} / @l2{l2} $;
 @l P  @l{l2} /  @l2 P $;
-@l<>{l2}  @l2{l3} / @l<>{l3} $;
+//@l<>{l2}  @l2{l3} / @l<>{l3} $;
 
 //Decomposition rules 
 
 @l ~(~P) / @l P $; 
 @l(P|Q) / @l P $| @l Q $;
 @l~(P|Q) / @l~P @l~Q $;
-@l<>P / @l<>{f(l,P)} @f(l,P)P $;  
-@l ~(<>P) @l<>{l2} / @l2~P $;
+@l(()P) / @f(l)P $;
+@l ~(()P) @f(l){f(l)} / @f(l)~P $;
+
+//Until
+
+@l(C U D) / @l (Ev0(C,D,l)) $;
+@l (Ev0(C,D,l1)) / @l D ((Ev0(C,D,l1))<->(C U D)) $| @l C @f(l) (Ev0(C,D,l1)) $;
+
+//@l~(C U D) / @l(Ev1(C,D,l)) $;
+//@l(Ev1(C,D,l1)) / @l ~C ((Ev1(C,D,l1))<->(~(C U D))) $| @f(l) (Ev1(C,D,l1)) $;
+
 
 // Theory rules 
-@l{l} / @l<>{l} $;
-@l<>{l2} @l2<>{l3} / @l1<>{l3} $;
+//@l{l} / @l<>{l} $;
+//@l<>{l2} @l2<>{l3} / @l1<>{l3} $;
 
 // Closure rule
-@l P  @l~P /  $; $; $;
-// last rule should not have $;
-// no comma between formulae
+@l P  @l~P /  $;
 
+//Blocking related
+@l{l0} / [l=l0] $;
+[l=l0] / @l{l0} $;
+@l~{l0} / ~([l=l0]) $;
+~([l=l0]) / @l~{l0} $;
+@l{l} @l0{l0} / [l=l0] $| ~([l=l0]) $;

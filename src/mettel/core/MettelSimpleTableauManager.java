@@ -30,7 +30,10 @@ public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 	 *
 	 */
 	public MettelSimpleTableauManager(MettelTableauObjectFactory factory, Collection<? extends MettelTableauRule> calculus) {
-		unexpandedStates = new TreeSet<MettelTableauState>(new MettelTableauStateComparator());
+		unexpandedStates =
+				new TreeSet<MettelTableauState>();
+				//new LinkedHashSet<MettelTableauState>();
+				//new TreeSet<MettelTableauState>(new MettelTableauStateComparator());
 		state = new MettelGeneralTableauState(factory, calculus);
 	}
 

@@ -13,6 +13,11 @@ syntax LTL{
 	formula diamond = '<>' formula;
 	formula at = '@' nominal formula;
 	formula disjunction  = formula '|' formula;
+	formula equivalence = formula '<->' formula;
 	formula until = formula 'U' formula;
-	nominal f = 'f' '('  nominal ',' formula  ')'; //Skolem function
+	//Tableau additions
+	formula eventuality0 = 'Ev0' '(' formula ',' formula ',' nominal ')';
+	formula eventuality1 = 'Ev1' '(' formula ',' formula ',' nominal ')';
+	formula equality = '[' nominal '=' nominal ']';
+	nominal f = 'f' '('  nominal ')'; //Skolem function == successor function
 }
