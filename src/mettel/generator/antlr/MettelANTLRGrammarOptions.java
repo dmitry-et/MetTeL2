@@ -27,6 +27,7 @@ import static mettel.util.MettelStrings.OPTIONS_STRING;
 class MettelANTLRGrammarOptions {
 
     private int k = 1;
+    private String superClass = "MettelAbstractLogicParser";
 
     /**
      *
@@ -53,6 +54,9 @@ class MettelANTLRGrammarOptions {
 	ibb.append('k');
 	ibb.append('=');
 	ibb.append(String.valueOf(k));
+	ibb.append(';');
+	ibb.append("superClass=");
+	ibb.append(superClass);
 	ibb.append(';');
 	ibb.appendEOL();
 

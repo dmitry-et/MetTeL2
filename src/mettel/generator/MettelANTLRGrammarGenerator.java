@@ -153,6 +153,7 @@ public class MettelANTLRGrammarGenerator {
 		grammar.addToHeader("import java.util.LinkedHashSet;");
 		grammar.addToHeader("");
 		grammar.addToHeader("import mettel.core.MettelGeneralTableauRule;");
+		grammar.addToHeader("import mettel.fo.MettelAbstractLogicParser;");
 
 //		MettelANTLRHeader lexerHeader = new MettelANTLRHeader(MettelANTLRHeader.LEXER);
 //		lexerHeader.addStatement(s);
