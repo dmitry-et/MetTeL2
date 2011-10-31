@@ -195,18 +195,20 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 		}
 //System.out.println("Done");
 	}
-	
+
 	private boolean add(MettelTableauState state){
-		final Iterator<MettelTableauState> i = unexpandedStates.iterator();
-		while(i.hasNext()){
-			final MettelTableauState s = i.next();
-			if(s.expressions().equals(state.expressions())){
-				if(state.id() < s.id()){
-					unexpandedStates.remove(s);
-					unexpandedStates.add(state);
-					return true;
+		if(state.isExpanded()){
+			final Iterator<MettelTableauState> i = unexpandedStates.iterator();
+			while(i.hasNext()){
+				final MettelTableauState s = i.next();
+				if(s.expressions().equals(state.expressions())){
+					if(state.id() < s.id()){
+						unexpandedStates.remove(s);
+						unexpandedStates.add(state);
+						return true;
+					}
+					return false;
 				}
-				return false;
 			}
 		}
 		return unexpandedStates.add(state);

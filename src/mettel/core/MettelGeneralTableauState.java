@@ -32,7 +32,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 
 	private MettelTableauState parent = null;
 
-	private LinkedHashSet<MettelTableauState> children = null;
+//	private LinkedHashSet<MettelTableauState> children = null;
 
 	private MettelAnnotator annotator = MettelSimpleAnnotator.ANNOTATOR;
 
@@ -254,11 +254,18 @@ public class MettelGeneralTableauState implements MettelTableauState {
 
 	private MettelRuleSelectionStrategy ruleSelectionStrategy = null;
 
+	private boolean expanded = true;
+
+	public boolean isExpanded(){
+		return expanded;
+	}
+
 	/* (non-Javadoc)
 	 * @see mettel.core.MettelTableauState#expand()
 	 */
 	@Override
 	public Set<MettelTableauState> expand() {
+		expanded = false;
 //System.out.println("Expanding "+this+" which has the expression pool "+expressions);
 
 /*		Iterator<MettelTableauAction> i = actions.iterator();//TODO replace for an action selection strategy
@@ -351,11 +358,11 @@ public class MettelGeneralTableauState implements MettelTableauState {
 
 	/* (non-Javadoc)
 	 * @see mettel.core.MettelTableauState#children()
-	 */
+	 *
 	@Override
 	public Set<MettelTableauState> children() {
 		return children;
-	}
+	}*/
 
 	/* (non-Javadoc)
 	 * @see mettel.core.MettelTableauState#expressions()
@@ -392,7 +399,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		final int BRANCHES_NUMBER = branches.length;
 		//MettelTableauState[] result = new MettelGeneralTableauState[BRANCHES_NUMBER];
 		if(BRANCHES_NUMBER == 1){
-			this.addAll(branches[0]);
+			expanded = this.addAll(branches[0]);
 			//result[0] = this;
 		}else{
 			boolean redundant = false;

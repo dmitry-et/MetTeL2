@@ -31,13 +31,15 @@ public interface MettelTableauState extends Comparable<MettelTableauState>{
 
 	boolean isComplete();
 
+	boolean isExpanded();
+
 	Set<MettelTableauState> expand();
 
 	boolean add(MettelAnnotatedExpression e);
 
 	boolean addAll(Set<MettelAnnotatedExpression> s);
 
-	Set<MettelTableauState> children();
+//	Set<MettelTableauState> children();
 
 	/**
 	 * @return
