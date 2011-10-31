@@ -195,8 +195,24 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 		}
 //System.out.println("Done");
 	}
+	
+	private boolean add(MettelTableauState state){
+		final Iterator<MettelTableauState> i = unexpandedStates.iterator();
+		while(i.hasNext()){
+			final MettelTableauState s = i.next();
+			if(s.expressions().equals(state.expressions())){
+				if(state.id() < s.id()){
+					unexpandedStates.remove(s);
+					unexpandedStates.add(state);
+					return true;
+				}
+				return false;
+			}
+		}
+		return unexpandedStates.add(state);
+	}
 
-	boolean remove(MettelTableauState state){
+/*	boolean remove(MettelTableauState state){
 		if(unexpandedStates.remove(state)) return true;
 
 		final Set<MettelTableauState> children = state.children();
@@ -208,19 +224,21 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 		}
 		return result;
 	}
-
+*/
 	void addChildren(MettelTableauState state, Set<MettelTableauState> children){
 //System.out.println("Unexpanded states:"+unexpandedStates);
 		//final Set<MettelTableauState> children = state.children();
 //System.out.println("Children:"+children);
 		if(children == null){
-			unexpandedStates.add(state);
+			//unexpandedStates.add(state);
+			add(state);
 			return;
 		}
 		//Expanded succesfully (not terminal and rule was applicable)
 //System.out.println("Removing state "+state);
 		for(MettelTableauState child:children){
-			unexpandedStates.add(child);
+			//unexpandedStates.add(child);
+			add(child);
 		}
 
 		final Set<MettelTableauAction> actions = state.actions();
