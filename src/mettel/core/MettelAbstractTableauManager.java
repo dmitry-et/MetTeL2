@@ -111,16 +111,17 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 						final MettelTableauAction a = ia.next();
 						final boolean f = a.isFor(state);
 						a.retainAll(unexpandedStates);
-						if(f){ a.add(state); }
-//System.out.println("    Action "+a+"...");
+						if(f){
+							a.add(state);
+							children = a.execute(state);
+							actionExecuted = true;
+							if(a.completed()){
+								ia.remove();
+							}
+							break;
+						}
 						if(a.completed()){
 							ia.remove();
-						}else{
-							if(a.isFor(state)){
-								children = a.execute(state);
-								actionExecuted = true;
-								break;
-							}
 						}
 					}
 				}
