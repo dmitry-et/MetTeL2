@@ -56,7 +56,9 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
 		headings.appendLine("import org.antlr.runtime.CommonTokenStream;");
 		headings.appendLine("import org.antlr.runtime.RecognitionException;");
 
-		headings.appendLine("import mettel.core.*;");
+		headings.appendLine("import mettel.core.MettelSimpleTableauManager;");
+		headings.appendLine("import mettel.core.MettelGeneralTableauRule;");
+		headings.appendLine("import mettel.core.MettelTableauObjectFactory;");
 
 		headings.appendLine("import "+packName+"*;");
 		headings.appendEOL();
