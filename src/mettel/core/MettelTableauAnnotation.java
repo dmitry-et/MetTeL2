@@ -17,6 +17,7 @@
 package mettel.core;
 
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * @author Dmitry Tishkovsky
@@ -39,6 +40,11 @@ public interface MettelTableauAnnotation {
 
 	public MettelTableauState state();
 
-	public MettelTableauAnnotation newInstance(MettelTableauState state);
+//	public MettelTableauAnnotation newInstance(MettelTableauState state);
+
+	/**
+	 * @return
+	 */
+	public Set<MettelExpression> dependencies();
 
 }

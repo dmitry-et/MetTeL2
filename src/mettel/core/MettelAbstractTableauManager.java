@@ -45,10 +45,11 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 		public MettelTableauState chooseTableauState(Set<MettelTableauState> s) {
 			Iterator<MettelTableauState> i = s.iterator();
 			while(i.hasNext()){
-				MettelTableauState state = i.next();
+				//MettelTableauState state = i.next();
 //System.out.println("Looking at state "+state);
-				if(state.isSatisfiable()) return state;
-				i.remove();
+				//if(state.isSatisfiable()) return state;
+				//i.remove();
+				return i.next();
 //System.out.println("The state "+state+" is unsatisfiable");
 			}
 //System.out.println("No states to select from");

@@ -64,11 +64,11 @@ public class MettelHistoryAnnotation extends MettelSimpleTableauAnnotation {
 
 	/* (non-Javadoc)
 	 * @see mettel.core.MettelTableauAnnotation#newInstance(mettel.core.MettelTableauState)
-	 */
+	 *
 	@Override
 	public MettelTableauAnnotation newInstance(MettelTableauState state) {
 		return new MettelHistoryAnnotation(state);
-	}
+	}*/
 
 //TODO Overwrite the method
 /*	public String toString(){

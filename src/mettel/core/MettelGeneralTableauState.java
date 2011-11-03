@@ -382,12 +382,12 @@ public class MettelGeneralTableauState implements MettelTableauState {
 
 	/* (non-Javadoc)
 	 * @see mettel.core.MettelTableauState#setSatisfiable(boolean)
-	 */
+	 *
 	@Override
 	public void setSatisfiable(boolean v) {
 		this.satisfiable = v;
 
-	}
+	}*/
 
 	/* (non-Javadoc)
 	 * @see mettel.core.MettelTableauState#expand(java.util.Set<mettel.core.MettelAnnotatedExpression>[])
@@ -493,5 +493,13 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	@Override
 	public MettelTableauState parent() {
 		return parent;
+	}
+
+	/* (non-Javadoc)
+	 * @see mettel.core.MettelTableauState#setUnsatisfiable()
+	 */
+	@Override
+	public void setUnsatisfiable() {
+		satisfiable = false;
 	}
 }

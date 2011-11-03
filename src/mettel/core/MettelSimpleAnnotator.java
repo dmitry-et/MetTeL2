@@ -64,7 +64,10 @@ public class MettelSimpleAnnotator implements MettelAnnotator {
 			MettelAnnotatedExpression ae) {
 //System.out.println("e="+e+", ae="+ae);
 		final MettelSubstitution s = e.match(ae.expression());
-		return s == null? null: new MettelSimpleAnnotatedSubstitution(s,ae.annotation());
+		if(s == null) return null;
+		final MettelSimpleTableauAnnotation a = new MettelSimpleTableauAnnotation(ae.annotation());
+		a.appendDependency(ae.expression());
+		return new MettelSimpleAnnotatedSubstitution(s,a);
 	}
 
 	/* (non-Javadoc)

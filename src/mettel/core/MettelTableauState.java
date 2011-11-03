@@ -51,7 +51,7 @@ public interface MettelTableauState extends Comparable<MettelTableauState>{
 	 */
 	void addToRulePools(MettelAnnotatedExpression e);
 
-	void setSatisfiable(boolean v);
+//	void setSatisfiable(boolean v);
 
 	/**
 	 * @param branches
@@ -83,5 +83,10 @@ public interface MettelTableauState extends Comparable<MettelTableauState>{
 	 * @return
 	 */
 	Set<MettelTableauState> rewrite();
+
+	/**
+	 *
+	 */
+	void setUnsatisfiable();
 
 }

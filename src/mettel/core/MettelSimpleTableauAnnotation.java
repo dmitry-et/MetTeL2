@@ -17,6 +17,8 @@
 package mettel.core;
 
 import java.util.Collection;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author Dmitry Tishkovsky
@@ -35,6 +37,28 @@ public class MettelSimpleTableauAnnotation implements MettelTableauAnnotation {
 	public MettelSimpleTableauAnnotation(MettelTableauState state){
 		super();
 		this.state = state;
+	}
+
+	private TreeSet<MettelExpression> dependencies = new TreeSet<MettelExpression>();
+
+	/**
+	 * @param annotation
+	 */
+	public MettelSimpleTableauAnnotation(MettelTableauAnnotation annotation) {
+		super();
+		this.state = annotation.state();
+		this.dependencies.addAll(annotation.dependencies());
+	}
+
+	/**
+	 * @param mettelSimpleTableauAnnotation
+	 * @param dependencies2
+	 */
+	protected MettelSimpleTableauAnnotation(
+			MettelTableauAnnotation a,
+			Set<MettelExpression> deps) {
+		this(a);
+		this.dependencies.addAll(deps);
 	}
 
 	/* (non-Javadoc)
@@ -60,9 +84,11 @@ public class MettelSimpleTableauAnnotation implements MettelTableauAnnotation {
 	public MettelTableauAnnotation merge(MettelTableauAnnotation a) {
 		final MettelTableauState astate = a.state();
 		if(this.state.id() > astate.id()){
-			return newInstance(this.state);
+			return new MettelSimpleTableauAnnotation(this, a.dependencies());
+//			result.dependencies().addAll(a.dependencies());
+//			return result;
 		}else{
-			return newInstance(astate);
+			return new MettelSimpleTableauAnnotation(a,dependencies);
 		}
 	}
 
@@ -115,14 +141,30 @@ public class MettelSimpleTableauAnnotation implements MettelTableauAnnotation {
 
 	/* (non-Javadoc)
 	 * @see mettel.core.MettelTableauAnnotation#newInstance(mettel.core.MettelTableauState)
-	 */
+	 *
 	@Override
 	public MettelTableauAnnotation newInstance(MettelTableauState state) {
 		return new MettelSimpleTableauAnnotation(state);
-	}
+	}*/
 
 	public String toString(){
 		return "Ann("+state+')';
+	}
+
+	/**
+	 * @param expression
+	 */
+	public void appendDependency(MettelExpression expression) {
+		this.dependencies.add(expression);
+
+	}
+
+	/* (non-Javadoc)
+	 * @see mettel.core.MettelTableauAnnotation#dependencies()
+	 */
+	@Override
+	public Set<MettelExpression> dependencies() {
+		return dependencies;
 	}
 
 }
