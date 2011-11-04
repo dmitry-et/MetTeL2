@@ -66,4 +66,6 @@ public interface MettelTableauRuleState {
 	public int branchingFactor();
 
 	public void rewrite(MettelTableauState s, MettelReplacement r);
+
+	public Set<MettelAnnotatedExpression> dependencies();
 }

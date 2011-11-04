@@ -16,6 +16,7 @@
  */
 package mettel.core;
 
+import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -27,11 +28,15 @@ import java.util.TreeSet;
  */
 public class MettelSimpleTableauExplanation implements MettelTableauExplanation {
 
+	private MettelTableauState state = null;
+
 	/**
 	 *
 	 */
 	@SuppressWarnings("unchecked")
-	public MettelSimpleTableauExplanation(int n) {
+	public MettelSimpleTableauExplanation(MettelTableauState state, int n) {
+		super();
+		this.state = state;
 		sublemmas = new Set[n];
 		SIZE = n;
 	}
@@ -48,7 +53,6 @@ public class MettelSimpleTableauExplanation implements MettelTableauExplanation 
 		return counter == SIZE;
 	}
 
-
 	private transient SortedSet<MettelAnnotatedExpression> lemma = null;
 	/* (non-Javadoc)
 	 * @see mettel.core.MettelTableauExplanation#lemma()
@@ -57,9 +61,16 @@ public class MettelSimpleTableauExplanation implements MettelTableauExplanation 
 	public SortedSet<MettelAnnotatedExpression> lemma() {
 		if(lemma != null) return lemma;
 		if(counter < SIZE) return null;
-		lemma = new TreeSet<MettelAnnotatedExpression>();
+		lemma = new TreeSet<MettelAnnotatedExpression>(MettelAnnotatedExpressionComparator.COMPARATOR);
+		final int ID = state.id();
 		for(int i = 0; i < SIZE; i++){
-			lemma.addAll(sublemmas[i]);
+			Iterator<MettelAnnotatedExpression> j = sublemmas[i].iterator();
+			while(j.hasNext()){
+				final MettelAnnotatedExpression ae = j.next();
+				if(ae.key().id() <= ID){
+					lemma.add(ae);
+				}
+			}
 		}
 		return lemma;
 	}
@@ -73,16 +84,33 @@ public class MettelSimpleTableauExplanation implements MettelTableauExplanation 
 		counter++;
 	}
 
+	private transient MettelTableauState ancestor = null;
+
 	/* (non-Javadoc)
 	 * @see mettel.core.MettelTableauExplanation#state()
 	 */
 	@Override
 	public MettelTableauState state() {
+		if(ancestor != null) return ancestor;
+		if(counter < SIZE) return null;
 		SortedSet<MettelAnnotatedExpression> lemma0 = lemma();
-		while(lemma0 != null){
-			lemma0.last().key().addLemma(lemma0);
+		final MettelTableauState state = lemma0.last().key();
+		final MettelTableauState parent = state.parent();
+		if(parent == null){
+			ancestor = state;
+			return ancestor;
 		}
-		return null;
+		final MettelTableauExplanation explanation = parent.explanation();
+		explanation.append(lemma0);
+		ancestor = explanation.state();
+		if(ancestor == null){
+			ancestor = state;
+		}
+		return ancestor;
 	}
 
+
+	public String toString(){
+		return lemma().toString();
+	}
 }

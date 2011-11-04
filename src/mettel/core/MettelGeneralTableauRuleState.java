@@ -171,6 +171,8 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 
     	private MettelTableauState applicationState = null;
 
+		private Set<MettelAnnotatedExpression> dependencies;
+
     	/* (non-Javadoc)
 		 * @see mettel.core.MettelTableauRuleState#apply()
 		 */
@@ -192,11 +194,11 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 //System.out.println("New substitution "+s0);
 
     	    applicationState = s0.key();
+    	    dependencies = s0.annotation().dependencies();
 
     		if(TERMINAL){
 //System.out.println("Terminal state");
     			terminal = true;
-    			applicationState = applicationState.addLemma(s0.annotation().dependencies());
     			return null;
     		}else{
 //System.out.println(""+ result.size()+" vs "+branches.size());
@@ -393,5 +395,13 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 	    			oldSubstitutions[i].add(annotator.annotate(r.rewrite(sub), s));
 	    		}
 			}
+		}
+
+		/* (non-Javadoc)
+		 * @see mettel.core.MettelTableauRuleState#dependencies()
+		 */
+		@Override
+		public Set<MettelAnnotatedExpression> dependencies() {
+			return dependencies;
 		}
 }

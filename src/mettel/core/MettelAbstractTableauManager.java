@@ -213,6 +213,7 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 				}
 			}
 		}
+
 		return unexpandedStates.add(state);
 	}
 

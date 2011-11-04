@@ -33,7 +33,7 @@ public interface MettelTableauState extends Comparable<MettelTableauState>{
 
 	boolean isExpanded();
 
-	Set<MettelTableauState> expand();
+	Set<MettelTableauState> expand(Set<MettelAnnotatedExpression>[] branches, Set<MettelAnnotatedExpression> dependencies);
 
 	boolean add(MettelAnnotatedExpression e);
 
@@ -56,7 +56,7 @@ public interface MettelTableauState extends Comparable<MettelTableauState>{
 	/**
 	 * @param branches
 	 */
-	Set<MettelTableauState> expand(Set<MettelAnnotatedExpression>[] branches);
+	Set<MettelTableauState> expand();
 
 	/**
 	 * @return
@@ -94,5 +94,10 @@ public interface MettelTableauState extends Comparable<MettelTableauState>{
 	 * @return
 	 */
 	MettelTableauState addLemma(Set<MettelAnnotatedExpression> dependencies);
+
+	/**
+	 *
+	 */
+	MettelTableauExplanation explanation();
 
 }

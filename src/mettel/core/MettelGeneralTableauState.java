@@ -294,18 +294,23 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		if(rs.isTerminal()){
 //System.out.println("Unsatisfiable: terminal rule at "+this+"with the expression pool "+expressions);
 			satisfiable = false;
-			actionsToAdd.add(new MettelTableauTerminateAction(rs.applicationState()));
+			explanation = new MettelSimpleTableauExplanation(this,1);
+			explanation.append(rs.dependencies());
+//System.out.println(explanation.state().explanation());
+//System.out.println(explanation.state());
+			actionsToAdd.add(new MettelTableauTerminateAction(explanation.state()));//rs.applicationState()));
 			return null;
 		}
 
 		if(branches == null) return null; //Cannot be applied or terminal
 
 		final int BRANCHES_NUMBER = branches.length;
+		final Set<MettelAnnotatedExpression> dependencies = rs.dependencies();
 		if(BRANCHES_NUMBER > 1){
-			actionsToAdd.add(new MettelTableauExpansionAction(rs.applicationState(),branches));
+			actionsToAdd.add(new MettelTableauExpansionAction(rs.applicationState(),branches,dependencies));
 		}
 
-		return expand(branches);
+		return expand(branches,dependencies);
 	}
 
 	/* (non-Javadoc)
@@ -395,7 +400,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	 * @see mettel.core.MettelTableauState#expand(java.util.Set<mettel.core.MettelAnnotatedExpression>[])
 	 */
 	@Override
-	public Set<MettelTableauState> expand(Set<MettelAnnotatedExpression>[] branches) {
+	public Set<MettelTableauState> expand(Set<MettelAnnotatedExpression>[] branches, Set<MettelAnnotatedExpression> dependencies) {
 //		if(branches == null) return null; //Cannot be applied or terminal
 
 		final int BRANCHES_NUMBER = branches.length;
@@ -418,7 +423,9 @@ public class MettelGeneralTableauState implements MettelTableauState {
 //System.out.println("branches["+i+"] = "+branches[i]);
 				}
 				//for(MettelTableauRuleState r:ruleStates) r.setApplicable(true);
-				explanation = new MettelSimpleTableauExplanation(BRANCHES_NUMBER);//XXX associate branches with dependencies
+				explanation = new MettelSimpleTableauExplanation(this,BRANCHES_NUMBER+1);//XXX associate branches with dependencies
+				explanation.append(dependencies);
+
 				return children;
 			}
 		}
@@ -515,5 +522,13 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		final MettelTableauState state = explanation.state();
 		if(state == null) return this;
 		return state;
+	}
+
+	/* (non-Javadoc)
+	 * @see mettel.core.MettelTableauState#explanation()
+	 */
+	@Override
+	public MettelTableauExplanation explanation() {
+		return explanation;
 	}
 }

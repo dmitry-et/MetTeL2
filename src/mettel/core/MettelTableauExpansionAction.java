@@ -27,14 +27,17 @@ import java.util.TreeSet;
 public class MettelTableauExpansionAction extends MettelAbstractTableauAction {
 
 	private Set<MettelAnnotatedExpression>[] branches = null;
+	private Set<MettelAnnotatedExpression> dependencies = null;
 
 	/**
+	 * @param dependencies
 	 *
 	 */
-	public MettelTableauExpansionAction(MettelTableauState state, Set<MettelAnnotatedExpression>[] branches) {
+	public MettelTableauExpansionAction(MettelTableauState state, Set<MettelAnnotatedExpression>[] branches, Set<MettelAnnotatedExpression> dependencies) {
 		this.state = state;
 		this.branches = branches;
 		states = new TreeSet<MettelTableauState>();
+		this.dependencies = dependencies;
 	}
 
 	/* (non-Javadoc)
@@ -44,7 +47,7 @@ public class MettelTableauExpansionAction extends MettelAbstractTableauAction {
 	public Set<MettelTableauState> execute(MettelTableauState s) {
 		if(isFor(s)){
 			remove(s);
-			return s.expand(branches);
+			return s.expand(branches,dependencies);
 		}
 		return null;
 	}
