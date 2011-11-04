@@ -17,6 +17,7 @@
 package mettel.core;
 
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
@@ -36,7 +37,7 @@ public class MettelSimpleTableauExplanation implements MettelTableauExplanation 
 	}
 
 	private final int SIZE;
-	private Set<MettelExpression>[] sublemmas = null;
+	private Set<MettelAnnotatedExpression>[] sublemmas = null;
 	private int counter = 0;
 
 	/* (non-Javadoc)
@@ -47,13 +48,16 @@ public class MettelSimpleTableauExplanation implements MettelTableauExplanation 
 		return counter == SIZE;
 	}
 
+
+	private transient SortedSet<MettelAnnotatedExpression> lemma = null;
 	/* (non-Javadoc)
 	 * @see mettel.core.MettelTableauExplanation#lemma()
 	 */
 	@Override
-	public Set<MettelExpression> lemma() {
+	public SortedSet<MettelAnnotatedExpression> lemma() {
+		if(lemma != null) return lemma;
 		if(counter < SIZE) return null;
-		TreeSet<MettelExpression> lemma = new TreeSet<MettelExpression>();
+		lemma = new TreeSet<MettelAnnotatedExpression>();
 		for(int i = 0; i < SIZE; i++){
 			lemma.addAll(sublemmas[i]);
 		}
@@ -64,9 +68,21 @@ public class MettelSimpleTableauExplanation implements MettelTableauExplanation 
 	 * @see mettel.core.MettelTableauExplanation#append(java.util.Set)
 	 */
 	@Override
-	public void append(Set<MettelExpression> sublemma) {
+	public void append(Set<MettelAnnotatedExpression> sublemma) {
 		sublemmas[counter] = sublemma;
 		counter++;
+	}
+
+	/* (non-Javadoc)
+	 * @see mettel.core.MettelTableauExplanation#state()
+	 */
+	@Override
+	public MettelTableauState state() {
+		SortedSet<MettelAnnotatedExpression> lemma0 = lemma();
+		while(lemma0 != null){
+			lemma0.last().key().addLemma(lemma0);
+		}
+		return null;
 	}
 
 }

@@ -17,6 +17,7 @@
 package mettel.core;
 
 import java.util.Set;
+import java.util.SortedSet;
 
 /**
  * @author Dmitry Tishkovsky
@@ -27,8 +28,13 @@ public interface MettelTableauExplanation {
 
 	boolean isComplete();
 
-	Set<MettelExpression> lemma();
+	SortedSet<MettelAnnotatedExpression> lemma();
 
-	void append(Set<MettelExpression> sublemma);
+	void append(Set<MettelAnnotatedExpression> sublemma);
+
+	/**
+	 * @return
+	 */
+	MettelTableauState state();
 
 }

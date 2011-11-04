@@ -196,6 +196,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
     		if(TERMINAL){
 //System.out.println("Terminal state");
     			terminal = true;
+    			applicationState = applicationState.addLemma(s0.annotation().dependencies());
     			return null;
     		}else{
 //System.out.println(""+ result.size()+" vs "+branches.size());

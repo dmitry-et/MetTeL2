@@ -66,7 +66,7 @@ public class MettelSimpleAnnotator implements MettelAnnotator {
 		final MettelSubstitution s = e.match(ae.expression());
 		if(s == null) return null;
 		final MettelSimpleTableauAnnotation a = new MettelSimpleTableauAnnotation(ae.annotation());
-		a.appendDependency(ae.expression());
+		a.appendDependency(ae);
 		return new MettelSimpleAnnotatedSubstitution(s,a);
 	}
 

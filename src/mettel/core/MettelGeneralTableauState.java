@@ -52,6 +52,8 @@ public class MettelGeneralTableauState implements MettelTableauState {
 
 	private Collection<? extends MettelTableauRule> calculus = null;
 
+	private MettelTableauExplanation explanation = null;
+
 	public MettelGeneralTableauState(MettelTableauObjectFactory factory, Collection<? extends MettelTableauRule> calculus) {
 		super();
 		this.factory = factory;
@@ -416,6 +418,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 //System.out.println("branches["+i+"] = "+branches[i]);
 				}
 				//for(MettelTableauRuleState r:ruleStates) r.setApplicable(true);
+				explanation = new MettelSimpleTableauExplanation(BRANCHES_NUMBER);//XXX associate branches with dependencies
 				return children;
 			}
 		}
@@ -501,5 +504,16 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	@Override
 	public void setUnsatisfiable() {
 		satisfiable = false;
+	}
+
+	/* (non-Javadoc)
+	 * @see mettel.core.MettelTableauState#addLemma(java.util.Set)
+	 */
+	@Override
+	public MettelTableauState addLemma(Set<MettelAnnotatedExpression> dependencies) {
+		explanation.append(dependencies);
+		final MettelTableauState state = explanation.state();
+		if(state == null) return this;
+		return state;
 	}
 }

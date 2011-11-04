@@ -89,4 +89,10 @@ public interface MettelTableauState extends Comparable<MettelTableauState>{
 	 */
 	void setUnsatisfiable();
 
+	/**
+	 * @param dependencies
+	 * @return
+	 */
+	MettelTableauState addLemma(Set<MettelAnnotatedExpression> dependencies);
+
 }

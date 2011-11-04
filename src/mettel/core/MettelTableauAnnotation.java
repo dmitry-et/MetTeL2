@@ -45,6 +45,6 @@ public interface MettelTableauAnnotation {
 	/**
 	 * @return
 	 */
-	public Set<MettelExpression> dependencies();
+	public Set<MettelAnnotatedExpression> dependencies();
 
 }

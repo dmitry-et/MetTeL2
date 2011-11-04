@@ -42,7 +42,6 @@ public class MettelTableauTerminateAction extends MettelAbstractTableauAction {
 		if(isFor(s)){
 			remove(s);
 			s.setUnsatisfiable();
-			s.addLemma(lemma);
 		}
 		return null;
 	}

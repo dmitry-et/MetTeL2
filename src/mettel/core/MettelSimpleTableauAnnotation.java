@@ -39,7 +39,7 @@ public class MettelSimpleTableauAnnotation implements MettelTableauAnnotation {
 		this.state = state;
 	}
 
-	private TreeSet<MettelExpression> dependencies = new TreeSet<MettelExpression>();
+	private TreeSet<MettelAnnotatedExpression> dependencies = new TreeSet<MettelAnnotatedExpression>();
 
 	/**
 	 * @param annotation
@@ -56,7 +56,7 @@ public class MettelSimpleTableauAnnotation implements MettelTableauAnnotation {
 	 */
 	protected MettelSimpleTableauAnnotation(
 			MettelTableauAnnotation a,
-			Set<MettelExpression> deps) {
+			Set<MettelAnnotatedExpression> deps) {
 		this(a);
 		this.dependencies.addAll(deps);
 	}
@@ -154,7 +154,7 @@ public class MettelSimpleTableauAnnotation implements MettelTableauAnnotation {
 	/**
 	 * @param expression
 	 */
-	public void appendDependency(MettelExpression expression) {
+	public void appendDependency(MettelAnnotatedExpression expression) {
 		this.dependencies.add(expression);
 
 	}
@@ -163,7 +163,7 @@ public class MettelSimpleTableauAnnotation implements MettelTableauAnnotation {
 	 * @see mettel.core.MettelTableauAnnotation#dependencies()
 	 */
 	@Override
-	public Set<MettelExpression> dependencies() {
+	public Set<MettelAnnotatedExpression> dependencies() {
 		return dependencies;
 	}
 
