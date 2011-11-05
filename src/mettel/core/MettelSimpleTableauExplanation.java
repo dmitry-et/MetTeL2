@@ -94,17 +94,20 @@ public class MettelSimpleTableauExplanation implements MettelTableauExplanation 
 		if(ancestor != null) return ancestor;
 		if(counter < SIZE) return null;
 		SortedSet<MettelAnnotatedExpression> lemma0 = lemma();
-		final MettelTableauState state = lemma0.last().key();
+		final MettelTableauState child = lemma0.last().key();
+//System.out.println("Child = "+child);
 		final MettelTableauState parent = state.parent();
+//System.out.println("Parent = "+parent);
 		if(parent == null){
-			ancestor = state;
+			ancestor = child;
 			return ancestor;
 		}
 		final MettelTableauExplanation explanation = parent.explanation();
 		explanation.append(lemma0);
 		ancestor = explanation.state();
+//System.out.println("Ancestor = "+ancestor);
 		if(ancestor == null){
-			ancestor = state;
+			ancestor = child;
 		}
 		return ancestor;
 	}

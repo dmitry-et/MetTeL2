@@ -297,7 +297,11 @@ public class MettelGeneralTableauState implements MettelTableauState {
 			explanation = new MettelSimpleTableauExplanation(this,1);
 			explanation.append(rs.dependencies());
 //System.out.println(explanation.state().explanation());
-//System.out.println(explanation.state());
+/*if(explanation.state().id() < rs.applicationState().id()){
+System.out.println();
+System.out.println("***Backjumping to "+explanation.state()+" from "+rs.applicationState()+" at "+this);
+System.out.println("Explanation: "+explanation.state().explanation());
+}*/
 			actionsToAdd.add(new MettelTableauTerminateAction(explanation.state()));//rs.applicationState()));
 			return null;
 		}
