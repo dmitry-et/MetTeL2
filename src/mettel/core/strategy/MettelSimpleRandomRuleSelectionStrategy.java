@@ -16,8 +16,6 @@
  */
 package mettel.core.strategy;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.TreeSet;
@@ -96,7 +94,7 @@ public class MettelSimpleRandomRuleSelectionStrategy extends
 		while(i.hasNext()){
 			final MettelTableauRuleState rs = i.next();
 			if(r < n*(n+1)/2){
-System.out.println("Rule state: "+rs);
+//System.out.println("Rule state: "+rs);
 				return rs;
 			}
 			n++;
