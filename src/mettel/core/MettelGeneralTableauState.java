@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import mettel.core.strategy.MettelSimpleRandomRuleSelectionStrategy;
 import mettel.core.strategy.MettelSimpleRuleSelectionStrategy;
 import mettel.util.MettelTreeSetLinkedHashMap;
 /**
