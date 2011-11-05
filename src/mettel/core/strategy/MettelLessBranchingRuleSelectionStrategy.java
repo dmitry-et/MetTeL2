@@ -72,4 +72,13 @@ public class MettelLessBranchingRuleSelectionStrategy implements
 		return result;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+	 */
+	@Override
+	public int compare(MettelTableauRuleState o1, MettelTableauRuleState o2) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

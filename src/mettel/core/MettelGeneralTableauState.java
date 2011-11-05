@@ -20,6 +20,8 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import mettel.core.strategy.MettelSimpleRandomRuleSelectionStrategy;
+import mettel.core.strategy.MettelSimpleRuleSelectionStrategy;
 import mettel.util.MettelTreeSetLinkedHashMap;
 /**
  * @author Dmitry Tishkovsky
@@ -58,6 +60,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		super();
 		this.factory = factory;
 		ruleSelectionStrategy  = new MettelSimpleRuleSelectionStrategy();
+								 //new MettelSimpleRandomRuleSelectionStrategy();
 		this.calculus = calculus;
 		initRuleStates(calculus);
 		expressions = new MettelTableauStatePool(/*this*/);
@@ -74,6 +77,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		super();
 		this.factory = factory;
 		ruleSelectionStrategy  = new MettelSimpleRuleSelectionStrategy();
+								 //new MettelSimpleRandomRuleSelectionStrategy();
 		this.calculus = calculus;
 		initRuleStates(calculus);
 		expressions = new MettelTableauStatePool(/*this*/);
@@ -205,33 +209,6 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		return complete;
 	}
 
-	private final class MettelSimpleRuleSelectionStrategy implements MettelRuleSelectionStrategy{
-
-		private int index = -1;
-
-		/* (non-Javadoc)
-		 * @see mettel.core.MettelRuleChoiceStrategy#select(mettel.core.MettelGeneralTableauRuleState[])
-		 */
-		@Override
-		public final MettelTableauRuleState select(
-				MettelTableauRuleState[] ruleStates) {
-			final int LENGTH = ruleStates.length;
-			index++;
-			if(index >= LENGTH) index = 0;
-			int i = index;
-			do{
-				final MettelTableauRuleState rs = ruleStates[i];
-				if(rs.isApplicable()){
-					index = i;
-					return rs;
-				}
-				i++;
-				if(i >= LENGTH) i = 0;
-			}while(i != index);
-			return null;
-		}
-
-	}
 
 
 	private transient MettelGeneralTableauRuleState[] ruleStates = null;

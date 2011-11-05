@@ -404,4 +404,12 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 		public Set<MettelAnnotatedExpression> dependencies() {
 			return dependencies;
 		}
+
+		/* (non-Javadoc)
+		 * @see mettel.core.MettelTableauRuleState#arity()
+		 */
+		@Override
+		public int arity() {
+			return premises.length;
+		}
 }

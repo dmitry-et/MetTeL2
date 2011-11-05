@@ -68,4 +68,9 @@ public interface MettelTableauRuleState {
 	public void rewrite(MettelTableauState s, MettelReplacement r);
 
 	public Set<MettelAnnotatedExpression> dependencies();
+
+	/**
+	 * @return
+	 */
+	public int arity();
 }
