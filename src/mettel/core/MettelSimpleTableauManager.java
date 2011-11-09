@@ -38,6 +38,14 @@ public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 	}
 
 	/* (non-Javadoc)
+	 * @see mettel.core.MettelAbstractTableauManager#isAcceptable(mettel.core.MettelTableauState)
+	 */
+	@Override
+	public boolean isAcceptable(MettelTableauState s) {
+		return s.isSatisfiable();
+	}
+
+	/* (non-Javadoc)
 	 * @see mettel.core.MettelAbstractTableauManager#cleanUp()
 	 *
 	@Override

@@ -129,7 +129,7 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 //System.out.println("Done");
 				if(!actionExecuted)	children = state.expand();
 				addActions(state);
-				if(state.isSatisfiable()){
+				if(isAcceptable(state)){
 					if(state.isComplete()) return true;
 
 					addChildren(state,children);
@@ -258,4 +258,6 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 			}
 		}
 	}
+
+	public abstract boolean isAcceptable(MettelTableauState s);
 }

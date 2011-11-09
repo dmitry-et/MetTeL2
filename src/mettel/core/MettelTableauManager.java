@@ -28,5 +28,7 @@ public interface MettelTableauManager {
 	boolean isSatisfiable(MettelExpression e);
 	boolean isSatisfiable(Collection<? extends MettelExpression> input);
 
+
+
 //	boolean isSatisfiable(InputStream stream);
 }
