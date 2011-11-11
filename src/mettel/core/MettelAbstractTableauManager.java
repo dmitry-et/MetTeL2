@@ -43,8 +43,8 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 		 */
 		@Override
 		public MettelTableauState chooseTableauState(Set<MettelTableauState> s) {
-			Iterator<MettelTableauState> i = s.iterator();
-			while(i.hasNext()){
+			final Iterator<MettelTableauState> i = s.iterator();
+			if(i.hasNext()){
 				//MettelTableauState state = i.next();
 //System.out.println("Looking at state "+state);
 				//if(state.isSatisfiable()) return state;
@@ -133,6 +133,7 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 					if(state.isComplete()) return true;
 
 					addChildren(state,children);
+					children = null;
 
 					//	throw new MettelCoreRuntimeException("Failed to add children of "+state);
 
@@ -181,7 +182,7 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 //		Set<MettelTableauAction> actions = s.actions();
 //System.out.println("Adding actions for "+s+"...");
 //System.out.println("Actions to add "+actionsToAdd);
-		Iterator<MettelTableauAction> ia = actionsToAdd.iterator();
+		final Iterator<MettelTableauAction> ia = actionsToAdd.iterator();
 		while(ia.hasNext()){
 			final MettelTableauAction a = ia.next();
 			for(MettelTableauState s0: unexpandedStates){
@@ -205,7 +206,7 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 				final MettelTableauState s = i.next();
 				if(s.expressions().equals(state.expressions())){
 					if(state.id() < s.id()){
-						unexpandedStates.remove(s);
+						i.remove();//unexpandedStates.remove(s);
 						unexpandedStates.add(state);
 						return true;
 					}
@@ -248,7 +249,7 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 
 		final Set<MettelTableauAction> actions = state.actions();
 		if(actions != null){
-			Iterator<MettelTableauAction> ia = actions.iterator();
+			final Iterator<MettelTableauAction> ia = actions.iterator();
 			while(ia.hasNext()){
 				final MettelTableauAction a = ia.next();
 				if(a.isFor(state)){

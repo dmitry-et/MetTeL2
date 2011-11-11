@@ -225,7 +225,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	private void initRuleStates(MettelGeneralTableauRuleState[] rs){
 		final int LENGTH = rs.length;
 		ruleStates = new MettelGeneralTableauRuleState[LENGTH];
-		for(int i = 0; i< LENGTH; i++){
+		for(int i = 0; i< LENGTH;i++){
 			ruleStates[i] = new MettelGeneralTableauRuleState(this,rs[i]);
 		}
 	}
@@ -454,6 +454,8 @@ System.out.println("Explanation: "+explanation.state().explanation());
 	 */
 	@Override
 	public boolean isChildOf(MettelTableauState key){
+		return expressions.subset(key) != null;
+/*
 //System.out.print("isChildOf for "+key+"...");
 		if(key == null) return false;
 		//MettelTableauState p = parent;
@@ -467,6 +469,7 @@ System.out.println("Explanation: "+explanation.state().explanation());
 		}
 //System.out.println("Done(false)");
 		return false;
+*/
 	}
 
 	/* (non-Javadoc)
