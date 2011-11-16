@@ -30,19 +30,18 @@ public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 	 *
 	 */
 	public MettelSimpleTableauManager(MettelTableauObjectFactory factory, Collection<? extends MettelTableauRule> calculus) {
+		this(factory,calculus,null,null);
+	}
+
+	public MettelSimpleTableauManager(MettelTableauObjectFactory factory, Collection<? extends MettelTableauRule> calculus,
+					MettelBranchSelectionStrategy strategy, MettelTableauStateAcceptor acceptor) {
 		unexpandedStates =
 				new TreeSet<MettelTableauState>();
 				//new LinkedHashSet<MettelTableauState>();
 				//new TreeSet<MettelTableauState>(new MettelTableauStateComparator());
 		state = new MettelGeneralTableauState(factory, calculus);
-	}
-
-	/* (non-Javadoc)
-	 * @see mettel.core.MettelAbstractTableauManager#isAcceptable(mettel.core.MettelTableauState)
-	 */
-	@Override
-	public boolean isAcceptable(MettelTableauState s) {
-		return s.isSatisfiable();
+		this.strategy = strategy;
+		this.acceptor = acceptor;
 	}
 
 	/* (non-Javadoc)

@@ -34,7 +34,20 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 
 	protected MettelBranchSelectionStrategy strategy = null;
 
+	protected MettelTableauStateAcceptor acceptor = null;
+
 	//protected Set<MettelGeneralTableauRule> calculus = null;
+
+	private class MettelSatisfiableTableauStateAcceptor implements MettelTableauStateAcceptor{
+
+		/* (non-Javadoc)
+		 * @see mettel.core.MettelTableauStateAcceptor#accept(mettel.core.MettelTableauState)
+		 */
+		@Override
+		public boolean accept(MettelTableauState state) {
+			return state.isSatisfiable();
+		}
+	}
 
 	private class MettelSimpleBranchSelectionStrategy implements MettelBranchSelectionStrategy{
 
@@ -90,6 +103,10 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 			strategy = new MettelSimpleBranchSelectionStrategy();
 		}
 
+		if(acceptor == null){
+			acceptor = new MettelSatisfiableTableauStateAcceptor();
+		}
+
 		if(state.addAll(input)){
 
 			unexpandedStates.add(state);
@@ -129,7 +146,7 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 //System.out.println("Done");
 				if(!actionExecuted)	children = state.expand();
 				addActions(state);
-				if(isAcceptable(state)){
+				if(acceptor.accept(state)){
 					if(state.isComplete()) return true;
 
 					addChildren(state,children);
@@ -260,5 +277,5 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 		}
 	}
 
-	public abstract boolean isAcceptable(MettelTableauState s);
+//	public abstract boolean isAcceptable(MettelTableauState s);
 }
