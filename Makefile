@@ -381,7 +381,7 @@ generateLogics: $(JAR_FILE) $(TEST_CLASSES_DIR)
 	@ echo $(DELIM0)
 	@ echo "Generating logics"
 	@ echo $(DELIM1)
-	@ for D in "$(TEST_LOGIC_DIRS)"; do echo "Generating $${D}"; java -cp $(RUNTIME_CLASSPATH) mettel.MettelGenerator -i "$(TEST_EXAMPLES_DIR)/$${D}/$${D}.s" -d "test/output"; done
+	@ for D in "$(TEST_LOGIC_DIRS)"; do echo "Generating $${D}"; java -cp $(RUNTIME_CLASSPATH) mettel.MettelGenerator -i "$(TEST_EXAMPLES_DIR)/$${D}/$${D}.s" -p "$(TEST_EXAMPLES_DIR)/$${D}/$${D}.properties" -d "test/output"; done
 	
 generateParsers: generateLogics
 #	@ TEST_LOGIC_PARSERS = $(shell find $(TEST_OUTPUT_DIR) -name '*.g')
