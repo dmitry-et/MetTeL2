@@ -19,7 +19,6 @@ package mettel.generator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import mettel.generator.antlr.MettelANTLRGrammar;
 //import mettel.generator.antlr.MettelANTLRHeader;
 import mettel.generator.antlr.MettelANTLRRule;
@@ -50,15 +49,17 @@ import static mettel.util.MettelStrings.BASIC_STRING;
 public class MettelANTLRGrammarGenerator {
 
 	@SuppressWarnings("unused")
-	private MettelANTLRGrammarGenerator(){}
+	private MettelANTLRGrammarGenerator(){ spec = null; properties = null;}
 
-	private MettelSpecification spec = null;
+	private final MettelSpecification spec;
+	private final MettelANTLRGrammarGeneratorProperties properties;
 	/**
 	 *
 	 */
-	public MettelANTLRGrammarGenerator(MettelSpecification spec) {
+	public MettelANTLRGrammarGenerator(MettelSpecification spec, MettelANTLRGrammarGeneratorProperties properties) {
 		super();
 		this.spec = spec;
+		this.properties = (properties == null)? new MettelANTLRGrammarGeneratorProperties() : properties;
 	}
 
 /*	//TODO use of output path
@@ -71,7 +72,7 @@ public class MettelANTLRGrammarGenerator {
 	private MettelJavaPackage langPackage = null;
 	private MettelJavaPackage grammarPackage = null;
 */
-	private MettelANTLRGrammar processSyntax0(MettelJavaPackageStructure pStructure, String name){
+/*	private MettelANTLRGrammar processSyntax0(MettelJavaPackageStructure pStructure, String name){
 		final String PATH = spec.path();
 		final String s = PACKAGE_STRING+' '+PATH+';';
 
@@ -126,7 +127,7 @@ public class MettelANTLRGrammarGenerator {
 
 		return grammar;
 	}
-
+*/
 
 	public MettelJavaPackageStructure processSyntax(String name){
 		MettelSyntax syn = spec.getSyntax(name);
@@ -180,7 +181,7 @@ public class MettelANTLRGrammarGenerator {
 			processSort(grammar,sort);
 			processBNFs(grammar,pStructure,sort,syn.getBNFs(sort));
 		}
-		pStructure.appendStandardClasses(NAME,sortStrings);
+		pStructure.appendStandardClasses(NAME,sortStrings,properties.branchBound);
 
 		grammar.addRule(makeANTLRExpressionListRule(NAME));
 		grammar.addRule(makeANTLRExpressionRule(NAME,sorts));
@@ -210,7 +211,7 @@ public class MettelANTLRGrammarGenerator {
 		s.addExpression(ruleRef);
 
 		MettelANTLRMultiaryBNFStatement s0 = new MettelANTLRMultiaryBNFStatement();
-		s0.addExpression(new MettelANTLRToken("'$;'"));
+		s0.addExpression(new MettelANTLRToken("'"+properties.tableauRuleDelimiter+"'"));
 		s0.addExpression(new MettelANTLRUnaryBNFStatement(ruleRef,
 							MettelANTLRUnaryBNFStatement.TEST));
 		s.addExpression(new MettelANTLRUnaryBNFStatement(
@@ -251,14 +252,14 @@ public class MettelANTLRGrammarGenerator {
 		MettelANTLRMultiaryBNFStatement s = new MettelANTLRMultiaryBNFStatement();
 		final String EXPRESSIONS = "expressions";
 		s.addExpression(new MettelANTLRRuleReference(EXPRESSIONS,"premises"));
-		s.addExpression(new MettelANTLRToken("'/'"));
+		s.addExpression(new MettelANTLRToken("'"+properties.tableauRulePremiseDelimiter+"'"));
 
 		MettelANTLRRuleReference ruleRef = new MettelANTLRRuleReference(EXPRESSIONS,"conclusion");
 		ruleRef.appendLineToPostfix("branches.add(new LinkedHashSet<"+grammarName+"Expression>(conclusion));");
 		s.addExpression(ruleRef);
 
 		MettelANTLRMultiaryBNFStatement s0 = new MettelANTLRMultiaryBNFStatement();
-		s0.addExpression(new MettelANTLRToken("'$|'"));
+		s0.addExpression(new MettelANTLRToken("'"+properties.tableauRuleBranchDelimiter+"'"));
 		s0.addExpression(ruleRef);
 		s.addExpression(new MettelANTLRUnaryBNFStatement(s0,MettelANTLRUnaryBNFStatement.STAR));
 

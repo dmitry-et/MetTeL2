@@ -150,6 +150,12 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 			appendLine("return false;");
 		decrementIndentLevel();
 		appendLine('}');
+
+		appendLine("public int length(){");
+		incrementIndentLevel();
+			appendLine("return 1;");
+		decrementIndentLevel();
+		appendLine('}');
 	}
 
 }

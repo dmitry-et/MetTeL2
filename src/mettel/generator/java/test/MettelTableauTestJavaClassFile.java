@@ -29,12 +29,12 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
 	private String prefix = "Mettel";
 	private String packName = null;
 
-	public MettelTableauTestJavaClassFile(String prefix, String sort, MettelJavaPackage pack) {
+	public MettelTableauTestJavaClassFile(String prefix, String sort, String branchBound, MettelJavaPackage pack) {
 		super(prefix+"TableauTest", pack, "public", "TestCase", null);
 		this.prefix = prefix;
 		packName = pack.path();
 		packName = packName.substring(0,packName.lastIndexOf('.')+1);
-		body(sort);
+		body(sort, branchBound);
 	}
 
 	protected void imports(){
@@ -59,12 +59,13 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
 		headings.appendLine("import mettel.core.MettelSimpleTableauManager;");
 		headings.appendLine("import mettel.core.MettelGeneralTableauRule;");
 		headings.appendLine("import mettel.core.MettelTableauObjectFactory;");
+		headings.appendLine("import mettel.core.acceptor.MettelSmallTableauStateAcceptor;");
 
 		headings.appendLine("import "+packName+"*;");
 		headings.appendEOL();
 	}
 
-	private void body(String sort){
+	private void body(String sort, String branchBound){
 
     	appendLine("final static String tableauFile = \""+MettelJavaNames.systemPath("test.examples."+packName+"tableau")+"\";");
     	appendLine("final static String inDir = \""+MettelJavaNames.systemPath("test.examples."+packName+"problems")+"\";");
@@ -127,14 +128,27 @@ appendLine("System.out.print(\"\"+counter+\". \"+fileName+\"...\");");
 
 //    	        		    appendLine("TreeSet<MettelAnnotatedExpression> annotated = new TreeSet<MettelAnnotatedExpression>();");
 
-    	        		    appendLine("final long start = System.currentTimeMillis();");
     	        		    appendLine("MettelTableauObjectFactory tfactory = new "+prefix+"TableauObjectFactory();");
-    	        		    appendLine("MettelSimpleTableauManager m = new MettelSimpleTableauManager(tfactory, calculus);");
+    	        		    if(branchBound == null){
+
+    	        		    	appendLine("MettelSimpleTableauManager m = new MettelSimpleTableauManager(tfactory, calculus);");
 //    	        		    appendLine("MettelSimpleTableauAnnotation a = new MettelSimpleTableauAnnotation(state);");
 //    	        		    appendLine("a.annotate(annotated,list);");
 //    	        		    appendLine("state.addAll(annotated);");
 //
-    	        		    appendLine("final boolean result = m.isSatisfiable(list);");
+    	        		    }else{
+    	        		    	appendLine("int branchBound = 0;");
+    	        		    	appendLine("for("+prefix+MettelJavaNames.firstCharToUpperCase(sort)+" e:list){");
+    	        		    	incrementIndentLevel();
+    	        		    		appendLine("branchBound += "+branchBound.replaceAll("%l", "e.length()")+';');
+    	        		    	decrementIndentLevel();
+    	        		    	appendLine('}');
+    	        		    	appendLine("MettelSmallTableauStateAcceptor acceptor = new MettelSmallTableauStateAcceptor(branchBound);");
+    	        		    	appendLine("MettelSimpleTableauManager m = new MettelSimpleTableauManager(tfactory, calculus,acceptor);");
+    	        		    }
+
+       	        		    appendLine("final long start = System.currentTimeMillis();");
+       	        		    appendLine("final boolean result = m.isSatisfiable(list);");
     	        		    appendLine("final long finish = System.currentTimeMillis();");
 appendLine("System.out.print(\"\"+(finish-start)+\" msec...\");");
 

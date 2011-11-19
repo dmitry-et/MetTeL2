@@ -81,7 +81,7 @@ public class MettelJavaPackageStructure {
 		langPackage.add(new MettelTableauObjectFactoryJavaClassFile(prefix,langPackage));
 	}
 
-	public void appendStandardClasses(String prefix, String[] sorts){
+	public void appendStandardClasses(String prefix, String[] sorts, String branchBound){
 		langPackage.add(new MettelReplacementJavaInterfaceFile(prefix,langPackage,sorts));
 		langPackage.add(new MettelSubstitutionJavaInterfaceFile(prefix,langPackage,sorts));
 		langPackage.add(new MettelReplacementJavaClassFile(prefix,langPackage,sorts));
@@ -89,7 +89,7 @@ public class MettelJavaPackageStructure {
 
 		if(sorts.length > 0){
 			testPackage.add(new MettelParserTestJavaClassFile(prefix,sorts[0],testPackage));
-			testPackage.add(new MettelTableauTestJavaClassFile(prefix,sorts[0],testPackage));
+			testPackage.add(new MettelTableauTestJavaClassFile(prefix,sorts[0],branchBound,testPackage));
 		}
 
 		for(String sort:sorts){

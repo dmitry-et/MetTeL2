@@ -80,6 +80,8 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 
 		appendLine("static final int PRIORITY = "+priority+';');
 
+		appendLine("private final int LENGTH;");
+
 		for(int i = 0; i < SIZE; i++){
 			appendLine("protected "+prefix+MettelJavaNames.firstCharToUpperCase(sorts[i])+" e"+i+" = null;");
 		}
@@ -98,9 +100,12 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 		appendEOL();
 			incrementIndentLevel();
 				appendLine("super(f);");
+				appendLine("int l = 1;");
 				for(int i = 0; i < SIZE;i++){
 					appendLine("this.e"+i+" = e"+i+';');
+					appendLine("l += e"+i+".length();");
 				}
+				appendLine("LENGTH = l;");
 			decrementIndentLevel();
 		appendLine('}');
 		appendEOL();
@@ -110,6 +115,10 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 		appendEOL();
 
 		appendLine("int priority(){ return PRIORITY; }");
+
+		appendEOL();
+
+		appendLine("public int length(){ return LENGTH; }");
 
 		appendEOL();
 

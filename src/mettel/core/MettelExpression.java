@@ -34,4 +34,6 @@ public interface MettelExpression extends Comparable<MettelExpression>{
 	MettelAnnotatedSubstitution match(MettelAnnotatedExpression e);
 
 //	boolean isEquality();
+
+	int length();
 }

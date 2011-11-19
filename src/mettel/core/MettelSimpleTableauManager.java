@@ -34,6 +34,11 @@ public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 	}
 
 	public MettelSimpleTableauManager(MettelTableauObjectFactory factory, Collection<? extends MettelTableauRule> calculus,
+			MettelTableauStateAcceptor acceptor) {
+		this(factory,calculus,null,acceptor);
+	}
+
+	public MettelSimpleTableauManager(MettelTableauObjectFactory factory, Collection<? extends MettelTableauRule> calculus,
 					MettelBranchSelectionStrategy strategy, MettelTableauStateAcceptor acceptor) {
 		unexpandedStates =
 				new TreeSet<MettelTableauState>();

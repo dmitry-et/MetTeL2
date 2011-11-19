@@ -16,6 +16,7 @@
  */
 package mettel;
 
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -29,6 +30,7 @@ import org.antlr.runtime.CommonTokenStream;
 //import org.antlr.Tool;
 
 import mettel.generator.MettelANTLRGrammarGenerator;
+import mettel.generator.MettelANTLRGrammarGeneratorProperties;
 import mettel.generator.java.MettelJavaPackageStructure;
 import mettel.language.MettelLexer;
 import mettel.language.MettelParser;
@@ -46,6 +48,7 @@ public class MettelGenerator {
 	private static CharStream in = null;
 	private static String outFileName = null;
 	private static String outputPath = "output";
+	private static FileReader prop = null;
 
 	/**
 	 * @param args
@@ -61,6 +64,7 @@ public class MettelGenerator {
             		    System.out.println("Input file: "+args[i]);
                     }else{
                         System.out.println("Input file name required");
+                        System.exit(-1);
                     }
 
         		}else if("-o".equals(args[i])||"--output".equals(args[i])){
@@ -71,6 +75,7 @@ public class MettelGenerator {
             		  System.out.println("Output file: "+outFileName);
                     }else{
                         System.out.println("Output file name required");
+                        System.exit(-1);
                     }
 
         		}else if("-e".equals(args[i])||"--error".equals(args[i])){
@@ -80,6 +85,7 @@ public class MettelGenerator {
             		  System.out.println("Using error file: "+args[i]);
                     }else{
                         System.out.println("Error file name required");
+                        System.exit(-1);
                     }
         		}else if("-d".equals(args[i])||"--output-directory".equals(args[i])){
 
@@ -88,9 +94,21 @@ public class MettelGenerator {
             		  System.out.println("Output path: "+outputPath);
                     }else{
                         System.out.println("Output directory name required");
+                        System.exit(-1);
+                    }
+        		}else if("-p".equals(args[i])||"--properties".equals(args[i])){
+
+        			if(i < SIZE-1){
+       					prop = new FileReader(args[++i]);
+        				System.out.println("Properties file: "+args[i]);
+                    }else{
+                        System.out.println("Properties file name required");
+                        System.exit(-1);
                     }
         		}
         	}
+
+
 
         	CommonTokenStream tokens = new CommonTokenStream();
 
@@ -105,14 +123,14 @@ public class MettelGenerator {
     				new OutputStreamWriter(System.out),true);
          	if(err == null) err = new PrintWriter(
     				new OutputStreamWriter(System.err),true);
-       	
+
         	MettelSpecification spec = parser.specification();
 
         	//StringBuilder buf = new StringBuilder();
         	//spec.toBuffer(buf);
         	//System.out.print(buf);
-    	
-        	MettelANTLRGrammarGenerator gen = new MettelANTLRGrammarGenerator(spec);
+        	MettelANTLRGrammarGeneratorProperties p = (prop == null)? null: new MettelANTLRGrammarGeneratorProperties(prop);
+        	MettelANTLRGrammarGenerator gen = new MettelANTLRGrammarGenerator(spec,p);
 //        	StringBuilder buf = new StringBuilder();
         	for(MettelJavaPackageStructure pStructure:gen.processSyntaxes()){
         		//System.out.println('#');
