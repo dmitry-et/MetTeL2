@@ -64,7 +64,7 @@ public class MettelSimpleTableauExplanation implements MettelTableauExplanation 
 		lemma = new TreeSet<MettelAnnotatedExpression>(MettelAnnotatedExpressionComparator.COMPARATOR);
 		final int ID = state.id();
 		for(int i = 0; i < SIZE; i++){
-			Iterator<MettelAnnotatedExpression> j = sublemmas[i].iterator();
+			final Iterator<MettelAnnotatedExpression> j = sublemmas[i].iterator();
 			while(j.hasNext()){
 				final MettelAnnotatedExpression ae = j.next();
 				if(ae.key().id() <= ID){
@@ -73,6 +73,26 @@ public class MettelSimpleTableauExplanation implements MettelTableauExplanation 
 			}
 		}
 		return lemma;
+	}
+
+	/* (non-Javadoc)
+	 * @see mettel.core.MettelTableauExplanation#incompleteLemma()
+	 */
+	@Override
+	public SortedSet<MettelAnnotatedExpression> incompleteLemma() {
+		if(lemma != null) return lemma;
+		final TreeSet<MettelAnnotatedExpression> result = new TreeSet<MettelAnnotatedExpression>(MettelAnnotatedExpressionComparator.COMPARATOR);
+		final int ID = state.id();
+		for(int i = 0; i < counter; i++){
+			final Iterator<MettelAnnotatedExpression> j = sublemmas[i].iterator();
+			while(j.hasNext()){
+				final MettelAnnotatedExpression ae = j.next();
+				if(ae.key().id() <= ID){
+					result.add(ae);
+				}
+			}
+		}
+		return result;
 	}
 
 	/* (non-Javadoc)

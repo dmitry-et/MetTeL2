@@ -29,6 +29,7 @@ public interface MettelTableauExplanation {
 	boolean isComplete();
 
 	SortedSet<MettelAnnotatedExpression> lemma();
+	SortedSet<MettelAnnotatedExpression> incompleteLemma();
 
 	void append(Set<MettelAnnotatedExpression> sublemma);
 

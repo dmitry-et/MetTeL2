@@ -245,7 +245,6 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	public Set<MettelTableauState> expand() {
 		expanded = false;
 //System.out.println("Expanding "+this+" which has the expression pool "+expressions);
-
 /*		Iterator<MettelTableauAction> i = actions.iterator();//TODO replace for an action selection strategy
 		while(i.hasNext()){
 			MettelTableauAction a = i.next();
@@ -259,12 +258,11 @@ public class MettelGeneralTableauState implements MettelTableauState {
 
 		final MettelTableauRuleState rs = ruleSelectionStrategy.select(ruleStates);
 		if(rs == null){
-//System.out.println("None of rules are applicable");
+//System.out.println("None of rules are applicable: ");
 			complete = true;
 			return null;
 		}
 //System.out.println(rs);
-
 
 		final Set<MettelAnnotatedExpression>[] branches = rs.apply();
 		if(rs.isTerminal()){
@@ -420,12 +418,31 @@ System.out.println("Explanation: "+explanation.state().explanation());
 		final MettelTableauStatePool pool = expressions;
 		expressions = new MettelTableauStatePool();
 		expressions.init(this);
+		boolean changed = false;
+		final LinkedHashSet<MettelAnnotatedExpression> rewritten = new LinkedHashSet<MettelAnnotatedExpression>();
 		for(MettelAnnotatedExpression ae:pool){
-			expressions.add(annotator.annotate(replacement.rewrite(ae.expression()),this));
+			final MettelExpression e0 = ae.expression();
+			final MettelExpression e1 = replacement.rewrite(e0);
+			if(e0.equals(e1)){
+				expressions.add(ae);
+			}else{
+				changed = true;
+				final MettelAnnotatedExpression ae1 = annotator.annotate(e1,this);
+				expressions.add(ae1);
+				rewritten.add(ae1);
+			}
 		}
-		final int LENGTH = ruleStates.length;
-		for(int i=0;i<LENGTH;i++){
-			ruleStates[i].rewrite(this, replacement);
+		if(changed){
+			for(MettelGeneralTableauRuleState rs:ruleStates){
+				rs.rewrite(this, replacement);
+				if(rs.TERMINAL){
+					rs.addAll(rewritten);
+//System.out.println("Rule state is applicable: "+rs.isApplicable());
+				}
+//System.out.println("Rule state: "+rs);
+			}
+		}else{
+			expressions = pool;
 		}
 		return null;
 /*

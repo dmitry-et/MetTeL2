@@ -24,13 +24,16 @@
 //@l~(C U D) / @l(Ev1(C,D,l)) $;
 //@l(Ev1(C,D,l1)) / @l ~C ((Ev1(C,D,l1))<->(~(C U D))) $| @f(l) (Ev1(C,D,l1)) $;
 
+@l~(C U D)/ @l (~D U ~(C | D)) $| @l (~D U false) $;
+
 
 // Theory rules 
 //@l{l} / @l<>{l} $;
 //@l<>{l2} @l2<>{l3} / @l1<>{l3} $;
 
 // Closure rule
-@l P  @l~P /  $;
+@l P  @l (~P) /  $;
+@l false / $;
 
 //Blocking related
 @l{l0} / [l=l0] $;

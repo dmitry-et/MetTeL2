@@ -50,7 +50,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 
     	private final int PREMISES_NUMBER;
     	protected final int BRANCHES_NUMBER;
-    	private final boolean TERMINAL;
+    	final boolean TERMINAL;
 
     	@SuppressWarnings("unchecked")
 		private void init(MettelTableauState s){
@@ -259,7 +259,11 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 //System.out.println("Substitution is "+s+" index = "+index);
 
     		final int ind = index - 1;
-    		if(!oldSubstitutions[ind].contains(s)){
+    		if(oldSubstitutions[ind].contains(s)){
+    			if(TERMINAL){
+    				newSubstitutions.addAll(mergeWithOldSubstitutions(s,ind));
+    			}
+    		}else{
     			newSubstitutions.addAll(mergeWithOldSubstitutions(s,ind));//first merge, than add to old
     			oldSubstitutions[ind].add(s);
     		}
@@ -308,7 +312,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 		}
 
 		private MettelAnnotatedSubstitution newSubstitutionsPoll(){
-			Iterator<MettelAnnotatedSubstitution> i = newSubstitutions.iterator();
+			final Iterator<MettelAnnotatedSubstitution> i = newSubstitutions.iterator();
 			if(i.hasNext()){
 				MettelAnnotatedSubstitution s = i.next();
 				i.remove();
@@ -319,7 +323,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 		}
 
 		private MettelAnnotatedExpression expressionsPoll(){
-			Iterator<MettelAnnotatedExpression> i = pool.iterator();
+			final Iterator<MettelAnnotatedExpression> i = pool.iterator();
 			if(i.hasNext()){
 				MettelAnnotatedExpression s = i.next();
 				//if(BRANCHES_NUMBER <= 1 || !s.key().equals(tstate))

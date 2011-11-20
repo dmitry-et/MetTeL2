@@ -17,6 +17,7 @@
 package mettel.core;
 
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * @author Dmitry Tishkovsky
@@ -28,7 +29,8 @@ public interface MettelTableauManager {
 	boolean isSatisfiable(MettelExpression e);
 	boolean isSatisfiable(Collection<? extends MettelExpression> input);
 
-
+	Set<MettelExpression> model();
+	Set<MettelExpression> contradiction();
 
 //	boolean isSatisfiable(InputStream stream);
 }

@@ -82,7 +82,7 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 	}
 
 
-	protected MettelTableauState state = null;
+	protected MettelTableauState state = null, root = null;
 
 	/* (non-Javadoc)
 	 * @see mettel.core.MettelTableauManager#isSatisfiable(java.util.Set)
@@ -278,4 +278,26 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 	}
 
 //	public abstract boolean isAcceptable(MettelTableauState s);
+
+	public Set<MettelExpression> model(){
+		if(state == null) return null;
+		final LinkedHashSet<MettelExpression> result = new LinkedHashSet<MettelExpression>();
+		final Set<MettelAnnotatedExpression> expressions = state.expressions();
+		for(MettelAnnotatedExpression ae:expressions){
+			result.add(ae.expression());
+		}
+		return result;
+	}
+
+	public Set<MettelExpression> contradiction(){
+		if(root == null) return null;
+		final Set<MettelAnnotatedExpression> lemma = root.explanation().lemma();
+		if(lemma == null) return null;
+		final LinkedHashSet<MettelExpression> result = new LinkedHashSet<MettelExpression>();
+		for(MettelAnnotatedExpression ae:lemma){
+			result.add(ae.expression());
+		}
+		return result;
+	}
+
 }

@@ -1,0 +1,3 @@
+//Unsatisfiable
+@l (C U D)
+@l ((~D U ~(C | D)) | ~(~false U D))

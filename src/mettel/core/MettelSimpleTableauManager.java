@@ -44,7 +44,7 @@ public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 				new TreeSet<MettelTableauState>();
 				//new LinkedHashSet<MettelTableauState>();
 				//new TreeSet<MettelTableauState>(new MettelTableauStateComparator());
-		state = new MettelGeneralTableauState(factory, calculus);
+		root = state = new MettelGeneralTableauState(factory, calculus);
 		this.strategy = strategy;
 		this.acceptor = acceptor;
 	}
