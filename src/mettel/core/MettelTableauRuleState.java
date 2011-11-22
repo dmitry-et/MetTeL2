@@ -73,4 +73,6 @@ public interface MettelTableauRuleState {
 	 * @return
 	 */
 	public int arity();
+
+	public int priority();
 }

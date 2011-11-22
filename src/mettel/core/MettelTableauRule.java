@@ -27,6 +27,8 @@ public interface MettelTableauRule {
 
 //	void apply(MettelTableauState state);
 
+	public int priority();
+
 	public MettelExpression[] premises();
 
 	public Set<? extends Set<? extends MettelExpression>> branches();

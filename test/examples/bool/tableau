@@ -1,10 +1,10 @@
-P ~P /  $;
-~(~P) / P $;
-~(P | Q) / ~P ~Q $;
-P & Q / P Q $;
-~P (P|Q) / Q $;
-P (~P|Q) / Q $;
-~Q (P|Q) / P $;
-Q (P|~Q) / P $;
-P | Q / P $| Q $;
-~(P & Q) / ~P $| ~Q
+P ~P /  priority 0 $;
+~(~P) / P priority  1$;
+~(P | Q) / ~P ~Q  priority 1 $;
+P & Q / P Q priority 1 $;
+~P (P|Q) / Q  priority 2 $;
+P (~P|Q) / Q priority 2$;
+~Q (P|Q) / P priority 2$;
+Q (P|~Q) / P priority 2$;
+P | Q / P $| Q priority 3$;
+~(P & Q) / ~P $| ~Q priority 3

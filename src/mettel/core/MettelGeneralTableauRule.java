@@ -27,10 +27,12 @@ import java.util.Set;
  */
 public class MettelGeneralTableauRule implements MettelTableauRule{
 
+	private int priority = 0;
+
 	/**
 	 *
 	 */
-	public MettelGeneralTableauRule(Set<? extends MettelExpression> premises, Set<? extends Set<? extends MettelExpression>> branches) {
+	public MettelGeneralTableauRule(Set<? extends MettelExpression> premises, Set<? extends Set<? extends MettelExpression>> branches, int priority) {
 		super();
 //		if(premises == null || premises.size() == 0) throw new MettelCoreRuntimeException("Empty premises in tableau rule");
 		this.premises = new MettelExpression[premises.size()];
@@ -42,6 +44,7 @@ public class MettelGeneralTableauRule implements MettelTableauRule{
 		}
 //		if(conclusions != null && conclusions.size() > 0){
 			this.branches = branches;
+			this.priority = priority;
 //		}
 	}
 
@@ -121,5 +124,13 @@ public class MettelGeneralTableauRule implements MettelTableauRule{
 		    }
 		}
     }
+
+	/* (non-Javadoc)
+	 * @see mettel.core.MettelTableauRule#priority()
+	 */
+	@Override
+	public int priority() {
+		return priority;
+	}
 
 }

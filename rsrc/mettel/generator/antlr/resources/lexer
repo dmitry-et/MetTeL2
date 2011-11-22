@@ -15,6 +15,9 @@ WS  :   ( ' '
         ) {$channel=HIDDEN;}
     ;
 
+INT :	'0'..'9'+
+    ;
+
 /*
 STRING
     :  '"' ( ESC_SEQ | ~('\\'|'"') )* '"'

@@ -263,11 +263,18 @@ public class MettelANTLRGrammarGenerator {
 		s0.addExpression(ruleRef);
 		s.addExpression(new MettelANTLRUnaryBNFStatement(s0,MettelANTLRUnaryBNFStatement.STAR));
 
+		MettelANTLRMultiaryBNFStatement s1 = new MettelANTLRMultiaryBNFStatement();
+		s1.addExpression(new MettelANTLRToken("'priority'"));
+		s1.addExpression(new MettelANTLRToken("INT",true));
+		s1.appendLineToPostfix("priority = Integer.valueOf(t.getText());");
+		s.addExpression(new MettelANTLRUnaryBNFStatement(s1,MettelANTLRUnaryBNFStatement.TEST));
+
 		MettelANTLRRule r = new MettelANTLRRule("tableauRule",s,
 				new String[]{"MettelGeneralTableauRule"});
 		r.appendLineToInitBlock("LinkedHashSet<LinkedHashSet<"+grammarName+
 				"Expression>> branches = new LinkedHashSet<LinkedHashSet<"+grammarName+"Expression>>();");
-		r.appendLineToAfterBlock("r0 = new MettelGeneralTableauRule(new LinkedHashSet<"+grammarName+"Expression>(premises),branches);");
+		r.appendLineToInitBlock("int priority = 0;");
+		r.appendLineToAfterBlock("r0 = new MettelGeneralTableauRule(new LinkedHashSet<"+grammarName+"Expression>(premises),branches,priority);");
 		return r;
 	}
 

@@ -25,6 +25,7 @@ import java.util.Comparator;
  */
 public interface MettelRuleSelectionStrategy extends Comparator<MettelTableauRuleState>{
 
-	MettelTableauRuleState select(MettelTableauRuleState[] ruleStates);
+	MettelTableauRuleState select();
 
+	MettelRuleSelectionStrategy create(MettelTableauRuleState[] ruleStates);
 }

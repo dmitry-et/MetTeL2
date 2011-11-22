@@ -26,45 +26,24 @@ import mettel.core.MettelTableauRuleState;
 public class MettelSimpleRuleSelectionStrategy implements MettelRuleSelectionStrategy{
 
 		private int index = -1;
+
+		private final MettelTableauRuleState[] ruleStates;
+
+		private final int LENGTH;
+
+		public MettelSimpleRuleSelectionStrategy(MettelTableauRuleState[] ruleStates){
+			super();
+			this.ruleStates = ruleStates;
+			LENGTH = ruleStates.length;
+		}
+
 		//private Random random = new Random();
 
 		/* (non-Javadoc)
 		 * @see mettel.core.MettelRuleChoiceStrategy#select(mettel.core.MettelGeneralTableauRuleState[])
 		 */
 		@Override
-		public MettelTableauRuleState select(
-				MettelTableauRuleState[] ruleStates) {
-
-//			Arrays.sort(ruleStates, this);
-//			if(!ruleStates[0].isApplicable()){
-//System.out.println("None is applicable.");
-//				return null;
-//			}
-
-			final int LENGTH = ruleStates.length;
-//			final int SUM = LENGTH*(LENGTH-1) / 2;
-
-//			final int r = random.nextInt( SUM ) ;
-
-/*			for(int i = 0; i < LENGTH; i++){
-				if(r < i*(i+1)/2){
-					final MettelTableauRuleState rs = ruleStates[i];
-					if(rs.isApplicable()){
-						return ruleStates[i];
-					}else{
-						for(int j = 0; j < LENGTH; j++){
-							final MettelTableauRuleState rs0 = ruleStates[j];
-							if(rs0.isApplicable()){
-								return ruleStates[j];
-							}
-						}
-						return null;
-					}
-				}
-			}
-
-			throw new RuntimeException("Never reach here.");
-*/
+		public MettelTableauRuleState select() {
 			index++;
 			if(index >= LENGTH) index = 0;
 			int i = index;
@@ -88,6 +67,15 @@ public class MettelSimpleRuleSelectionStrategy implements MettelRuleSelectionStr
 		@Override
 		public int compare(MettelTableauRuleState o1, MettelTableauRuleState o2) {
 			return 0;
+		}
+
+		/* (non-Javadoc)
+		 * @see mettel.core.MettelRuleSelectionStrategy#create(mettel.core.MettelTableauRuleState[])
+		 */
+		@Override
+		public MettelRuleSelectionStrategy create(
+				MettelTableauRuleState[] ruleStates) {
+			return new MettelSimpleRuleSelectionStrategy(ruleStates);
 		}
 
 	}

@@ -28,6 +28,8 @@ import mettel.util.MettelTreeSetLinkedHashMap;
  */
 public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 
+		private int priority = 0;
+
 //		private MettelTableauState tstate = null;
 
 		private MettelAnnotator annotator = MettelSimpleAnnotator.ANNOTATOR;
@@ -158,6 +160,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 
     		this.premises = rule.premises();
     		this.branches = rule.branches();
+    		this.priority = rule.priority();
 
     		BRANCHES_NUMBER = branches.size();
     		PREMISES_NUMBER = this.premises.length;
@@ -173,6 +176,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 
     		this.premises = state.premises;
     		this.branches = state.branches;
+    		this.priority = state.priority;
 
     		//TODO make it syncronised
 
@@ -532,5 +536,13 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 		@Override
 		public int arity() {
 			return premises.length;
+		}
+
+		/* (non-Javadoc)
+		 * @see mettel.core.MettelTableauRuleState#priority()
+		 */
+		@Override
+		public int priority() {
+			return priority;
 		}
 }

@@ -1,30 +1,30 @@
 //equality rules 
-@l{l2} / @l2{l} $;
-@l~{l2} / @l2{l2} $;
+@l{l2} / @l2{l} priority 1$;
+@l~{l2} / @l2{l2} priority 1$;
 
-@l P / @l{l} $;
+@l P / @l{l} priority 1 $;
 
 //@l<>{l2} / @l2{l2} $;
-@l P  @l{l2} /  @l2 P $;
+@l P  @l{l2} /  @l2 P  priority 2$;
 //@l<>{l2}  @l2{l3} / @l<>{l3} $;
 
 //Decomposition rules 
 
-@l ~(~P) / @l P $; 
-@l(P|Q) / @l P $| @l Q $;
-@l~(P|Q) / @l~P @l~Q $;
-@l(()P) / @f(l)P $;
-@l ~(()P) @f(l){f(l)} / @f(l)~P $;
+@l ~(~P) / @l P  priority 1$; 
+@l(P|Q) / @l P $| @l Q  priority 3$;
+@l~(P|Q) / @l~P @l~Q  priority 1$;
+@l(()P) / @f(l)P  priority 7$;
+@l ~(()P) @f(l){f(l)} / @f(l)~P  priority 2$;
 
 //Until
 
-@l(C U D) / @l (Ev0(C,D,l)) $;
-@l (Ev0(C,D,l1)) / @l D ((Ev0(C,D,l1))<->(C U D)) $| @l C @f(l) (Ev0(C,D,l1)) $;
+@l(C U D) / @l (Ev0(C,D,l)) priority 1$;
+@l (Ev0(C,D,l1)) / @l D ((Ev0(C,D,l1))<->(C U D)) $| @l C @f(l) (Ev0(C,D,l1)) priority 7$;
 
 //@l~(C U D) / @l(Ev1(C,D,l)) $;
 //@l(Ev1(C,D,l1)) / @l ~C ((Ev1(C,D,l1))<->(~(C U D))) $| @f(l) (Ev1(C,D,l1)) $;
 
-@l~(C U D)/ @l (~D U ~(C | D)) $| @l (~D U false) $;
+@l~(C U D)/ @l (~D U ~(C | D)) $| @l (~D U false) priority 4$;
 
 
 // Theory rules 
@@ -32,12 +32,14 @@
 //@l<>{l2} @l2<>{l3} / @l1<>{l3} $;
 
 // Closure rule
-@l P  @l (~P) /  $;
-@l false / $;
+@l P  @l (~P) / priority 0$;
+@l false / priority 0$;
 
 //Blocking related
-@l{l0} / [l=l0] $;
-[l=l0] / @l{l0} $;
-@l~{l0} / ~([l=l0]) $;
-~([l=l0]) / @l~{l0} $;
-@l{l} @l0{l0} / [l=l0] $| ~([l=l0]) $;
+@l{l0} / [l=l0]  priority 1$;
+[l=l0] / @l{l0}  priority 1$;
+@l~{l0} / ~([l=l0])  priority 1$;
+~([l=l0]) / @l~{l0}  priority 1$;
+@l{l} @l0{l0} / [l=l0] $| ~([l=l0])  priority 6$;
+
+@l (Ev0(C,D,l)) /  priority 8
