@@ -415,26 +415,26 @@ System.out.println("Explanation: "+explanation.state().explanation());
 //System.out.println("Rewrite action execution");
 		if(replacement.isEmpty()) return null;
 //System.out.println("Rewriting: "+replacement);
-		final MettelTableauStatePool pool = expressions;
-		expressions = new MettelTableauStatePool();
-		expressions.init(this);
+		final MettelTableauStatePool pool = new MettelTableauStatePool();
+		pool.init(this);
 		boolean changed = false;
 //		final LinkedHashSet<MettelAnnotatedExpression> rewritten = new LinkedHashSet<MettelAnnotatedExpression>();
-		for(MettelAnnotatedExpression ae:pool){
+		for(MettelAnnotatedExpression ae:expressions){
 			final MettelExpression e0 = ae.expression();
 			final MettelExpression e1 = replacement.rewrite(e0);
-			if(e0.equals(e1)){//Only single instance of expression!
-				expressions.add(ae);
+			if(e0 == e1){//Only single instance of expression exists!
+				pool.add(ae);
 			}else{
 				changed = true;
 				final MettelAnnotatedExpression ae1 = annotator.annotate(e1,this);
-				if(!pool.contains(ae1)){
-					expressions.add(ae1);
+				if(!expressions.contains(ae1)){
+					pool.add(ae1);
 //					rewritten.add(ae1);
 				}
 			}
 		}
 		if(changed){
+			expressions = pool;
 			//expressions.addAll(rewritten);
 			for(MettelGeneralTableauRuleState rs:ruleStates){
 				rs.rewrite(this, replacement);
@@ -445,9 +445,10 @@ System.out.println("Explanation: "+explanation.state().explanation());
 */
 //System.out.println("Rule state: "+rs);
 			}
-		}else{
-			expressions = pool;
 		}
+		/*else{
+			expressions = pool;
+		}*/
 		return null;
 /*
 		MettelGeneralTableauState ts = new MettelGeneralTableauState(this.factory,this.calculus,this.ruleSelectionStrategy);

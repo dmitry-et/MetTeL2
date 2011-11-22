@@ -448,7 +448,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 			for(MettelAnnotatedExpression ae:pool0){
 				final MettelExpression exp = ae.expression();
 				final MettelExpression exp1 = r.rewrite(exp);
-				if(exp.equals(exp1)){//Only single instance of expression!
+				if(exp == exp1){//Only single instance of expression exists!
 					pool.add(ae);
 				}else{
 					final MettelAnnotatedExpression ae1 =annotator.annotate(exp1, s);
@@ -458,7 +458,11 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 				}
 			}
 			if(e != null){
-				e = annotator.annotate(r.rewrite(e.expression()), s);
+				final MettelExpression e0 = e.expression();
+				final MettelExpression e1 = r.rewrite(e0);
+				if(e0 != e1){
+					e = annotator.annotate(e1, s);
+				}
 			}
 			final MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution> newSubstitutions0 = newSubstitutions;
 			newSubstitutions = new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution>();
