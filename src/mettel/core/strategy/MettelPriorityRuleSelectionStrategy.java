@@ -19,8 +19,6 @@ package mettel.core.strategy;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.SortedMap;
-import java.util.SortedSet;
 import java.util.TreeMap;
 
 import mettel.core.MettelRuleSelectionStrategy;
