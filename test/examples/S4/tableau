@@ -18,7 +18,7 @@
 
 // Theory rules
 @l{l} / @l<>{l} $;
-@l<>{l2} @l2<>{l3} / @l1<>{l3} $;
+@l<>{l2} @l2<>{l3} / @l<>{l3} $;
 
 // Closure rule
 @l P  @l~P /  $; $; $;

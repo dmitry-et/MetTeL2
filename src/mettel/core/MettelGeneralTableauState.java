@@ -419,26 +419,30 @@ System.out.println("Explanation: "+explanation.state().explanation());
 		expressions = new MettelTableauStatePool();
 		expressions.init(this);
 		boolean changed = false;
-		final LinkedHashSet<MettelAnnotatedExpression> rewritten = new LinkedHashSet<MettelAnnotatedExpression>();
+//		final LinkedHashSet<MettelAnnotatedExpression> rewritten = new LinkedHashSet<MettelAnnotatedExpression>();
 		for(MettelAnnotatedExpression ae:pool){
 			final MettelExpression e0 = ae.expression();
 			final MettelExpression e1 = replacement.rewrite(e0);
-			if(e0.equals(e1)){
+			if(e0.equals(e1)){//Only single instance of expression!
 				expressions.add(ae);
 			}else{
 				changed = true;
 				final MettelAnnotatedExpression ae1 = annotator.annotate(e1,this);
-				expressions.add(ae1);
-				rewritten.add(ae1);
+				if(!pool.contains(ae1)){
+					expressions.add(ae1);
+//					rewritten.add(ae1);
+				}
 			}
 		}
 		if(changed){
+			//expressions.addAll(rewritten);
 			for(MettelGeneralTableauRuleState rs:ruleStates){
 				rs.rewrite(this, replacement);
-				if(rs.TERMINAL){
+/*				if(rs.TERMINAL){
 					rs.addAll(rewritten);
 //System.out.println("Rule state is applicable: "+rs.isApplicable());
 				}
+*/
 //System.out.println("Rule state: "+rs);
 			}
 		}else{

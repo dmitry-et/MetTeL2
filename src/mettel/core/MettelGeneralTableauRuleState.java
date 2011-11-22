@@ -46,6 +46,43 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
     	private MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution> newSubstitutions = null;
     	private MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution>[] oldSubstitutions = null;
 
+    	private class MettelIndexedSubstitution extends MettelSimpleAnnotatedSubstitution{
+    		/**
+			 * @param s
+			 * @param a
+			 */
+			private MettelIndexedSubstitution(MettelSubstitution s,
+					MettelTableauAnnotation a, int i) {
+				super(s, a);
+				this.i = i;
+			}
+
+			private int i = -1;
+
+			public int compareTo(MettelAnnotatedSubstitution s0){
+				if(this == s0) return 0;
+				if(!(s0 instanceof MettelIndexedSubstitution)) return 1;
+				final MettelIndexedSubstitution is = (MettelIndexedSubstitution)s0;
+				if(this.i < is.i) return -1;
+				if(this.i > is.i) return 1;
+				return super.compareTo(s0);
+			}
+
+			public boolean equals(Object o){
+				if(this == o) return true;
+				if(!(o instanceof MettelIndexedSubstitution)) return false;
+				final MettelIndexedSubstitution is = (MettelIndexedSubstitution)o;
+				if(this.i != is.i) return false;
+				return super.equals(o);
+			}
+
+			public String toString(){
+				return super.toString()+'('+this.i+')';
+			}
+    	}
+
+    	private MettelTreeSetLinkedHashMap<MettelTableauState,MettelIndexedSubstitution> substitutions = null;
+
     	private int index = 0;
 
     	private final int PREMISES_NUMBER;
@@ -65,6 +102,9 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
     			}
     			newSubstitutions = new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution>();
         		newSubstitutions.init(s);
+
+        		substitutions = new MettelTreeSetLinkedHashMap<MettelTableauState,MettelIndexedSubstitution>();
+        		substitutions.init(s);
 //    		}else{
 //    			pool = new TreeSet<MettelAnnotatedExpression>();
 //
@@ -93,6 +133,10 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
         		newSubstitutions = new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution>();
         		newSubstitutions.embed((MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution>)state.newSubstitutions);
         		newSubstitutions.init(s);
+
+        		substitutions = new MettelTreeSetLinkedHashMap<MettelTableauState,MettelIndexedSubstitution>();
+        		substitutions.embed((MettelTreeSetLinkedHashMap<MettelTableauState,MettelIndexedSubstitution>)state.substitutions);
+        		substitutions.init(s);
 //    		}else{
 //    			pool = new TreeSet<MettelAnnotatedExpression>(state.pool);
 //
@@ -222,44 +266,69 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
     	private final int EMPTY_QUEUE = -1;
 //    	private final int DOES_NOT_MATCH = -2;
 
+    	private MettelIndexedSubstitution substitutionsPoll(){
+			final Iterator<MettelIndexedSubstitution> i = substitutions.iterator();
+			if(i.hasNext()){
+				MettelIndexedSubstitution s = i.next();
+				i.remove();
+				return s;
+			}else{
+				return null;
+			}
+    	}
+
     	private int processExpression(){
 
-    		MettelAnnotatedSubstitution s = null;
-    		boolean doesNotMatch = false;
-    		do{
-    			doesNotMatch = false;
-	    		if(e == null){
-	    		    e = expressionsPoll();
-	    		    index = 0;
-	    		    if(e == null) return EMPTY_QUEUE;
+    		final MettelIndexedSubstitution is = substitutionsPoll();
+    		if(is == null){
 
-//	    		    MettelGeneralTableauRuleState st = states.get(e.annotation().state());
-//	    		    if(st != null) st.queue.remove(e);
+    			MettelAnnotatedSubstitution s = null;
+	    		boolean doesNotMatch = false;
+	    		do{
+	    			doesNotMatch = false;
+		    		if(e == null){
+		    		    e = expressionsPoll();
+		    		    index = 0;
+		    		    if(e == null) return EMPTY_QUEUE;
+
+	//	    		    MettelGeneralTableauRuleState st = states.get(e.annotation().state());
+	//	    		    if(st != null) st.queue.remove(e);
+		    		}
+	//System.out.println("Chosen expression: "+e);
+
+	//	    		s = null;
+		    		while(s == null && index < PREMISES_NUMBER){
+		    			s = annotator.match(premises[index],e);
+	//System.out.println("Match is "+(s != null) +": "+premises[index]+" vs "+e);
+	//System.out.println("##Substitution is "+s+" index = "+index);
+		    			index++;
+		    		}
+
+		    		if(index == PREMISES_NUMBER){
+
+	//System.out.println("#Substitution is "+s+" index = "+index);
+		    		    e = null;
+		    		    if(s == null){
+		    		    	doesNotMatch = true;
+		    		    }
+		    		}
+	    		}while(doesNotMatch);
+
+	    		final int ind = index - 1;
+	    		if(!oldSubstitutions[ind].contains(s)){
+	    			newSubstitutions.addAll(mergeWithOldSubstitutions(s,ind));//first merge, than add to old
+	    			oldSubstitutions[ind].add(s);
 	    		}
-//System.out.println("Chosen expression: "+e);
+    		}else{
+//System.out.println("Substitution: "+is);
 
-//	    		s = null;
-	    		while(s == null && index < PREMISES_NUMBER){
-	    			s = annotator.match(premises[index],e);
-//System.out.println("Match is "+(s != null) +": "+premises[index]+" vs "+e);
-//System.out.println("##Substitution is "+s+" index = "+index);
-	    			index++;
-	    		}
-
-	    		if(index == PREMISES_NUMBER){
-
-//System.out.println("#Substitution is "+s+" index = "+index);
-	    		    e = null;
-	    		    if(s == null){
-	    		    	doesNotMatch = true;
-	    		    }
-	    		}
-    		}while(doesNotMatch);
-
+    			final int ind = is.i;
+    			newSubstitutions.addAll(mergeWithOldSubstitutions(is,ind));//first merge, than add to old
+    			oldSubstitutions[ind].add(is);
+    		}
 //System.out.println("Substitution is "+s+" index = "+index);
 
-    		final int ind = index - 1;
-    		if(oldSubstitutions[ind].contains(s)){
+ /*   		if(oldSubstitutions[ind].contains(s)){
     			if(TERMINAL){
     				newSubstitutions.addAll(mergeWithOldSubstitutions(s,ind));
     			}
@@ -267,7 +336,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
     			newSubstitutions.addAll(mergeWithOldSubstitutions(s,ind));//first merge, than add to old
     			oldSubstitutions[ind].add(s);
     		}
-
+*/
     		return 0;
     	}
 
@@ -339,6 +408,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 	    	String s = "Rule: "+MettelGeneralTableauRule.toString(premises,branches)+"\nPool: "+pool+"\nOld Substitutions:";
 	    	for(int i = 0; i< PREMISES_NUMBER; i++) s=s+' '+oldSubstitutions[i];
 	    	s += "\nNew Substitutions: "+newSubstitutions;
+	    	s += "\nsubstitutions: "+substitutions;
 	    	return s;
 	    }
 
@@ -371,12 +441,21 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 		 */
 		@Override
 		public void rewrite(MettelTableauState s,MettelReplacement r) {
+//System.out.println("Before rewriting: "+this);
 			final MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedExpression> pool0 = pool;
 			pool = new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedExpression>();
 			pool.init(s);
 			for(MettelAnnotatedExpression ae:pool0){
 				final MettelExpression exp = ae.expression();
-				pool.add(annotator.annotate(r.rewrite(exp), s));
+				final MettelExpression exp1 = r.rewrite(exp);
+				if(exp.equals(exp1)){//Only single instance of expression!
+					pool.add(ae);
+				}else{
+					final MettelAnnotatedExpression ae1 =annotator.annotate(exp1, s);
+					if(!pool0.contains(ae1)){
+						pool.add(ae1);
+					}
+				}
 			}
 			if(e != null){
 				e = annotator.annotate(r.rewrite(e.expression()), s);
@@ -386,7 +465,32 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
     		newSubstitutions.init(s);
     		for(MettelAnnotatedSubstitution as:newSubstitutions0){
     			final MettelSubstitution sub = as.substitution();
-    			newSubstitutions.add(annotator.annotate(r.rewrite(sub), s));
+    			final MettelSubstitution sub1 = r.rewrite(sub);
+    			if(sub.equals(sub1)){
+    				newSubstitutions.add(as);
+    			}else{
+    				final MettelAnnotatedSubstitution as1 = annotator.annotate(sub1, s);
+    				if(!newSubstitutions0.contains(as1)){
+    					newSubstitutions.add(as1);
+    				}
+    			}
+    		}
+
+    		final MettelTreeSetLinkedHashMap<MettelTableauState,MettelIndexedSubstitution> substitutions0 = substitutions;
+			substitutions = new MettelTreeSetLinkedHashMap<MettelTableauState,MettelIndexedSubstitution>();
+    		substitutions.init(s);
+    		for(MettelIndexedSubstitution as:substitutions0){
+    			final MettelSubstitution sub = as.substitution();
+    			final MettelSubstitution sub1 = r.rewrite(sub);
+    			if(sub.equals(sub1)){
+    				substitutions.add(as);
+    			}else{
+    				final MettelAnnotatedSubstitution as1 = annotator.annotate(sub1, s);
+    				final MettelIndexedSubstitution is1 = new MettelIndexedSubstitution(sub1,as1.annotation(),as.i);
+    				if(!substitutions0.contains(is1)){
+    					substitutions.add(is1);
+    				}
+    			}
     		}
 
 //    		oldSubstitutions = new MettelTreeSetLinkedHashMap[PREMISES_NUMBER];
@@ -396,9 +500,18 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 				oldSubstitutions[i].init(s);
 	    		for(MettelAnnotatedSubstitution as:subs){
 	    			final MettelSubstitution sub = as.substitution();
-	    			oldSubstitutions[i].add(annotator.annotate(r.rewrite(sub), s));
+	    			final MettelSubstitution sub1 = r.rewrite(sub);
+	    			if(sub.equals(sub1)){
+	    				oldSubstitutions[i].add(as);
+	    			}else{
+	    				final MettelAnnotatedSubstitution as1 = annotator.annotate(sub1, s);
+	    				if(!oldSubstitutions[i].contains(as1)){
+	    					substitutions.add(new MettelIndexedSubstitution(sub1,as.annotation(),i));
+	    				}
+	    			}
 	    		}
 			}
+//System.out.println("After rewriting: "+this);
 		}
 
 		/* (non-Javadoc)

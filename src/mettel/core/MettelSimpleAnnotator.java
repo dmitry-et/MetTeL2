@@ -76,8 +76,8 @@ public class MettelSimpleAnnotator implements MettelAnnotator {
 	@Override
 	public Set<MettelAnnotatedExpression> reannotate(
 			Set<MettelAnnotatedExpression> set, MettelTableauState state) {
-		LinkedHashSet<MettelAnnotatedExpression> result = new LinkedHashSet<MettelAnnotatedExpression>(set.size());
-		MettelSimpleTableauAnnotation a = new MettelSimpleTableauAnnotation(state);
+		final LinkedHashSet<MettelAnnotatedExpression> result = new LinkedHashSet<MettelAnnotatedExpression>(set.size());
+		final MettelSimpleTableauAnnotation a = new MettelSimpleTableauAnnotation(state);
 		for(MettelAnnotatedExpression ae:set){
 			result.add(new MettelSimpleAnnotatedExpression(ae.expression(),a));
 		}
