@@ -1,4 +1,3 @@
 //Unsatisfiable
 @l (C U D)
-@l (C U ~D)
-@l ~C
+@l ((~D W ~(C | D)) | []~D)
