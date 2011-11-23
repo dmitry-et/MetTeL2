@@ -389,7 +389,8 @@ generateParsers: generateLogics
 	@ echo $(DELIM0)
 	@ echo "Generating parsers for logics"
 	@ echo $(DELIM1)
-	@ for P in $(shell find $(TEST_OUTPUT_DIR) -name '*.g'); do java -cp $(COMPILE_CLASSPATH) org.antlr.Tool "$${P}"; done
+	@for P in $(shell find $(TEST_OUTPUT_DIR) -name '*.g'); do java -cp $(COMPILE_CLASSPATH) org.antlr.Tool "$${P}"; done
+	@rm -f -v *.tokens
 	
 compileLogics: generateParsers
 	@ echo $(DELIM0)
