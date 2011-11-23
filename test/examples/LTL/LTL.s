@@ -21,6 +21,8 @@ syntax LTL{
 	formula conjunction  = formula '&' formula;
 	formula disjunction  = formula '|' formula;
 	
+	formula implication = formula '->' formula;
+	
 	formula equivalence = formula '<->' formula;
 	
 	formula until = formula 'U' formula;

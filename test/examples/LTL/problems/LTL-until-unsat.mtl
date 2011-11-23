@@ -1,0 +1,4 @@
+//Unsatisfiable
+//Negation of axiom for Until
+@l ~( (A U B) <-> ( B | ( A & (()(A U B)) ) ) )
+ 

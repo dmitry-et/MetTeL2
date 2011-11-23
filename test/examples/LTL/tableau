@@ -15,6 +15,12 @@
 @l(P&Q) / @l P @l Q priority 1$;
 @l ~(P&Q) / @l ~P $| @l ~Q priority 3$;
 
+@l(P->Q) / @l ~P $| @l Q priority 3$;
+@l~(P->Q) / @l P @l ~Q priority 1$;
+
+@l(P<->Q) / @l (P->Q) @l (Q->P) priority 1$;
+@l~(P<->Q) / @l ~(P->Q) $| @l ~(Q->P) priority 3$;
+
 @l(()P) / @f(l)P  priority 7$;
 @l ~(()P) / @l ()(~P) priority 1$;
 //@l ~(()P) @f(l){f(l)} / @f(l)~P  priority 2$;
@@ -32,7 +38,7 @@
 //Until
 @l(C U D) / @l (EU(C,D,l)) priority 1$;
 @l (EU(C,D,l1)) / @l D ((EU(C,D,l1))<->(C U D)) $| @l C @f(l) (EU(C,D,l1)) priority 7$;
-@l~(C U D) / (~D) W ((~C) & (~D)) priority 1$;
+@l~(C U D) / @l((~D) W ((~C) & (~D))) priority 1$;
 
 //While
 @l(C W D) / @l (EW(C,D,l)) priority 1$;

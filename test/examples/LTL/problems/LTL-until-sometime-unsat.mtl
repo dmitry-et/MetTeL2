@@ -1,0 +1,4 @@
+//Unsatisfiable
+//Negation of axiom for Until and eventually
+@l ~( (A U B) -> <>B )
+ 

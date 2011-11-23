@@ -1,0 +1,4 @@
+//Unsatisfiable
+//Negation of induction axiom 
+@l ~([](A->()B) -> (A->[]B))
+ 

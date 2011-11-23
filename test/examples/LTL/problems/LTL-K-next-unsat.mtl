@@ -1,0 +1,4 @@
+//Unsatisfiable
+//Negation of K axiom for next
+@l ~(()(A->B) -> (()A->()B))
+ 

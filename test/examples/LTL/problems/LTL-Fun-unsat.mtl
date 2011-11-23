@@ -1,0 +1,3 @@
+//Unsatisfiable
+//Negation of functionality axiom
+@l ~(~(()P) <-> (()(~P)))
