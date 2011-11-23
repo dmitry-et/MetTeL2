@@ -425,7 +425,8 @@ $(TEST_JAR_FILE): $(TEST_CLASSES) generate
 test-jar: $(TEST_JAR_FILE)
 
 define allTests
-$(JAVA) -classpath .:$(TEST_CLASSPATH) $(JAVA_TEST_OPTIONS)	mettel.AllTests 2>$(TEST_ERR_FILE) || (cat $(TEST_ERR_FILE) && exit 1)
+$(JAVA) -classpath .:$(TEST_CLASSPATH) $(JAVA_TEST_OPTIONS)	mettel.AllTests 
+#2>$(TEST_ERR_FILE) || (cat $(TEST_ERR_FILE) && exit 1)
 endef
 
 test: $(TEST_JAR_FILE)
