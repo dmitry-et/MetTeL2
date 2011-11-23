@@ -418,7 +418,7 @@ System.out.println("Explanation: "+explanation.state().explanation());
 //System.out.println("Rewriting: "+replacement);
 		final MettelTableauStatePool pool = new MettelTableauStatePool();
 		pool.init(this);
-		boolean changed = false;
+		expanded = false;
 //		final LinkedHashSet<MettelAnnotatedExpression> rewritten = new LinkedHashSet<MettelAnnotatedExpression>();
 		for(MettelAnnotatedExpression ae:expressions){
 			final MettelExpression e0 = ae.expression();
@@ -426,7 +426,7 @@ System.out.println("Explanation: "+explanation.state().explanation());
 			if(e0 == e1){//Only single instance of expression exists!
 				pool.add(ae);
 			}else{
-				changed = true;
+				expanded = true;
 				final MettelAnnotatedExpression ae1 = annotator.annotate(e1,this);
 				if(!expressions.contains(ae1)){
 					pool.add(ae1);
@@ -434,7 +434,7 @@ System.out.println("Explanation: "+explanation.state().explanation());
 				}
 			}
 		}
-		if(changed){
+		if(expanded){
 			expressions = pool;
 			//expressions.addAll(rewritten);
 			for(MettelGeneralTableauRuleState rs:ruleStates){
