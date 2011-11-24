@@ -1,0 +1,5 @@
+//Unsatisfiable
+@l ~(
+    ~(A U B) <->
+    (~B W (~A & ~B))
+    )
