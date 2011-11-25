@@ -9,6 +9,20 @@
 //Decomposition rules 
 @l ~(~P) / @l P  priority 1$; 
 
+@l~P @l(P|Q) / @l Q priority 2$;
+@l P @l(~P|Q) / @l Q priority 2$;
+@l~Q @l(P|Q) / @l P priority 2$;
+@l Q @l(P|~Q) / @l P priority 2$;
+
+@l P @l~(P&Q) / @l~Q priority 2$;
+@l~P @l~(~P&Q) / @l~Q priority 2$;
+@l Q @l~(P&Q) / @l~P priority 2$;
+@l~Q @l~(P&~Q) / @l~P priority 2$;
+
+@l P @l(P->Q) / @l Q priority 2$;
+@l~Q @l(P -> Q) / @l~P priority 2$;
+@l Q @l(P -> ~Q) / @l~P priority 2$;
+
 @l(P|Q) / @l P $| @l Q  priority 3$;
 @l~(P|Q) / @l~P @l~Q  priority 1$;
 
@@ -17,6 +31,9 @@
 
 @l(P->Q) / @l ~P $| @l Q priority 3$;
 @l~(P->Q) / @l P @l ~Q priority 1$;
+
+//@l(P->Q) / @l(~P|Q) priority 1$;
+//@l~(P->Q) / @l(P&~Q) priority 1$;
 
 @l(P<->Q) / @l (P->Q) @l (Q->P) priority 1$;
 @l~(P<->Q) / @l ~(P->Q) $| @l ~(Q->P) priority 3$;

@@ -297,7 +297,7 @@ System.out.println("Explanation: "+explanation.state().explanation());
 	 */
 	@Override
 	public boolean add(MettelAnnotatedExpression e) {
-//System.out.println("Adding "+e);
+System.out.println("Adding "+e);
 		final boolean result = expressions.add(e);
 		if(result){
 			for(MettelTableauRuleState rs:ruleStates) rs.add(e);
@@ -415,7 +415,7 @@ System.out.println("Explanation: "+explanation.state().explanation());
 	public Set<MettelTableauState> rewrite(){
 //System.out.println("Rewrite action execution");
 		if(replacement.isEmpty()) return null;
-//System.out.println("Rewriting: "+replacement);
+System.out.println("Rewriting: "+replacement);
 		final MettelTableauStatePool pool = new MettelTableauStatePool();
 		pool.init(this);
 		expanded = false;
