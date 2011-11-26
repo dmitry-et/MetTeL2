@@ -38,4 +38,11 @@ public interface MettelTableauExplanation {
 	 */
 	MettelTableauState state();
 
+	/**
+	 * @param mettelGeneralTableauState
+	 * @param replacement
+	 *
+	void rewrite(MettelAnnotator annotator, MettelTableauState state,
+			MettelReplacement replacement);
+	*/
 }

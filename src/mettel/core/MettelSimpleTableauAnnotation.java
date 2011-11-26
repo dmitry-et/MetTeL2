@@ -167,4 +167,22 @@ public class MettelSimpleTableauAnnotation implements MettelTableauAnnotation {
 		return dependencies;
 	}
 
+	/* (non-Javadoc)
+	 * @see mettel.core.MettelTableauAnnotation#rewrite(mettel.core.MettelTableauState, mettel.core.MettelReplacement)
+	 *
+	@Override
+	public void rewrite(MettelAnnotator annotator, MettelTableauState state, MettelReplacement replacement) {
+		final TreeSet<MettelAnnotatedExpression> deps = new TreeSet<MettelAnnotatedExpression>();
+		for(MettelAnnotatedExpression ae:dependencies){
+			final MettelExpression e0 = ae.expression();
+			final MettelExpression e1 = replacement.rewrite(e0);
+			if(e0 == e1){//Only single instance of expression exists!
+				deps.add(ae);
+			}else{
+				deps.add(annotator.annotate(e1,state));
+			}
+		}
+		dependencies = deps;
+	}*/
+
 }

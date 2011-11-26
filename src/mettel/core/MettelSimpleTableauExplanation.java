@@ -136,4 +136,25 @@ public class MettelSimpleTableauExplanation implements MettelTableauExplanation 
 	public String toString(){
 		return lemma().toString();
 	}
+
+	/* (non-Javadoc)
+	 * @see mettel.core.MettelTableauExplanation#rewrite(mettel.core.MettelTableauState, mettel.core.MettelReplacement)
+	 *
+	@Override
+	public void rewrite(MettelAnnotator annotator, MettelTableauState state, MettelReplacement replacement) {
+		for(int i=0; i < counter;i++){
+			final Set<MettelAnnotatedExpression> sublemma = sublemmas[i];
+			final TreeSet<MettelAnnotatedExpression> sublemma0 = new TreeSet<MettelAnnotatedExpression>();
+			for(MettelAnnotatedExpression ae:sublemma){
+				final MettelExpression e0 = ae.expression();
+				final MettelExpression e1 = replacement.rewrite(e0);
+				if(e0 == e1){//Only single instance of expression exists!
+					sublemma0.add(ae);
+				}else{
+					sublemma0.add(annotator.annotate(e1,state));
+				}
+			}
+			sublemmas[i] = sublemma0;
+		}
+	}*/
 }

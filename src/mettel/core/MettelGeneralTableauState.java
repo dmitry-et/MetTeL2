@@ -19,6 +19,7 @@ package mettel.core;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import mettel.core.strategy.MettelPriorityRuleSelectionStrategy;
 import mettel.util.MettelTreeSetLinkedHashMap;
@@ -55,6 +56,8 @@ public class MettelGeneralTableauState implements MettelTableauState {
 
 	private MettelTableauExplanation explanation = null;
 
+	private TreeSet<MettelAnnotatedExpression> equalities = null;
+
 	public MettelGeneralTableauState(MettelTableauObjectFactory factory, Collection<? extends MettelTableauRule> calculus) {
 		super();
 		this.factory = factory;
@@ -67,6 +70,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		expressions.init(this);
 		actions.init(this);
 		replacement = factory.createReplacement();
+		equalities = new TreeSet<MettelAnnotatedExpression>();
 	}
 
 	/**
@@ -85,6 +89,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		expressions.init(this);
 		actions.init(this);
 		replacement = factory.createReplacement();
+		equalities = new TreeSet<MettelAnnotatedExpression>();
 	}
 
 	/**
@@ -142,7 +147,13 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		actions.init(this);
 		replacement = factory.createReplacement();
 		replacement.append(state.replacement);
-		state.replacement = null;//Forget about old replacements
+		if(!replacement.isEmpty()){
+			final MettelTableauRewriteAction action = new MettelTableauRewriteAction(this);
+			action.add(this);
+			actions.add(action);
+		}
+		equalities = new TreeSet<MettelAnnotatedExpression>(state.equalities);
+		//state.replacement = null;//Forget about old replacements
 	}
 
 	/**
@@ -267,10 +278,12 @@ public class MettelGeneralTableauState implements MettelTableauState {
 
 		final Set<MettelAnnotatedExpression>[] branches = rs.apply();
 		if(rs.isTerminal()){
-//System.out.println("Unsatisfiable: terminal rule at "+this+"with the expression pool "+expressions);
+//System.out.println("Unsatisfiable: terminal rule "+rs+" at "+this+" with the expression pool "+expressions);
 			satisfiable = false;
 			explanation = new MettelSimpleTableauExplanation(this,1);
 			explanation.append(rs.dependencies());
+//			if(!replacement.isEmpty()) explanation.rewrite(annotator, this, replacement);
+//System.out.println("*Explanation: "+explanation);
 //System.out.println(explanation.state().explanation());
 /*if(explanation.state().id() < rs.applicationState().id()){
 System.out.println();
@@ -297,12 +310,14 @@ System.out.println("Explanation: "+explanation.state().explanation());
 	 */
 	@Override
 	public boolean add(MettelAnnotatedExpression e) {
-System.out.println("Adding "+e);
+//System.out.println("Adding "+e);
+//System.out.println("Replacement is "+replacement);
 		final boolean result = expressions.add(e);
 		if(result){
 			for(MettelTableauRuleState rs:ruleStates) rs.add(e);
 			final MettelExpression exp = e.expression();
 			if(exp instanceof MettelEqualityExpression){
+				equalities.add(e);
 				final MettelEqualityExpression eq = (MettelEqualityExpression)exp;
 				if(replacement.append(eq.left(), eq.right())){
 					final MettelTableauRewriteAction action = new MettelTableauRewriteAction(this);
@@ -415,7 +430,7 @@ System.out.println("Adding "+e);
 	public Set<MettelTableauState> rewrite(){
 //System.out.println("Rewrite action execution");
 		if(replacement.isEmpty()) return null;
-System.out.println("Rewriting: "+replacement);
+//System.out.println("Rewriting: "+replacement);
 		final MettelTableauStatePool pool = new MettelTableauStatePool();
 		pool.init(this);
 		expanded = false;
@@ -428,6 +443,7 @@ System.out.println("Rewriting: "+replacement);
 			}else{
 				expanded = true;
 				final MettelAnnotatedExpression ae1 = annotator.annotate(e1,this);
+				ae1.annotation().dependencies().addAll(equalities);
 				if(!expressions.contains(ae1)){
 					pool.add(ae1);
 //					rewritten.add(ae1);
@@ -446,6 +462,9 @@ System.out.println("Rewriting: "+replacement);
 */
 //System.out.println("Rule state: "+rs);
 			}
+//			if(explanation != null){
+//				explanation.rewrite(annotator, this, replacement);
+//			}
 		}
 		/*else{
 			expressions = pool;
@@ -536,5 +555,13 @@ System.out.println("Rewriting: "+replacement);
 	@Override
 	public MettelTableauExplanation explanation() {
 		return explanation;
+	}
+
+	/* (non-Javadoc)
+	 * @see mettel.core.MettelTableauState#equalities()
+	 */
+	@Override
+	public Set<MettelAnnotatedExpression> equalities() {
+		return equalities;
 	}
 }

@@ -310,7 +310,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 
 		    		if(index == PREMISES_NUMBER){
 
-	//System.out.println("#Substitution is "+s+" index = "+index);
+//System.out.println("###Substitution is "+s+" index = "+index);
 		    		    e = null;
 		    		    if(s == null){
 		    		    	doesNotMatch = true;
@@ -324,7 +324,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 	    			oldSubstitutions[ind].add(s);
 	    		}
     		}else{
-//System.out.println("Substitution: "+is);
+//System.out.println("###Substitution: "+is);
 
     			final int ind = is.i;
     			newSubstitutions.addAll(mergeWithOldSubstitutions(is,ind));//first merge, than add to old
@@ -457,6 +457,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 				}else{
 					final MettelAnnotatedExpression ae1 =annotator.annotate(exp1, s);
 					if(!pool0.contains(ae1)){
+						ae1.annotation().dependencies().addAll(s.equalities());
 						pool.add(ae1);
 					}
 				}
@@ -466,6 +467,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 				final MettelExpression e1 = r.rewrite(e0);
 				if(e0 != e1){
 					e = annotator.annotate(e1, s);
+					e.annotation().dependencies().addAll(s.equalities());
 				}
 			}
 			final MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution> newSubstitutions0 = newSubstitutions;
@@ -479,7 +481,8 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
     			}else{
     				final MettelAnnotatedSubstitution as1 = annotator.annotate(sub1, s);
     				if(!newSubstitutions0.contains(as1)){
-    					newSubstitutions.add(as1);
+    					as1.annotation().dependencies().addAll(s.equalities());
+        				newSubstitutions.add(as1);
     				}
     			}
     		}
@@ -496,7 +499,8 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
     				final MettelAnnotatedSubstitution as1 = annotator.annotate(sub1, s);
     				final MettelIndexedSubstitution is1 = new MettelIndexedSubstitution(sub1,as1.annotation(),as.i);
     				if(!substitutions0.contains(is1)){
-    					substitutions.add(is1);
+    					is1.annotation().dependencies().addAll(s.equalities());
+        				substitutions.add(is1);
     				}
     			}
     		}
@@ -514,7 +518,8 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 	    			}else{
 	    				final MettelAnnotatedSubstitution as1 = annotator.annotate(sub1, s);
 	    				if(!oldSubstitutions[i].contains(as1)){
-	    					substitutions.add(new MettelIndexedSubstitution(sub1,as.annotation(),i));
+	    					as1.annotation().dependencies().addAll(s.equalities());
+		    				substitutions.add(new MettelIndexedSubstitution(sub1,as.annotation(),i));
 	    				}
 	    			}
 	    		}

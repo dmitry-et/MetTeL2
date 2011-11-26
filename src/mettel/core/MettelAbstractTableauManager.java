@@ -155,8 +155,13 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 					//	throw new MettelCoreRuntimeException("Failed to add children of "+state);
 
 				}
-/*				else{
+//				else{
 //System.out.println("Removing "+state);
+//System.out.println("Satisfiable? "+state.isSatisfiable());
+//System.out.println("Expressions: "+state.expressions());
+//System.out.println("Explanation: "+state.explanation());
+//				}
+/*
 					unexpandedStates.remove(state);
 //					final Iterator<MettelTableauAction> ia = actions.iterator();
 //					while(ia.hasNext()){

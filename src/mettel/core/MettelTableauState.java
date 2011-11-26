@@ -100,4 +100,6 @@ public interface MettelTableauState extends Comparable<MettelTableauState>{
 	 */
 	MettelTableauExplanation explanation();
 
+	Set<MettelAnnotatedExpression> equalities();
+
 }

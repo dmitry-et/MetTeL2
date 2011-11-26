@@ -47,4 +47,6 @@ public interface MettelTableauAnnotation {
 	 */
 	public Set<MettelAnnotatedExpression> dependencies();
 
+	//public void rewrite(MettelAnnotator annotator, MettelTableauState state, MettelReplacement replacement);
+
 }
