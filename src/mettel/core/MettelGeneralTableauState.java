@@ -326,10 +326,11 @@ public class MettelGeneralTableauState implements MettelTableauState {
 				equalities.add(e);
 				final MettelEqualityExpression eq = (MettelEqualityExpression)exp;
 				if(replacement.append(eq.left(), eq.right())){
-					final MettelTableauRewriteAction action = new MettelTableauRewriteAction(this);
+					//final MettelTableauRewriteAction action = new MettelTableauRewriteAction(this);
 //					action.add(e.key());
-					action.add(this);
-					actions.add(action);
+					//action.add(this);
+					//actions.add(action);
+					this.rewrite();//Immediate rewrite is faster on the specified examples
 //System.out.println("Rewriting action added");
 				}
 			}
