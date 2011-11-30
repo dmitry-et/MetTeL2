@@ -326,7 +326,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 				equalities.add(e);
 				final MettelEqualityExpression eq = (MettelEqualityExpression)exp;
 				if(replacement.append(eq.left(), eq.right())){
-					final MettelTableauRewriteAction action = new MettelTableauRewriteAction(e.key());
+					final MettelTableauRewriteAction action = new MettelTableauRewriteAction(this);
 //					action.add(e.key());
 					action.add(this);
 					actions.add(action);
@@ -453,7 +453,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 				final MettelTableauState max = ID > aeKey.id()? this:aeKey;
 				final MettelAnnotatedExpression ae1 = annotator.annotate(e1,max);
 				if(!expressions.contains(ae1)){
-//					ae1.annotation().dependencies().addAll(equalities);
+					ae1.annotation().dependencies().addAll(equalities);
 					pool.add(ae1);
 //					rewritten.add(ae1);
 				}
