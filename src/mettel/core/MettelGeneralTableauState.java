@@ -450,9 +450,9 @@ public class MettelGeneralTableauState implements MettelTableauState {
 				pool.add(ae);
 			}else{
 				expanded = true;
-				final MettelTableauState aeKey = ae.key();
-				final MettelTableauState max = ID > aeKey.id()? this:aeKey;
-				final MettelAnnotatedExpression ae1 = annotator.annotate(e1,max);
+//				final MettelTableauState aeKey = ae.key();
+//				final MettelTableauState max = ID > aeKey.id()? this:aeKey;
+				final MettelAnnotatedExpression ae1 = annotator.annotate(e1,this/*max*/);
 				if(!expressions.contains(ae1)){
 					ae1.annotation().dependencies().addAll(equalities);
 					pool.add(ae1);
