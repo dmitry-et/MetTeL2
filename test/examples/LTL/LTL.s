@@ -26,7 +26,7 @@ syntax LTL{
 	formula equivalence = formula '<->' formula;
 	
 	formula until = formula 'U' formula;
-	formula while = formula 'W' formula;
+	formula waitFor = formula 'W' formula;
 	
 	//Tableau additions
 	formula eventualityDiamond = 'E' '(' formula ',' nominal ')';
