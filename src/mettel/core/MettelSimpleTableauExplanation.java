@@ -63,6 +63,7 @@ public class MettelSimpleTableauExplanation implements MettelTableauExplanation 
 		if(counter < SIZE) return null;
 		lemma = new TreeSet<MettelAnnotatedExpression>(MettelAnnotatedExpressionComparator.COMPARATOR);
 		final int ID = state.id();
+//System.out.println("ID="+ID);
 		for(int i = 0; i < SIZE; i++){
 			final Iterator<MettelAnnotatedExpression> j = sublemmas[i].iterator();
 			while(j.hasNext()){
@@ -113,9 +114,11 @@ public class MettelSimpleTableauExplanation implements MettelTableauExplanation 
 	public MettelTableauState state() {
 		if(ancestor != null) return ancestor;
 		if(counter < SIZE) return null;
-		SortedSet<MettelAnnotatedExpression> lemma0 = lemma();
+		final SortedSet<MettelAnnotatedExpression> lemma0 = lemma();
 		final MettelTableauState child = lemma0.last().key();
 //System.out.println("Child = "+child);
+//System.out.println("Lemma = "+lemma0);
+//System.out.println("first = "+lemma0.first().key());
 		final MettelTableauState parent = state.parent();
 //System.out.println("Parent = "+parent);
 		if(parent == null){

@@ -243,6 +243,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 
     	    applicationState = s0.key();
     	    dependencies = s0.annotation().dependencies();
+//System.out.println("Dependencies: "+dependencies);
 
     		if(TERMINAL){
 //System.out.println("Terminal state");
@@ -455,19 +456,25 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 				if(exp == exp1){//Only single instance of expression exists!
 					pool.add(ae);
 				}else{
+//					final MettelTableauState aeKey = ae.key();
+//					final MettelTableauState max = s.id() > aeKey.id()? s:aeKey;
 					final MettelAnnotatedExpression ae1 =annotator.annotate(exp1, s);
 					if(!pool0.contains(ae1)){
-						ae1.annotation().dependencies().addAll(s.equalities());
+//						ae1.annotation().dependencies().addAll(s.equalities());
+//System.out.println("ae1:"+ae1+" ae1 deps:"+ae1.annotation().dependencies());
 						pool.add(ae1);
 					}
 				}
 			}
 			if(e != null){
+//				final MettelTableauState eKey = e.key();
 				final MettelExpression e0 = e.expression();
 				final MettelExpression e1 = r.rewrite(e0);
 				if(e0 != e1){
+//					final MettelTableauState max = s.id() > eKey.id()? s:eKey;
 					e = annotator.annotate(e1, s);
-					e.annotation().dependencies().addAll(s.equalities());
+//					e.annotation().dependencies().addAll(s.equalities());
+//System.out.println("e: "+e+" e deps:"+e.annotation().dependencies());
 				}
 			}
 			final MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution> newSubstitutions0 = newSubstitutions;
@@ -479,10 +486,13 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
     			if(sub.equals(sub1)){
     				newSubstitutions.add(as);
     			}else{
-    				final MettelAnnotatedSubstitution as1 = annotator.annotate(sub1, s);
+//    				final MettelTableauState asKey = as.key();
+//					final MettelTableauState max = s.id() > asKey.id()? s:asKey;
+					final MettelAnnotatedSubstitution as1 = annotator.annotate(sub1, s);
     				if(!newSubstitutions0.contains(as1)){
-    					as1.annotation().dependencies().addAll(s.equalities());
-        				newSubstitutions.add(as1);
+//    					as1.annotation().dependencies().addAll(s.equalities());
+//System.out.println("as1: "+as1+" as1 deps:"+as1.annotation().dependencies());
+						newSubstitutions.add(as1);
     				}
     			}
     		}
@@ -496,10 +506,13 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
     			if(sub.equals(sub1)){
     				substitutions.add(as);
     			}else{
-    				final MettelAnnotatedSubstitution as1 = annotator.annotate(sub1, s);
+//    				final MettelTableauState asKey = as.key();
+//					final MettelTableauState max = s.id() > asKey.id()? s:asKey;
+					final MettelAnnotatedSubstitution as1 = annotator.annotate(sub1, s);
     				final MettelIndexedSubstitution is1 = new MettelIndexedSubstitution(sub1,as1.annotation(),as.i);
     				if(!substitutions0.contains(is1)){
-    					is1.annotation().dependencies().addAll(s.equalities());
+//    					is1.annotation().dependencies().addAll(s.equalities());
+//System.out.println("is1: "+is1+" is1 deps:"+is1.annotation().dependencies());
         				substitutions.add(is1);
     				}
     			}
@@ -516,10 +529,13 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 	    			if(sub.equals(sub1)){
 	    				oldSubstitutions[i].add(as);
 	    			}else{
-	    				final MettelAnnotatedSubstitution as1 = annotator.annotate(sub1, s);
+//	    				final MettelTableauState asKey = as.key();
+//						final MettelTableauState max = s.id() > asKey.id()? s:asKey;
+						final MettelAnnotatedSubstitution as1 = annotator.annotate(sub1, s);
 	    				if(!oldSubstitutions[i].contains(as1)){
-	    					as1.annotation().dependencies().addAll(s.equalities());
-		    				substitutions.add(new MettelIndexedSubstitution(sub1,as.annotation(),i));
+//	    					as1.annotation().dependencies().addAll(s.equalities());
+//System.out.println("old as1: "+as1+" old as1 deps:"+as1.annotation().dependencies());
+		    				oldSubstitutions[i].add(as1);
 	    				}
 	    			}
 	    		}
