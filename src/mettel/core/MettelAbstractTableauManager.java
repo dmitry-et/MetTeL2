@@ -296,7 +296,9 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 
 	public Set<MettelExpression> contradiction(){
 		if(root == null) return null;
-		final Set<MettelAnnotatedExpression> lemma = root.explanation().lemma();
+		final MettelTableauExplanation explanation = root.explanation();
+		if(explanation == null) return null;
+		final Set<MettelAnnotatedExpression> lemma = explanation.lemma();
 		if(lemma == null) return null;
 		final LinkedHashSet<MettelExpression> result = new LinkedHashSet<MettelExpression>();
 		for(MettelAnnotatedExpression ae:lemma){
