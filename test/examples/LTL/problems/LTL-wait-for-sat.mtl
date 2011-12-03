@@ -1,0 +1,4 @@
+//Satisfiable
+@i(
+[]P & (true W (~P))
+)
