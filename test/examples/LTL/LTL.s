@@ -31,7 +31,6 @@ syntax LTL{
 	//Tableau additions
 	formula eventualityDiamond = 'E' '(' formula ',' nominal ')';
 	formula eventualityU = 'EU' '(' formula ',' formula ',' nominal ')';
-	formula eventualityW = 'EW' '(' formula ',' formula ',' nominal ')';
 
 	formula equality = '[' nominal '=' nominal ']';
 	nominal f = 'f' '('  nominal ')'; //Skolem function == successor function

@@ -1,0 +1,7 @@
+//Unsatisfiable
+//Negated Axiom [U]A -> A
+@i(
+~(
+forall R.A & forall ~R.A -> A
+)
+)

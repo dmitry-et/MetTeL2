@@ -1,0 +1,6 @@
+//Negated Axiom <R>i <-> [[R]]i
+@j(
+~(
+exists R.{i} <-> forall ~R.~{i}
+)
+)

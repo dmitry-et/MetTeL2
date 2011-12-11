@@ -1,0 +1,9 @@
+//Unsatisfiable
+//Negated Axiom N(A,B) & N(A->C,B->D) -> N(C,D)
+@i(
+~(
+(forall R.A & forall ~R.B &
+forall R.(A->C) & forall ~R.(B->D)) ->
+(forall R.C & forall ~R.D)
+)
+)

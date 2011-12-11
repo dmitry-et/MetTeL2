@@ -1,0 +1,7 @@
+//Ansatisfiable
+//Negated Axiom N(1,1)
+@i(
+~(
+forall R.true & forall ~R.true
+)
+)

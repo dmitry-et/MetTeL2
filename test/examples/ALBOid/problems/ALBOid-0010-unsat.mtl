@@ -1,0 +1,6 @@
+//Negated Axiom <U>i
+@j(
+~(
+exists R.{i} | exists ~R.{i}
+)
+)

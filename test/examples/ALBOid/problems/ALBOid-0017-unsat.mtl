@@ -1,0 +1,4 @@
+//Unsatisfiable
+@i(
+forall (T|~T).exists R.(exists S.P) & exists (T|~T).~(exists R.(exists S.P))
+)

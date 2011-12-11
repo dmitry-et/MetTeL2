@@ -1,0 +1,12 @@
+//Unsatisfiable
+@i(
+forall R.(
+    (exists R0.true->exists R1.true) &
+    (exists R1.true->exists R2.true)
+) &
+forall ~R.(
+    (exists R0.true->exists R1.true) &
+    (exists R1.true->exists R2.true)
+) &
+~(exists R0.true->exists R2.true)
+)

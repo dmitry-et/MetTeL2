@@ -1,0 +1,5 @@
+//Unsatisfiable
+
+@j(
+~(@i P -> exists (R0|~R0).P)
+)

@@ -1,0 +1,16 @@
+true
+false
+{l}
+~p
+p&q
+p|q
+p->q
+p<->q
+exists r.p
+forall r.p
+exists ~r|s.p
+exists r|s.p
+exists r-.p
+//=====================
+exists r|~s|p-.(true & false & {l} -> ~p <-> p & q | r)
+forall ~r|~s.(p&q)

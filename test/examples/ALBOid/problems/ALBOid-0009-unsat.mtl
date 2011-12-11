@@ -1,0 +1,6 @@
+//Negated Axiom <U>(i & A) -> [U](i -> A)
+@j(
+~(
+(exists R.({i} & A) | exists ~R.({i} & A)) -> (forall R.({i}->A) & forall ~R.({i} -> A))
+)
+)

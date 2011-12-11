@@ -1,0 +1,4 @@
+//Satisfiable
+@i(
+~(forall ((R0 | R1) & R2).P <-> forall ((R0|R2) & (R1|R2)).P)
+)

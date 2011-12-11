@@ -1,0 +1,4 @@
+/* satisfiable */
+@i(
+forall R.exists S.P & forall ~R.exists S.P & exists S.P
+)

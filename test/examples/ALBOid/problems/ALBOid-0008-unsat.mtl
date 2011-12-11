@@ -1,0 +1,7 @@
+//Negated Axiom A -> [U]<U>A
+@i(
+~(
+A -> 
+forall R.(exists R.A | exists ~R.A) & forall ~R.(exists R.A | exists ~R.A)
+)
+)

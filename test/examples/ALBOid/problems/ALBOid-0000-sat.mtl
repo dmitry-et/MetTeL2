@@ -1,0 +1,4 @@
+//Satisfiable
+@i(
+P & forall ~R.~P
+)

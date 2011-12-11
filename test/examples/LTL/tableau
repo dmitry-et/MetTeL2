@@ -1,4 +1,4 @@
-//equality rules 
+//equality rules
 @l{l2} / @l2{l} priority 1$;
 @l~{l2} / @l2{l2} priority 1$;
 
@@ -6,8 +6,8 @@
 
 @l P  @l{l2} /  @l2 P  priority 2$;
 
-//Decomposition rules 
-@l ~(~P) / @l P  priority 1$; 
+//Decomposition rules
+@l ~(~P) / @l P  priority 1$;
 
 @l~P @l(P|Q) / @l Q priority 2$;
 @l P @l(~P|Q) / @l Q priority 2$;

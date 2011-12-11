@@ -1,0 +1,4 @@
+/* Unsatisfiable */
+@i(
+forall (S|~S).~(exists R.P) & exists R.P
+)

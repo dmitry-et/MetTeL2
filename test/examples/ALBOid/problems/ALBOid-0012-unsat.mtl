@@ -1,0 +1,6 @@
+//Negated Axiom [[R||S]]A <-> [[R]]A & [[S]]A
+@i(
+~(
+forall ~(R & S).~A <-> forall ~R.~A & forall ~S.~A
+)
+)
