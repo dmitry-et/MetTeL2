@@ -3,7 +3,7 @@
 @l {l2} / @l2 {l} priority 1$;
 @l ~{l2} / @l2 {l2} priority 1$;
 
-@l P / @l {l} priority 1$;
+@l P / @l{l} priority 1$;
 
 @l exists r.{l2} / @l2 {l2} priority 1$;
 @l P  @l {l2} / @l2 P priority 2$;
@@ -52,7 +52,7 @@
 
 //role intersection
 
-@l exists (r&s).P / @l exists ~(~r|~s).P priority 1$;
+@l exists (r&s).{l0} / @l exists r.{l0} @l exists s.{l0} priority 1$;
 @l ~(exists (r&s).P) / @l ~(exists ~(~r|~s).P) priority 1$;
 
 // Theory rules
