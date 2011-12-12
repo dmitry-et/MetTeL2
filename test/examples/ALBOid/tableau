@@ -25,6 +25,18 @@
 @l (P <-> Q) / @l P @l Q $| @l ~P @l ~Q priority 4$;
 @l ~(P <-> Q) / @l P  @l ~Q $| @l ~P @l Q priority 4$;
 
+//Unit propagation and resolution
+//@l ~P @l (P|Q) / @l Q  priority 2$;
+//@l P @l (~P|Q) / @l Q priority 2$;
+//@l ~Q @l (P|Q) / @l P priority 2$;
+//@l Q @l (P|~Q) / @l P priority 2$;
+
+//@l(P | Q) @l(~P | R) / @l Q $| @l R priority 3$;
+//@l(Q | P) @l(~P | R) / @l Q $| @l R priority 3$;
+//@l(P | Q) @l(R | ~P) / @l Q $| @l R priority 3$;
+//@l(Q | P) @l(R | ~P) / @l Q $| @l R priority 3$;
+//===============
+
 @l forall r.P / @l ~(exists r.~P) priority 1$;
 @l ~(forall r.P) / @l exists r.~P priority 1$;
 
@@ -32,6 +44,8 @@
 @l ~(exists r.P) @l exists r.{l2} / @l2 ~P priority 2$;
 
 //Roles
+//@l exists r|s.{l2} @l ~(exists r.{l2}) / @l exists s.{l2} priority 2$;
+//@l exists r|s.{l2} @l ~(exists s.{l2}) / @l exists r.{l2} priority 2$;
 @l exists r|s.{l2} / @l exists r.{l2} $| @l exists s.{l2} priority 3$;
 @l ~(exists r|s.P) / @l ~(exists r.P) @l ~(exists s.P) priority 1$;
 
@@ -48,6 +62,8 @@
 
 //role negation
 @l exists ~R.{l0} / @l ~(exists R.{l0}) priority 1$;
+@l ~(exists ~R.P) @l0 P / @l exists R.{l0} priority 2$;
+@l ~(exists ~R.P) @l ~(exists R.{l0}) / @l0 ~P priority 2$;
 @l ~(exists ~R.P) @l0 {l0} / @l exists R.{l0} $| @l0 ~P priority 4$;
 
 //role intersection
