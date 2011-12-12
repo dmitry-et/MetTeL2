@@ -5,12 +5,14 @@ import junit.framework.*;
 public class AllTests {
 
 	private static final String[] classNames = new String[]{
-		"ALCO.test.ALCOParserTest",
-		"ALCO.test.ALCOTableauTest",
 		"bool.test.BooleanParserTest",
 		"bool.test.BooleanTableauTest",
+		"ALCO.test.ALCOParserTest",
+		"ALCO.test.ALCOTableauTest",
 		"S4.test.S4ParserTest",
 		"S4.test.S4TableauTest",
+		"ALBOid.test.ALBOidParserTest",
+		"ALBOid.test.ALBOidTableauTest",
 		"LTL.test.LTLParserTest",
 		"LTL.test.LTLTableauTest"
 	     };

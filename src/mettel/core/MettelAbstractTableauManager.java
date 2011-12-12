@@ -114,6 +114,7 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 			do{
 //System.out.println("Unexpanded states:"+unexpandedStates);
 //System.out.println("Expanding "+state);
+//System.out.println("Expressions "+state.expressions());
 				//final MettelTableauState[] children =
 //System.out.println("Processing actions for "+state+"...");
 
@@ -221,24 +222,8 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 //System.out.println("Done");
 	}
 
-	private boolean add(MettelTableauState state){
-		if(state.isExpanded()){
-			final Iterator<MettelTableauState> i = unexpandedStates.iterator();
-			while(i.hasNext()){
-				final MettelTableauState s = i.next();
-				if(s.expressions().equals(state.expressions())){
-					if(state.id() < s.id()){
-						i.remove();//unexpandedStates.remove(s);
-						unexpandedStates.add(state);
-						return true;
-					}
-					return false;
-				}
-			}
-		}
 
-		return unexpandedStates.add(state);
-	}
+
 
 /*	boolean remove(MettelTableauState state){
 		if(unexpandedStates.remove(state)) return true;
@@ -281,6 +266,8 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 			}
 		}
 	}
+
+	abstract protected boolean add(MettelTableauState state);
 
 //	public abstract boolean isAcceptable(MettelTableauState s);
 

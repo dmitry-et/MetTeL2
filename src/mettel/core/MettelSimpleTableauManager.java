@@ -17,6 +17,7 @@
 package mettel.core;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.TreeSet;
 
 /**
@@ -47,6 +48,28 @@ public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 		root = state = new MettelGeneralTableauState(factory, calculus);
 		this.strategy = strategy;
 		this.acceptor = acceptor;
+	}
+
+	private final MettelTableauStateComparator comparator = new MettelTableauStateComparator();
+
+	protected boolean add(MettelTableauState state){
+		if(state.isExpanded()){
+			final Iterator<MettelTableauState> i = unexpandedStates.iterator();
+			while(i.hasNext()){
+				final MettelTableauState s = i.next();
+//				if(s.expressions().equals(state.expressions())){
+				if(comparator.compare(state, s) == 0){
+					if(state.id() < s.id()){
+						i.remove();//unexpandedStates.remove(s);
+						unexpandedStates.add(state);
+						return true;
+					}
+					return false;
+				}
+			}
+		}
+
+		return unexpandedStates.add(state);
 	}
 
 	/* (non-Javadoc)
