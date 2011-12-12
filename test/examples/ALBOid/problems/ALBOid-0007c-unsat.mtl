@@ -1,0 +1,6 @@
+//Unsatisfiable
+@i(
+~(
+forall (R|~R).P -> forall (~S|S).(forall (T|~T).P)
+)
+)
