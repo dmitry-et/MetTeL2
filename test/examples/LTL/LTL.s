@@ -34,4 +34,5 @@ syntax LTL{
 
 	formula equality = '[' nominal '=' nominal ']';
 	nominal f = 'f' '('  nominal ')'; //Skolem function == successor function
+	formula badLoop = 'badLoop';
 }
