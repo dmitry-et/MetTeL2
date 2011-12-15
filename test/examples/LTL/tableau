@@ -75,8 +75,8 @@
 ~([l=l0]) / @l~{l0}  priority 1$;
 @l{l} @l0{l0} / [l=l0] $| ~([l=l0])  priority 6$;
 
-@l (EU(C,D,l)) / badLoop priority 8$;
+@l (EU(C,D,l)) / ((EU(C,D,l))<->(badLoop)) priority 8$;
 //@l (EW(C,D,l)) /  priority 8$;
-@l (E(C,l)) / badLoop  priority 8$;
+@l (E(C,l)) / ((E(C,l))<->(badLoop))  priority 8$;
 
-badLoop / priority 1$;
+@l (badLoop) / priority 1$;
