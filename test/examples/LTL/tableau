@@ -43,8 +43,8 @@
 //@l ~(()P) @f(l){f(l)} / @f(l)~P  priority 2$;
 
 //Diamond
-@l (<>P) / @l (E(P,l)) priority 1 $;
-@l (E(P,l1)) / @l P ((E(P,l1)) <-> (<>P)) $| @f(l) (E(P,l1)) priority 7$;
+@l (<>P) / @l (E(P)) priority 1 $;
+@l (E(P)) / @l P ((E(P)) <-> (<>P)) $| @f(l) (E(P)) priority 7$;
 
 @l (~(<>P)) / @l ([](~P)) priority 1$;
 
@@ -53,8 +53,8 @@
 @l ~([]P) / @l <>(~P) priority 1$;
 
 //Until
-@l(C U D) / @l (EU(C,D,l)) priority 1$;
-@l (EU(C,D,l1)) / @l D ((EU(C,D,l1))<->(C U D)) $| @l C @f(l) (EU(C,D,l1)) priority 7$;
+@l(C U D) / @l (EU(C,D)) priority 1$;
+@l (EU(C,D)) / @l D ((EU(C,D))<->(C U D)) $| @l C @f(l) (EU(C,D)) priority 7$;
 @l~(C U D) / @l((~D) W ((~C) & (~D))) priority 1$;
 
 //Wait for
@@ -75,8 +75,8 @@
 ~([l=l0]) / @l~{l0}  priority 1$;
 @l{l} @l0{l0} / [l=l0] $| ~([l=l0])  priority 6$;
 
-@l (EU(C,D,l)) / ((EU(C,D,l))<->(badLoop)) priority 8$;
+@l (EU(C,D)) / ((EU(C,D))<->(badLoop)) priority 8$;
 //@l (EW(C,D,l)) /  priority 8$;
-@l (E(C,l)) / ((E(C,l))<->(badLoop))  priority 8$;
+@l (E(C)) / ((E(C))<->(badLoop))  priority 8$;
 
 @l (badLoop) / priority 1$;

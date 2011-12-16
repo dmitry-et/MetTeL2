@@ -417,7 +417,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 			}
 			if(!redundant){
 				LinkedHashSet<MettelTableauState> children = new LinkedHashSet<MettelTableauState>(BRANCHES_NUMBER);
-				for(int i = 0; i < BRANCHES_NUMBER; i++){
+				for(int i = BRANCHES_NUMBER -1; i>= 0; i--){
 					MettelGeneralTableauState ts = new MettelGeneralTableauState(this);
 					ts.addAll(annotator.reannotate(branches[i],ts));
 					//result[i] = ts;
