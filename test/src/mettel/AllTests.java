@@ -7,6 +7,9 @@ public class AllTests {
 	public static void main(String[] args)
 	   throws java.io.FileNotFoundException{
 
+//		System.setErr(new java.io.PrintStream(
+//	            new java.io.FileOutputStream("test.err")));
+
 		new junit.textui.TestRunner(
 		  new java.io.PrintStream(
             new java.io.FileOutputStream("test.log"){

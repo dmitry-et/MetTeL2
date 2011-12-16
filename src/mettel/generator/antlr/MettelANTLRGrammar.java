@@ -93,6 +93,15 @@ public class MettelANTLRGrammar {
 		 header.toStringBuilder(ib);
 		 lexerHeader.toStringBuilder(ib);
 
+		 ib.appendLine("@rulecatch{");
+		 ib.appendLine("catch (RecognitionException e) {");
+		 ib.incrementIndentLevel();
+		 ib.appendLine("reportError(e);");
+		 ib.appendLine("throw e;");
+		 ib.decrementIndentLevel();
+		 ib.appendLine('}');
+		 ib.appendLine('}');
+
 		 members.toStringBuilder(ib);
 
 		 for(MettelANTLRRule rule:rules){

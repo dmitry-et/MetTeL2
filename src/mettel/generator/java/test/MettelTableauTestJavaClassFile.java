@@ -85,11 +85,15 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
 
     	    appendEOL();
 
-    	    appendLine("LinkedHashSet<MettelGeneralTableauRule> calculus = new LinkedHashSet<MettelGeneralTableauRule>();");
+appendLine("System.out.println();");
+appendLine(  "System.out.println(\"----------------------------------------------------\");");
+appendLine("System.out.print(\"Reading tableau calculus for "+prefix+"...\");");
+
+			appendLine("LinkedHashSet<MettelGeneralTableauRule> calculus = new LinkedHashSet<MettelGeneralTableauRule>();");
     	    appendLine("parser.tableauCalculus(calculus);");
 
 //appendLine("System.out.println(calculus);");
-appendLine("System.out.println();");
+appendLine("System.out.println(\"OK\");");
 appendLine(  "System.out.println(\"----------------------------------------------------\");");
 appendLine("System.out.println(\"Testing tableau algorithm for "+prefix+"\");");
 appendLine(  "System.out.print(\"----------------------------------------------------\");");

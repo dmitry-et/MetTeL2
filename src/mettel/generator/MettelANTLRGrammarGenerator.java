@@ -160,6 +160,29 @@ public class MettelANTLRGrammarGenerator {
 //		lexerHeader.addStatement(s);
 		grammar.addToLexerHeader(s);
 
+/*		grammar.addToMembers("protected Object recoverFromMismatchedToken(IntStream input, int ttype, BitSet follow)");
+		grammar.addToMembers("          throws RecognitionException{");
+		grammar.addToMembers("    throw new MismatchedTokenException(ttype, input);");
+		grammar.addToMembers("}");
+
+		grammar.addToMembers("protected void mismatch(IntStream input, int ttype, BitSet follow)");
+		grammar.addToMembers("          throws RecognitionException{");
+		grammar.addToMembers("    throw new MismatchedTokenException(ttype, input);");
+		grammar.addToMembers("}");
+
+		grammar.addToMembers("public Object recoverFromMismatchedSet(IntStream input, RecognitionException e, BitSet follow)");
+		grammar.addToMembers("       throws RecognitionException{");
+		grammar.addToMembers("    reportError(e);");
+		grammar.addToMembers("    throw e;");
+		grammar.addToMembers("}");
+*/
+		grammar.addToMembers("public Object recoverFromMismatchedToken(IntStream input, int ttype, BitSet follow)");
+		grammar.addToMembers("       throws RecognitionException{");
+		grammar.addToMembers("    MismatchedTokenException e = new MismatchedTokenException(ttype, input);");
+		grammar.addToMembers("    reportError(e);");
+		grammar.addToMembers("    throw e;");
+		grammar.addToMembers("}");
+
 		grammar.addToMembers("private "+NAME+"ObjectFactory factory = "+NAME+"ObjectFactory.DEFAULT;");
 
 		grammar.addToMembers("public "+NAME+"Parser(TokenStream input, "+NAME+"ObjectFactory factory){");

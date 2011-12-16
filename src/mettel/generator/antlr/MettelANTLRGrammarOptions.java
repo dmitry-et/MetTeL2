@@ -55,6 +55,8 @@ class MettelANTLRGrammarOptions {
 	ibb.append('=');
 	ibb.append(String.valueOf(k));
 	ibb.append(';');
+	ibb.appendEOL();
+	ibb.indent();
 	ibb.append("superClass=");
 	ibb.append(superClass);
 	ibb.append(';');
