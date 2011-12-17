@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.SortedSet;
 
 /**
  * @author Dmitry Tishkovsky
@@ -30,7 +31,7 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 
 	protected MettelAnnotator annotator = MettelSimpleAnnotator.ANNOTATOR;
 
-	protected Set<MettelTableauState> unexpandedStates = null;
+	protected SortedSet<MettelTableauState> unexpandedStates = null;
 
 	protected MettelBranchSelectionStrategy strategy = null;
 
@@ -49,14 +50,21 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 		}
 	}
 
+	/**
+	 * @author Dmitry Tishkovsky
+	 *
+	 * Provides depth-first left-to-right strategy if the states are in the natural order.
+	 */
 	private class MettelSimpleBranchSelectionStrategy implements MettelBranchSelectionStrategy{
 
 		/* (non-Javadoc)
-		 * @see mettel.core.MettelBranchChoiceStrategy#chooseTableauState(java.util.Set)
+		 * @see mettel.core.MettelBranchChoiceStrategy#chooseTableauState(java.util.SortedSet)
 		 */
 		@Override
-		public MettelTableauState chooseTableauState(Set<MettelTableauState> s) {
-			final Iterator<MettelTableauState> i = s.iterator();
+		public MettelTableauState chooseTableauState(SortedSet<MettelTableauState> s) {
+			if(s.isEmpty()) return null;
+			return s.last();
+/*			final Iterator<MettelTableauState> i = s.iterator();
 			if(i.hasNext()){
 				//MettelTableauState state = i.next();
 //System.out.println("Looking at state "+state);
@@ -66,7 +74,7 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 //System.out.println("The state "+state+" is unsatisfiable");
 			}
 //System.out.println("No states to select from");
-			return null;
+			return null;*/
 		}
 
 	}

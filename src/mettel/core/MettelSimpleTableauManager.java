@@ -42,10 +42,10 @@ public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 	public MettelSimpleTableauManager(MettelTableauObjectFactory factory, Collection<? extends MettelTableauRule> calculus,
 					MettelBranchSelectionStrategy strategy, MettelTableauStateAcceptor acceptor) {
 		unexpandedStates =
-				//new TreeSet<MettelTableauState>();
+				new TreeSet<MettelTableauState>();
 				//new LinkedHashSet<MettelTableauState>();
 				//new TreeSet<MettelTableauState>(new MettelTableauStateComparator());
-				new TreeSet<MettelTableauState>(new MettelTableauStateReverseNaturalComparator());
+				//new TreeSet<MettelTableauState>(new MettelTableauStateReverseNaturalComparator());
 		root = state = new MettelGeneralTableauState(factory, calculus);
 		this.strategy = strategy;
 		this.acceptor = acceptor;

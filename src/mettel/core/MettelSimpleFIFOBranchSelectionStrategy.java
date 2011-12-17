@@ -22,9 +22,19 @@ import java.util.SortedSet;
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
+ * Provides breadth-first (right-to-left) strategy if the states are in the natural order.
+ *
  */
-public interface MettelBranchSelectionStrategy {
+public class MettelSimpleFIFOBranchSelectionStrategy implements
+		MettelBranchSelectionStrategy {
 
-	MettelTableauState chooseTableauState(SortedSet<MettelTableauState> s);
+	/* (non-Javadoc)
+	 * @see mettel.core.MettelBranchSelectionStrategy#chooseTableauState(java.util.SortedSet)
+	 */
+	@Override
+	public MettelTableauState chooseTableauState(SortedSet<MettelTableauState> s) {
+		if(s.isEmpty()) return null;
+		return s.first();
+	}
 
 }
