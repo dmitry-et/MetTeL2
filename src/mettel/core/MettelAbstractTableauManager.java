@@ -55,11 +55,11 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 	 *
 	 * Provides depth-first left-to-right strategy if the states are in the natural order.
 	 */
-	private class MettelSimpleBranchSelectionStrategy implements MettelBranchSelectionStrategy{
+	private class MettelSimpleBranchSelectionStrategy extends MettelSimpleLIFOBranchSelectionStrategy{}
 
 		/* (non-Javadoc)
 		 * @see mettel.core.MettelBranchChoiceStrategy#chooseTableauState(java.util.SortedSet)
-		 */
+		 *
 		@Override
 		public MettelTableauState chooseTableauState(SortedSet<MettelTableauState> s) {
 			if(s.isEmpty()) return null;
@@ -74,10 +74,10 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 //System.out.println("The state "+state+" is unsatisfiable");
 			}
 //System.out.println("No states to select from");
-			return null;*/
+			return null;*
 		}
 
-	}
+	}*/
 
 	/* (non-Javadoc)
 	 * @see mettel.core.MettelTableauManager#isSatisfiable(mettel.core.MettelAnnotatedExpression)
@@ -139,7 +139,7 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 						final boolean f = a.isFor(state);
 						a.retainAll(unexpandedStates);
 						if(f){
-							a.add(state);
+//							a.add(state);
 							children = a.execute(state);
 							actionExecuted = true;
 							if(a.completed()){

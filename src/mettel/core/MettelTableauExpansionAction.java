@@ -45,11 +45,11 @@ public class MettelTableauExpansionAction extends MettelAbstractTableauAction {
 	 */
 	@Override
 	public Set<MettelTableauState> execute(MettelTableauState s) {
-		if(isFor(s)){
-			remove(s);
+//		if(isFor(s)){
+//			remove(s);
 			return s.expand(branches,dependencies);
-		}
-		return null;
+//		}
+//		return null;
 	}
 
 	/* (non-Javadoc)

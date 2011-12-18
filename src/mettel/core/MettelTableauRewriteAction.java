@@ -40,12 +40,12 @@ public class MettelTableauRewriteAction extends MettelAbstractTableauAction {
 	@Override
 	public Set<MettelTableauState> execute(MettelTableauState s) {
 //System.out.println("Executing rewrite action");
-		if(isFor(s)){
+//		if(isFor(s)){
 //System.out.println("The rewrite action is for "+s);
-			remove(s);
+//			remove(s);
 			return s.rewrite();
-		}
-		return null;
+//		}
+//		return null;
 	}
 
 	/* (non-Javadoc)
