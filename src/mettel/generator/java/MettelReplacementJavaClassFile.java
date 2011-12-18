@@ -203,7 +203,8 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 
 				appendLine("if(e instanceof "+TYPE+"){");
 				incrementIndentLevel();
-					appendLine(TYPE+" f1 = ("+TYPE+")e;");
+					appendLine("return (("+TYPE+")e).rewrite(this);");
+					/*appendLine(TYPE+" f1 = ("+TYPE+")e;");
 					appendLine(TYPE+" f0 = null;");
 					appendLine("do{");
 					incrementIndentLevel();
@@ -211,7 +212,7 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 						appendLine("f1 = ("+TYPE+")f0.replace(this);");
 					decrementIndentLevel();
 					appendLine("}while(f0 != f1);");//We can use equality here since only one instance is allowed
-					appendLine("return f1;");
+					appendLine("return f1;");*/
 				decrementIndentLevel();
 				appendLine('}');
 			}

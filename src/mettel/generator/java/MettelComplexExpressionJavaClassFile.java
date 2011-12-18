@@ -181,29 +181,32 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 
 		appendEOL();
 
-		appendLine("public "+prefix+"Expression replace("+prefix+"Replacement s){");
+		appendLine("public "+prefix+"Expression rewrite("+prefix+"Replacement s){");
 		incrementIndentLevel();
 			appendLine(prefix+"Expression e = s.get"+MettelJavaNames.firstCharToUpperCase(sort)+"(this);");
 			appendLine("if(e != null){ return e; }");
 			if(SIZE > 0){
 				indent();
-				append("return factory.create"+MettelJavaNames.firstCharToUpperCase(name)+MettelJavaNames.firstCharToUpperCase(sort)+'(');
+				append("final "+TYPE+" ee = factory.create"+MettelJavaNames.firstCharToUpperCase(name)+MettelJavaNames.firstCharToUpperCase(sort)+'(');
 				append('(');
 				append(prefix+MettelJavaNames.firstCharToUpperCase(sorts[0]));
 				append(')');
-				append("e0.replace(s)");
+				append("e0.rewrite(s)");
 				for(int i = 1; i < SIZE; i++){
 					append(", ");
 					append('(');
 					append(prefix+MettelJavaNames.firstCharToUpperCase(sorts[i]));
 					append(')');
-					append("e"+i+".replace(s)");
+					append("e"+i+".rewrite(s)");
 				}
 				append(");");
+				appendEOL();
+				appendLine("e = s.get"+MettelJavaNames.firstCharToUpperCase(sort)+"(ee);");
+				appendLine("if(e == null){ return ee; }else{ return e; }");
 			}else{
 				appendLine("return this;");
 			}
-			appendEOL();
+			//appendEOL();
 		decrementIndentLevel();
 		appendLine('}');
 

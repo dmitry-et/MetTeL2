@@ -42,7 +42,7 @@ public class MettelExpressionInterfaceFile extends MettelJavaInterfaceFile {
 		indent();append("int id();");appendEOL();
 		indent();append(prefix+"ObjectFactory factory();");appendEOL();
 		indent();append(prefix+"Expression substitute("+prefix+"Substitution s);");appendEOL();
-		indent();append(prefix+"Expression replace("+prefix+"Replacement r);");appendEOL();
+		indent();append(prefix+"Expression rewrite("+prefix+"Replacement r);");appendEOL();
 		indent();append(prefix+"Substitution match("+prefix+"Expression e);");appendEOL();
 
 		appendEOL();

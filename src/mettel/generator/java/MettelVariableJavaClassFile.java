@@ -79,7 +79,7 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 
 		appendEOL();
 
-	    appendLine("public " + prefix + "Expression replace(" + prefix + "Replacement r) {");
+	    appendLine("public " + prefix + "Expression rewrite(" + prefix + "Replacement r) {");
 	    incrementIndentLevel();
 	    	appendLine(TYPE + " e = r.get" + MettelJavaNames.firstCharToUpperCase(type) +"(this);");
 	    	appendLine("return (e == null) ? this : e;");
