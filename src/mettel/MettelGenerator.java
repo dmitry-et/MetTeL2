@@ -55,6 +55,12 @@ public class MettelGenerator {
 	 */
 	public static void main(String[] args) {
 
+		System.out.println("-----------------------------------------------------------------");
+		System.out.println("MetTeL  Copyright (C) 2009-2011 Dmitry Tishkovsky");
+	    System.out.println("This program comes with ABSOLUTELY NO WARRANTY.");//for details type `show w'.
+	    System.out.println("This is free software, and you are welcome to redistribute it");
+	    System.out.println("under certain conditions; use the option `--license' for details.");
+	    System.out.println("-----------------------------------------------------------------");
     	try{
     		final int SIZE = args.length;
     		for(int i = 0; i < SIZE; i++){
