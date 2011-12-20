@@ -92,6 +92,11 @@
 @l (C13(p,q,r)) / @l (C13(q,r,p)) priority 1$;
 @l (C23(p,q,r)) / @l (C23(q,r,p)) priority 1$;
 @l (C33(p,q,r)) / @l (C33(q,r,p)) priority 1$;
+@l (C03(p,q,r)) / @l (C03(q,p,r)) priority 1$;
+@l (C13(p,q,r)) / @l (C13(q,p,r)) priority 1$;
+@l (C23(p,q,r)) / @l (C23(q,p,r)) priority 1$;
+@l (C33(p,q,r)) / @l (C33(q,p,r)) priority 1$;
+
 
 @l (C02(p,q)) @l p / priority 0 $;
 @l (C02(p,q)) @l ~p / @l ~q priority 2 $;
@@ -113,3 +118,12 @@
 
 @l (C33(p,q,r)) @l p / @l (C22(q,r)) priority 2 $;
 @l (C33(p,q,r)) @l ~p / priority 0 $;
+
+@l (C02(p,p)) / @l ~p priority 1$;
+@l (C12(p,p)) / @l p priority 1$;
+@l (C22(p,p)) / priority 0$;
+
+@l (C03(p,p,q)) / @l (C02(p,q)) priority 1$;
+@l (C13(p,p,q)) / @l (C12(p,q)) priority 1$;
+@l (C23(p,p,q)) / @l (C22(p,q)) priority 1$;
+@l (C33(p,p,q)) / priority 0$;
