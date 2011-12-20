@@ -1,0 +1,2 @@
+Main-Class: mettel.MettelGenerator
+Class-Path: antlr3-runtime.jar

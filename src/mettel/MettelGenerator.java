@@ -16,8 +16,11 @@
  */
 package mettel;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
@@ -65,6 +68,7 @@ public class MettelGenerator {
     		final int SIZE = args.length;
     		for(int i = 0; i < SIZE; i++){
         	  	if("-i".equals(args[i])||"--input".equals(args[i])){
+
         	        if(i < SIZE-1){
             		    in = new ANTLRFileStream(args[++i]);
             		    System.out.println("Input file: "+args[i]);
@@ -93,6 +97,7 @@ public class MettelGenerator {
                         System.out.println("Error file name required");
                         System.exit(-1);
                     }
+
         		}else if("-d".equals(args[i])||"--output-directory".equals(args[i])){
 
                     if(i < SIZE-1){
@@ -102,6 +107,7 @@ public class MettelGenerator {
                         System.out.println("Output directory name required");
                         System.exit(-1);
                     }
+
         		}else if("-p".equals(args[i])||"--properties".equals(args[i])){
 
         			if(i < SIZE-1){
@@ -111,6 +117,27 @@ public class MettelGenerator {
                         System.out.println("Properties file name required");
                         System.exit(-1);
                     }
+
+        		}else if("--license".equals(args[i])){
+
+        			BufferedReader r = new BufferedReader(
+        					new InputStreamReader(
+        							MettelGenerator.class.getResourceAsStream("/etc/license")));
+					String s;
+					while((s = r.readLine()) != null){
+						System.out.println(s);
+					}
+					System.out.println();
+
+					r = new BufferedReader(
+        					new InputStreamReader(
+        							MettelGenerator.class.getResourceAsStream("/etc/license-additional-terms")));
+					while((s = r.readLine()) != null){
+						System.out.println(s);
+					}
+
+					System.exit(0);
+
         		}
         	}
 
