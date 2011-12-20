@@ -69,7 +69,7 @@ DOC_DIR := $(BASE_DIR)/doc
 JAVADOC_DIR := $(DOC_DIR)/javadoc
 
 # Javadoc options
-JAVADOC_OPTIONS := -private -windowtitle "$(TITLE)" -author -version -use -source 1.5 -verbose
+JAVADOC_OPTIONS := -private -windowtitle "$(TITLE)" -author -version -use -source 1.6 -verbose
 
 # Class paths
 ANTLR:=antlr
@@ -355,7 +355,7 @@ $(RESOURCE_FILES): $(CLASSES_DIR) $(SRC_RESOURCE_FILES)
 	@ echo $(DELIM0)
 	@ echo "Copying resources"
 	@ echo $(DELIM1)
-	@ cd $(RESOURCE_DIR) && cp -R --parents $(shell cd $(RESOURCE_DIR) && find . -type f ! -path '*.svn*') $(CLASSES_DIR)
+	@ cd $(RESOURCE_DIR) && cp -R -L --parents $(shell cd $(RESOURCE_DIR) && find -L . -type f ! -path '*.svn*') $(CLASSES_DIR)
 	
 #	echo $(RESOURCE_FILES)
 #	echo $(SRC_RESOURCE_FILES)
@@ -374,7 +374,7 @@ $(JAR_FILE): $(CLASSES) $(RESOURCE_FILES) $(MANIFEST_FILE)
 	@ echo $(DELIM0)
 	@ echo "Building runtime jar ($(JAR_FILE_NAME))"
 	@ echo $(DELIM1)
-	@ cd $(CLASSES_DIR) && $(JAR) cvfm $(JAR_FILE) $(MANIFEST_FILE) *
+	@ cd $(CLASSES_DIR) && $(JAR) cvmf $(MANIFEST_FILE) $(JAR_FILE) *
 	@ cd $(BASE_DIR)
 
 generateLogics: $(JAR_FILE) $(TEST_CLASSES_DIR)
