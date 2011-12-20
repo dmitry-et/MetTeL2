@@ -14,7 +14,9 @@ public class AllTests {
 		"ALBOid.test.ALBOidParserTest",
 		"ALBOid.test.ALBOidTableauTest",
 		"LTL.test.LTLParserTest",
-		"LTL.test.LTLTableauTest"
+		"LTL.test.LTLTableauTest",
+		"LTLC.test.LTLCParserTest",
+		"LTLC.test.LTLCTableauTest"
 	     };
 
 	public static void main(String[] args) {

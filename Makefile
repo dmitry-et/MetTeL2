@@ -166,7 +166,7 @@ JAVA_TEST_OPTIONS := -Xfuture -Xbatch -Xms256M -Xmx1024M
 
 TEST_EXAMPLES_DIR = $(TEST_DIR)/examples
 TEST_OUTPUT_DIR = $(TEST_DIR)/output
-TEST_LOGIC_DIRS = "bool ALCO S4 ALBOid LTL"
+TEST_LOGIC_DIRS = "bool ALCO S4 ALBOid LTL LTLC"
 TEST_LOGIC_PARSERS = $(shell find $(TEST_OUTPUT_DIR) -name '*.g')
 TEST_LOGIC_SOURCES = $(shell find $(TEST_OUTPUT_DIR) -name '*.java')
 
@@ -380,8 +380,8 @@ $(JAR_FILE): $(CLASSES) $(RESOURCE_FILES) $(MANIFEST_FILE)
 generateLogics: $(JAR_FILE) $(TEST_CLASSES_DIR)
 	@ echo $(DELIM0)
 	@ echo "Generating logics"
-	@ echo $(DELIM1)
-	@ for D in "$(TEST_LOGIC_DIRS)"; do echo "Generating $${D}"; java -cp $(RUNTIME_CLASSPATH) mettel.MettelGenerator -i "$(TEST_EXAMPLES_DIR)/$${D}/$${D}.s" -p "$(TEST_EXAMPLES_DIR)/$${D}/$${D}.properties" -d "test/output"; done
+#	@ echo $(DELIM1)
+	@ for D in "$(TEST_LOGIC_DIRS)"; do echo $(DELIM1); echo "Generating $${D}"; java -cp $(RUNTIME_CLASSPATH) mettel.MettelGenerator -i "$(TEST_EXAMPLES_DIR)/$${D}/$${D}.s" -p "$(TEST_EXAMPLES_DIR)/$${D}/$${D}.properties" -d "test/output"; done
 	
 generateParsers: generateLogics
 #	@ TEST_LOGIC_PARSERS = $(shell find $(TEST_OUTPUT_DIR) -name '*.g')
