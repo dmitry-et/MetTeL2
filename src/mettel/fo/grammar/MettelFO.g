@@ -33,7 +33,20 @@ import mettel.core.MettelExpression;
 package mettel.fo;
 }
 
+@rulecatch{
+catch (RecognitionException e) {
+reportError(e);
+throw e;
+}
+}
 @members{
+public Object recoverFromMismatchedToken(IntStream input, int ttype, BitSet follow)
+       throws RecognitionException{
+    MismatchedTokenException e = new MismatchedTokenException(ttype, input);
+    reportError(e);
+    throw e;
+}
+
 private MettelLogicParser islandParser = null;
 private Lexer islandLexer = null;
 

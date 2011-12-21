@@ -58,9 +58,11 @@ public class MettelGenerator {
 	public static void main(String[] args) {
 
 		System.out.println("-----------------------------------------------------------------");
-		System.out.println("MetTeL  Copyright (c) 2009-2011 Dmitry Tishkovsky");
-	    System.out.println("This program comes with ABSOLUTELY NO WARRANTY.");//for details type `show w'.
-	    System.out.println("This is free software, and you are welcome to redistribute it");
+		System.out.println("Hello there! I am MetTeL, an automated tableau prover generator.");
+		System.out.println("I am designed and implemented by Dmitry Tishkovsky.");
+		System.out.println("Copyright (c) 2009-2011 Dmitry Tishkovsky.");
+	    System.out.println("As a program, I have ABSOLUTELY NO WARRANTY.");//for details type `show w'.
+	    System.out.println("I am free software, and you are welcome to redistribute me");
 	    System.out.println("under certain conditions; use the option `--license' for details.");
 	    System.out.println("-----------------------------------------------------------------");
     	try{
@@ -72,7 +74,7 @@ public class MettelGenerator {
             		    in = new ANTLRFileStream(args[++i]);
             		    System.out.println("Input file: "+args[i]);
                     }else{
-                        System.out.println("Input file name required");
+                        System.out.println("I need a name of the input file.");
                         System.exit(-1);
                     }
 
@@ -83,7 +85,7 @@ public class MettelGenerator {
             		  out = new PrintWriter(new FileWriter(outFileName),true);
             		  System.out.println("Output file: "+outFileName);
                     }else{
-                        System.out.println("Output file name required");
+                        System.out.println("I need a name of file for my output.");
                         System.exit(-1);
                     }
 
@@ -93,7 +95,7 @@ public class MettelGenerator {
             		  err = new PrintWriter(new FileWriter(args[++i]),true);
             		  System.out.println("Using error file: "+args[i]);
                     }else{
-                        System.out.println("Error file name required");
+                        System.out.println("I need a name of file for output about my errors.");
                         System.exit(-1);
                     }
 
@@ -103,7 +105,7 @@ public class MettelGenerator {
             		  outputPath = args[++i];
             		  System.out.println("Output path: "+outputPath);
                     }else{
-                        System.out.println("Output directory name required");
+                        System.out.println("I need a name of directory where I will put generated code.");
                         System.exit(-1);
                     }
 
@@ -113,7 +115,7 @@ public class MettelGenerator {
        					prop = new FileReader(args[++i]);
         				System.out.println("Properties file: "+args[i]);
                     }else{
-                        System.out.println("Properties file name required");
+                        System.out.println("I need a name of file where you have specified properties of the program I am going to generate.");
                         System.exit(-1);
                     }
 
@@ -188,8 +190,10 @@ public class MettelGenerator {
         	System.exit(0);
         } catch(Exception e) {
 
+        		out.println("Sorry! I detected an exceptional situation and terminate now.");
+        		out.println("If you can help me to avoid this situation in future, please look at my error output.");
     	    	err.println("==Exception==========================");
-           	e.printStackTrace(err);
+    	    	e.printStackTrace(err);
             	err.println("=====================================");
             	System.exit(-1);
 
