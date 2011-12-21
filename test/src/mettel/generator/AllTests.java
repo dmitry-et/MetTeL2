@@ -6,17 +6,17 @@ public class AllTests {
 
 	private static final String[] classNames = new String[]{
 		"bool.language.test.BooleanParserTest",
-		"bool.language.test.BooleanTableauTest",
+		"bool.tableau.test.BooleanTableauTest",
 		"ALCO.language.test.ALCOParserTest",
-		"ALCO.language.test.ALCOTableauTest",
+		"ALCO.tableau.test.ALCOTableauTest",
 		"S4.language.test.S4ParserTest",
-		"S4.language.test.S4TableauTest",
+		"S4.tableau.test.S4TableauTest",
 		"ALBOid.language.test.ALBOidParserTest",
-		"ALBOid.language.test.ALBOidTableauTest",
+		"ALBOid.tableau.test.ALBOidTableauTest",
 		"LTL.language.test.LTLParserTest",
-		"LTL.language.test.LTLTableauTest",
+		"LTL.tableau.test.LTLTableauTest",
 		"LTLC.language.test.LTLCParserTest",
-		"LTLC.language.test.LTLCTableauTest"
+		"LTLC.tableau.test.LTLCTableauTest"
 	     };
 
 	public static void main(String[] args) {

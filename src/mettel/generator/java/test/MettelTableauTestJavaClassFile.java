@@ -27,15 +27,20 @@ import mettel.generator.java.*;
 public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
 
 	private String prefix = "Mettel";
-	private String packName = null;
-	private String packNameFull = null;
+//	private String packName = null;
+//	private String packNameFull = null;
 
-	public MettelTableauTestJavaClassFile(String prefix, String sort, String branchBound, MettelJavaPackage pack) {
-		super(prefix+"TableauTest", pack, "public", "TestCase", null);
+	private MettelJavaPackageStructure pStructure = null;
+	
+	public MettelTableauTestJavaClassFile(String prefix, String sort, String branchBound, MettelJavaPackageStructure pStructure) {
+		super(prefix+"TableauTest", pStructure.testTableauPackage(), "public", "TestCase", null);
+		this.pStructure = pStructure;
 		this.prefix = prefix;
-		packName = pack.path();
-		packNameFull = packName.substring(0,packName.lastIndexOf('.')+1);
-		packName = packName.substring(0,packName.indexOf('.')+1);
+
+//		packName = pack.path();
+//		packNameFull = packName.substring(0,packName.lastIndexOf('.')+1);
+//		packName = packName.substring(0,packName.indexOf('.')+1);
+		
 		body(sort, branchBound);
 	}
 
@@ -63,14 +68,14 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
 		headings.appendLine("import mettel.core.MettelTableauObjectFactory;");
 		headings.appendLine("import mettel.core.acceptor.MettelSmallTableauStateAcceptor;");
 
-		headings.appendLine("import "+packNameFull+"*;");
+		headings.appendLine("import "+pStructure.languagePackage().path()+".*;");
 		headings.appendEOL();
 	}
 
 	private void body(String sort, String branchBound){
 
-    	appendLine("final static String tableauFile = \""+MettelJavaNames.systemPath("test.examples."+packName+"tableau")+"\";");
-    	appendLine("final static String inDir = \""+MettelJavaNames.systemPath("test.examples."+packName+"problems")+"\";");
+    	appendLine("final static String tableauFile = \""+MettelJavaNames.systemPath("test.examples."+pStructure.basePackage().path()+".tableau")+"\";");
+    	appendLine("final static String inDir = \""+MettelJavaNames.systemPath("test.examples."+pStructure.basePackage().path()+".problems")+"\";");
 
     	appendEOL();
 

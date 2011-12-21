@@ -27,15 +27,21 @@ import mettel.generator.java.*;
 public class MettelParserTestJavaClassFile extends MettelJavaClassFile {
 
 	private String prefix = "Mettel";
-	private String packName = null;
-	private String packNameFull = null;
+//	private String packName = null;
+//	private String packNameFull = null;
 	
-	public MettelParserTestJavaClassFile(String prefix, String sort, MettelJavaPackage pack) {
-		super(prefix+"ParserTest", pack, "public", "TestCase", null);
+	private MettelJavaPackageStructure pStructure = null;
+	
+	public MettelParserTestJavaClassFile(String prefix, String sort, MettelJavaPackageStructure pStructure) {
+		super(prefix+"ParserTest", pStructure.testLanguagePackage(), "public", "TestCase", null);
+		this.pStructure = pStructure;
+		
 		this.prefix = prefix;
-		packName = pack.path();
-		packNameFull = packName.substring(0,packName.lastIndexOf('.')+1);
-		packName = packName.substring(0,packName.indexOf('.')+1);
+		
+//		packName = pack.path();
+//		packNameFull = packName.substring(0,packName.lastIndexOf('.')+1);
+//		packName = packName.substring(0,packName.indexOf('.')+1);
+		
 		body(sort);
 	}
 
@@ -54,14 +60,14 @@ public class MettelParserTestJavaClassFile extends MettelJavaClassFile {
 		headings.appendLine("import org.antlr.runtime.CommonTokenStream;");
 		headings.appendLine("import org.antlr.runtime.RecognitionException;");
 		headings.appendEOL();
-		headings.appendLine("import "+packNameFull+"*;");
+		headings.appendLine("import "+pStructure.languagePackage().path()+".*;");
 		headings.appendEOL();
 	}
 
 	private void body(String sort){
 
-		appendLine("final static String inFile = \""+MettelJavaNames.systemPath("test.examples."+packName+"input")+"\";");
-		appendLine("final static String outFile = \""+MettelJavaNames.systemPath("test.examples."+packName+"output")+"\";");
+		appendLine("final static String inFile = \""+MettelJavaNames.systemPath("test.examples."+pStructure.basePackage().path()+".input")+"\";");
+		appendLine("final static String outFile = \""+MettelJavaNames.systemPath("test.examples."+pStructure.basePackage().path()+".output")+"\";");
 
 		appendLine("public void testParser() throws IOException, RecognitionException{");
 		incrementIndentLevel();

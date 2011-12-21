@@ -45,7 +45,7 @@ public class MettelJavaPackageStructure {
 	@SuppressWarnings("unused")
 	private MettelJavaPackageStructure(){}
 
-	private MettelJavaPackage grammarPackage = null, langPackage = null, testPackage = null;
+	private MettelJavaPackage basePackage = null, grammarPackage = null, langPackage = null, testLangPackage = null, testTableauPackage = null, tableauPackage = null;
 
 	private MettelObjectFactoryJavaInterfaceFile iFactory = null;
 	private MettelObjectFactoryJavaClassFile factory = null;
@@ -56,10 +56,15 @@ public class MettelJavaPackageStructure {
 	public MettelJavaPackageStructure(String base){
 		super();
 
+		basePackage =  new MettelJavaPackage(base);
+		
 		grammarPackage = new MettelJavaPackage(base+".language");// +'.'+GRAMMAR_STRING);
 		langPackage = new MettelJavaPackage(base+".language");
-		testPackage = new MettelJavaPackage(base+".language.test");
 
+		tableauPackage = new MettelJavaPackage(base+".tableau");
+		
+		testLangPackage = new MettelJavaPackage(base+".language.test");
+		testTableauPackage = new MettelJavaPackage(base+".tableau.test");
 	}
 
 	public void appendParser(MettelANTLRGrammar g){
@@ -89,8 +94,8 @@ public class MettelJavaPackageStructure {
 		langPackage.add(new MettelSubstitutionJavaClassFile(prefix,langPackage,sorts));
 
 		if(sorts.length > 0){
-			testPackage.add(new MettelParserTestJavaClassFile(prefix,sorts[0],testPackage));
-			testPackage.add(new MettelTableauTestJavaClassFile(prefix,sorts[0],branchBound,testPackage));
+			testLangPackage.add(new MettelParserTestJavaClassFile(prefix,sorts[0],this));
+			testTableauPackage.add(new MettelTableauTestJavaClassFile(prefix,sorts[0],branchBound,this));
 		}
 
 		for(String sort:sorts){
@@ -138,9 +143,15 @@ public class MettelJavaPackageStructure {
 
 
 	public void flush(String outputPath) throws IOException {
+		basePackage.flush(outputPath);
+		
 		langPackage.flush(outputPath);
 		grammarPackage.flush(outputPath);
-		testPackage.flush(outputPath);
+		
+		tableauPackage.flush(outputPath);
+		
+		testLangPackage.flush(outputPath);
+		testTableauPackage.flush(outputPath);
 	}
 
 	/**
@@ -148,6 +159,34 @@ public class MettelJavaPackageStructure {
 	 */
 	public MettelJavaPackage grammarPackage() {
 		return grammarPackage;
+	}
+
+	/**
+	 * @return
+	 */
+	public MettelJavaPackage testTableauPackage() {
+		return testTableauPackage;
+	}
+
+	/**
+	 * @return
+	 */
+	public MettelJavaPackage languagePackage() {
+		return langPackage;
+	}
+
+	/**
+	 * @return
+	 */
+	public MettelJavaPackage basePackage() {
+		return basePackage;
+	}
+
+	/**
+	 * @return
+	 */
+	public MettelJavaPackage testLanguagePackage() {
+		return testLangPackage;
 	}
 
 }
