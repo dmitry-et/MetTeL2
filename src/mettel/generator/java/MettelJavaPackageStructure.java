@@ -27,9 +27,6 @@ import java.util.List;
 //import java.io.InputStreamReader;
 
 import mettel.generator.antlr.MettelANTLRGrammar;
-//import mettel.generator.antlr.MettelANTLRHeader;
-//import mettel.util.MettelIndentedStringBuilder;
-import mettel.language.MettelSpecification;
 import mettel.language.MettelToken;
 
 import mettel.generator.java.test.MettelParserTestJavaClassFile;
