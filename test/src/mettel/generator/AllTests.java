@@ -5,18 +5,18 @@ import junit.framework.*;
 public class AllTests {
 
 	private static final String[] classNames = new String[]{
-		"bool.test.BooleanParserTest",
-		"bool.test.BooleanTableauTest",
-		"ALCO.test.ALCOParserTest",
-		"ALCO.test.ALCOTableauTest",
-		"S4.test.S4ParserTest",
-		"S4.test.S4TableauTest",
-		"ALBOid.test.ALBOidParserTest",
-		"ALBOid.test.ALBOidTableauTest",
-		"LTL.test.LTLParserTest",
-		"LTL.test.LTLTableauTest",
-		"LTLC.test.LTLCParserTest",
-		"LTLC.test.LTLCTableauTest"
+		"bool.language.test.BooleanParserTest",
+		"bool.language.test.BooleanTableauTest",
+		"ALCO.language.test.ALCOParserTest",
+		"ALCO.language.test.ALCOTableauTest",
+		"S4.language.test.S4ParserTest",
+		"S4.language.test.S4TableauTest",
+		"ALBOid.language.test.ALBOidParserTest",
+		"ALBOid.language.test.ALBOidTableauTest",
+		"LTL.language.test.LTLParserTest",
+		"LTL.language.test.LTLTableauTest",
+		"LTLC.language.test.LTLCParserTest",
+		"LTLC.language.test.LTLCTableauTest"
 	     };
 
 	public static void main(String[] args) {

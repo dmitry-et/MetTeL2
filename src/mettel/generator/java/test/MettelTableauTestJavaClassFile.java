@@ -28,12 +28,14 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
 
 	private String prefix = "Mettel";
 	private String packName = null;
+	private String packNameFull = null;
 
 	public MettelTableauTestJavaClassFile(String prefix, String sort, String branchBound, MettelJavaPackage pack) {
 		super(prefix+"TableauTest", pack, "public", "TestCase", null);
 		this.prefix = prefix;
 		packName = pack.path();
-		packName = packName.substring(0,packName.lastIndexOf('.')+1);
+		packNameFull = packName.substring(0,packName.lastIndexOf('.')+1);
+		packName = packName.substring(0,packName.indexOf('.')+1);
 		body(sort, branchBound);
 	}
 
@@ -61,7 +63,7 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
 		headings.appendLine("import mettel.core.MettelTableauObjectFactory;");
 		headings.appendLine("import mettel.core.acceptor.MettelSmallTableauStateAcceptor;");
 
-		headings.appendLine("import "+packName+"*;");
+		headings.appendLine("import "+packNameFull+"*;");
 		headings.appendEOL();
 	}
 

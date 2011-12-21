@@ -29,6 +29,7 @@ import java.util.List;
 import mettel.generator.antlr.MettelANTLRGrammar;
 //import mettel.generator.antlr.MettelANTLRHeader;
 //import mettel.util.MettelIndentedStringBuilder;
+import mettel.language.MettelSpecification;
 import mettel.language.MettelToken;
 
 import mettel.generator.java.test.MettelParserTestJavaClassFile;
@@ -55,9 +56,9 @@ public class MettelJavaPackageStructure {
 	public MettelJavaPackageStructure(String base){
 		super();
 
-		grammarPackage = new MettelJavaPackage(base);// +'.'+GRAMMAR_STRING);
-		langPackage = new MettelJavaPackage(base);
-		testPackage = new MettelJavaPackage(base+".test");
+		grammarPackage = new MettelJavaPackage(base+".language");// +'.'+GRAMMAR_STRING);
+		langPackage = new MettelJavaPackage(base+".language");
+		testPackage = new MettelJavaPackage(base+".language.test");
 
 	}
 
@@ -140,6 +141,13 @@ public class MettelJavaPackageStructure {
 		langPackage.flush(outputPath);
 		grammarPackage.flush(outputPath);
 		testPackage.flush(outputPath);
+	}
+
+	/**
+	 * @return
+	 */
+	public MettelJavaPackage grammarPackage() {
+		return grammarPackage;
 	}
 
 }

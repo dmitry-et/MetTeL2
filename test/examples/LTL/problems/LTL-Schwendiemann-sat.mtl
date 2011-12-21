@@ -1,4 +1,4 @@
-//Unsatisfiable
+//Satisfiable
 @l (
     [](<>P0) & [](<>P1) &
     [](P0->(~P1 & ()(~P1))) &

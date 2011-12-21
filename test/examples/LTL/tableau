@@ -79,4 +79,4 @@
 //@l (EW(C,D,l)) /  priority 8$;
 @l (E(C)) / ((E(C))<->(badLoop))  priority 8$;
 
-@l (badLoop) / priority 1$;
+@l (badLoop) / priority 8$;

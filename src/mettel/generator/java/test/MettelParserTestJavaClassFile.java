@@ -28,12 +28,14 @@ public class MettelParserTestJavaClassFile extends MettelJavaClassFile {
 
 	private String prefix = "Mettel";
 	private String packName = null;
-
+	private String packNameFull = null;
+	
 	public MettelParserTestJavaClassFile(String prefix, String sort, MettelJavaPackage pack) {
 		super(prefix+"ParserTest", pack, "public", "TestCase", null);
 		this.prefix = prefix;
 		packName = pack.path();
-		packName = packName.substring(0,packName.lastIndexOf('.')+1);
+		packNameFull = packName.substring(0,packName.lastIndexOf('.')+1);
+		packName = packName.substring(0,packName.indexOf('.')+1);
 		body(sort);
 	}
 
@@ -52,7 +54,7 @@ public class MettelParserTestJavaClassFile extends MettelJavaClassFile {
 		headings.appendLine("import org.antlr.runtime.CommonTokenStream;");
 		headings.appendLine("import org.antlr.runtime.RecognitionException;");
 		headings.appendEOL();
-		headings.appendLine("import "+packName+"*;");
+		headings.appendLine("import "+packNameFull+"*;");
 		headings.appendEOL();
 	}
 

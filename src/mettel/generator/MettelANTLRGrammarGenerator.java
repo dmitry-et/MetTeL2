@@ -138,14 +138,15 @@ public class MettelANTLRGrammarGenerator {
 
 		MettelANTLRGrammar grammar = new MettelANTLRGrammar(NAME);
 		final String PATH = spec.path();
-		final String s = PACKAGE_STRING+' '+PATH+';';
-
+		
 		/*langPackage = new MettelJavaPackage(PATH);
 		grammarPackage = new MettelJavaPackage(PATH+'.'+GRAMMAR_STRING);
 */
 		MettelJavaPackageStructure pStructure = new MettelJavaPackageStructure(PATH);
 		pStructure.appendStandardClasses(NAME);
 
+		final String s = PACKAGE_STRING+' '+pStructure.grammarPackage().path()+';';
+	
 		//new java.io.File("dir").
 		grammar.addToHeader(s);
 		grammar.addToHeader("");
