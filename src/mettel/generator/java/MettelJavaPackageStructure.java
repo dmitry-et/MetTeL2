@@ -54,12 +54,12 @@ public class MettelJavaPackageStructure {
 		super();
 
 		basePackage =  new MettelJavaPackage(base);
-		
+
 		grammarPackage = new MettelJavaPackage(base+".language");// +'.'+GRAMMAR_STRING);
 		langPackage = new MettelJavaPackage(base+".language");
 
 		tableauPackage = new MettelJavaPackage(base+".tableau");
-		
+
 		testLangPackage = new MettelJavaPackage(base+".language.test");
 		testTableauPackage = new MettelJavaPackage(base+".tableau.test");
 	}
@@ -91,6 +91,8 @@ public class MettelJavaPackageStructure {
 		langPackage.add(new MettelSubstitutionJavaClassFile(prefix,langPackage,sorts));
 
 		if(sorts.length > 0){
+			basePackage.add(new MettelTableauProverFile(prefix,sorts[0], branchBound, this));
+
 			testLangPackage.add(new MettelParserTestJavaClassFile(prefix,sorts[0],this));
 			testTableauPackage.add(new MettelTableauTestJavaClassFile(prefix,sorts[0],branchBound,this));
 		}
@@ -141,12 +143,12 @@ public class MettelJavaPackageStructure {
 
 	public void flush(String outputPath) throws IOException {
 		basePackage.flush(outputPath);
-		
+
 		langPackage.flush(outputPath);
 		grammarPackage.flush(outputPath);
-		
+
 		tableauPackage.flush(outputPath);
-		
+
 		testLangPackage.flush(outputPath);
 		testTableauPackage.flush(outputPath);
 	}
@@ -184,6 +186,13 @@ public class MettelJavaPackageStructure {
 	 */
 	public MettelJavaPackage testLanguagePackage() {
 		return testLangPackage;
+	}
+
+	/**
+	 * @return
+	 */
+	public MettelJavaPackage tableauPackage() {
+		return tableauPackage;
 	}
 
 }
