@@ -28,6 +28,7 @@ import java.util.List;
 
 import mettel.generator.antlr.MettelANTLRGrammar;
 import mettel.language.MettelToken;
+//import mettel.util.MettelJavaNames;
 
 import mettel.generator.java.test.MettelParserTestJavaClassFile;
 import mettel.generator.java.test.MettelTableauTestJavaClassFile;
@@ -142,6 +143,8 @@ public class MettelJavaPackageStructure {
 
 
 	public void flush(String outputPath) throws IOException {
+		//final String srcPath = MettelJavaNames.addSeparator(outputPath)+"src";
+
 		basePackage.flush(outputPath);
 
 		langPackage.flush(outputPath);

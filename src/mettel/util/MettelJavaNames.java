@@ -52,6 +52,7 @@ public class MettelJavaNames {
 
 	public static String addSeparator(String path){
 		if(path == null || path.equals("")) return "";
+		if(path.endsWith(FILE_SEPARATOR)) return path;
 		return path + FILE_SEPARATOR;
 	}
 }
