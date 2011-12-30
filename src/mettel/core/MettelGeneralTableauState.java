@@ -318,15 +318,14 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	public boolean add(MettelAnnotatedExpression e) {
 //System.out.println("Adding "+e);
 //System.out.println("Replacement is "+replacement);
-		final MettelExpression e0 = e.expression();
-		final MettelExpression e1 = replacement.rewrite(e0);
-		if(e1 != e0){
-			e = annotator.annotate(e1, this);
+		final MettelExpression exp = e.expression();
+		final MettelExpression exp0 = replacement.rewrite(exp);
+		if(exp0 != exp){
+			e = annotator.annotate(exp0, this);//TODO: Needs specific annotations to be effective
 		}
 		final boolean result = expressions.add(e);
 		if(result){
 			for(MettelTableauRuleState rs:ruleStates) rs.add(e);
-			final MettelExpression exp = e.expression();
 			if(exp instanceof MettelEqualityExpression){
 				equalities.add(e);
 				final MettelEqualityExpression eq = (MettelEqualityExpression)exp;
