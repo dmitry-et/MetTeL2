@@ -1,0 +1,5 @@
+//Unsatisfiable
+
+@l [](C13(p,q,r))
+@l [](C22(~p,~q))
+@l [](C22(~q,~r))

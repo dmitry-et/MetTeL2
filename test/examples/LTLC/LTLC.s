@@ -40,8 +40,15 @@ syntax LTLC{
 	formula C02 = 'C02' '(' formula ',' formula ')';
 	formula C12 = 'C12' '(' formula ',' formula ')';
 	formula C22 = 'C22' '(' formula ',' formula ')';
+
 	formula C03 = 'C03' '(' formula ',' formula ',' formula ')';
 	formula C13 = 'C13' '(' formula ',' formula ',' formula ')';
 	formula C23 = 'C23' '(' formula ',' formula ',' formula ')';
-	formula C33 = 'C33' '(' formula ',' formula ',' formula ')'
+	formula C33 = 'C33' '(' formula ',' formula ',' formula ')';
+
+	formula C04 = 'C04' '(' formula ',' formula ',' formula ',' formula ')';
+	formula C14 = 'C14' '(' formula ',' formula ',' formula ',' formula ')';
+	formula C24 = 'C24' '(' formula ',' formula ',' formula ',' formula ')';
+	formula C34 = 'C34' '(' formula ',' formula ',' formula ',' formula ')';
+	formula C44 = 'C44' '(' formula ',' formula ',' formula ',' formula ')';
 }

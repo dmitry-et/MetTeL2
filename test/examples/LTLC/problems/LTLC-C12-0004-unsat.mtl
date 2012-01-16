@@ -1,0 +1,4 @@
+//Unsatisfiable
+@l [](C12(p,q))
+@l [](C12(~p,~q))
+@l [](C12(p,~q))

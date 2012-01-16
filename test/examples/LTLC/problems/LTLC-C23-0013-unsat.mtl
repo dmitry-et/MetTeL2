@@ -1,0 +1,3 @@
+//Unsatisfiable
+@l [](C23(p,~p,q))
+@l [](C23(p,~p,~q))

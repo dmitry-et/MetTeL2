@@ -85,46 +85,103 @@
 
 //Constraints
 
+//permutations
 @l (C02(p,q)) / @l (C02(q,p)) priority 1$;
 @l (C12(p,q)) / @l (C12(q,p)) priority 1$;
 @l (C22(p,q)) / @l (C22(q,p)) priority 1$;
 
-@l (C03(p,q,r)) / @l (C03(q,r,p)) priority 1$;
-@l (C13(p,q,r)) / @l (C13(q,r,p)) priority 1$;
-@l (C23(p,q,r)) / @l (C23(q,r,p)) priority 1$;
-@l (C33(p,q,r)) / @l (C33(q,r,p)) priority 1$;
 @l (C03(p,q,r)) / @l (C03(q,p,r)) priority 1$;
+@l (C03(p,q,r)) / @l (C03(r,q,p)) priority 1$;
 @l (C13(p,q,r)) / @l (C13(q,p,r)) priority 1$;
+@l (C13(p,q,r)) / @l (C13(r,q,p)) priority 1$;
 @l (C23(p,q,r)) / @l (C23(q,p,r)) priority 1$;
+@l (C23(p,q,r)) / @l (C23(r,q,p)) priority 1$;
 @l (C33(p,q,r)) / @l (C33(q,p,r)) priority 1$;
+@l (C33(p,q,r)) / @l (C33(r,q,p)) priority 1$;
 
+@l (C04(p,q,r,s)) / @l (C04(q,p,r,s)) priority 1$;
+@l (C04(p,q,r,s)) / @l (C04(r,q,p,s)) priority 1$;
+@l (C04(p,q,r,s)) / @l (C04(s,q,r,p)) priority 1$;
+@l (C14(p,q,r,s)) / @l (C14(q,p,r,s)) priority 1$;
+@l (C14(p,q,r,s)) / @l (C14(r,q,p,s)) priority 1$;
+@l (C14(p,q,r,s)) / @l (C14(s,q,r,p)) priority 1$;
+@l (C24(p,q,r,s)) / @l (C24(q,p,r,s)) priority 1$;
+@l (C24(p,q,r,s)) / @l (C24(r,q,p,s)) priority 1$;
+@l (C24(p,q,r,s)) / @l (C24(s,q,r,p)) priority 1$;
+@l (C34(p,q,r,s)) / @l (C34(q,p,r,s)) priority 1$;
+@l (C34(p,q,r,s)) / @l (C34(r,q,p,s)) priority 1$;
+@l (C34(p,q,r,s)) / @l (C34(s,q,r,p)) priority 1$;
+@l (C44(p,q,r,s)) / @l (C44(q,p,r,s)) priority 1$;
+@l (C44(p,q,r,s)) / @l (C44(r,q,p,s)) priority 1$;
+@l (C44(p,q,r,s)) / @l (C44(s,q,r,p)) priority 1$;
 
-@l (C02(p,q)) @l p / priority 0 $;
-@l (C02(p,q)) @l ~p / @l ~q priority 2 $;
+//Reductions
+//@l (C02(p,q)) @l p / priority 0 $;
+//@l (C02(p,q)) @l ~p / @l ~q priority 2 $;
 
 @l (C12(p,q)) @l p / @l ~q priority 2 $;
 @l (C12(p,q)) @l ~p / @l q priority 2 $;
 
-@l (C22(p,q)) @l p / @l q priority 2 $;
-@l (C22(p,q)) @l ~p / priority 0 $;
+//@l (C22(p,q)) @l p / @l q priority 2 $;
+//@l (C22(p,q)) @l ~p / priority 0 $;
 
-@l (C03(p,q,r)) @l p / priority 0 $;
-@l (C03(p,q,r)) @l ~p / @l (C02(q,r)) priority 2 $;
+//@l (C03(p,q,r)) @l p / priority 0 $;
+//@l (C03(p,q,r)) @l ~p / @l (C02(q,r)) priority 2 $;
 
-@l (C13(p,q,r)) @l p / @l (C02(q,r)) priority 2 $;
+@l (C13(p,q,r)) @l p / @l (C02(q,r)) priority 2 $; //Unfortunately this causes a clash when p=q or p=r, so the agreement is that all arguments are syntactically pairwise different
 @l (C13(p,q,r)) @l ~p / @l (C12(q,r)) priority 2 $;
 
-@l (C23(p,q,r)) @l p / @l (C12(q,r)) priority 2 $;
+@l (C23(p,q,r)) @l p / @l (C12(q,r)) priority 2 $; //Unfortunately this causes a clash when p=q or p=r, so the agreement is that all arguments are syntactically pairwise different
 @l (C23(p,q,r)) @l ~p / @l (C22(q,r)) priority 2 $;
 
-@l (C33(p,q,r)) @l p / @l (C22(q,r)) priority 2 $;
-@l (C33(p,q,r)) @l ~p / priority 0 $;
+//@l (C33(p,q,r)) @l p / @l (C22(q,r)) priority 2 $;
+//@l (C33(p,q,r)) @l ~p / priority 0 $;
 
-@l (C02(p,p)) / @l ~p priority 1$;
-@l (C12(p,p)) / @l p priority 1$;
-@l (C22(p,p)) / priority 0$;
 
-@l (C03(p,p,q)) / @l (C02(p,q)) priority 1$;
-@l (C13(p,p,q)) / @l (C12(p,q)) priority 1$;
-@l (C23(p,p,q)) / @l (C22(p,q)) priority 1$;
-@l (C33(p,p,q)) / priority 0$;
+//@l (C04(p,q,r,s)) @l p / priority 0 $;
+//@l (C04(p,q,r,s)) @l ~p / @l (C03(q,r,s)) priority 2 $;
+
+@l (C14(p,q,r,s)) @l p / @l (C03(q,r,s)) priority 2 $; //Unfortunately this causes a clash when p=q,r, or s, so the agreement is that all arguments are syntactically pairwise different
+@l (C14(p,q,r,s)) @l ~p / @l (C13(q,r,s)) priority 2 $;
+
+@l (C24(p,q,r,s)) @l p / @l (C13(q,r,s)) priority 2 $; //Unfortunately this causes a clash when p=q,r, or s, so the agreement is that all arguments are syntactically pairwise different
+@l (C24(p,q,r,s)) @l ~p / @l (C23(q,r,s)) priority 2 $;
+
+@l (C34(p,q,r,s)) @l p / @l (C23(q,r,s)) priority 2 $; //Unfortunately this causes a clash when p=q,r, or s, so the agreement is that all arguments are syntactically pairwise different
+@l (C34(p,q,r,s)) @l ~p / @l (C33(q,r,s)) priority 2 $;
+
+//@l (C44(p,q,r,s)) @l p / @l (C33(q,r,s)) priority 2 $;
+//@l (C44(p,q,r,s)) @l ~p / priority 0 $;
+
+
+//Duplications in view of the above agreement need not to be checked
+////@l (C02(p,p)) / @l ~p priority 1$;
+//@l (C12(p,p)) / @l p priority 1$; 
+//@l (C22(p,p)) / priority 0$;
+
+//@l (C03(p,p,q)) / @l (C02(p,q)) priority 1$;
+//@l (C13(p,p,q)) / @l (C12(p,q)) priority 1$;
+//@l (C23(p,p,q)) / @l (C22(p,q)) priority 1$;
+//@l (C33(p,p,q)) / priority 0$;
+
+//@l (C04(p,p,q,r)) / @l (C03(p,q,r)) priority 1$;
+//@l (C14(p,p,q,r)) / @l (C13(p,q,r)) priority 1$;
+//@l (C24(p,p,q,r)) / @l (C23(p,q,r)) priority 1$;
+//@l (C34(p,p,q,r)) / @l (C33(p,q,r)) priority 1$;
+//@l (C44(p,p,q,r)) / priority 0$;
+
+//Additions and cut rules for completeness
+@l (C02(p,q)) / @l ~p priority 1$;
+@l (C12(p,q)) / @l p $| @l ~p priority 4$;
+@l (C22(p,q)) / @l p priority 1$;
+
+@l (C03(p,q,r)) / @l ~p priority 1$;
+@l (C13(p,q,r)) / @l p $| @l ~p priority 4$;
+@l (C23(p,q,r)) / @l p $| @l ~p priority 4$;
+@l (C33(p,q,r)) / @l p priority 1$;
+
+@l (C04(p,q,r,s)) / @l ~p priority 1$;
+@l (C14(p,q,r,s)) / @l p $| @l ~p priority 4$;
+@l (C24(p,q,r,s)) / @l p $| @l ~p priority 4$;
+@l (C34(p,q,r,s)) / @l p $| @l ~p priority 4$;
+@l (C44(p,q,r,s)) / @l p priority 1$;
