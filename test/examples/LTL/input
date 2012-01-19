@@ -1,18 +1,8 @@
+//Test input for IJCAR specification
+
+{ a = a }
+[ 0 = 0 ]
+[ @a 0 = @b 0]
+[@a (@b 0) = @a (@b 0)]
 true
 false
-~p
-p|q
-() (<> q)
-<> () (q|()(~P))
-~ ( ~P )
-pop
-~ P | Q
-~ (~P | Q)
-p U ()(<>p| () q)
-(~Q | <> (R))
-
-(Q | (P | Z | (R | S)))
-
-P | Q
-P | ~P
-
