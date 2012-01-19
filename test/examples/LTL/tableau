@@ -1,8 +1,83 @@
-// ~ ( 0 = 0 ) / FALSE $;
-false / $;
-~  ({ a = a } ) / $;
-({ a = b } ) ~({ a = b } ) / $;
-~  ([ 0 = 0 ] ) / $;
-~ ([ @a L1 = @b L2]) / ~ ({ a = b } )   $|   ~  ([ L1 = L2 ] )  $;
+//equality rules
+//@l{l2} / @l2{l} priority 1$;
+//@l~{l2} / @l2{l2} priority 1$;
 
+@l P / @l{l} priority 1 $;
 
+//@l P  @l{l2} /  @l2 P  priority 2$;
+
+//Decomposition rules
+@l ~(~P) / @l P  priority 1$;
+
+@l~P @l(P|Q) / @l Q priority 2$;
+@l P @l(~P|Q) / @l Q priority 2$;
+@l~Q @l(P|Q) / @l P priority 2$;
+@l Q @l(P|~Q) / @l P priority 2$;
+
+@l P @l~(P&Q) / @l~Q priority 2$;
+@l~P @l~(~P&Q) / @l~Q priority 2$;
+@l Q @l~(P&Q) / @l~P priority 2$;
+@l~Q @l~(P&~Q) / @l~P priority 2$;
+
+@l P @l(P->Q) / @l Q priority 2$;
+@l~Q @l(P -> Q) / @l~P priority 2$;
+@l Q @l(P -> ~Q) / @l~P priority 2$;
+
+@l(P|Q) / @l P $| @l Q  priority 3$;
+@l~(P|Q) / @l~P @l~Q  priority 1$;
+
+@l(P&Q) / @l P @l Q priority 1$;
+@l ~(P&Q) / @l ~P $| @l ~Q priority 3$;
+
+@l(P->Q) / @l ~P $| @l Q priority 3$;
+@l~(P->Q) / @l P @l ~Q priority 1$;
+
+//@l(P->Q) / @l(~P|Q) priority 1$;
+//@l~(P->Q) / @l(P&~Q) priority 1$;
+
+@l(P<->Q) / @l (P->Q) @l (Q->P) priority 1$;
+@l~(P<->Q) / @l ~(P->Q) $| @l ~(Q->P) priority 3$;
+
+@l(()P) / @f(l)P  priority 7$;
+@l ~(()P) / @l ()(~P) priority 1$;
+//@l ~(()P) @f(l){f(l)} / @f(l)~P  priority 2$;
+
+//Diamond
+@l (<>P) / @l (E(P)) priority 1 $;
+@l (E(P)) / @l P ((E(P)) <-> (<>P)) $| @f(l) (E(P)) priority 7$;
+
+@l (~(<>P)) / @l ([](~P)) priority 1$;
+
+//Box
+@l []P / @l P @f(l)[]P priority 7$;
+@l ~([]P) / @l <>(~P) priority 1$;
+
+//Until
+@l(C U D) / @l (EU(C,D)) priority 1$;
+@l (EU(C,D)) / @l D ((EU(C,D))<->(C U D)) $| @l C @f(l) (EU(C,D)) priority 7$;
+@l~(C U D) / @l((~D) W ((~C) & (~D))) priority 1$;
+
+//Wait for
+//@l(C W D) / @l (EW(C,D,l)) priority 1$;
+@l(C W D) / @l D $| @l C @f(l) (C W D) priority 7$;
+
+//@l~(C U D)/ @l (~D U ~(C | D)) $| @l ~(~false U ~C) priority 4$;
+
+// Closure rule
+@l P  @l (~P) / priority 0$;
+@l false / priority 0$;
+@l ~(true)/ priority 0$;
+
+//Blocking related
+//@l{l0} / [l=l0]  priority 6$;
+//[l=l0] / @l{l0}  priority 6$;
+//@l~{l0} / ~([l=l0])  priority 6$;
+//~([l=l0]) / @l~{l0}  priority 6$;
+@l{l} @l0{l0} / [l=l0] $| ~([l=l0])  priority 6$;
+~([l=l])/ priority 0$;
+
+@l (EU(C,D)) / ((EU(C,D))<->(badLoop)) priority 8$;
+//@l (EW(C,D,l)) /  priority 8$;
+@l (E(C)) / ((E(C))<->(badLoop))  priority 8$;
+
+@l (badLoop) / priority 8$;
