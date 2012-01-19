@@ -1,0 +1,8 @@
+//Test input for IJCAR specification
+
+{ a = a }
+[ 0 = 0 ]
+[ @a 0 = @b 0]
+[@a (@b 0) = @a (@b 0)]
+true
+false

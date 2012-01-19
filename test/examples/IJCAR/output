@@ -1,0 +1,37 @@
+( { a = a } )
+( [ ( 0 ) = ( 0 ) ] )
+( [ ( @ a ( 0 ) ) = ( @ b ( 0 ) ) ] )
+( [ ( @ a ( @ b ( 0 ) ) ) = ( @ a ( @ b ( 0 ) ) ) ] )
+( true )
+( false )
+
+Matching ( { a = a } ) with ( [ ( 0 ) = ( 0 ) ] )
+Substitution: null
+Matching ( { a = a } ) with ( [ ( @ a ( 0 ) ) = ( @ b ( 0 ) ) ] )
+Substitution: null
+Matching ( { a = a } ) with ( [ ( @ a ( @ b ( 0 ) ) ) = ( @ a ( @ b ( 0 ) ) ) ] )
+Substitution: null
+Matching ( { a = a } ) with ( true )
+Substitution: null
+Matching ( { a = a } ) with ( false )
+Substitution: null
+Matching ( [ ( 0 ) = ( 0 ) ] ) with ( [ ( @ a ( 0 ) ) = ( @ b ( 0 ) ) ] )
+Substitution: null
+Matching ( [ ( 0 ) = ( 0 ) ] ) with ( [ ( @ a ( @ b ( 0 ) ) ) = ( @ a ( @ b ( 0 ) ) ) ] )
+Substitution: null
+Matching ( [ ( 0 ) = ( 0 ) ] ) with ( true )
+Substitution: null
+Matching ( [ ( 0 ) = ( 0 ) ] ) with ( false )
+Substitution: null
+Matching ( [ ( @ a ( 0 ) ) = ( @ b ( 0 ) ) ] ) with ( [ ( @ a ( @ b ( 0 ) ) ) = ( @ a ( @ b ( 0 ) ) ) ] )
+Substitution: null
+Matching ( [ ( @ a ( 0 ) ) = ( @ b ( 0 ) ) ] ) with ( true )
+Substitution: null
+Matching ( [ ( @ a ( 0 ) ) = ( @ b ( 0 ) ) ] ) with ( false )
+Substitution: null
+Matching ( [ ( @ a ( @ b ( 0 ) ) ) = ( @ a ( @ b ( 0 ) ) ) ] ) with ( true )
+Substitution: null
+Matching ( [ ( @ a ( @ b ( 0 ) ) ) = ( @ a ( @ b ( 0 ) ) ) ] ) with ( false )
+Substitution: null
+Matching ( true ) with ( false )
+Substitution: null

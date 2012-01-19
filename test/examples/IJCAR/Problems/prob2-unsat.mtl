@@ -1,0 +1,9 @@
+//unSatisfiable
+
+//false
+
+//~ { element1 = element1 }
+
+//~ [ 0 = 0 ] 
+
+~ [@a (0) = @a (0)]
