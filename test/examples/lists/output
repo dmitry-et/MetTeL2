@@ -1,0 +1,10 @@
+( { ( <> ) != ( <> ) } )
+( { ( < a L > ) != ( < a ( < b ( < c L > ) > ) > ) } )
+( { ( ( < a L > ) * ( <> ) ) != ( ( ( < a ( < b L1 > ) > ) * ( < c L2 > ) ) * ( < d ( L3 * L4 ) > ) ) } )
+
+Matching ( { ( <> ) != ( <> ) } ) with ( { ( < a L > ) != ( < a ( < b ( < c L > ) > ) > ) } )
+Substitution: null
+Matching ( { ( <> ) != ( <> ) } ) with ( { ( ( < a L > ) * ( <> ) ) != ( ( ( < a ( < b L1 > ) > ) * ( < c L2 > ) ) * ( < d ( L3 * L4 ) > ) ) } )
+Substitution: null
+Matching ( { ( < a L > ) != ( < a ( < b ( < c L > ) > ) > ) } ) with ( { ( ( < a L > ) * ( <> ) ) != ( ( ( < a ( < b L1 > ) > ) * ( < c L2 > ) ) * ( < d ( L3 * L4 ) > ) ) } )
+Substitution: null
