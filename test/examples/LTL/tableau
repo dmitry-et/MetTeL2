@@ -29,6 +29,11 @@
 @l(P&Q) / @l P @l Q priority 1$;
 @l ~(P&Q) / @l ~P $| @l ~Q priority 3$;
 
+//@l (P&Q) @l ~P/ priority 0$;
+//@l (P&Q) @l ~Q/ priority 0$;
+//@l (~P&Q) @l P/ priority 0$;
+//@l (P&~Q) @l Q/ priority 0$;
+
 @l(P->Q) / @l ~P $| @l Q priority 3$;
 @l~(P->Q) / @l P @l ~Q priority 1$;
 

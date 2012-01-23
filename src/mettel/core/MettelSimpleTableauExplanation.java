@@ -137,7 +137,7 @@ public class MettelSimpleTableauExplanation implements MettelTableauExplanation 
 
 
 	public String toString(){
-		return lemma().toString();
+		return incompleteLemma().toString();
 	}
 
 	/* (non-Javadoc)

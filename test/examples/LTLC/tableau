@@ -26,8 +26,10 @@
 @l(P|Q) / @l P $| @l Q  priority 3$;
 @l~(P|Q) / @l~P @l~Q  priority 1$;
 
-@l(P&Q) / @l P @l Q priority 1$;
+@l(P&Q) / @l P  @l Q priority 1$;
 @l ~(P&Q) / @l ~P $| @l ~Q priority 3$;
+//@l ~(P&Q) / @l (~P|~Q) priority 1$;
+//@l(P&Q) / @l ~(~P | ~Q) priority 1$;
 
 @l(P->Q) / @l ~P $| @l Q priority 3$;
 @l~(P->Q) / @l P @l ~Q priority 1$;
@@ -156,7 +158,7 @@
 
 //Duplications in view of the above agreement need not to be checked
 ////@l (C02(p,p)) / @l ~p priority 1$;
-//@l (C12(p,p)) / @l p priority 1$; 
+//@l (C12(p,p)) / @l p priority 1$;
 //@l (C22(p,p)) / priority 0$;
 
 //@l (C03(p,p,q)) / @l (C02(p,q)) priority 1$;

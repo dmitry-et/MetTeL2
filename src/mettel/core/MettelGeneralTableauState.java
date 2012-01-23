@@ -302,6 +302,8 @@ public class MettelGeneralTableauState implements MettelTableauState {
 
 		if(branches == null) return null; //Cannot be applied or terminal
 
+//System.out.println(rs);
+
 		final int BRANCHES_NUMBER = branches.length;
 		final Set<MettelAnnotatedExpression> dependencies = rs.dependencies();
 		if(BRANCHES_NUMBER > 1){
@@ -319,10 +321,10 @@ public class MettelGeneralTableauState implements MettelTableauState {
 //System.out.println("Adding "+e);
 //System.out.println("Replacement is "+replacement);
 		final MettelExpression exp = e.expression();
-		final MettelExpression exp0 = replacement.rewrite(exp);
-		if(exp0 != exp){
-			e = annotator.annotate(exp0, this);//TODO: Needs specific annotations to be effective
-		}
+//		final MettelExpression exp0 = replacement.rewrite(exp);//XXX: Does not work as expected, needs fix!
+//		if(exp0 != exp){
+//			e = annotator.annotate(exp0, this);//TODO: Needs specific annotations to be effective
+//		}
 		final boolean result = expressions.add(e);
 		if(result){
 			for(MettelTableauRuleState rs:ruleStates) rs.add(e);
