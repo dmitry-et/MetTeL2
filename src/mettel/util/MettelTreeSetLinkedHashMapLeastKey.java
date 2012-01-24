@@ -49,9 +49,7 @@ public class MettelTreeSetLinkedHashMapLeastKey<Key extends Comparable<? super K
 			final Object o = e.create(key,e.object());
 			
 			if(contains(key,o)){
-				//final Comparable<? super Key> c = (Comparable<? super Key>)key;
-				final int COMP = key.compareTo(e.key());
-				if(COMP <= 0) return false;
+				if(key.compareTo(e.key()) <= 0) return false;
 				remove(key,o);
 				return add(e.key(),e);
 			}
