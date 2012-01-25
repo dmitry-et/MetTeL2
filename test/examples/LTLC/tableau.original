@@ -92,30 +92,30 @@
 @l (C12(p,q)) / @l (C12(q,p)) priority 1$;
 @l (C22(p,q)) / @l (C22(q,p)) priority 1$;
 
-@l (C03(p,q,r)) / @l (C03(q,r,p)) priority 1$;
-//@l (C03(p,q,r)) / @l (C03(r,q,p)) priority 1$;
-@l (C13(p,q,r)) / @l (C13(q,r,p)) priority 1$;
-//@l (C13(p,q,r)) / @l (C13(r,q,p)) priority 1$;
-@l (C23(p,q,r)) / @l (C23(q,r,p)) priority 1$;
-//@l (C23(p,q,r)) / @l (C23(r,q,p)) priority 1$;
-@l (C33(p,q,r)) / @l (C33(q,r,p)) priority 1$;
-//@l (C33(p,q,r)) / @l (C33(r,q,p)) priority 1$;
+@l (C03(p,q,r)) / @l (C03(q,p,r)) priority 1$;
+@l (C03(p,q,r)) / @l (C03(r,q,p)) priority 1$;
+@l (C13(p,q,r)) / @l (C13(q,p,r)) priority 1$;
+@l (C13(p,q,r)) / @l (C13(r,q,p)) priority 1$;
+@l (C23(p,q,r)) / @l (C23(q,p,r)) priority 1$;
+@l (C23(p,q,r)) / @l (C23(r,q,p)) priority 1$;
+@l (C33(p,q,r)) / @l (C33(q,p,r)) priority 1$;
+@l (C33(p,q,r)) / @l (C33(r,q,p)) priority 1$;
 
-@l (C04(p,q,r,s)) / @l (C04(q,r,s,p)) priority 1$;
-//@l (C04(p,q,r,s)) / @l (C04(r,q,p,s)) priority 1$;
-//@l (C04(p,q,r,s)) / @l (C04(s,q,r,p)) priority 1$;
-@l (C14(p,q,r,s)) / @l (C14(q,r,s,p)) priority 1$;
-//@l (C14(p,q,r,s)) / @l (C14(r,q,p,s)) priority 1$;
-//@l (C14(p,q,r,s)) / @l (C14(s,q,r,p)) priority 1$;
-@l (C24(p,q,r,s)) / @l (C24(q,r,s,p)) priority 1$;
-//@l (C24(p,q,r,s)) / @l (C24(r,q,p,s)) priority 1$;
-//@l (C24(p,q,r,s)) / @l (C24(s,q,r,p)) priority 1$;
-@l (C34(p,q,r,s)) / @l (C34(q,r,s,p)) priority 1$;
-//@l (C34(p,q,r,s)) / @l (C34(r,q,p,s)) priority 1$;
-//@l (C34(p,q,r,s)) / @l (C34(s,q,r,p)) priority 1$;
-@l (C44(p,q,r,s)) / @l (C44(q,r,s,p)) priority 1$;
-//@l (C44(p,q,r,s)) / @l (C44(r,q,p,s)) priority 1$;
-//@l (C44(p,q,r,s)) / @l (C44(s,q,r,p)) priority 1$;
+@l (C04(p,q,r,s)) / @l (C04(q,p,r,s)) priority 1$;
+@l (C04(p,q,r,s)) / @l (C04(r,q,p,s)) priority 1$;
+@l (C04(p,q,r,s)) / @l (C04(s,q,r,p)) priority 1$;
+@l (C14(p,q,r,s)) / @l (C14(q,p,r,s)) priority 1$;
+@l (C14(p,q,r,s)) / @l (C14(r,q,p,s)) priority 1$;
+@l (C14(p,q,r,s)) / @l (C14(s,q,r,p)) priority 1$;
+@l (C24(p,q,r,s)) / @l (C24(q,p,r,s)) priority 1$;
+@l (C24(p,q,r,s)) / @l (C24(r,q,p,s)) priority 1$;
+@l (C24(p,q,r,s)) / @l (C24(s,q,r,p)) priority 1$;
+@l (C34(p,q,r,s)) / @l (C34(q,p,r,s)) priority 1$;
+@l (C34(p,q,r,s)) / @l (C34(r,q,p,s)) priority 1$;
+@l (C34(p,q,r,s)) / @l (C34(s,q,r,p)) priority 1$;
+@l (C44(p,q,r,s)) / @l (C44(q,p,r,s)) priority 1$;
+@l (C44(p,q,r,s)) / @l (C44(r,q,p,s)) priority 1$;
+@l (C44(p,q,r,s)) / @l (C44(s,q,r,p)) priority 1$;
 
 //Reductions
 //@l (C02(p,q)) @l p / priority 0 $;
