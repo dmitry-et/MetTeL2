@@ -16,17 +16,35 @@
  */
 package mettel;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.jar.Attributes;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.jar.JarOutputStream;
+import java.util.jar.Manifest;
 
+import javax.tools.ToolProvider;
+import javax.tools.JavaCompiler;
+
+import org.antlr.Tool;
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
+import org.antlr.tool.ErrorManager;
 //import org.antlr.tool.ErrorManager;
 
 //import org.antlr.Tool;
@@ -51,6 +69,7 @@ public class MettelGenerator {
 	private static String outFileName = null;
 	private static String outputPath = "output";
 	private static FileReader prop = null;
+	private static File tableau = null;
 
 	/**
 	 * @param args
@@ -139,6 +158,16 @@ public class MettelGenerator {
 
 					System.exit(0);
 
+        		}else if("-t".equals(args[i])||"--tableau".equals(args[i])){
+
+        			if(i < SIZE-1){
+       					tableau = new File(args[++i]);
+        				System.out.println("Tableau file name: "+args[i]);
+                    }else{
+                        System.out.println("I need a name of file where you defined tableau rules.");
+                        System.exit(-1);
+                    }
+
         		}
         	}
 
@@ -186,6 +215,9 @@ public class MettelGenerator {
             	System.exit(1);
             }
 */
+        	if(tableau != null){
+        		build(spec.path());
+        	}
 
         	System.exit(0);
         } catch(Exception e) {
@@ -199,6 +231,196 @@ public class MettelGenerator {
 
         }
 
+	}
+
+
+	private static boolean build(String path) throws IOException{
+
+		File src = new File(outputPath+File.separatorChar+path);
+		File grammar = findGrammarFile(src);
+
+		String[] antlrArguments = {
+				grammar.getAbsolutePath()
+		};
+
+		Tool antlr = new Tool(antlrArguments);
+        antlr.process();
+        if (ErrorManager.getNumErrors() > 0) {
+                return false;
+        }
+
+		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+
+		File dir = createTempDir(path);
+
+		List<String> arguments = new ArrayList<String>();
+		//arguments.add("-verbose");
+		arguments.add("-d");
+		arguments.add(dir.getAbsolutePath());
+		arguments.addAll(listFileNames(src));
+
+		if(compiler.run(null, System.out, System.err, arguments.toArray(new String[arguments.size()])) != 0) return false;
+
+		File mainClass = findMainClass(src);
+		String name = mainClass.getName();
+		name = name.substring(0, name.lastIndexOf('.'));
+
+		Manifest manifest = new Manifest();
+		Attributes attributes = manifest.getMainAttributes();
+		attributes.put(Attributes.Name.MANIFEST_VERSION, "1.0");
+		attributes.put(Attributes.Name.MAIN_CLASS, path+'.'+name);
+		attributes.put(Attributes.Name.CLASS_PATH, "mettel2.jar antlr3-runtime.jar");
+
+		JarOutputStream jar = new JarOutputStream(new FileOutputStream(path+".jar"), manifest);
+		addToJar(dir.getPath(),dir,jar);
+		addTableauToJar(path, tableau,jar);
+		jar.close();
+
+		deleteFiles(dir);
+
+		return true;
+	}
+
+	private static void addTableauToJar(String path, File source, JarOutputStream target) throws IOException{
+		JarEntry entry = new JarEntry(path+"/tableau/calculus");
+		entry.setTime(source.lastModified());
+		target.putNextEntry(entry);
+		BufferedInputStream in = new BufferedInputStream(new FileInputStream(source));
+
+		byte[] buffer = new byte[1024];
+		while(true){
+			int count = in.read(buffer);
+			if(count == -1) break;
+			target.write(buffer, 0, count);
+		}
+		target.closeEntry();
+	}
+
+	private static void addToJar(String prefix, File source, JarOutputStream target) throws IOException{
+		BufferedInputStream in = null;
+		try{
+			if (source.isDirectory()){
+				String name = source.getPath().replace(prefix,"").replace(File.separator, "/");
+				if(!name.isEmpty()){
+					if(!name.endsWith("/")) name += "/";
+					if(name.startsWith("/")) name = name.substring(1);
+					JarEntry entry = new JarEntry(name);
+					entry.setTime(source.lastModified());
+					target.putNextEntry(entry);
+					target.closeEntry();
+				}
+				for(File nestedFile: source.listFiles()) addToJar(prefix,nestedFile, target);
+				return;
+			}
+
+			String name = source.getPath().replace(prefix,"").replace(File.separator, "/");
+			if(name.startsWith("/")) name = name.substring(1);
+			JarEntry entry = new JarEntry(name);
+			entry.setTime(source.lastModified());
+			target.putNextEntry(entry);
+			in = new BufferedInputStream(new FileInputStream(source));
+
+			byte[] buffer = new byte[1024];
+			while(true){
+				int count = in.read(buffer);
+				if(count == -1) break;
+				target.write(buffer, 0, count);
+			}
+			target.closeEntry();
+		}finally{
+			if(in != null) in.close();
+		}
+	}
+
+	public static File createTempDir(String prefix) {
+
+		  final int TEMP_DIR_ATTEMPTS = 10000;
+
+		  final File systemTempDir = new File(System.getProperty("java.io.tmpdir"));
+		  final String random = System.currentTimeMillis() + "_";
+
+		  for (int counter = 0; counter < TEMP_DIR_ATTEMPTS; counter++) {
+
+			  final File dir = new File(systemTempDir, prefix + random + counter);
+			  if(dir.mkdir()) return dir;
+
+		  }
+		  throw new IllegalStateException("Failed to create directory "
+			  + prefix + random +" within " + TEMP_DIR_ATTEMPTS);
+
+	}
+
+	private static List<File> listFiles(List<File> files, File dir){
+
+	    if(files == null) files = new ArrayList<File>();
+
+	    if(!dir.isDirectory()){
+	    	String name = dir.getName();
+	        if(name.endsWith(".java")){
+	        		files.add(dir);
+	    	}
+	        return files;
+	    }
+
+	    if(!dir.getName().equals("test")){
+	    	for(File file: dir.listFiles()) listFiles(files, file);
+	    }
+	    return files;
+
+	}
+
+	private static void deleteFiles(File dir){
+
+	    if(!dir.isDirectory()){
+	    	dir.delete();
+	    	return;
+	    }
+
+	    for(File file: dir.listFiles()) deleteFiles(file);
+	    dir.delete();
+	}
+
+	private static File findGrammarFile(File dir){
+
+	    if(!dir.isDirectory()){
+	    	String name = dir.getName();
+	        if(name.endsWith(".g")){
+	        		return dir;
+	    	}
+	        return null;
+	    }
+
+	    for(File file: dir.listFiles()){
+	    	File result = findGrammarFile(file);
+	    	if(result != null) return result;
+	    }
+	    return null;
+	}
+
+	private static File findMainClass(File dir){
+
+	    if(!dir.isDirectory()){
+	    	String name = dir.getName();
+	        if(name.endsWith("TableauProver.java")){
+	        		return dir;
+	    	}
+	        return null;
+	    }
+
+	    for(File file: dir.listFiles()){
+	    	File result = findMainClass(file);
+	    	if(result != null) return result;
+	    }
+	    return null;
+	}
+
+	private static List<String> listFileNames(File dir){
+		List<File> fileList = listFiles(null, dir);
+		List<String> result = new ArrayList<String>();
+		for(File f: fileList){
+			result.add(f.getAbsolutePath());
+		}
+		return result;
 	}
 
 }

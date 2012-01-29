@@ -36,7 +36,7 @@ endif
 
 # Project name
 NAME := mettel
-TITLE := MetTeL
+TITLE := MetTeL2
 CLASS_PREFIX := Mettel
 
 BASE_DIR := $(PWD)
@@ -96,8 +96,8 @@ DELIM0 :="====================================================================="
 DELIM1 :="---------------------------------------------------------------------"
 
 # Jar attributes
-JAR_FILE_NAME := $(NAME).jar
-JAR_FILE := $(LIB_DIR)/$(NAME).jar
+JAR_FILE_NAME := $(NAME)2.jar
+JAR_FILE := $(LIB_DIR)/$(NAME)2.jar
 MANIFEST_FILE := $(SRC_DIR)/etc/manifest.mf
 PACKAGES_FILE := $(SRC_DIR)/etc/packages
 STATISTICS_FILE := $(SRC_DIR)/etc/statistics
@@ -138,7 +138,7 @@ CLASSES := $(shell echo $(SOURCES) | sed -e 's/\.java/\.class/g; s/src/classes/g
 
 ### Test ###########################################################################
 
-RUNTIME_CLASSPATH:=$(ANTLR3_RUNTIME_JAR):$(JAR_FILE)
+RUNTIME_CLASSPATH:=$(ANTLR3_JAR):$(ANTLR_JAR):$(STRINGTEMPLATE_JAR):$(JAR_FILE)
 LOGIC_GENERATION_CLASSPATH:=$(RUNTIME_CLASSPATH)
 #$(COMPILE_CLASSPATH):$(JAR_FILE)
 
