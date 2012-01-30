@@ -18,6 +18,8 @@ package mettel.util;
 
 import static mettel.util.MettelStrings.FILE_SEPARATOR;
 
+import java.util.regex.Pattern;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -47,7 +49,7 @@ public class MettelJavaNames {
 	}
 
 	public static String systemPath(String javaPath){
-		return javaPath.replaceAll("\\.", FILE_SEPARATOR);
+		return javaPath.replaceAll("\\.", FILE_SEPARATOR.replace("\\" ,"\\\\"));
 	}
 
 	public static String addSeparator(String path){
