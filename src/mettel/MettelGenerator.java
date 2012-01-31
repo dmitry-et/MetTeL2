@@ -250,6 +250,9 @@ public class MettelGenerator {
         }
 
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+		
+		if(compiler == null)
+			throw new RuntimeException("No compiler available");
 
 		File dir = createTempDir(path);
 
