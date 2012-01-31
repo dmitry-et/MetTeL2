@@ -74,8 +74,8 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
 
 	private void body(String sort, String branchBound){
 
-    	appendLine("final static String tableauFile = \""+MettelJavaNames.systemPath("test.examples."+pStructure.basePackage().path()+".tableau")+"\";");
-    	appendLine("final static String inDir = \""+MettelJavaNames.systemPath("test.examples."+pStructure.basePackage().path()+".problems")+"\";");
+    	appendLine("final static String tableauFile = \""+MettelJavaNames.quote(MettelJavaNames.systemPath("test.examples."+pStructure.basePackage().path()+".tableau"))+"\";");
+    	appendLine("final static String inDir = \""+MettelJavaNames.quote(MettelJavaNames.systemPath("test.examples."+pStructure.basePackage().path()+".problems"))+"\";");
 
     	appendEOL();
 
