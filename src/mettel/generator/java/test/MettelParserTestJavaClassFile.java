@@ -66,8 +66,8 @@ public class MettelParserTestJavaClassFile extends MettelJavaClassFile {
 
 	private void body(String sort){
 
-		appendLine("final static String inFile = \""+MettelJavaNames.systemPath("test.examples."+pStructure.basePackage().path()+".input")+"\";");
-		appendLine("final static String outFile = \""+MettelJavaNames.systemPath("test.examples."+pStructure.basePackage().path()+".output")+"\";");
+		appendLine("final static String inFile = \""+MettelJavaNames.quote(MettelJavaNames.systemPath("test.examples."+pStructure.basePackage().path()+".input"))+"\";");
+		appendLine("final static String outFile = \""+MettelJavaNames.quote(MettelJavaNames.systemPath("test.examples."+pStructure.basePackage().path()+".output"))+"\";");
 
 		appendLine("public void testParser() throws IOException, RecognitionException{");
 		incrementIndentLevel();

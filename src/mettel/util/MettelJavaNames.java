@@ -57,6 +57,11 @@ public class MettelJavaNames {
 		//return javaPath.replaceAll("\\.", FILE_SEPARATOR.replace("\\" ,"\\\\"));
 		return javaPath.replace(".", "/");
 	}
+	
+	public static String quote(String s){
+		//return javaPath.replaceAll("\\.", FILE_SEPARATOR.replace("\\" ,"\\\\"));
+		return s.replace("\\", "\\\\");
+	}
 
 	public static String addSeparator(String path){
 		if(path == null || path.equals("")) return "";
