@@ -153,7 +153,7 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
 	            appendLine("CharStream tin = (tableauFile == null)?");
 	            	incrementIndentLevel();
 	            	appendLine("new ANTLRInputStream("+prefix+"TableauProver.class.getResourceAsStream(\"/"+
-	            			MettelJavaNames.systemPath(pStructure.tableauPackage().path()+".calculus")+"\")):");
+	            			MettelJavaNames.javaPath(pStructure.tableauPackage().path()+".calculus")+"\")):");
 	            	appendLine("new ANTLRFileStream(tableauFile);");
 	            	decrementIndentLevel();
 
