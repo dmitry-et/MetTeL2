@@ -70,6 +70,8 @@ public class MettelGenerator {
 	private static String outputPath = "output";
 	private static FileReader prop = null;
 	private static File tableau = null;
+	
+	private static boolean  quiet = false;
 
 	/**
 	 * @param args
@@ -87,7 +89,11 @@ public class MettelGenerator {
     	try{
     		final int SIZE = args.length;
     		for(int i = 0; i < SIZE; i++){
-        	  	if("-i".equals(args[i])||"--input".equals(args[i])){
+    			if("-q".equals(args[i])||"--quiet".equals(args[i])){
+
+        	        quiet = true;
+
+        		}else if("-i".equals(args[i])||"--input".equals(args[i])){
 
         	        if(i < SIZE-1){
             		    in = new ANTLRFileStream(args[++i]);
@@ -187,18 +193,31 @@ public class MettelGenerator {
          	if(err == null) err = new PrintWriter(
     				new OutputStreamWriter(System.err),true);
 
-        	MettelSpecification spec = parser.specification();
+         	report("I am reading the specification.");
+         	MettelSpecification spec = parser.specification();
 
+        	final int errorNumber = parser.getNumberOfSyntaxErrors();
+        	if( errorNumber > 0){
+        		report("The specification contains "+errorNumber+" syntax errors.");
+//        		err.println("I found "+errorNumber +"syntax errors in the specification.");
+        		System.exit(1);
+        	}else{
+            	report("The specification is OK.");
+        	}
+        	
         	//StringBuilder buf = new StringBuilder();
         	//spec.toBuffer(buf);
         	//System.out.print(buf);
         	MettelANTLRGrammarGeneratorProperties p = (prop == null)? null: new MettelANTLRGrammarGeneratorProperties(prop);
+        	
+        	report("I am processing the specification.");
         	MettelANTLRGrammarGenerator gen = new MettelANTLRGrammarGenerator(spec,p);
 //        	StringBuilder buf = new StringBuilder();
         	for(MettelJavaPackageStructure pStructure:gen.processSyntaxes()){
         		//System.out.println('#');
         		pStructure.flush(outputPath);
         	}
+        	report("The Java code is generated.");
 /*        	out.print(buf);
         	out.flush();
         	out.close();
@@ -216,7 +235,8 @@ public class MettelGenerator {
             }
 */
         	if(tableau != null){
-        		build(spec.path());
+        		if(build(spec.path())) System.exit(0);
+        		System.exit(1);
         	}
 
         	System.exit(0);
@@ -224,15 +244,23 @@ public class MettelGenerator {
 
         		out.println("Sorry! I detected an exceptional situation and terminate now.");
         		out.println("If you can help me to avoid this situation in future, please look at my error output.");
+        		out.flush();
     	    	err.println("==Exception==========================");
     	    	e.printStackTrace(err);
             	err.println("=====================================");
+            	err.flush();
             	System.exit(-1);
 
         }
 
 	}
 
+	private static void report(String s){
+		if(!quiet){
+			out.println(s);
+			out.flush();
+		}
+	}
 
 	private static boolean build(String path) throws IOException{
 
@@ -243,12 +271,17 @@ public class MettelGenerator {
 				grammar.getAbsolutePath()
 		};
 
+		report("I have asked ANTLR to generate a parser.");
 		Tool antlr = new Tool(antlrArguments);
         antlr.process();
-        if (ErrorManager.getNumErrors() > 0) {
+        final int errorNumber = ErrorManager.getNumErrors(); 
+        if ( errorNumber > 0) {
+        		report("ANTLR reported "+errorNumber+" errors.");
                 return false;
         }
+        report("The Java code for parser is generated.");
 
+        report("I am trying to compile the generated code.");
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 		
 		if(compiler == null)
@@ -262,8 +295,13 @@ public class MettelGenerator {
 		arguments.add(dir.getAbsolutePath());
 		arguments.addAll(listFileNames(src));
 
-		if(compiler.run(null, System.out, System.err, arguments.toArray(new String[arguments.size()])) != 0) return false;
+		if(compiler.run(null, System.out, System.err, arguments.toArray(new String[arguments.size()])) != 0){
+			report("Compilation failed.");
+			return false;
+		}
 
+		report("I am trying to make an executable jar-file with the prover.");
+		
 		File mainClass = findMainClass(src);
 		String name = mainClass.getName();
 		name = name.substring(0, name.lastIndexOf('.'));
@@ -278,6 +316,8 @@ public class MettelGenerator {
 		addToJar(dir.getPath(),dir,jar);
 		addTableauToJar(path, tableau,jar);
 		jar.close();
+		
+		report("The jar is made.");
 
 		deleteFiles(dir);
 
