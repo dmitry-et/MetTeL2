@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 
@@ -67,10 +66,11 @@ public class MettelGenerator {
 	private static PrintWriter err = null;
 	private static CharStream in = null;
 	private static String outFileName = null;
+	private static String errFileName = null;
 	private static String outputPath = "output";
 	private static FileReader prop = null;
 	private static File tableau = null;
-	
+
 	private static boolean  quiet = false;
 
 	/**
@@ -117,8 +117,9 @@ public class MettelGenerator {
         		}else if("-e".equals(args[i])||"--error".equals(args[i])){
 
                     if(i < SIZE-1){
-            		  err = new PrintWriter(new FileWriter(args[++i]),true);
-            		  System.out.println("Using error file: "+args[i]);
+                      errFileName = args[++i];
+            		  err = new PrintWriter(new FileWriter(errFileName),true);
+            		  System.out.println("Using error file: "+errFileName);
                     }else{
                         System.out.println("I need a name of file for output about my errors.");
                         System.exit(-1);
@@ -204,12 +205,12 @@ public class MettelGenerator {
         	}else{
             	report("The specification is OK.");
         	}
-        	
+
         	//StringBuilder buf = new StringBuilder();
         	//spec.toBuffer(buf);
         	//System.out.print(buf);
         	MettelANTLRGrammarGeneratorProperties p = (prop == null)? null: new MettelANTLRGrammarGeneratorProperties(prop);
-        	
+
         	report("I am processing the specification.");
         	MettelANTLRGrammarGenerator gen = new MettelANTLRGrammarGenerator(spec,p);
 //        	StringBuilder buf = new StringBuilder();
@@ -217,7 +218,7 @@ public class MettelGenerator {
         		//System.out.println('#');
         		pStructure.flush(outputPath);
         	}
-        	report("The Java code is generated.");
+        	report("Java code of the prover is generated.");
 /*        	out.print(buf);
         	out.flush();
         	out.close();
@@ -271,19 +272,19 @@ public class MettelGenerator {
 				grammar.getAbsolutePath()
 		};
 
-		report("I have asked ANTLR to generate a parser.");
+		report("I have asked ANTLR to generate a parser for the prover.");
 		Tool antlr = new Tool(antlrArguments);
         antlr.process();
-        final int errorNumber = ErrorManager.getNumErrors(); 
+        final int errorNumber = ErrorManager.getNumErrors();
         if ( errorNumber > 0) {
         		report("ANTLR reported "+errorNumber+" errors.");
                 return false;
         }
-        report("The Java code for parser is generated.");
+        report("The Java code for the parser is generated.");
 
         report("I am trying to compile the generated code.");
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-		
+
 		if(compiler == null)
 			throw new RuntimeException("No compiler available");
 
@@ -295,13 +296,25 @@ public class MettelGenerator {
 		arguments.add(dir.getAbsolutePath());
 		arguments.addAll(listFileNames(src));
 
-		if(compiler.run(null, System.out, System.err, arguments.toArray(new String[arguments.size()])) != 0){
+		OutputStream out0 = System.out;
+		if(outFileName != null){
+			out0 = new FileOutputStream(outFileName,true);
+		}
+
+		OutputStream err0 = System.err;
+		if(errFileName != null){
+			err0 = new FileOutputStream(errFileName,true);
+		}
+
+		if(compiler.run(null, out0, err0, arguments.toArray(new String[arguments.size()])) != 0){
+			out0.flush(); err0.flush();
 			report("Compilation failed.");
 			return false;
 		}
+		out0.flush(); err0.flush();
 
 		report("I am trying to make an executable jar-file with the prover.");
-		
+
 		File mainClass = findMainClass(src);
 		String name = mainClass.getName();
 		name = name.substring(0, name.lastIndexOf('.'));
@@ -314,9 +327,12 @@ public class MettelGenerator {
 
 		JarOutputStream jar = new JarOutputStream(new FileOutputStream(path+".jar"), manifest);
 		addToJar(dir.getPath(),dir,jar);
+
+		//ClassLoader cl = new ClassLoader();
+
 		addTableauToJar(path, tableau,jar);
 		jar.close();
-		
+
 		report("The jar is made.");
 
 		deleteFiles(dir);
