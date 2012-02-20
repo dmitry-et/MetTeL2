@@ -46,8 +46,13 @@ public class MettelANTLRGrammarGeneratorProperties {
 	public String listLeftDelimiter="";
 	public String listRightDelimiter="";
 
+	public String expressionLeftDelimiter="(";
+	public String expressionRightDelimiter=")";
+	
 	public String branchBound = null;
-
+	
+	
+	
 //	public static final int NONE = -1;
 //	public static final int IGNORE_HUGE_BRANCH = 0;
 //	public int acceptanceStrategy = NONE;
@@ -73,8 +78,11 @@ public class MettelANTLRGrammarGeneratorProperties {
 		tableauRulePremiseDelimiter = p.getProperty("tableau.rule.premise.delimiter", tableauRulePremiseDelimiter);
 
 		listLeftDelimiter = p.getProperty("list.left.delimiter", listLeftDelimiter);
-		listRightDelimiter = p.getProperty("list.right.delimiter", listLeftDelimiter);
+		listRightDelimiter = p.getProperty("list.right.delimiter", listRightDelimiter);
 
+		expressionLeftDelimiter = p.getProperty("expression.left.delimiter", expressionLeftDelimiter);
+		expressionRightDelimiter = p.getProperty("expression.right.delimiter", expressionRightDelimiter);
+		
 		branchBound = p.getProperty("branch.bound", branchBound);
 
 		//acceptanceStrategy = p.getProperty("ignore.huge.branch") == "Yes"? 0 : -1;

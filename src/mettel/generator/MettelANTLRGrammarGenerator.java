@@ -475,9 +475,9 @@ public class MettelANTLRGrammarGenerator {
 				MettelANTLRMultiaryBNFStatement.OR);
 		s.addExpression(new MettelANTLRRuleReference(NAME+VARIABLE_STRING,"e0"));
 		MettelANTLRMultiaryBNFStatement s0 = new MettelANTLRMultiaryBNFStatement();
-		s0.addExpression(MettelANTLRToken.LBRACE);
+		s0.addExpression(new MettelANTLRToken("'"+properties.expressionLeftDelimiter+"'"));//MettelANTLRToken.LBRACE);
 		s0.addExpression(new MettelANTLRRuleReference(NAME,"e0"));
-		s0.addExpression(MettelANTLRToken.RBRACE);
+		s0.addExpression(new MettelANTLRToken("'"+properties.expressionRightDelimiter+"'"));//MettelANTLRToken.RBRACE);
 		s.addExpression(s0);
 		MettelANTLRRule r = new MettelANTLRRule(BASIC_STRING+MettelJavaNames.firstCharToUpperCase(NAME),s/*,true*/,
 				new String[]{grammarName+MettelJavaNames.firstCharToUpperCase(NAME)});
