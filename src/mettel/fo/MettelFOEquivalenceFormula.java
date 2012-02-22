@@ -8,14 +8,14 @@ package mettel.fo;
  import mettel.core.MettelExpression;
 import mettel.core.MettelEqualityExpression;
 
-public class MettelFOFormulaEquivalenceFormula extends MettelFOAbstractExpression implements MettelEqualityExpression,MettelFOFormula{
+public class MettelFOEquivalenceFormula extends MettelFOAbstractExpression implements MettelEqualityExpression,MettelFOFormula{
 
     static final int PRIORITY = 7;
     private final int LENGTH;
     protected MettelFOFormula e0 = null;
     protected MettelFOFormula e1 = null;
 
-    public MettelFOFormulaEquivalenceFormula(MettelFOFormula e0, MettelFOFormula e1, MettelFOObjectFactory f){
+    public MettelFOEquivalenceFormula(MettelFOFormula e0, MettelFOFormula e1, MettelFOObjectFactory f){
         super(f);
         int l = 1;
         this.e0 = e0;
@@ -39,8 +39,8 @@ public class MettelFOFormulaEquivalenceFormula extends MettelFOAbstractExpressio
     }
 
     public boolean match(MettelFOExpression e, MettelFOSubstitution s){
-        if(!(e instanceof MettelFOFormulaEquivalenceFormula)){ return false;}
-        final MettelFOFormulaEquivalenceFormula ee = (MettelFOFormulaEquivalenceFormula)e;
+        if(!(e instanceof MettelFOEquivalenceFormula)){ return false;}
+        final MettelFOEquivalenceFormula ee = (MettelFOEquivalenceFormula)e;
         return e0.match(ee.e0, s) && e1.match(ee.e1, s);
     }
 
@@ -51,7 +51,7 @@ public class MettelFOFormulaEquivalenceFormula extends MettelFOAbstractExpressio
     public MettelFOExpression rewrite(MettelFOReplacement s){
         MettelFOExpression e = s.getFormula(this);
         if(e != null){ return e; }
-        final MettelFOFormulaEquivalenceFormula ee = factory.createFormulaEquivalenceFormula((MettelFOFormula)e0.rewrite(s), (MettelFOFormula)e1.rewrite(s));
+        final MettelFOEquivalenceFormula ee = factory.createFormulaEquivalenceFormula((MettelFOFormula)e0.rewrite(s), (MettelFOFormula)e1.rewrite(s));
         e = s.getFormula(ee);
         if(e == null){ return ee; }else{ return e; }
     }
@@ -68,8 +68,8 @@ public class MettelFOFormulaEquivalenceFormula extends MettelFOAbstractExpressio
 
     public boolean equals(Object o){
         if(o == this){ return true; }
-        if(!(o instanceof MettelFOFormulaEquivalenceFormula)){ return false; }
-        MettelFOFormulaEquivalenceFormula e = (MettelFOFormulaEquivalenceFormula) o;
+        if(!(o instanceof MettelFOEquivalenceFormula)){ return false; }
+        MettelFOEquivalenceFormula e = (MettelFOEquivalenceFormula) o;
         return (e0.equals(e.e0)) && (e1.equals(e.e1));
     }
 
@@ -77,8 +77,8 @@ public class MettelFOFormulaEquivalenceFormula extends MettelFOAbstractExpressio
         if(e == this){ return 0; }
         if(!(e instanceof MettelFOFormula)){ return SORTID - ((MettelFOAbstractExpression)e).sortId(); }
         if(e instanceof MettelFOFormulaVariable){ return 1; }
-        if(!(e instanceof MettelFOFormulaEquivalenceFormula)){ return PRIORITY - ((MettelFOAbstractExpression)e).priority(); }
-        MettelFOFormulaEquivalenceFormula ee = (MettelFOFormulaEquivalenceFormula) e;
+        if(!(e instanceof MettelFOEquivalenceFormula)){ return PRIORITY - ((MettelFOAbstractExpression)e).priority(); }
+        MettelFOEquivalenceFormula ee = (MettelFOEquivalenceFormula) e;
         int result = 0;
         result = e0.compareTo(ee.e0);
         if(result != 0){ return result; }
