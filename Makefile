@@ -47,11 +47,6 @@ TEST_JAVAC_LOG_FILE := $(BASE_DIR)/javac-test.log
 TEST_LOG_FILE := $(BASE_DIR)/test.log
 TEST_ERR_FILE := $(BASE_DIR)/test.err
 
-# Antlr log files
-ANTLR_LEXER_LOG_FILE := $(BASE_DIR)/antlr.lexer.log
-ANTLR_PARSER_LOG_FILE := $(BASE_DIR)/antlr.parser.log
-
-
 # Project paths
 BIN_DIR := $(BASE_DIR)/bin
 SRC_DIR := $(BASE_DIR)/src
@@ -118,6 +113,30 @@ PARSER_FILES := $(PARSER_DIR)/$(LEXER_NAME).java $(PARSER_DIR)/$(PARSER_NAME).ja
 LEXER_DOC_FILE := $(DOC_DIR)/grammar/$(LEXER_NAME).html
 PARSER_DOC_FILE := $(DOC_DIR)/grammar/$(PARSER_NAME).html
 
+# Antlr log files
+ANTLR_LEXER_LOG_FILE := $(BASE_DIR)/antlr.lexer.log
+ANTLR_PARSER_LOG_FILE := $(BASE_DIR)/antlr.parser.log
+
+### FO-Parser #########################################################################
+
+FO_PARSER_DIR := $(SRC_DIR)/$(NAME)/fo
+
+FO_GRAMMAR_NAME := $(CLASS_PREFIX)FO
+FO_LEXER_NAME := $(FO_GRAMMAR_NAME)Lexer
+FO_PARSER_NAME := $(FO_GRAMMAR_NAME)Parser
+FO_GRAMMAR_FILE_NAME := $(FO_GRAMMAR_NAME).g
+FO_GRAMMAR_FILE := $(FO_PARSER_DIR)/grammar/$(FO_GRAMMAR_FILE_NAME)
+FO_TOKENS_FILE := $(FO_PARSER_DIR)/$(FO_GRAMMAR_NAME).tokens
+FO_PARSER_FILES := $(FO_PARSER_DIR)/$(FO_LEXER_NAME).java $(FO_PARSER_DIR)/$(FO_PARSER_NAME).java 
+
+# FO-Parser doc files
+FO_LEXER_DOC_FILE := $(DOC_DIR)/grammar/$(FO_LEXER_NAME).html
+FO_PARSER_DOC_FILE := $(DOC_DIR)/grammar/$(FO_PARSER_NAME).html
+
+# Antlr log files
+ANTLR_FO_LEXER_LOG_FILE := $(BASE_DIR)/antlr.fo.lexer.log
+ANTLR_FO_PARSER_LOG_FILE := $(BASE_DIR)/antlr.fo.parser.log
+
 ### Compilation ####################################################################
 
 # Sources
@@ -125,11 +144,15 @@ AST_SOURCES := $(shell find $(SRC_DIR)/$(NAME)/language -name '*.java')
 PURE_SOURCES := $(shell find $(SRC_DIR) -name '*.java' \
 ! -name $(LEXER_NAME).java \
 ! -name $(PARSER_NAME).java \
+! -name $(FO_LEXER_NAME).java \
+! -name $(FO_PARSER_NAME).java \
 ! -name $(VOCABULARY)TokenTypes.java \
 ! -name $(PARSER_NAME)TokenTypes.java) 
 SOURCES := $(PURE_SOURCES) \
 $(PARSER_DIR)/$(LEXER_NAME).java \
-$(PARSER_DIR)/$(PARSER_NAME).java
+$(PARSER_DIR)/$(PARSER_NAME).java \
+$(FO_PARSER_DIR)/$(FO_LEXER_NAME).java \
+$(FO_PARSER_DIR)/$(FO_PARSER_NAME).java
 
 # Classes
 #EXTRA_CLASSES := 
@@ -176,9 +199,10 @@ SPASS_LOG_FILE := $(BASE_DIR)/SPASS.log
 
 ### Rules ##########################################################################
 
-.PHONY : $(NAME) jar clear-lexer-log clear-parser-log clear-javac-log clear-jar clear-classes \
-clear clean clear-ast-classes compile compile-ast clear-parser-files clear prepare \
-clear-log only-lexer only-parser parser lexer-doc parser-doc doc resources test \
+.PHONY : $(NAME) jar clear-lexer-log clear-parser-log clear-fo-lexer-log clear-fo-parser-log \
+clear-javac-log clear-jar clear-classes \
+clear clean clear-ast-classes compile compile-ast clear-parser-files clear-fo-parser-files clear prepare \
+clear-log only-lexer only-parser parser only-fo-parser fo-parser lexer-doc parser-doc parser-fo-doc doc resources test \
 all compile-test packages-file java-doc clear-test-log clear-doc clear-test clear-test-jar clear-test-output\
 clear-test-classes test-jar old-test junit-test junit SPASS clear-spass-log statistics \
 libantlr tableau-bin clear-bin generateLogics generateParsers compileLogics generate
@@ -196,6 +220,18 @@ clear-parser-log:
 	@ echo "Clearing parser log file"
 	@ echo $(DELIM1)
 	@ rm -f -v $(ANTLR_PARSER_LOG_FILE)
+
+clear-fo-lexer-log:
+	@ echo $(DELIM0)
+	@ echo "Clearing first-order language lexer log file"
+	@ echo $(DELIM1)
+	@ rm -f -v $(ANTLR_FO_LEXER_LOG_FILE)
+
+clear-fo-parser-log:
+	@ echo $(DELIM0)
+	@ echo "Clearing first-order language parser log file"
+	@ echo $(DELIM1)
+	@ rm -f -v $(ANTLR_FO_PARSER_LOG_FILE)
 
 clear-javac-log:
 	@ echo $(DELIM0)
@@ -218,7 +254,7 @@ clear-spass-log:
 	@ rm -f -v $(SPASS_LOG_FILE)
 
 
-clear-log: clear-lexer-log clear-parser-log clear-javac-log clear-test-log clear-spass-log
+clear-log: clear-lexer-log clear-parser-log clear-fo-lexer-log clear-fo-parser-log clear-javac-log clear-test-log clear-spass-log
 
 clear-parser-files: 
 	@ echo $(DELIM0)
@@ -226,6 +262,14 @@ clear-parser-files:
 	@ echo $(DELIM1)
 #	@ rm -f -v $(PARSER_DIR)/*.*
 	@ rm -f -v $(PARSER_FILES) $(TOKENS_FILE)
+
+clear-fo-parser-files: 
+	@ echo $(DELIM0)
+	@ echo "Clearing first-order language parser files"
+	@ echo $(DELIM1)
+#	@ rm -f -v $(PARSER_DIR)/*.*
+	@ rm -f -v $(FO_PARSER_FILES) $(FO_TOKENS_FILE)
+
     
 clear-classes: 
 	@ echo $(DELIM0)
@@ -246,7 +290,7 @@ clear-bin:
 	@ rm -f -v $(LIBANTLR) $(TABLEAU_BIN)        
 
 
-clear: clear-log clear-jar clear-bin clear-classes clear-parser-files clear-doc clear-test
+clear: clear-log clear-jar clear-bin clear-classes clear-parser-files clear-fo-parser-files clear-doc clear-test
 	@ echo $(DELIM0)
 	@ echo "Clearing *.bck and *~ files"
 	@ echo $(DELIM1)
@@ -312,6 +356,21 @@ parser: clear-parser-files only-parser
 
 parser-doc: only-parser
 
+$(FO_PARSER_FILES): $(FO_GRAMMAR_FILE)
+	@ echo $(DELIM0)
+	@ echo "Making first-order language parser and parser documentation"
+	@ echo $(DELIM1)
+	@ mkdir -p $(DOC_DIR)/grammar
+	@ cd $(FO_PARSER_DIR)/grammar && $(JAVA) -classpath $(COMPILE_CLASSPATH) org.antlr.Tool -o $(FO_PARSER_DIR) -print $(ANTLR_OPTIONS) $(FO_GRAMMAR_FILE_NAME) 1>$(DOC_DIR)/grammar/$(FO_PARSER_NAME).txt 2>$(ANTLR_FO_PARSER_LOG_FILE) && rm -f $(FO_TOKENS_FILE) 
+	@ cat $(ANTLR_FO_PARSER_LOG_FILE)
+	@ cd $(BASE_DIR)
+
+only-fo-parser: $(FO_PARSER_FILES)
+       
+fo-parser: clear-fo-parser-files only-fo-parser
+
+fo-parser-doc: only-fo-parser
+
 packages-file:
 	@ cd $(SRC_DIR) && \
 		(find * -not -path "etc*" -not -path "*CVS*" -not -path "*svn*" -not -path "*/parser/grammar" -type d -print | sed -e 's/\//./g') >$(PACKAGES_FILE)
@@ -319,7 +378,7 @@ packages-file:
 	
 
 statistics:
-	@ wc -l -c $(PURE_SOURCES) $(PARSER_FILE) $(LEXER_FILE) > $(STATISTICS_FILE)
+	@ wc -l -c $(PURE_SOURCES) $(PARSER_FILE) $(LEXER_FILE) $(FO_PARSER_FILE) $(FO_LEXER_FILE) > $(STATISTICS_FILE)
 	@ cat $(STATISTICS_FILE)
 
 java-doc: packages-file
@@ -329,7 +388,7 @@ java-doc: packages-file
 	@ mkdir -p $(JAVADOC_DIR)
 	@ $(JAVADOC) $(JAVADOC_OPTIONS) -classpath $(COMPILE_CLASSPATH) -sourcepath $(SRC_DIR) -d $(JAVADOC_DIR) @$(PACKAGES_FILE)
 
-doc: lexer-doc parser-doc java-doc
+doc: lexer-doc parser-doc fo-lexer-doc fo-parser-doc java-doc
     
 clear-ast-classes:
 	@ rm -f $(AST_CLASSES_DIR)/*.class
