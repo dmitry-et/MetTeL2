@@ -20,7 +20,8 @@
 grammar MettelFO;
 
 options{
- k=1;
+// k=1;
+backtrack = true;
 }
 
 @header{
@@ -108,24 +109,33 @@ conjunctionFormula
 
 existentialFormula
 	:
-	('exists'
-	  (ID ('exists' ID)*
-	  |
-	  '[' ID+ ']'
-	  )
-	)?
+	('exists' variableList)*
+//	  (ID ('exists' ID)*
+//	  |
+//	  '(' ID+ ')'
+//	  )
+//	)?
 	universalFormula
 	;
 
 universalFormula
 	:
-	('forall'
-	  (ID ('forall' ID)*
-	  |
-	  '[' ID+ ']'
-	  )
-	)?
+	('forall' variableList)*
+//	  (ID ('forall' ID)*
+//	  |
+//	  '(' ID+ ')'
+//	  )
+//	)?
 	negationFormula
+	;
+
+variableList
+	:
+		ID
+		|
+		'[' ID+ ']'
+		|
+		'(' ID+ ')'
 	;
 
 negationFormula
@@ -151,7 +161,14 @@ atomicFormula
 	|
 	ID '(' termList? ')'
 	|
+    equalityFormula
+	;
+
+equalityFormula
+	:
 	'[' term '=' term ']'
+	|
+	'(' term '=' term ')'
 	;
 
 term
