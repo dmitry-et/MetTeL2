@@ -27,6 +27,8 @@ backtrack = true;
 @header{
 package mettel.fo;
 
+import java.util.Collection;
+
 import mettel.generator.MettelLogicParser;
 
 import mettel.core.MettelExpression;
@@ -38,8 +40,8 @@ package mettel.fo;
 
 @rulecatch{
 catch (RecognitionException e) {
-reportError(e);
-throw e;
+    reportError(e);
+    throw e;
 }
 }
 @members{
@@ -54,62 +56,99 @@ private MettelLogicParser islandParser = null;
 private Lexer islandLexer = null;
 
 private MettelExpression expression() throws RecognitionException {
-		CharStream in = ((Lexer)this.input.getTokenSource()).getCharStream();
-		int index = in.index();
-		int line = in.getLine();
-		int charPositionInLine = in.getCharPositionInLine();
-        islandLexer.setCharStream(in);
-        in.seek(index);
-        in.setLine(line);
-        in.setCharPositionInLine(charPositionInLine);
-
-		return islandParser.expression();
-	}
-
+    CharStream in = ((Lexer)this.input.getTokenSource()).getCharStream();
+    int index = in.index();
+    int line = in.getLine();
+    int charPositionInLine = in.getCharPositionInLine();
+    islandLexer.setCharStream(in);
+    in.seek(index);
+    in.setLine(line);
+    in.setCharPositionInLine(charPositionInLine);
+    return islandParser.expression();
 }
 
-formulae
+private MettelFOObjectFactory factory = MettelFOObjectFactory.DEFAULT;
+public MettelFOParser(TokenStream input, MettelFOObjectFactory factory){
+    this(input);
+    this.factory = factory;
+}
+public MettelFOParser(TokenStream input, RecognizerSharedState state, MettelFOObjectFactory factory){
+    this(input,state);
+    this.factory = factory;
+}
+}
+
+formulae[Collection<MettelFOFormula> c]
 	:
-	formula+
+	(f  = formula
+		{ c.add(f); }
+	)+
 	;
 
 formula
+returns [MettelFOFormula f]
 	:
-	equivalenceFormula
+	f0 = equivalenceFormula
+		{f = f0;}
 	;
 
 
 equivalenceFormula
+returns [MettelFOFormula f]
+@after{
+	f = f0;
+}
 	:
-	implicationFormula
+	f0  = implicationFormula
 	('<->'
-	implicationFormula)*
+	f1  = implicationFormula
+		{ f0  = factory.createEquivalenceFormula(f0,f1); }
+	)*
 	;
 
 
 implicationFormula
+returns [MettelFOFormula f]
+@after{
+	f = f0;
+}
 	:
-	disjunctionFormula
+	f0  = disjunctionFormula
 	('->'
-	disjunctionFormula)*
+	f1 = disjunctionFormula
+		{ f0  = factory.createImplicationFormula(f0,f1); }
+	)*
 	;
 
 
 disjunctionFormula
+returns [MettelFOFormula f]
+@after{
+	f = f0;
+}
 	:
-	conjunctionFormula
+	f0  = conjunctionFormula
 	('|'
-	conjunctionFormula)*
+	f1 = conjunctionFormula
+		{ f0  = factory.createDisjunctionFormula(f0,f1); }
+	)*
 	;
 
 conjunctionFormula
+returns [MettelFOFormula f]
+@after{
+	f = f0;
+}
 	:
-	existentialFormula
+	f0  = existentialFormula
 	('&'
-	existentialFormula)*
+	f1 = existentialFormula
+		{ f0  = factory.createConjunctionFormula(f0,f1); }
+	)*
 	;
 
 existentialFormula
+returns [MettelFOFormula f]
 	:
 	('exists' variableList)*
 //	  (ID ('exists' ID)*
@@ -121,6 +160,7 @@ existentialFormula
 	;
 
 universalFormula
+returns [MettelFOFormula f]
 	:
 	('forall' variableList)*
 //	  (ID ('forall' ID)*
@@ -141,32 +181,52 @@ variableList
 	;
 
 negationFormula
+returns [MettelFOFormula f]
+@init{
+	int n = 0;
+}
 	:
-	('~')*
-	basicFormula
+	('~'
+		{n++;}
+	)*
+	f0  = basicFormula
+		{if( (n \% 2) == 1){
+			f = factory.createNegationFormula(f0);
+		  }else{
+		     f = f0;
+		  }
+		}
 	;
 
 basicFormula
+returns [MettelFOFormula f]
 	:
 	'true'
+		{f = factory.createTrueFormula(); }
 	|
 	'false'
+		{f = factory.createFalseFormula(); }
 	|
-	'(' formula ')'
+	'(' f0 = formula ')'
+		{f = f0;} 
 	|
-	atomicFormula
+	f0 = atomicFormula
+		{f = f0;}
 	;
 
 atomicFormula
+returns [MettelFOFormula f]
 	:
 	'holds' '(' {expression();} (',' term)+ ')'
 	|
 	ID '(' termList? ')'
 	|
-    equalityFormula
+   	f0  = equalityFormula
+   		{f = f0;}
 	;
 
 equalityFormula
+returns [MettelFOFormula f]
 	:
 	'[' term '=' term ']'
 	|

@@ -86,7 +86,7 @@ public class MettelFODefaultObjectFactory implements MettelFOObjectFactory{
 
     private Map<MettelFOEquivalenceFormula, MettelFOEquivalenceFormula> formulaEquivalenceFormulas = new TreeMap<MettelFOEquivalenceFormula, MettelFOEquivalenceFormula>();
 
-    public MettelFOEquivalenceFormula createFormulaEquivalenceFormula(MettelFOFormula e0, MettelFOFormula e1){
+    public MettelFOEquivalenceFormula createEquivalenceFormula(MettelFOFormula e0, MettelFOFormula e1){
         final MettelFOEquivalenceFormula e = new MettelFOEquivalenceFormula(e0, e1, this);
         final MettelFOEquivalenceFormula old = formulaEquivalenceFormulas.get(e);
         if(old == null){ 

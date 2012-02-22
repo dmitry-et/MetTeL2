@@ -45,13 +45,13 @@ public class MettelFOEquivalenceFormula extends MettelFOAbstractExpression imple
     }
 
     public MettelFOExpression substitute(MettelFOSubstitution s){
-        return factory.createFormulaEquivalenceFormula((MettelFOFormula)e0.substitute(s), (MettelFOFormula)e1.substitute(s));
+        return factory.createEquivalenceFormula((MettelFOFormula)e0.substitute(s), (MettelFOFormula)e1.substitute(s));
     }
 
     public MettelFOExpression rewrite(MettelFOReplacement s){
         MettelFOExpression e = s.getFormula(this);
         if(e != null){ return e; }
-        final MettelFOEquivalenceFormula ee = factory.createFormulaEquivalenceFormula((MettelFOFormula)e0.rewrite(s), (MettelFOFormula)e1.rewrite(s));
+        final MettelFOEquivalenceFormula ee = factory.createEquivalenceFormula((MettelFOFormula)e0.rewrite(s), (MettelFOFormula)e1.rewrite(s));
         e = s.getFormula(ee);
         if(e == null){ return ee; }else{ return e; }
     }

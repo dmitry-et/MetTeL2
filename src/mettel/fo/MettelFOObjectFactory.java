@@ -25,7 +25,7 @@ public interface MettelFOObjectFactory{
 
     MettelFOImplicationFormula createImplicationFormula(MettelFOFormula e0, MettelFOFormula e1);    
 
-    MettelFOEquivalenceFormula createFormulaEquivalenceFormula(MettelFOFormula e0, MettelFOFormula e1);    
+    MettelFOEquivalenceFormula createEquivalenceFormula(MettelFOFormula e0, MettelFOFormula e1);    
 
     MettelFOFormulaVariable createFormulaVariable(String name);
 
