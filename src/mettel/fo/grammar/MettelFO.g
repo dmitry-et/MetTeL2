@@ -27,6 +27,8 @@ backtrack = true;
 @header{
 package mettel.fo;
 
+import mettel.generator.MettelLogicParser;
+
 import mettel.core.MettelExpression;
 }
 

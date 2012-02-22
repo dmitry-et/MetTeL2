@@ -14,27 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with MetTeL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package mettel.fo;
+package mettel.generator;
 
-import org.antlr.runtime.Parser;
-import org.antlr.runtime.RecognizerSharedState;
-import org.antlr.runtime.TokenStream;
+import org.antlr.runtime.RecognitionException;
+
+import mettel.core.MettelExpression;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public abstract class MettelAbstractLogicParser extends Parser implements MettelLogicParser {
+public interface MettelLogicParser {
 
-	/**
-	 * @param input
-	 */
-	public MettelAbstractLogicParser(TokenStream input) {
-		super(input);
-	}
-
-	public MettelAbstractLogicParser(TokenStream input, RecognizerSharedState state) {
-		super(input,state);
-	}
+	MettelExpression expression() throws RecognitionException;
 
 }

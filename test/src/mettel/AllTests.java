@@ -26,6 +26,7 @@ public class AllTests {
 		suite.addTest(mettel.util.AllTests.suite());
 		suite.addTest(mettel.generator.AllTests.suite());
 		suite.addTest(mettel.language.AllTests.suite());
+		suite.addTest(mettel.fo.AllTests.suite());
 		return suite;
 	}
 }
