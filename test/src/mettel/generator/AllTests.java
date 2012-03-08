@@ -18,7 +18,9 @@ public class AllTests {
 		"LTL.language.test.LTLParserTest",
 		"LTL.tableau.test.LTLTableauTest",
 		"LTLC.language.test.LTLCParserTest",
-		"LTLC.tableau.test.LTLCTableauTest"
+		"LTLC.tableau.test.LTLCTableauTest",
+//		"KE3.tableau.test.KE3ParserTest",
+		"KE3.tableau.test.KE3TableauTest" 
 	     };
 
 	public static void main(String[] args) {

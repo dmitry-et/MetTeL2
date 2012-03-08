@@ -189,7 +189,7 @@ JAVA_TEST_OPTIONS := -Xfuture -Xbatch -Xms256M -Xmx1024M
 
 TEST_EXAMPLES_DIR = $(TEST_DIR)/examples
 TEST_OUTPUT_DIR = $(TEST_DIR)/output
-TEST_LOGIC_DIRS = "bool ALCO S4 ALBOid LTL LTLC lists"
+TEST_LOGIC_DIRS = "bool ALCO S4 ALBOid LTL LTLC lists KE3"
 TEST_LOGIC_PARSERS = $(shell find $(TEST_OUTPUT_DIR) -name '*.g')
 TEST_LOGIC_SOURCES = $(shell find $(TEST_OUTPUT_DIR) -name '*.java')
 
