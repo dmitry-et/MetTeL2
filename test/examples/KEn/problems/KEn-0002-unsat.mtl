@@ -1,0 +1,6 @@
+// ?? example: unsatisfiable
+//false
+
+@i P
+@i Q
+@i (~(P&Q))

@@ -1,0 +1,15 @@
+@f  ~A / @t A $;
+@FU  ~A / @TU A $;
+@t ~A / @f A $;
+@TU ~A / @FU A $;
+
+
+@f A | B / @f A @f B $;
+@FU A | B / @FU A @FU B $;
+@t A | B / @t A $| @t B $;
+@TU A | B / @TU A $| @TU B $;
+
+
+@f A @TU A /  priority 0$;
+@f A @t A /   priority 0$;
+@FU A @t A /   priority 0$;

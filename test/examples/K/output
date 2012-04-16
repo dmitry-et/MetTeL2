@@ -1,0 +1,170 @@
+( true )
+( false )
+( ~ p )
+( p & q )
+( p | q )
+( p -> q )
+( p <-> q )
+( ~ ( ~ P ) )
+( ( ~ P ) | Q )
+( ~ ( ( ~ P ) | Q ) )
+( ( P | Q ) | R )
+( P | Q )
+( P & ( ~ P ) )
+
+Matching ( true ) with ( false )
+Substitution: null
+Matching ( true ) with ( ~ p )
+Substitution: null
+Matching ( true ) with ( p & q )
+Substitution: null
+Matching ( true ) with ( p | q )
+Substitution: null
+Matching ( true ) with ( p -> q )
+Substitution: null
+Matching ( true ) with ( p <-> q )
+Substitution: null
+Matching ( true ) with ( ~ ( ~ P ) )
+Substitution: null
+Matching ( true ) with ( ( ~ P ) | Q )
+Substitution: null
+Matching ( true ) with ( ~ ( ( ~ P ) | Q ) )
+Substitution: null
+Matching ( true ) with ( ( P | Q ) | R )
+Substitution: null
+Matching ( true ) with ( P | Q )
+Substitution: null
+Matching ( true ) with ( P & ( ~ P ) )
+Substitution: null
+Matching ( false ) with ( ~ p )
+Substitution: null
+Matching ( false ) with ( p & q )
+Substitution: null
+Matching ( false ) with ( p | q )
+Substitution: null
+Matching ( false ) with ( p -> q )
+Substitution: null
+Matching ( false ) with ( p <-> q )
+Substitution: null
+Matching ( false ) with ( ~ ( ~ P ) )
+Substitution: null
+Matching ( false ) with ( ( ~ P ) | Q )
+Substitution: null
+Matching ( false ) with ( ~ ( ( ~ P ) | Q ) )
+Substitution: null
+Matching ( false ) with ( ( P | Q ) | R )
+Substitution: null
+Matching ( false ) with ( P | Q )
+Substitution: null
+Matching ( false ) with ( P & ( ~ P ) )
+Substitution: null
+Matching ( ~ p ) with ( p & q )
+Substitution: null
+Matching ( ~ p ) with ( p | q )
+Substitution: null
+Matching ( ~ p ) with ( p -> q )
+Substitution: null
+Matching ( ~ p ) with ( p <-> q )
+Substitution: null
+Matching ( ~ p ) with ( ~ ( ~ P ) )
+Substitution: $[p/( ~ P )]
+Matching ( ~ p ) with ( ( ~ P ) | Q )
+Substitution: null
+Matching ( ~ p ) with ( ~ ( ( ~ P ) | Q ) )
+Substitution: $[p/( ( ~ P ) | Q )]
+Matching ( ~ p ) with ( ( P | Q ) | R )
+Substitution: null
+Matching ( ~ p ) with ( P | Q )
+Substitution: null
+Matching ( ~ p ) with ( P & ( ~ P ) )
+Substitution: null
+Matching ( p & q ) with ( p | q )
+Substitution: null
+Matching ( p & q ) with ( p -> q )
+Substitution: null
+Matching ( p & q ) with ( p <-> q )
+Substitution: null
+Matching ( p & q ) with ( ~ ( ~ P ) )
+Substitution: null
+Matching ( p & q ) with ( ( ~ P ) | Q )
+Substitution: null
+Matching ( p & q ) with ( ~ ( ( ~ P ) | Q ) )
+Substitution: null
+Matching ( p & q ) with ( ( P | Q ) | R )
+Substitution: null
+Matching ( p & q ) with ( P | Q )
+Substitution: null
+Matching ( p & q ) with ( P & ( ~ P ) )
+Substitution: $[p/P, q/( ~ P )]
+Matching ( p | q ) with ( p -> q )
+Substitution: null
+Matching ( p | q ) with ( p <-> q )
+Substitution: null
+Matching ( p | q ) with ( ~ ( ~ P ) )
+Substitution: null
+Matching ( p | q ) with ( ( ~ P ) | Q )
+Substitution: $[p/( ~ P ), q/Q]
+Matching ( p | q ) with ( ~ ( ( ~ P ) | Q ) )
+Substitution: null
+Matching ( p | q ) with ( ( P | Q ) | R )
+Substitution: $[p/( P | Q ), q/R]
+Matching ( p | q ) with ( P | Q )
+Substitution: $[p/P, q/Q]
+Matching ( p | q ) with ( P & ( ~ P ) )
+Substitution: null
+Matching ( p -> q ) with ( p <-> q )
+Substitution: null
+Matching ( p -> q ) with ( ~ ( ~ P ) )
+Substitution: null
+Matching ( p -> q ) with ( ( ~ P ) | Q )
+Substitution: null
+Matching ( p -> q ) with ( ~ ( ( ~ P ) | Q ) )
+Substitution: null
+Matching ( p -> q ) with ( ( P | Q ) | R )
+Substitution: null
+Matching ( p -> q ) with ( P | Q )
+Substitution: null
+Matching ( p -> q ) with ( P & ( ~ P ) )
+Substitution: null
+Matching ( p <-> q ) with ( ~ ( ~ P ) )
+Substitution: null
+Matching ( p <-> q ) with ( ( ~ P ) | Q )
+Substitution: null
+Matching ( p <-> q ) with ( ~ ( ( ~ P ) | Q ) )
+Substitution: null
+Matching ( p <-> q ) with ( ( P | Q ) | R )
+Substitution: null
+Matching ( p <-> q ) with ( P | Q )
+Substitution: null
+Matching ( p <-> q ) with ( P & ( ~ P ) )
+Substitution: null
+Matching ( ~ ( ~ P ) ) with ( ( ~ P ) | Q )
+Substitution: null
+Matching ( ~ ( ~ P ) ) with ( ~ ( ( ~ P ) | Q ) )
+Substitution: null
+Matching ( ~ ( ~ P ) ) with ( ( P | Q ) | R )
+Substitution: null
+Matching ( ~ ( ~ P ) ) with ( P | Q )
+Substitution: null
+Matching ( ~ ( ~ P ) ) with ( P & ( ~ P ) )
+Substitution: null
+Matching ( ( ~ P ) | Q ) with ( ~ ( ( ~ P ) | Q ) )
+Substitution: null
+Matching ( ( ~ P ) | Q ) with ( ( P | Q ) | R )
+Substitution: null
+Matching ( ( ~ P ) | Q ) with ( P | Q )
+Substitution: null
+Matching ( ( ~ P ) | Q ) with ( P & ( ~ P ) )
+Substitution: null
+Matching ( ~ ( ( ~ P ) | Q ) ) with ( ( P | Q ) | R )
+Substitution: null
+Matching ( ~ ( ( ~ P ) | Q ) ) with ( P | Q )
+Substitution: null
+Matching ( ~ ( ( ~ P ) | Q ) ) with ( P & ( ~ P ) )
+Substitution: null
+Matching ( ( P | Q ) | R ) with ( P | Q )
+Substitution: null
+Matching ( ( P | Q ) | R ) with ( P & ( ~ P ) )
+Substitution: null
+Matching ( P | Q ) with ( P & ( ~ P ) )
+Substitution: null

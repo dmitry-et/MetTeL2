@@ -1,0 +1,6 @@
+// ?? example: unsatisfiable
+
+@i (E=1 (Q&P))
+@j (Q&P)
+@k (Q&P)
+@k (~{j})

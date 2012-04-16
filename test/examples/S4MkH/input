@@ -1,0 +1,19 @@
+true
+false
+~p
+p|q
+dia q
+dia (q|(~P))
+~ ( ~P )
+
+~ P | Q
+~ (~P | Q) 
+
+(~Q | (dia (R)))  // Cause ERROR
+
+(Q | (P | Z | (R | S)))
+
+P | Q
+P | ~P
+
+@l P

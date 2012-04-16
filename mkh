@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# use ./mkh loop 10
+# Run with no argument will clean , make and test
+# Run with just one argument run test for that specific logic
+# Run with 2 argument will rerun the process every ? sec
+
+
+
+
+
+
+# Prepare the files
+if [ $1 ] 
+then
+	#Prepare Alltest file for the given logics
+	sed "s/MKH/$1/g" '/home/khodadam/Dropbox/ATPG/TheSystem/MetTeL2/trunk/test/src/mettel/generator/AllTests.java.template' >'/home/khodadam/Dropbox/ATPG/TheSystem/MetTeL2/trunk/test/src/mettel/generator/AllTests.java';
+	sed "s/MKH/$1/g" '/home/khodadam/Dropbox/ATPG/TheSystem/MetTeL2/trunk/Makefile.template' >'/home/khodadam/Dropbox/ATPG/TheSystem/MetTeL2/trunk/Makefile' ;
+	#Run the system
+	#make clean;make ; make test;
+
+else
+	#If no specific logic has been asked for, Run it for all
+	cp '/home/khodadam/Dropbox/ATPG/TheSystem/MetTeL2/trunk/test/src/mettel/generator/AllTests.java.original'  '/home/khodadam/Dropbox/ATPG/TheSystem/MetTeL2/trunk/test/src/mettel/generator/AllTests.java';
+
+	cp '/home/khodadam/Dropbox/ATPG/TheSystem/MetTeL2/trunk/Makefile.original'  '/home/khodadam/Dropbox/ATPG/TheSystem/MetTeL2/trunk/Makefile' 
+	#make clean;make ; make test;
+fi
+
+
+
+# Run the test
+if [ $2 ] #If time provided for rerun
+then
+		sleepTime=$2
+		while :
+		do
+		clear 
+		echo "Loop run of ATPG"
+		make clean
+		make  
+		make test
+		echo ""
+		echo ""
+		echo "Will rerun after " $sleepTime " seconds"
+		sleep "$sleepTime";
+		done
+else
+	make clean;make ; make test;
+fi
+
+
+
+#make clean;make ; make test;
+#while (0>1); do ./mkh; sleep 5; done

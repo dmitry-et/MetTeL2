@@ -1,0 +1,81 @@
+// Tableau Rules with second refined (Meeting 20th)
+
+
+
+//Decomposition rules
+@l (~(~P)) / @l P $;
+@l (P&Q) / @l P @l Q $;
+@l (~(P&Q)) / @l (~P) $| @l (~Q) $;
+@l (P|Q) / @l (~((~P) & (~Q))) $;
+//@l (<>P) / @l (<>{f(l,P)}) @f(l,P) P $;
+@l (~(<>P)) @l (<>{l2}) / @l2 (~P) $;
+
+
+@l ( E>0 P) / @f1(l,P) P $;
+@l ( E>1 P) / @f1(l,P) P @f2(l,P) P @f1(l,P) (~({f2(l,P)}))$;
+
+@l ( E>2 P) / @f1(l,P) P @f2(l,P) P @f3(l,P) P  
+@f1(l,P) (~{f2(l,P)}) @f1(l,P) (~{f3(l,P)}) 
+@f2(l,P) (~{f3(l,P)})$;
+
+@l ( E>3 P) /@f1(l,P) P @f2(l,P) P @f3(l,P) P @f4(l,P) P 
+@f1(l,P) (~{f2(l,P)}) @f1(l,P) (~{f3(l,P)}) @f1(l,P) (~{f4(l,P)}) 
+@f2(l,P) (~{f3(l,P)}) @f2(l,P) (~{f4(l,P)})
+@f3(l,P) (~{f4(l,P)})$; 
+
+
+@l (~( E>0 P))  @l1 P/ $;
+@l (~( E>1 P))  @l1 P @l2 P/ @l1 ({l2}) $;
+@l (~( E>2 P))  @l1 P @l2 P @l3 P/ @l1 ({l2}) | @l1 ({l3}) |
+@l2 ({l3}) $;
+
+
+@l (~( E>3 P))  @l1 P @l2 P @l3 P @l4 P/ 
+@l1 ({l2}) | @l1 ({l3}) | @l1 ({l4}) |
+@l2 ({l3}) | @l2 ({l4}) | @l3 ({l4})$; 
+
+// Rewrite rules for lessThan and eqaul (from michal's paper) 
+@l (E<1 P) / @l (~(E>0 P)) $;
+@l (E<2 P) / @l (~(E>1 P)) $;
+@l (E<3 P) / @l (~(E>2 P)) $;
+
+
+@l (E=0 P) / @l (~(E>0 P)) $;
+@l (E=1 P) / @l ((E<2 P)&(E>0 P)) $;
+@l (E=2 P) / @l ((E<3 P)&(E>1 P)) $;
+@l (E=3 P) / @l ((~(E>3 P))&(E>2 P)) $;
+
+//equality rules
+@l{l2} / @l2{l} $;
+@l (~{l2}) / @l2{l2} $;
+
+@l P / @l{l} $;
+
+@l (<>{l2}) / @l2{l2} $;
+@l P  @l{l2} /  @l2 P $;
+@l (<>{l2})  @l2{l3} / @l (<>{l3}) $;
+
+
+// Closure rule
+@l P  @l (~P) /  $;
+false / $;
+
+/*
+
+
+
+
+
+
+
+
+
+
+
+//Blocking related
+@l{l0} / [l=l0] $;
+[l=l0] / @l{l0} $;
+@l~{l0} / ~([l=l0]) $;
+~([l=l0]) / @l~{l0} $;
+@l{l} @l0{l0} / [l=l0] $| ~([l=l0]) $;
+*/

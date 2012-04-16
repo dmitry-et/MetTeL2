@@ -1,0 +1,197 @@
+( true )
+( false )
+( ~ p )
+( p | q )
+( dia q )
+( dia ( q | ( ~ P ) ) )
+( ~ ( ~ P ) )
+( ( ~ P ) | Q )
+( ~ ( ( ~ P ) | Q ) )
+( ( ~ Q ) | ( dia R ) )
+( Q | ( ( P | Z ) | ( R | S ) ) )
+( P | Q )
+( P | ( ~ P ) )
+( @ l P )
+
+Matching ( true ) with ( false )
+Substitution: null
+Matching ( true ) with ( ~ p )
+Substitution: null
+Matching ( true ) with ( p | q )
+Substitution: null
+Matching ( true ) with ( dia q )
+Substitution: null
+Matching ( true ) with ( dia ( q | ( ~ P ) ) )
+Substitution: null
+Matching ( true ) with ( ~ ( ~ P ) )
+Substitution: null
+Matching ( true ) with ( ( ~ P ) | Q )
+Substitution: null
+Matching ( true ) with ( ~ ( ( ~ P ) | Q ) )
+Substitution: null
+Matching ( true ) with ( ( ~ Q ) | ( dia R ) )
+Substitution: null
+Matching ( true ) with ( Q | ( ( P | Z ) | ( R | S ) ) )
+Substitution: null
+Matching ( true ) with ( P | Q )
+Substitution: null
+Matching ( true ) with ( P | ( ~ P ) )
+Substitution: null
+Matching ( true ) with ( @ l P )
+Substitution: null
+Matching ( false ) with ( ~ p )
+Substitution: null
+Matching ( false ) with ( p | q )
+Substitution: null
+Matching ( false ) with ( dia q )
+Substitution: null
+Matching ( false ) with ( dia ( q | ( ~ P ) ) )
+Substitution: null
+Matching ( false ) with ( ~ ( ~ P ) )
+Substitution: null
+Matching ( false ) with ( ( ~ P ) | Q )
+Substitution: null
+Matching ( false ) with ( ~ ( ( ~ P ) | Q ) )
+Substitution: null
+Matching ( false ) with ( ( ~ Q ) | ( dia R ) )
+Substitution: null
+Matching ( false ) with ( Q | ( ( P | Z ) | ( R | S ) ) )
+Substitution: null
+Matching ( false ) with ( P | Q )
+Substitution: null
+Matching ( false ) with ( P | ( ~ P ) )
+Substitution: null
+Matching ( false ) with ( @ l P )
+Substitution: null
+Matching ( ~ p ) with ( p | q )
+Substitution: null
+Matching ( ~ p ) with ( dia q )
+Substitution: null
+Matching ( ~ p ) with ( dia ( q | ( ~ P ) ) )
+Substitution: null
+Matching ( ~ p ) with ( ~ ( ~ P ) )
+Substitution: $[p/( ~ P )]
+Matching ( ~ p ) with ( ( ~ P ) | Q )
+Substitution: null
+Matching ( ~ p ) with ( ~ ( ( ~ P ) | Q ) )
+Substitution: $[p/( ( ~ P ) | Q )]
+Matching ( ~ p ) with ( ( ~ Q ) | ( dia R ) )
+Substitution: null
+Matching ( ~ p ) with ( Q | ( ( P | Z ) | ( R | S ) ) )
+Substitution: null
+Matching ( ~ p ) with ( P | Q )
+Substitution: null
+Matching ( ~ p ) with ( P | ( ~ P ) )
+Substitution: null
+Matching ( ~ p ) with ( @ l P )
+Substitution: null
+Matching ( p | q ) with ( dia q )
+Substitution: null
+Matching ( p | q ) with ( dia ( q | ( ~ P ) ) )
+Substitution: null
+Matching ( p | q ) with ( ~ ( ~ P ) )
+Substitution: null
+Matching ( p | q ) with ( ( ~ P ) | Q )
+Substitution: $[p/( ~ P ), q/Q]
+Matching ( p | q ) with ( ~ ( ( ~ P ) | Q ) )
+Substitution: null
+Matching ( p | q ) with ( ( ~ Q ) | ( dia R ) )
+Substitution: $[p/( ~ Q ), q/( dia R )]
+Matching ( p | q ) with ( Q | ( ( P | Z ) | ( R | S ) ) )
+Substitution: $[p/Q, q/( ( P | Z ) | ( R | S ) )]
+Matching ( p | q ) with ( P | Q )
+Substitution: $[p/P, q/Q]
+Matching ( p | q ) with ( P | ( ~ P ) )
+Substitution: $[p/P, q/( ~ P )]
+Matching ( p | q ) with ( @ l P )
+Substitution: null
+Matching ( dia q ) with ( dia ( q | ( ~ P ) ) )
+Substitution: $[q/( q | ( ~ P ) )]
+Matching ( dia q ) with ( ~ ( ~ P ) )
+Substitution: null
+Matching ( dia q ) with ( ( ~ P ) | Q )
+Substitution: null
+Matching ( dia q ) with ( ~ ( ( ~ P ) | Q ) )
+Substitution: null
+Matching ( dia q ) with ( ( ~ Q ) | ( dia R ) )
+Substitution: null
+Matching ( dia q ) with ( Q | ( ( P | Z ) | ( R | S ) ) )
+Substitution: null
+Matching ( dia q ) with ( P | Q )
+Substitution: null
+Matching ( dia q ) with ( P | ( ~ P ) )
+Substitution: null
+Matching ( dia q ) with ( @ l P )
+Substitution: null
+Matching ( dia ( q | ( ~ P ) ) ) with ( ~ ( ~ P ) )
+Substitution: null
+Matching ( dia ( q | ( ~ P ) ) ) with ( ( ~ P ) | Q )
+Substitution: null
+Matching ( dia ( q | ( ~ P ) ) ) with ( ~ ( ( ~ P ) | Q ) )
+Substitution: null
+Matching ( dia ( q | ( ~ P ) ) ) with ( ( ~ Q ) | ( dia R ) )
+Substitution: null
+Matching ( dia ( q | ( ~ P ) ) ) with ( Q | ( ( P | Z ) | ( R | S ) ) )
+Substitution: null
+Matching ( dia ( q | ( ~ P ) ) ) with ( P | Q )
+Substitution: null
+Matching ( dia ( q | ( ~ P ) ) ) with ( P | ( ~ P ) )
+Substitution: null
+Matching ( dia ( q | ( ~ P ) ) ) with ( @ l P )
+Substitution: null
+Matching ( ~ ( ~ P ) ) with ( ( ~ P ) | Q )
+Substitution: null
+Matching ( ~ ( ~ P ) ) with ( ~ ( ( ~ P ) | Q ) )
+Substitution: null
+Matching ( ~ ( ~ P ) ) with ( ( ~ Q ) | ( dia R ) )
+Substitution: null
+Matching ( ~ ( ~ P ) ) with ( Q | ( ( P | Z ) | ( R | S ) ) )
+Substitution: null
+Matching ( ~ ( ~ P ) ) with ( P | Q )
+Substitution: null
+Matching ( ~ ( ~ P ) ) with ( P | ( ~ P ) )
+Substitution: null
+Matching ( ~ ( ~ P ) ) with ( @ l P )
+Substitution: null
+Matching ( ( ~ P ) | Q ) with ( ~ ( ( ~ P ) | Q ) )
+Substitution: null
+Matching ( ( ~ P ) | Q ) with ( ( ~ Q ) | ( dia R ) )
+Substitution: $[P/Q, Q/( dia R )]
+Matching ( ( ~ P ) | Q ) with ( Q | ( ( P | Z ) | ( R | S ) ) )
+Substitution: null
+Matching ( ( ~ P ) | Q ) with ( P | Q )
+Substitution: null
+Matching ( ( ~ P ) | Q ) with ( P | ( ~ P ) )
+Substitution: null
+Matching ( ( ~ P ) | Q ) with ( @ l P )
+Substitution: null
+Matching ( ~ ( ( ~ P ) | Q ) ) with ( ( ~ Q ) | ( dia R ) )
+Substitution: null
+Matching ( ~ ( ( ~ P ) | Q ) ) with ( Q | ( ( P | Z ) | ( R | S ) ) )
+Substitution: null
+Matching ( ~ ( ( ~ P ) | Q ) ) with ( P | Q )
+Substitution: null
+Matching ( ~ ( ( ~ P ) | Q ) ) with ( P | ( ~ P ) )
+Substitution: null
+Matching ( ~ ( ( ~ P ) | Q ) ) with ( @ l P )
+Substitution: null
+Matching ( ( ~ Q ) | ( dia R ) ) with ( Q | ( ( P | Z ) | ( R | S ) ) )
+Substitution: null
+Matching ( ( ~ Q ) | ( dia R ) ) with ( P | Q )
+Substitution: null
+Matching ( ( ~ Q ) | ( dia R ) ) with ( P | ( ~ P ) )
+Substitution: null
+Matching ( ( ~ Q ) | ( dia R ) ) with ( @ l P )
+Substitution: null
+Matching ( Q | ( ( P | Z ) | ( R | S ) ) ) with ( P | Q )
+Substitution: null
+Matching ( Q | ( ( P | Z ) | ( R | S ) ) ) with ( P | ( ~ P ) )
+Substitution: null
+Matching ( Q | ( ( P | Z ) | ( R | S ) ) ) with ( @ l P )
+Substitution: null
+Matching ( P | Q ) with ( P | ( ~ P ) )
+Substitution: $[P/P, Q/( ~ P )]
+Matching ( P | Q ) with ( @ l P )
+Substitution: null
+Matching ( P | ( ~ P ) ) with ( @ l P )
+Substitution: null
