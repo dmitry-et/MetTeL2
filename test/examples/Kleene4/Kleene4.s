@@ -1,12 +1,10 @@
 specification Kleene4;
 
 syntax Kleene4{
-	sort valuation, formula, value;
+	sort valuation, formula;
 	//Connectives in a decreasing priority order
-	valuation = '[' formula '=' value ']';
-	value true = 'T' | undecidedTrue = 'UT' | undecidedFalse = 'UF' | false = 'F';
+	valuation true = 'T' formula | undecidedTrue = 'UT' formula | undecidedFalse = 'UF' formula | false = 'F' formula;
 	formula true = 'true' | false = 'false';
 	formula	negation = '~' formula;
-	formula	conjunction = formula '&' formula;
 	formula	disjunction = formula '|' formula;
 }

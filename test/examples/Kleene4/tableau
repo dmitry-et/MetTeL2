@@ -1,17 +1,8 @@
-[P = T]  [P = F] /  priority 0 $;
-[P = T]  [P = UF] /  priority 0 $;
-[P = UT]  [P = F] /  priority 0 $;
-[P = UT]  [P = UF] /  priority 0 $;
+T P  F P /  priority 0 $;                 T P  UF P /  priority 0 $;
+UT P  F P /  priority 0 $;                UT P  UF P /  priority 0 $;
 
-//P = T  P = UT / priority 0 $;
-//P = F  P = UF / priority 0 $;
+T ~P / F P priority  1$;                  UT ~P / UF P priority 1$;
+UF ~P / UT P priority 1$;                 F ~P / T P priority 1$;
 
-[~P = T] / [P = F] priority  1$;
-[~P = UT] / [P = UF] priority 1$;
-[~P = UF] / [P = UT] priority 1$;
-[~P = F] / [P = T] priority 1$;
-
-[[(P | Q) = T] / [P = T] $| [Q = T] priority 2$;
-[(P | Q) = UT] / [P = UT] $| [Q = UT] priority 2$;
-[(P | Q) = UF] / [P = UF] $| [Q = UF] priority 2$;
-[(P | Q) = F] / [P = F] $| [Q = F] priority 2$;
+T (P | Q) / T P $| T Q priority 2$;       UT (P | Q) / UT P $| UT Q priority 2$;
+UF (P | Q) / UF P $| UF Q priority 2$;    F (P | Q) / F P $| F Q priority 2$;
