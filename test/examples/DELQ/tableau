@@ -1,0 +1,107 @@
+// Equality rules
+
+@l{l2} / @l2{l} priority 1$;                           
+@l~{l2} / @l2{l2} priority 1$;                         
+@l P / @l{l} priority 1$;
+@l P  @l{l2} /  @l2 P priority 2$;
+@l <1>{l2} / @l2 {l2} priority 1$;
+@l <1>{l2}  @l2 {l3} / @l <1>{l3} priority 2$;
+@l <2>{l2} / @l2 {l2} priority 1$;
+@l <2>{l2}  @l2 {l3} / @l <2>{l3} priority 2$;
+@l <3>{l2} / @l2 {l2} priority 1$;
+@l <3>{l2}  @l2 {l3} / @l <3>{l3} priority 2$;
+
+// Decomposition rules
+
+@l ~(~P) / @l P priority 1$;                            
+@l~(P1&P2) / @l~P1 $| @l~P2 priority 3$;           
+@l(P & Q) / @l P @l Q priority 1$;
+@l(P | Q) / @l P $| @l Q priority 3$;           
+@l~(P | Q) / @l~P @l~Q priority 1$;
+@l~(P -> Q) / @l P @l~Q priority 3$;           
+@l(P -> Q) / @l~P $| @l Q priority 1$;
+
+//Static Modalities
+
+@l<1>P / @l<1>{f1(l,P)} @f1(l,P)P priority 7$;               
+@l ~(<1>P) @l<1>{l2} / @l2~P priority 2$;
+@l<2>P / @l<2>{f2(l,P)} @f2(l,P)P priority 7$;    
+@l ~(<2>P) @l<2>{l2} / @l2~P priority 2$;
+@l<3>P / @l<3>{f3(l,P)} @f3(l,P)P priority 7$;    
+@l ~(<3>P) @l<3>{l2} / @l2~P priority 2$;
+
+//Boxes
+
+@l [1]P @l<1>{l2} / @l2 P priority 2$;  
+@l ~([1]P) / @l<1>{f1(l,~P)} @f1(l,~P)~P priority 7$;
+@l [2]P @l<2>{l2} / @l2 P priority 2$;    
+@l ~([2]P) / @l<2>{f2(l,~P)} @f2(l,~P)~P priority 7$;
+@l [3]P @l<3>{l2} / @l2 P priority 2$;    
+@l ~([3]P) / @l<3>{f3(l,~P)} @f3(l,~P)~P priority 7$;
+
+//Dynamic Modalities
+
+@l ([6p] P A) / @l A priority 2$;  
+@l ([6n] P {l2}) / @l {l2} priority 2$;  
+@l ([7p] A) / @l A priority 2$;  
+@l ([7n] {l2}) / @l {l2} priority 2$;  
+@l ([6] P ~Q) / @l ~([6] P Q)$;
+@l ([7] ~Q) / @l ~([7] Q)$;
+@l ([6] P (P1 & P2)) / @l ([6] P P1)  @l ([6] P P2)$;
+@l ([7] (P1 & P2)) / @l ([7] P1)  @l ([7] P2)$;
+@l ([7] ([1] P)) / @l ([1] ([7] P))$;
+@l ([7] ([3] P)) / @l ([3] ([7] P))$;
+@l ([6] P ([2] Q)) / @l ([2] ([6] P Q))$;
+@l ([7] ([2] P)) / @l ([3] ([7] P))$;      //Intersection
+@l ([6] P [1] Q) / @l (P & [1] (P -> [6] P Q)) $| @l (~P & [1] (~P -> [6] P Q))$;  
+@l ([6] P [3] Q) / @l (P & [3] (P -> [6] P Q)) $| @l (~P & [3] (~P -> [6] P Q))$;
+
+// Dynamic Sequences (Length Two)
+
+@l ([6] P1 ([6] P2 A)) / @l A priority 2$;                            
+@l ([6] P  ([7] A)) / @l A priority 2$;
+@l ([6] P1 ([6] P2 ~Q)) / @l ~([6] P1 ([6] P2 Q))$;
+@l ([6] P ([7] ~Q)) / @l ~([6] P ([7] Q))$;
+@l ([6] P1 ([6] P2 (P3 & P4))) / @l ([6] P1 ([6] P2 P3))  @l ([6] P1 ([6] P2 P4))$;
+@l ([6] P ([7] (P1 & P2))) / @l ([6] P ([7] P1))  @l ([6] P ([7] P2))$;
+@l ([6] P ([7] [1]P)) / @l (P & [1](P -> [6] P ([7] Q))) $| @l (~P & [1](~P -> [6] P ([7] Q)))$;   
+@l ([6] P ([7] [3]P)) / @l (P & [3](P -> [6] P ([7] Q))) $| @l (~P & [3](~P -> [6] P ([7] Q)))$;
+@l ([6] P1 ([6] P2 [2]Q)) / @l ([2] ([6] P1 ([6] P2 Q)))$;
+@l ([6] P ([7] [2]Q)) / @l (P & [3](P -> [6] P ([7] Q))) $| @l (~P & [3](~P -> [6] P ([7] Q)))$; //Inters
+@l ([6] P1 ([6] P2 [1]Q)) / @l (( P &    [6] P1 P2)  & [1](( P &    [6] P1 P2)  -> [6] P1 ([6] P2 Q))) $| 
+                            @l ((~P &    [6] P1 P2)  & [1]((~P &    [6] P1 P2)  -> [6] P1 ([6] P2 Q))) $|
+                            @l (( P &  ~([6] P1 P2)) & [1](( P &  ~([6] P1 P2)) -> [6] P1 ([6] P2 Q))) $|
+                            @l ((~P &  ~([6] P1 P2)) & [1](( P &  ~([6] P1 P2)) -> [6] P1 ([6] P2 Q))) $;   
+@l ([6] P1 ([6] P2 [3]Q)) / @l (( P &    [6] P1 P2)  & [3](( P &    [6] P1 P2)  -> [6] P1 ([6] P2 Q))) $| 
+                            @l ((~P &    [6] P1 P2)  & [3]((~P &    [6] P1 P2)  -> [6] P1 ([6] P2 Q))) $|
+                            @l (( P &  ~([6] P1 P2)) & [3](( P &  ~([6] P1 P2)) -> [6] P1 ([6] P2 Q))) $|
+                            @l ((~P &  ~([6] P1 P2)) & [3](( P &  ~([6] P1 P2)) -> [6] P1 ([6] P2 Q))) $;
+
+// Theory rules
+
+@l{l} / @l<1>{l} priority 1$;                            
+@l<1>{l2} @l2<1>{l3} / @l<1>{l3} priority 2$;
+@l<1>{l2} / @l2<1>{l} priority 3$;
+@l{l} / @l<2>{l} priority 1$;                            
+@l<2>{l2} @l2<2>{l3} / @l<2>{l3} priority 2$;
+@l<2>{l2} / @l2<2>{l} priority 3$;
+@l{l} / @l<3>{l} priority 1$;                            
+@l<3>{l2} @l2<3>{l3} / @l<3>{l3} priority 2$;
+@l<3>{l2} / @l2<3>{l} priority 3$;
+
+// Intersection
+
+@l<1>{l2} @l<2>{l2} / @l<3>{l2} priority 2$;              
+@l<3>{l2} / @l<1>{l2} @l<2>{l2} priority 2$;
+
+// Closure rule
+
+@l P  @l~P /  priority 0$;
+
+// Blocking related
+
+@l{l0} / [l=l0] priority 1$;                            
+[l=l0] / @l{l0} priority 1$;
+@l~{l0} / ~([l=l0]) priority 1$;
+~([l=l0]) / @l~{l0} priority 1$;
+@l{l} @l0{l0} / [l=l0] $| ~([l=l0]) priority 6$;
