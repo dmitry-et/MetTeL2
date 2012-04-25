@@ -433,7 +433,10 @@ $(JAR_FILE): $(CLASSES) $(RESOURCE_FILES) $(MANIFEST_FILE)
 	@ echo $(DELIM0)
 	@ echo "Building runtime jar ($(JAR_FILE_NAME))"
 	@ echo $(DELIM1)
-	@ cd $(CLASSES_DIR) && $(JAR) cvmf $(MANIFEST_FILE) $(JAR_FILE) *
+	@ cd   $(BASE_DIR)/src && 
+	  	zip -9 -r --exclude=*.svn*  "metsrc.zip"  "mettel/" && 
+		mv  "metsrc.zip" $(CLASSES_DIR)
+	@ cd $(CLASSES_DIR) && $(JAR) cvmf $(MANIFEST_FILE) $(JAR_FILE) * 
 	@ cd $(BASE_DIR)
 
 generateLogics: $(JAR_FILE) $(TEST_CLASSES_DIR)
