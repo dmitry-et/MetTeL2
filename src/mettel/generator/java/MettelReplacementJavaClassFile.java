@@ -91,14 +91,16 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 			incrementIndentLevel();
 				appendLine("if(e0 == null || e1 == null){ return false; }");
 
-				appendLine("final int ID0 = e0.id();");
-				appendLine("int ID1 = e1.id();");
+				//appendLine("final int ID0 = e0.id();");
+				//appendLine("int ID1 = e1.id();");
 			    //appendLine("final int res = ID0-ID1;");
-			    appendLine("if(ID0 == ID1) return false;");
+				
+				appendLine("final int CMP = e0.compareTo(e1);");
+				appendLine("if(CMP == 0) return false;");
 			    incrementIndentLevel();
 			    	appendLine(TYPE+" left = null;");
 			        appendLine(TYPE+" right = null;");
-			        appendLine("if(ID0 > ID1){");
+			        appendLine("if(CMP > 0){");
 			        incrementIndentLevel();
 			        	appendLine("left = e0;");
 			        	appendLine("right = e1;");
@@ -107,7 +109,7 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 			        incrementIndentLevel();
 			        	appendLine("left = e1;");
 			        	appendLine("right = e0;");
-			        	appendLine("ID1 = ID0;");
+			        	//appendLine("ID1 = ID0;");
 			        decrementIndentLevel();
 					appendLine('}');
 					//appendEOL();
@@ -122,9 +124,10 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 			        appendLine("}else{");
 			        incrementIndentLevel();
 			        	appendLine("final "+TYPE+" third = entry.expression;");
-			        	appendLine("final int ID2 = third.id();");
-			        	appendLine("if(ID1 == ID2) return false;");
-			        	appendLine("if(ID1 > ID2){");
+			        	//appendLine("final int ID2 = third.id();");
+			        	appendLine("final int CMP0 = right.compareTo(third);");
+			        	appendLine("if(CMP0 == 0) return false;");
+			        	appendLine("if(CMP0 > 0){");
 			        	incrementIndentLevel();
 			        		appendLine(sort+"Map.put(right, entry);");
 			        		appendLine("return true;");
