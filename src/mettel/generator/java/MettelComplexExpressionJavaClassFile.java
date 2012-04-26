@@ -250,6 +250,47 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 
 		appendEOL();
 
+		//appendLine("public int compareTo(MettelExpression e){ return id() - e.id(); }");
+		
+/*		appendLine("int preCompareTo(MettelExpression e){");
+		incrementIndentLevel();
+			if(SIZE >0 ){
+				appendLine("int result = 0;");
+				for(int i = 0; i < SIZE; i++){
+					appendLine("result = e"+i+".compareTo(e);");
+					appendLine("if(result >= 0){ return 1; }");
+				}
+			}
+			appendLine("if(PRIORITY < (("+prefix+"AbstractExpression)e).priority()){return -1;}");
+			appendLine("return 0;");
+		decrementIndentLevel();
+		appendLine('}');
+		
+		appendLine("public int compareTo(MettelExpression e){");
+		incrementIndentLevel();
+			appendLine("if(e == this){ return 0; }");
+			appendLine("if(!(e instanceof "+prefix+MettelJavaNames.firstCharToUpperCase(sort)+")){ return SORTID - (("+
+					prefix+"AbstractExpression)e).sortId(); }");
+			appendLine("if(e instanceof "+prefix+MettelJavaNames.firstCharToUpperCase(sort)+"Variable){ return 1; }");
+			
+			appendLine("final int PRE0 = preCompareTo(e);");
+			appendLine("if(PRE0 != 0){return PRE0;}");
+			
+			appendLine("final int PRE1 = (("+prefix+"AbstractExpression)e).preCompareTo(this);");
+			appendLine("if(PRE1 != 0){return -PRE1;}");
+			
+			if(SIZE >0 ){
+				appendLine(TYPE+" ee = ("+TYPE+") e;");
+				appendLine("int result = 0;");
+				for(int i = 0; i < SIZE; i++){
+					appendLine("result = e"+i+".compareTo(ee.e"+i+");");
+					appendLine("if(result != 0){ return result; }");
+				}
+			}
+			appendLine("return 0;");
+		decrementIndentLevel();
+		appendLine('}');*/
+
 		appendLine("public int compareTo(MettelExpression e){");
 		incrementIndentLevel();
 			appendLine("if(e == this){ return 0; }");
@@ -269,7 +310,9 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 			appendLine("return 0;");
 		decrementIndentLevel();
 		appendLine('}');
-
+		
+		appendEOL();
+		
 		if(equality){
 			appendLine("public MettelExpression left(){");
 			incrementIndentLevel();

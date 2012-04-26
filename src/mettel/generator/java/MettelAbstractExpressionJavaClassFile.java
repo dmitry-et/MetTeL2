@@ -107,6 +107,12 @@ public class MettelAbstractExpressionJavaClassFile extends MettelJavaClassFile {
 		 appendLine("return null;");
 		 decrementIndentLevel();
 		 appendLine('}');
+		 
+		 appendEOL();
+		 
+		 //appendLine("public int compareTo(MettelExpression e){ return id() - (("+prefix+"AbstractExpression)e).id(); }");
+		 
+		 //appendLine("int preCompareTo(MettelExpression e){return 0;}");
 
 /*		 appendEOL();
 
