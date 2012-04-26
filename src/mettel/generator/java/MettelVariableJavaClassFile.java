@@ -129,7 +129,7 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 
 		appendLine("public int compareTo(MettelExpression e){");
 		incrementIndentLevel();
-			appendLine("if(e instanceof " +TYPE +"Variable) return id() - (("+TYPE+"Variable)e).id();");
+			appendLine("if(e instanceof " +TYPE +"Variable) return name.compareTo((("+TYPE+"Variable)e).name());");
 			appendLine("if(e instanceof " +TYPE +") return -1;");
 			appendLine("return SORTID - (("+prefix+"AbstractExpression)e).sortId();");
 		decrementIndentLevel();
@@ -141,10 +141,12 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 		incrementIndentLevel();
 			appendLine("if(o == this){ return true; }");
 			appendLine("if(!(o instanceof "+TYPE+"Variable)){ return false; }");
-			appendLine("return id() == (("+TYPE+"Variable)o).id();");
+			appendLine("return name.equals((("+TYPE+"Variable)o).name());");
 		decrementIndentLevel();
 		appendLine('}');
-
+		
+		appendEOL();
+		
 		appendLine("public boolean isEquality(){");
 		incrementIndentLevel();
 			appendLine("return false;");
