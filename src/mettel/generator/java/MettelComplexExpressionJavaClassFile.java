@@ -67,6 +67,8 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 
 
 	protected void imports(){
+		headings.appendLine("import java.util.Comparator;");
+		headings.appendEOL();
 		headings.appendLine("import mettel.core.MettelExpression;");
 		if(equality){
 			headings.appendLine("import mettel.core.MettelEqualityExpression;");
@@ -252,21 +254,36 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 
 		//appendLine("public int compareTo(MettelExpression e){ return id() - e.id(); }");
 		
-/*		appendLine("int preCompareTo(MettelExpression e){");
+		appendLine("int compareArgumentsTo("+prefix+"AbstractExpression e, Comparator<"+prefix+"AbstractExpression> c){");
 		incrementIndentLevel();
 			if(SIZE >0 ){
 				appendLine("int result = 0;");
 				for(int i = 0; i < SIZE; i++){
-					appendLine("result = e"+i+".compareTo(e);");
+					appendLine("result = c.compare(("+prefix+"AbstractExpression)e"+i+", e);");
 					appendLine("if(result >= 0){ return 1; }");
 				}
 			}
-			appendLine("if(PRIORITY < (("+prefix+"AbstractExpression)e).priority()){return -1;}");
+//			appendLine("if(PRIORITY < (("+prefix+"AbstractExpression)e).priority()){return -1;}");
+			appendLine("return 0;");
+		decrementIndentLevel();
+		appendLine('}');
+
+		appendLine("int compareArguments("+prefix+"AbstractExpression e, Comparator<"+prefix+"AbstractExpression> c){");
+		incrementIndentLevel();
+			if(SIZE >0 ){
+				appendLine("final "+TYPE+" ee = ("+TYPE+")e;");
+				appendLine("int result = 0;");
+				for(int i = 0; i < SIZE; i++){
+					appendLine("result = c.compare(("+prefix+"AbstractExpression)e"+i+", ("+prefix+"AbstractExpression)ee.e"+i+");");
+					appendLine("if(result != 0){ return result; }");
+				}
+			}
 			appendLine("return 0;");
 		decrementIndentLevel();
 		appendLine('}');
 		
-		appendLine("public int compareTo(MettelExpression e){");
+		
+/*		appendLine("public int compareTo(MettelExpression e){");
 		incrementIndentLevel();
 			appendLine("if(e == this){ return 0; }");
 			appendLine("if(!(e instanceof "+prefix+MettelJavaNames.firstCharToUpperCase(sort)+")){ return SORTID - (("+

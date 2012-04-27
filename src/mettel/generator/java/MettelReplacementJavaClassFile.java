@@ -36,6 +36,7 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 	}
 
 	protected void imports(){
+		headings.appendLine("import java.util.Comparator;");
 		headings.appendLine("import java.util.Map;");
 		headings.appendLine("import java.util.TreeMap;");
 		headings.appendLine("import java.util.Set;");
@@ -68,6 +69,9 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 		appendLine('}');
 		appendEOL();
 
+		appendLine("private Comparator<"+prefix+"AbstractExpression> comparator = new "+prefix+"LPOComparator();");
+		appendEOL();
+		
 		for(String sort:sorts){
 			final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(sort);
 			appendLine("protected final Map<"+TYPE+", Pointer<"+TYPE+">> "+sort+"Map = new TreeMap<"+TYPE+", Pointer<"+TYPE+">>();");
@@ -87,7 +91,7 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 			appendLine('}');
 			appendEOL();
 
-			appendLine("public boolean append("+TYPE+" e0, "+TYPE+" e1){");
+/*			appendLine("public boolean append("+TYPE+" e0, "+TYPE+" e1){");
 			incrementIndentLevel();
 				appendLine("if(e0 == null || e1 == null){ return false; }");
 
@@ -152,12 +156,12 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 					appendLine("return (e.equals(e1));");
 				decrementIndentLevel();
 				appendLine('}');
-*/
+/
 			decrementIndentLevel();
 			appendLine('}');
 			appendEOL();
-			
-/*			appendLine("public boolean append("+TYPE+" e0, "+TYPE+" e1){");
+*/			
+			appendLine("public boolean append("+TYPE+" e0, "+TYPE+" e1){");
 			incrementIndentLevel();
 				appendLine("if(e0 == null || e1 == null){ return false; }");
 
@@ -165,7 +169,7 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 				//appendLine("int ID1 = e1.id();");
 			    //appendLine("final int res = ID0-ID1;");
 				
-				appendLine("final int CMP = e0.compareTo(e1);");
+				appendLine("final int CMP = comparator.compare(("+prefix+"AbstractExpression)e0,("+prefix+"AbstractExpression)e1);");
 				appendLine("if(CMP == 0) return false;");
 			    incrementIndentLevel();
 			    	appendLine(TYPE+" left = null;");
@@ -185,27 +189,44 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 					//appendEOL();
 //appendLine("System.out.println(\"Left=\"+left+\", right=\"+right);");
 
+//appendLine("System.out.println("+sort+"Map.keySet());");					
 			        appendLine("final Pointer<"+TYPE+"> entry = "+sort+"Map.get(left);");
+			        
 			        appendLine("if(entry == null){");
 			        incrementIndentLevel();
-			        	appendLine(sort+"Map.put(left, new Pointer<"+TYPE+">(right));");
+			        	appendLine("final Pointer<"+TYPE+"> rEntry = "+sort+"Map.get(right);");
+			        	appendLine("if(rEntry == null) {");
+			        	incrementIndentLevel();
+			        		appendLine(sort+"Map.put(left, new Pointer<"+TYPE+">(right));");
+//appendLine("System.out.println(\"* \"+left+\"->\"+right);");
+//appendLine("System.out.println("+sort+"Map.keySet());");
+//appendLine("System.out.println(this);");
+			        	decrementIndentLevel();
+			        	appendLine("}else{");
+			        	incrementIndentLevel();
+		        			appendLine(sort+"Map.put(left, rEntry);");
+//appendLine("System.out.println(\"# \"+left+\"->\"+rEntry.expression);");			        	
+		        		decrementIndentLevel();
+		        		appendLine('}');
 			        	appendLine("return true;");
 			        decrementIndentLevel();
 			        appendLine("}else{");
 			        incrementIndentLevel();
 			        	appendLine("final "+TYPE+" third = entry.expression;");
 			        	//appendLine("final int ID2 = third.id();");
-			        	appendLine("final int CMP0 = right.compareTo(third);");
+			        	appendLine("final int CMP0 = comparator.compare(("+prefix+"AbstractExpression)right, ("+prefix+"AbstractExpression)third);");
 			        	appendLine("if(CMP0 == 0) return false;");
 			        	appendLine("if(CMP0 > 0){");
 			        	incrementIndentLevel();
 			        		appendLine(sort+"Map.put(right, entry);");
+//appendLine("System.out.println(\"** \"+right+\"->\"+third);");			        	
 			        		appendLine("return true;");
 			        	decrementIndentLevel();
 			        	appendLine("}else{");
 			        	incrementIndentLevel();
 			        		appendLine("entry.expression = right;");
 			        		appendLine(sort+"Map.put(third, entry);");
+//appendLine("System.out.println(\"*** \"+third+\"->\"+right);");			        	
 			        		appendLine("return true;");
 			        	decrementIndentLevel();
 			        	appendLine('}');
@@ -213,7 +234,7 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 			        appendLine('}');
 			decrementIndentLevel();
 			appendLine('}');
-			appendEOL();*/
+			appendEOL();
 		}
 
 		appendLine("public boolean isEmpty(){");

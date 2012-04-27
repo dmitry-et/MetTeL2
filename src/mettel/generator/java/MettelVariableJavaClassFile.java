@@ -37,6 +37,9 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 	}
 
 	protected void imports(){
+		headings.appendLine("import java.util.Comparator;");
+		headings.appendEOL();
+		
 		headings.appendLine("import mettel.core.MettelExpression;");
 		headings.appendEOL();
 	}
@@ -135,6 +138,11 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 		decrementIndentLevel();
 		appendLine('}');
 
+		appendEOL();
+		
+		appendLine("int compareArgumentsTo("+prefix+"AbstractExpression e, Comparator<"+prefix+"AbstractExpression> c){return 0;}");
+		appendLine("int compareArguments("+prefix+"AbstractExpression e, Comparator<"+prefix+"AbstractExpression> c){return 0;}");
+		
 		appendEOL();
 
 		appendLine("public boolean equals(Object o){");
