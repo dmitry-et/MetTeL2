@@ -46,7 +46,7 @@ public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 				//new LinkedHashSet<MettelTableauState>();
 				//new TreeSet<MettelTableauState>(new MettelTableauStateComparator());
 				//new TreeSet<MettelTableauState>(new MettelTableauStateReverseNaturalComparator());
-		root = state = new MettelGeneralTableauState(factory, calculus);//TODO: Good possibility to implement AND-OR graph
+		root = state = new MettelGeneralTableauStateWithRewriting(factory, calculus);//TODO: Good possibility to implement AND-OR graph
 		this.strategy = strategy;
 		this.acceptor = acceptor;
 	}

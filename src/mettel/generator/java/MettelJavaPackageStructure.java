@@ -76,6 +76,7 @@ public class MettelJavaPackageStructure {
 		langPackage.add(new MettelAbstractExpressionJavaClassFile(prefix,langPackage));
 		langPackage.add(new MettelAbstractVariableJavaClassFile(prefix,langPackage));
 
+		langPackage.add(new MettelIDComparatorJavaClassFile(prefix,langPackage));
 		langPackage.add(new MettelLPOComparatorJavaClassFile(prefix,langPackage));
 		
 		iFactory = new MettelObjectFactoryJavaInterfaceFile(prefix,langPackage);
