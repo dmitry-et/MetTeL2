@@ -78,6 +78,7 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 
 	private void body(String[] sorts){
 		final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(name)+MettelJavaNames.firstCharToUpperCase(sort);
+		final String TYPE0 = prefix+MettelJavaNames.firstCharToUpperCase(sort);
 		final int SIZE = sorts.length;
 
 		appendLine("static final int PRIORITY = "+priority+';');
@@ -189,7 +190,7 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 			appendLine("if(e != null){ return e; }");
 			if(SIZE > 0){
 				indent();
-				append("final "+TYPE+" ee = factory.create"+MettelJavaNames.firstCharToUpperCase(name)+MettelJavaNames.firstCharToUpperCase(sort)+'(');
+				append("final "+TYPE0+" ee = factory.create"+MettelJavaNames.firstCharToUpperCase(name)+MettelJavaNames.firstCharToUpperCase(sort)+'(');
 				append('(');
 				append(prefix+MettelJavaNames.firstCharToUpperCase(sorts[0]));
 				append(')');

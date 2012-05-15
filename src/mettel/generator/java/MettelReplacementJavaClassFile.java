@@ -69,7 +69,7 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 		appendLine('}');
 		appendEOL();
 
-		appendLine("private Comparator<"+prefix+"AbstractExpression> comparator = new "+prefix+"LPOComparator();");
+		appendLine("private Comparator<"+prefix+"AbstractExpression> comparator = new "+prefix+"IDComparator();");
 		appendEOL();
 		
 		for(String sort:sorts){

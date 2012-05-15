@@ -64,15 +64,16 @@ public class MettelObjectFactoryJavaClassFile extends MettelJavaClassFile {
 	public void addCreateMethod(String type, String name, String[] types){
 		final String ltype = name + MettelJavaNames.firstCharToUpperCase(type);
 		final String TYPE = prefix + MettelJavaNames.firstCharToUpperCase(name) + MettelJavaNames.firstCharToUpperCase(type);
+		final String TYPE0 = prefix + MettelJavaNames.firstCharToUpperCase(type);
 
 		final int SIZE = types.length;
 		if(SIZE > 0){
-			appendLine("private Map<"+TYPE+", "+TYPE+"> "+ ltype + "s = new TreeMap<"+TYPE+", "+TYPE+">();");
-			appendEOL();
+//			appendLine("private Map<"+TYPE+", "+TYPE+"> "+ ltype + "s = new TreeMap<"+TYPE+", "+TYPE+">();");
+//			appendEOL();
 
 			indent();
 
-			append("public "+TYPE+" create"+MettelJavaNames.firstCharToUpperCase(ltype) + '(');
+			append("public "+TYPE0+" create"+MettelJavaNames.firstCharToUpperCase(ltype) + '(');
 			append(prefix+MettelJavaNames.firstCharToUpperCase(types[0])+" e"+0);
 			for(int i = 1; i < SIZE; i++){
 				append(", "+prefix+MettelJavaNames.firstCharToUpperCase(types[i])+" e"+i);
@@ -91,10 +92,10 @@ public class MettelObjectFactoryJavaClassFile extends MettelJavaClassFile {
 				append("this);");
 				appendEOL();
 
-				appendLine("final "+TYPE+" old = "+ltype+"s.get(e);");
+				appendLine("final "+TYPE0+" old = "+type+"s.get(e);");
 				appendLine("if(old == null){ ");
 				incrementIndentLevel();
-					appendLine(ltype+"s.put(e,e);");
+					appendLine(type+"s.put(e,e);");
 					appendLine("return e;");
 				decrementIndentLevel();
 				appendLine("}else{ return old; }");
@@ -171,6 +172,16 @@ public class MettelObjectFactoryJavaClassFile extends MettelJavaClassFile {
 		decrementIndentLevel();
 		appendLine('}');
 
+		appendEOL();
+	}
+
+
+	/**
+	 * @param sort
+	 */
+	public void addMap(String sort) {
+		final String TYPE = prefix + MettelJavaNames.firstCharToUpperCase(sort);
+		appendLine("private Map<"+TYPE+", "+TYPE+"> "+ sort + "s = new TreeMap<"+TYPE+", "+TYPE+">();");
 		appendEOL();
 	}
 

@@ -63,6 +63,7 @@ public class MettelGeneralTableauStateWithRewriting extends MettelAbstractTablea
 		equalities = new MettelTableauStatePool();
 		equalities.embed(state.equalities);
 		equalities.init(this);
+//		this.rewrite();
 	}
 
 	/* (non-Javadoc)
