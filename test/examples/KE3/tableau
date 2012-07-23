@@ -28,6 +28,10 @@
 @l (E=2 P) / @l (E<3 P) @l (E>1 P) priority 1$;
 @l (E=3 P) / @l (~(E>3 P)) @l (E>2 P) priority 1$;
 
+@l (~(E=0 P)) / @l (E>0 P) priority 1$;
+@l (~(E=1 P)) / @l (~((E<2 P)&(E>0 P))) priority 1$;
+@l (~(E=2 P)) / @l (~((~(E>2 P))&(E>1 P))) priority 1$;
+@l (~(E=3 P)) / @l (~((~(E>3 P))&(E>2 P))) priority 1$;
 
 //equality rules
 @l{l2} / @l2{l} priority 1$;

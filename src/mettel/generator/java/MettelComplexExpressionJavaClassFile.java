@@ -67,6 +67,8 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 
 
 	protected void imports(){
+		headings.appendLine("import java.util.Comparator;");
+		headings.appendEOL();
 		headings.appendLine("import mettel.core.MettelExpression;");
 		if(equality){
 			headings.appendLine("import mettel.core.MettelEqualityExpression;");
@@ -76,6 +78,7 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 
 	private void body(String[] sorts){
 		final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(name)+MettelJavaNames.firstCharToUpperCase(sort);
+		final String TYPE0 = prefix+MettelJavaNames.firstCharToUpperCase(sort);
 		final int SIZE = sorts.length;
 
 		appendLine("static final int PRIORITY = "+priority+';');
@@ -187,7 +190,7 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 			appendLine("if(e != null){ return e; }");
 			if(SIZE > 0){
 				indent();
-				append("final "+TYPE+" ee = factory.create"+MettelJavaNames.firstCharToUpperCase(name)+MettelJavaNames.firstCharToUpperCase(sort)+'(');
+				append("final "+TYPE0+" ee = factory.create"+MettelJavaNames.firstCharToUpperCase(name)+MettelJavaNames.firstCharToUpperCase(sort)+'(');
 				append('(');
 				append(prefix+MettelJavaNames.firstCharToUpperCase(sorts[0]));
 				append(')');
@@ -250,6 +253,62 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 
 		appendEOL();
 
+		//appendLine("public int compareTo(MettelExpression e){ return id() - e.id(); }");
+		
+		appendLine("int compareArgumentsTo("+prefix+"AbstractExpression e, Comparator<"+prefix+"AbstractExpression> c){");
+		incrementIndentLevel();
+			if(SIZE >0 ){
+				appendLine("int result = 0;");
+				for(int i = 0; i < SIZE; i++){
+					appendLine("result = c.compare(("+prefix+"AbstractExpression)e"+i+", e);");
+					appendLine("if(result >= 0){ return 1; }");
+				}
+			}
+//			appendLine("if(PRIORITY < (("+prefix+"AbstractExpression)e).priority()){return -1;}");
+			appendLine("return 0;");
+		decrementIndentLevel();
+		appendLine('}');
+
+		appendLine("int compareArguments("+prefix+"AbstractExpression e, Comparator<"+prefix+"AbstractExpression> c){");
+		incrementIndentLevel();
+			if(SIZE >0 ){
+				appendLine("final "+TYPE+" ee = ("+TYPE+")e;");
+				appendLine("int result = 0;");
+				for(int i = 0; i < SIZE; i++){
+					appendLine("result = c.compare(("+prefix+"AbstractExpression)e"+i+", ("+prefix+"AbstractExpression)ee.e"+i+");");
+					appendLine("if(result != 0){ return result; }");
+				}
+			}
+			appendLine("return 0;");
+		decrementIndentLevel();
+		appendLine('}');
+		
+		
+/*		appendLine("public int compareTo(MettelExpression e){");
+		incrementIndentLevel();
+			appendLine("if(e == this){ return 0; }");
+			appendLine("if(!(e instanceof "+prefix+MettelJavaNames.firstCharToUpperCase(sort)+")){ return SORTID - (("+
+					prefix+"AbstractExpression)e).sortId(); }");
+			appendLine("if(e instanceof "+prefix+MettelJavaNames.firstCharToUpperCase(sort)+"Variable){ return 1; }");
+			
+			appendLine("final int PRE0 = preCompareTo(e);");
+			appendLine("if(PRE0 != 0){return PRE0;}");
+			
+			appendLine("final int PRE1 = (("+prefix+"AbstractExpression)e).preCompareTo(this);");
+			appendLine("if(PRE1 != 0){return -PRE1;}");
+			
+			if(SIZE >0 ){
+				appendLine(TYPE+" ee = ("+TYPE+") e;");
+				appendLine("int result = 0;");
+				for(int i = 0; i < SIZE; i++){
+					appendLine("result = e"+i+".compareTo(ee.e"+i+");");
+					appendLine("if(result != 0){ return result; }");
+				}
+			}
+			appendLine("return 0;");
+		decrementIndentLevel();
+		appendLine('}');*/
+
 		appendLine("public int compareTo(MettelExpression e){");
 		incrementIndentLevel();
 			appendLine("if(e == this){ return 0; }");
@@ -269,7 +328,9 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 			appendLine("return 0;");
 		decrementIndentLevel();
 		appendLine('}');
-
+		
+		appendEOL();
+		
 		if(equality){
 			appendLine("public MettelExpression left(){");
 			incrementIndentLevel();

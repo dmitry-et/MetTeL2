@@ -19,7 +19,7 @@ public class AllTests {
 		"LTL.tableau.test.LTLTableauTest",
 		"LTLC.language.test.LTLCParserTest",
 		"LTLC.tableau.test.LTLCTableauTest",
-//		"KE3.tableau.test.KE3ParserTest",
+//		"KE3.language.test.KE3ParserTest",
 		"KE3.tableau.test.KE3TableauTest" 
 	     };
 

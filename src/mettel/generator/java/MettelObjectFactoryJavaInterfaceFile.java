@@ -63,7 +63,7 @@ public class MettelObjectFactoryJavaInterfaceFile extends MettelJavaInterfaceFil
 
 		StringBuilder b  = new StringBuilder();
 		if(SIZE > 0){
-			append(TYPE + " create" + MettelJavaNames.firstCharToUpperCase(ltype) + '(');
+			append(prefix+MettelJavaNames.firstCharToUpperCase(type) + " create" + MettelJavaNames.firstCharToUpperCase(ltype) + '(');
 			append(prefix + MettelJavaNames.firstCharToUpperCase(types[0]) +" e0");
 			for(int i = 1; i < SIZE; i++){
 				append(", " + prefix + MettelJavaNames.firstCharToUpperCase(types[i]) + " e" + i);

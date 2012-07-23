@@ -462,6 +462,12 @@ compileLogics: generateParsers
 	@ echo "Compiling sources for logics"
 	@ echo $(DELIM1)
 	@ $(JAVAC) -classpath $(LOGIC_GENERATION_CLASSPATH):$(LIB_DIR)/junit.jar -d $(TEST_CLASSES_DIR) $(shell find $(TEST_OUTPUT_DIR) -name '*.java')
+	
+compileLogics-alone:
+	@ echo $(DELIM0)
+	@ echo "Compiling sources for logics"
+	@ echo $(DELIM1)
+	@ $(JAVAC) -classpath $(LOGIC_GENERATION_CLASSPATH):$(LIB_DIR)/junit.jar -d $(TEST_CLASSES_DIR) $(shell find $(TEST_OUTPUT_DIR) -name '*.java')	
 
 generate: compileLogics
 
@@ -481,6 +487,13 @@ $(TEST_CLASSES): $(TEST_SOURCES) $(JAR_FILE) $(TEST_CLASSES_DIR)
 
 compile-test: $(TEST_CLASSES)
 
+test-jar-alone: $(TEST_CLASSES)
+	@ echo $(DELIM0)
+	@ echo "Building runtime jar (test.jar)"
+	@ echo $(DELIM1)
+	@ cd $(TEST_CLASSES_DIR) && $(JAR) cvf $(TEST_JAR_FILE) *
+	@ cd $(BASE_DIR)
+
 $(TEST_JAR_FILE): $(TEST_CLASSES) generate
 	@ echo $(DELIM0)
 	@ echo "Building runtime jar (test.jar)"
@@ -496,6 +509,13 @@ $(JAVA) -classpath .:$(TEST_CLASSPATH) $(JAVA_TEST_OPTIONS)	mettel.AllTests
 endef
 
 test: $(TEST_JAR_FILE)
+	@ echo $(DELIM0)
+	@ echo "Testing"
+	@ echo $(DELIM1)
+	@ $(allTests)
+#2>$(TEST_LOG_FILE) || (cat $(TEST_LOG_FILE) && exit 1)
+
+test-alone:
 	@ echo $(DELIM0)
 	@ echo "Testing"
 	@ echo $(DELIM1)

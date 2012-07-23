@@ -40,8 +40,8 @@
 //@l(P->Q) / @l(~P|Q) priority 1$;
 //@l~(P->Q) / @l(P&~Q) priority 1$;
 
-@l(P<->Q) / @l (P->Q) @l (Q->P) priority 1$;
-@l~(P<->Q) / @l ~(P->Q) $| @l ~(Q->P) priority 3$;
+@l(P<->Q) / @l P @l Q | @l ~P @l ~Q priority 3$;
+@l~(P<->Q) / @l ~P @l Q $| @l ~Q @l P priority 3$;
 
 @l(()P) / @f(l)P  priority 7$;
 @l ~(()P) / @l ()(~P) priority 1$;
@@ -51,10 +51,12 @@
 @l (<>P) / @l (E(P)) priority 1 $;
 @l (E(P)) / @l P ((E(P)) <-> (<>P)) $| @f(l) (E(P)) priority 7$;
 
-@l (~(<>P)) / @l ([](~P)) priority 1$;
+//@l (~(<>P)) / @l ([](~P)) priority 1$;
+@l (~(<>P)) / @l (~P) @f(l)(~(<>P)) priority 7$;
 
 //Box
-@l []P / @l P @f(l)[]P priority 7$;
+//@l []P / @l P @f(l)[]P priority 7$;
+@l []P / @l (~(<>(~P))) priority 1$;
 @l ~([]P) / @l <>(~P) priority 1$;
 
 //Until

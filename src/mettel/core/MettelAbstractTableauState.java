@@ -26,60 +26,52 @@ import mettel.util.MettelTreeSetLinkedHashMap;
  * @version $Revision$ $Date$
  *
  */
-public class MettelGeneralTableauState implements MettelTableauState {
-
-	//private MettelTableauManager manager = null;
+public abstract class MettelAbstractTableauState implements MettelTableauState {
 
 	private MettelTableauState parent = null;
 
-//	private LinkedHashSet<MettelTableauState> children = null;
-
-	private MettelAnnotator annotator = MettelSimpleAnnotator.ANNOTATOR;
+	protected MettelAnnotator annotator = MettelSimpleAnnotator.ANNOTATOR;
 
 	private static int idCounter = 0;
 
 	private final int ID = idCounter++;
 
-	private MettelTableauStatePool expressions = null;
-//		new MettelTableauTreeSetLinkedHashMap<MettelTableauState, MettelAnnotatedExpression>();
+	protected MettelTableauStatePool expressions = null;
 
 	private MettelTreeSetLinkedHashMap<MettelTableauState, MettelTableauAction> actions =
 		new MettelTreeSetLinkedHashMap<MettelTableauState, MettelTableauAction>();
 
-	private MettelTableauObjectFactory factory = null;
+	protected MettelTableauObjectFactory factory = null;
 
-	private MettelReplacement replacement = null;
+	//private MettelReplacement replacement = null;
 
 	private Collection<? extends MettelTableauRule> calculus = null;
 
-	private MettelTableauExplanation explanation = null;
+	protected MettelTableauExplanation explanation = null;
 
-	private MettelTableauStatePool equalities = null;
+	//private MettelTableauStatePool equalities = null;
 
-	public MettelGeneralTableauState(MettelTableauObjectFactory factory, Collection<? extends MettelTableauRule> calculus) {
+	public MettelAbstractTableauState(MettelTableauObjectFactory factory, Collection<? extends MettelTableauRule> calculus) {
 		super();
 		this.factory = factory;
-//		ruleSelectionStrategy  = new MettelSimpleRuleSelectionStrategy();
-								 //new MettelSimpleRandomRuleSelectionStrategy();
 		this.calculus = calculus;
 		initRuleStates(calculus);
 		ruleSelectionStrategy  = new MettelPriorityRuleSelectionStrategy(ruleStates);
 		expressions = new MettelTableauStatePool(/*this*/);
 		expressions.init(this);
 		actions.init(this);
-		replacement = factory.createReplacement();
-		equalities = new MettelTableauStatePool();
-		equalities.init(this);
+		//replacement = factory.createReplacement();
+		//equalities = new MettelTableauStatePool();
+		//equalities.init(this);
 	}
 
 	/**
 	 * @param set
 	 */
-	public MettelGeneralTableauState(MettelTableauObjectFactory factory, Collection<? extends MettelTableauRule> calculus,
+	public MettelAbstractTableauState(MettelTableauObjectFactory factory, Collection<? extends MettelTableauRule> calculus,
 			Set<MettelAnnotatedExpression> set) {
 		super();
 		this.factory = factory;
-								 //new MettelSimpleRandomRuleSelectionStrategy();
 		this.calculus = calculus;
 		initRuleStates(calculus);
 		ruleSelectionStrategy  = new MettelPriorityRuleSelectionStrategy(ruleStates);
@@ -87,53 +79,15 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		expressions.addAll(set);
 		expressions.init(this);
 		actions.init(this);
-		replacement = factory.createReplacement();
-		equalities = new MettelTableauStatePool();
-		equalities.init(this);
+		//replacement = factory.createReplacement();
+		//equalities = new MettelTableauStatePool();
+		//equalities.init(this);
 	}
-
-	/**
-	 * @param set
-	 * @param strategy
-	 *
-	public MettelGeneralTableauState(MettelTableauObjectFactory factory,
-			Collection<? extends MettelTableauRule> calculus,
-			MettelRuleSelectionStrategy strategy) {
-		super();
-		this.factory = factory;
-		ruleSelectionStrategy  = strategy;
-		this.calculus = calculus;
-		initRuleStates(calculus);
-		expressions = new MettelTableauStatePool();
-		expressions.init(this);;
-		actions.init(this);
-		replacement = factory.createReplacement();
-	}*/
-
-	/**
-	 * @param set
-	 * @param strategy
-	 *
-	public MettelGeneralTableauState(MettelTableauObjectFactory factory,
-			Collection<? extends MettelTableauRule> calculus,
-			Set<MettelAnnotatedExpression> set,
-			MettelRuleSelectionStrategy strategy) {
-		super();
-		this.factory = factory;
-		ruleSelectionStrategy  = strategy;
-		this.calculus = calculus;
-		initRuleStates(calculus);
-		expressions = new MettelTableauStatePool();
-		expressions.addAll(set);
-		expressions.init(this);
-		actions.init(this);
-		replacement = factory.createReplacement();
-	}*/
 
 	/**
 	 * @param state
 	 */
-	public MettelGeneralTableauState(MettelGeneralTableauState state){
+	public MettelAbstractTableauState(MettelAbstractTableauState state){
 		super();
 		this.factory = state.factory;
 		parent = state;
@@ -145,55 +99,18 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		expressions.init(this);
 		actions.embed(state.actions);
 		actions.init(this);
-		replacement = factory.createReplacement();
-		replacement.append(state.replacement);
-		if(!replacement.isEmpty()){
-			final MettelTableauRewriteAction action = new MettelTableauRewriteAction(this);
-			action.add(this);
-			actions.add(action);
-		}
+		//replacement = factory.createReplacement();
+		//replacement.append(state.replacement);
+		//if(!replacement.isEmpty()){
+		//	final MettelTableauRewriteAction action = new MettelTableauRewriteAction(this);
+		//	action.add(this);
+		//	actions.add(action);
+		//}
 //System.out.println("*****Replacement="+replacement);		
-		equalities = new MettelTableauStatePool();
-		equalities.embed(state.equalities);
-		equalities.init(this);
-		//state.replacement = null;//Forget about old replacements
+		//equalities = new MettelTableauStatePool();
+		//equalities.embed(state.equalities);
+		//equalities.init(this);
 	}
-
-	/**
-	 * @param state
-	 * @param set
-	 *
-	public MettelGeneralTableauState(
-			MettelGeneralTableauState state,
-			Set<MettelAnnotatedExpression> set) {
-		this(state,set,state.ruleSelectionStrategy);
-	}
-
-	/**
-	 * @param state
-	 * @param set
-	 * @param strategy
-	 *
-	public MettelGeneralTableauState(
-			MettelGeneralTableauState state,
-			Set<MettelAnnotatedExpression> set,
-			MettelRuleSelectionStrategy strategy) {
-		super();
-		this.factory = state.factory;
-		parent = state;
-		ruleSelectionStrategy  = strategy;
-		this.calculus = state.calculus;
-		initRuleStates(state.ruleStates);
-		expressions = new MettelTableauStatePool();
-		expressions.embed(state.expressions);// first to embed
-		expressions.addAll(set);
-		expressions.init(this);
-		actions.embed(state.actions);
-		actions.init(this);
-		replacement = factory.createReplacement();
-		replacement.append(state.replacement);
-		state.replacement = null;//Forget about old replacements
-	}*/
 
 	/* (non-Javadoc)
 	 * @see mettel.core.MettelTableauState#id()
@@ -223,9 +140,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		return complete;
 	}
 
-
-
-	private transient MettelGeneralTableauRuleState[] ruleStates = null;
+	protected transient MettelGeneralTableauRuleState[] ruleStates = null;
 
 	private void initRuleStates(Collection<? extends MettelTableauRule> c){
 		final int LENGTH = c.size();
@@ -247,7 +162,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 
 	private MettelRuleSelectionStrategy ruleSelectionStrategy = null;
 
-	private boolean expanded = true;
+	protected boolean expanded = true;
 
 	public boolean isExpanded(){
 		return expanded;
@@ -260,16 +175,6 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	public Set<MettelTableauState> expand() {
 		expanded = false;
 //System.out.println("Expanding "+this+" which has the expression pool "+expressions);
-/*		Iterator<MettelTableauAction> i = actions.iterator();//TODO replace for an action selection strategy
-		while(i.hasNext()){
-			MettelTableauAction a = i.next();
-			if(a.isFor(this)){
-				Set<MettelTableauState> children = a.execute(this);
-				if(children != null) a.addAll(children);
-				return children;
-			}
-		}//xXXX: Infinite loop
-*/
 
 		final MettelTableauRuleState rs = ruleSelectionStrategy.select();
 		if(rs == null){
@@ -287,9 +192,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 			satisfiable = false;
 			explanation = new MettelSimpleTableauExplanation(this,1);
 //System.out.println("*Dependencies: "+rs.dependencies());
-			//rs.dependencies().addAll(equalities);
 			explanation.append(rs.dependencies());
-//			if(!replacement.isEmpty()) explanation.rewrite(annotator, this, replacement);
 //System.out.println("*Explanation: "+explanation);
 //System.out.println(explanation.state().explanation());
 //if(explanation.state().id() < rs.applicationState().id()){
@@ -321,27 +224,9 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	public boolean add(MettelAnnotatedExpression e) {
 //System.out.println("Adding "+e);
 //System.out.println("Replacement is "+replacement);
-		final MettelExpression exp = e.expression();
-		final MettelExpression exp0 = replacement.rewrite(exp);//XXX: Does not work as expected, needs fix!
-		if(exp0 != exp){
-			e = annotator.annotate(exp0, this);//TODO: Needs specific annotations to be effective
-		}
 		final boolean result = expressions.add(e);
 		if(result){
 			for(MettelTableauRuleState rs:ruleStates) rs.add(e);
-			if(exp instanceof MettelEqualityExpression){
-//System.out.println("Replacement is "+replacement);				
-				equalities.add(e);
-				final MettelEqualityExpression eq = (MettelEqualityExpression)exp;
-				if(replacement.append(eq.left(), eq.right())){
-					//final MettelTableauRewriteAction action = new MettelTableauRewriteAction(this);
-//					action.add(e.key());
-					//action.add(this);
-					//actions.add(action);
-					this.rewrite();//Immediate rewrite is faster on the specified examples
-//System.out.println("Rewriting action added");
-				}
-			}
 		}
 		return result;
 	}
@@ -374,14 +259,6 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	}
 
 	/* (non-Javadoc)
-	 * @see mettel.core.MettelTableauState#children()
-	 *
-	@Override
-	public Set<MettelTableauState> children() {
-		return children;
-	}*/
-
-	/* (non-Javadoc)
 	 * @see mettel.core.MettelTableauState#expressions()
 	 */
 	@Override
@@ -398,26 +275,14 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	}
 
 	/* (non-Javadoc)
-	 * @see mettel.core.MettelTableauState#setSatisfiable(boolean)
-	 *
-	@Override
-	public void setSatisfiable(boolean v) {
-		this.satisfiable = v;
-
-	}*/
-
-	/* (non-Javadoc)
 	 * @see mettel.core.MettelTableauState#expand(java.util.Set<mettel.core.MettelAnnotatedExpression>[])
 	 */
 	@Override
 	public Set<MettelTableauState> expand(Set<MettelAnnotatedExpression>[] branches, Set<MettelAnnotatedExpression> dependencies) {
-//		if(branches == null) return null; //Cannot be applied or terminal
 
 		final int BRANCHES_NUMBER = branches.length;
-		//MettelTableauState[] result = new MettelGeneralTableauState[BRANCHES_NUMBER];
 		if(BRANCHES_NUMBER == 1){
 			expanded = this.addAll(branches[0]);
-			//result[0] = this;
 		}else{
 			boolean redundant = false;
 			for(int i = 0; i < BRANCHES_NUMBER; i++){
@@ -426,78 +291,28 @@ public class MettelGeneralTableauState implements MettelTableauState {
 			if(!redundant){
 				LinkedHashSet<MettelTableauState> children = new LinkedHashSet<MettelTableauState>(BRANCHES_NUMBER);
 				for(int i = BRANCHES_NUMBER -1; i>= 0; i--){
-					MettelGeneralTableauState ts = new MettelGeneralTableauState(this);
-					ts.addAll(annotator.reannotate(branches[i],ts));
-					//result[i] = ts;
-					children.add(ts);
+					children.add(makeChild(branches[i]));
+					//MettelAbstractTableauState ts = new MettelAbstractTableauState(this);
+					//ts.addAll(annotator.reannotate(branches[i],ts));
+					//children.add(ts);
 //System.out.println("branches["+i+"] = "+branches[i]);
 				}
-				//for(MettelTableauRuleState r:ruleStates) r.setApplicable(true);
 				explanation = new MettelSimpleTableauExplanation(this,BRANCHES_NUMBER+1);//XXX associate branches with dependencies
 				explanation.append(dependencies);
 
 				return children;
 			}
 		}
-//		return result;
 		return null;
 	}
-
-	public Set<MettelTableauState> rewrite(){
-//System.out.println("Rewrite action execution");
-		if(replacement.isEmpty()) return null;
-//System.out.println("Rewriting: "+replacement);
-		final MettelTableauStatePool pool = new MettelTableauStatePool();
-		pool.init(this);
-		expanded = false;
-//		final LinkedHashSet<MettelAnnotatedExpression> rewritten = new LinkedHashSet<MettelAnnotatedExpression>();
-		for(MettelAnnotatedExpression ae:expressions){
-			final MettelExpression e0 = ae.expression();
-			final MettelExpression e1 = replacement.rewrite(e0);
-			if(e0 == e1){//Only single instance of expression exists!
-				pool.add(ae);
-			}else{
-				expanded = true;
-//				final MettelTableauState aeKey = ae.key();
-//				final MettelTableauState max = ID > aeKey.id()? this:aeKey;
-				final MettelAnnotatedExpression ae1 = annotator.annotate(e1,this/*max*/);
-				if(!expressions.contains(ae1)){
-					ae1.annotation().dependencies().addAll(equalities);
-					pool.add(ae1);
-//					rewritten.add(ae1);
-				}
-			}
-		}
-		if(expanded){
-			expressions = pool;
-			//expressions.addAll(rewritten);
-			for(MettelGeneralTableauRuleState rs:ruleStates){
-				rs.rewrite(this, replacement);
-/*				if(rs.TERMINAL){
-					rs.addAll(rewritten);
-//System.out.println("Rule state is applicable: "+rs.isApplicable());
-				}
-*/
-//System.out.println("Rule state: "+rs);
-			}
-//			if(explanation != null){
-//				explanation.rewrite(annotator, this, replacement);
-//			}
-		}
-		/*else{
-			expressions = pool;
-		}*/
-		return null;
-/*
-		MettelGeneralTableauState ts = new MettelGeneralTableauState(this.factory,this.calculus,this.ruleSelectionStrategy);
-		//ts.initRuleStates(this.ruleStates);
-		for(MettelAnnotatedExpression ae:expressions){
-			ts.add(annotator.annotate(replacement.rewrite(ae.expression()),ts));
-		}
-		final LinkedHashSet<MettelTableauState> children = new LinkedHashSet<MettelTableauState>(1);
-		children.add(ts);
-		return children;
-*/	}
+	
+	protected MettelTableauState makeChild(Set<MettelAnnotatedExpression> expressions){
+		MettelTableauState ts = makeChildOf(this);
+		ts.addAll(annotator.reannotate(expressions,ts));
+		return ts;
+	}
+	
+	abstract protected MettelTableauState makeChildOf(MettelTableauState state);
 
 	private Set<MettelTableauAction> actionsToAdd = new LinkedHashSet<MettelTableauAction>();
 
@@ -515,21 +330,6 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	@Override
 	public boolean isChildOf(MettelTableauState key){
 		return expressions.subset(key) != null;
-/*
-//System.out.print("isChildOf for "+key+"...");
-		if(key == null) return false;
-		//MettelTableauState p = parent;
-		MettelTableauState current = this;
-		while(current != null && current.id() >= key.id()){
-			if(current.equals(key)){
-//System.out.println("Done(true)");
-				return true;
-			}
-			current = current.parent();
-		}
-//System.out.println("Done(false)");
-		return false;
-*/
 	}
 
 	/* (non-Javadoc)
@@ -575,11 +375,4 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		return explanation;
 	}
 
-	/* (non-Javadoc)
-	 * @see mettel.core.MettelTableauState#equalities()
-	 */
-	@Override
-	public Set<MettelAnnotatedExpression> equalities() {
-		return equalities;
-	}
 }

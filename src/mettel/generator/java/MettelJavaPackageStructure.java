@@ -76,6 +76,9 @@ public class MettelJavaPackageStructure {
 		langPackage.add(new MettelAbstractExpressionJavaClassFile(prefix,langPackage));
 		langPackage.add(new MettelAbstractVariableJavaClassFile(prefix,langPackage));
 
+		langPackage.add(new MettelIDComparatorJavaClassFile(prefix,langPackage));
+		langPackage.add(new MettelLPOComparatorJavaClassFile(prefix,langPackage));
+		
 		iFactory = new MettelObjectFactoryJavaInterfaceFile(prefix,langPackage);
 		langPackage.add(iFactory);
 
@@ -103,6 +106,7 @@ public class MettelJavaPackageStructure {
 			langPackage.add(new MettelVariableJavaClassFile(prefix,sort,langPackage));
 			iFactory.addVariableMethod(sort);
 			factory.addVariableMethod(sort);
+			factory.addMap(sort);
 		}
 	}
 
@@ -110,6 +114,7 @@ public class MettelJavaPackageStructure {
 		MettelComplexExpressionJavaClassFile f = new MettelComplexExpressionJavaClassFile(prefix,sort,name,sorts,langPackage,equality);
 		f.addToStringMethod(tokens);
 		langPackage.add(f);
+		
 		factory.addCreateMethod(sort, name, sorts);
 		iFactory.addCreateMethod(sort, name, sorts);
 	}
