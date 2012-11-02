@@ -22,7 +22,7 @@ import mettel.core.MettelExpression;
 import mettel.core.MettelSimpleTableauAnnotation;
 import mettel.core.MettelSubstitution;
 import mettel.core.MettelTableauAnnotation;
-import mettel.core.MettelTableauRule;
+//import mettel.core.MettelTableauRule;
 import mettel.core.MettelTableauState;
 
 /**
@@ -32,11 +32,11 @@ import mettel.core.MettelTableauState;
  */
 public class MettelHistoryAnnotation extends MettelSimpleTableauAnnotation {
 
-	private MettelTableauRule rule = null;
+	//private MettelTableauRule rule = null;
 
-	private MettelAnnotatedExpression[] cause = null;
+	//private MettelAnnotatedExpression[] cause = null;
 
-	private MettelAnnotatedSubstitution[] substitutions = null;
+	//private MettelAnnotatedSubstitution[] substitutions = null;
 
 	/**
 	 * @param state
