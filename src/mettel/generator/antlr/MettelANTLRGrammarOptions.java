@@ -24,7 +24,7 @@ import static mettel.util.MettelStrings.OPTIONS_STRING;
  * @version $Revision$ $Date$
  *
  */
-class MettelANTLRGrammarOptions {
+public class MettelANTLRGrammarOptions {
 
     private int k = 1;
     private String superClass = "MettelAbstractLogicParser";
@@ -32,14 +32,14 @@ class MettelANTLRGrammarOptions {
     /**
      *
      */
-    MettelANTLRGrammarOptions() {
-	super();
-	this.k = 1;
+    public MettelANTLRGrammarOptions() {
+    	this(1);
     }
 
-    MettelANTLRGrammarOptions(int k) {
-	super();
-	this.k = k;
+    public MettelANTLRGrammarOptions(int k) {
+    	super();
+    	if(k <= 0) throw new MettelANTLRGrammarOptionsException("Wrong lookahead parameter: "+k);
+    	this.k = k;
     }
 
     void toStringBuilder(MettelIndentedStringBuilder b) {
