@@ -40,6 +40,10 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
 		this.prefix = prefix;
 
 		body(sort, branchBound);
+
+		if(branchBound != null){
+			headings.appendLine("import mettel.core.acceptor.MettelSmallTableauStateAcceptor;");
+		}
 	}
 
 	protected void imports(){
@@ -59,7 +63,7 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
 		headings.appendLine("import mettel.core.MettelSimpleTableauManager;");
 		headings.appendLine("import mettel.core.MettelGeneralTableauRule;");
 		headings.appendLine("import mettel.core.MettelTableauObjectFactory;");
-		headings.appendLine("import mettel.core.acceptor.MettelSmallTableauStateAcceptor;");
+		//headings.appendLine("import mettel.core.acceptor.MettelSmallTableauStateAcceptor;");
 
 		headings.appendLine("import "+pStructure.languagePackage().path()+".*;");
 		headings.appendEOL();

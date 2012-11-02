@@ -353,6 +353,7 @@ public class MettelGenerator {
 			target.write(buffer, 0, count);
 		}
 		target.closeEntry();
+		in.close();
 	}
 
 	private static void addToJar(String prefix, File source, JarOutputStream target) throws IOException{
