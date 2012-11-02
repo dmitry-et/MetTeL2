@@ -136,9 +136,9 @@ public class MettelANTLRGrammarGenerator {
 
 		final String NAME = MettelJavaNames.firstCharToUpperCase(name);
 
-		MettelANTLRGrammar grammar = new MettelANTLRGrammar(NAME);
+		MettelANTLRGrammar grammar = new MettelANTLRGrammar(NAME, properties.grammarOptions);
 		final String PATH = spec.path();
-		
+
 		/*langPackage = new MettelJavaPackage(PATH);
 		grammarPackage = new MettelJavaPackage(PATH+'.'+GRAMMAR_STRING);
 */
@@ -146,7 +146,7 @@ public class MettelANTLRGrammarGenerator {
 		pStructure.appendStandardClasses(NAME);
 
 		final String s = PACKAGE_STRING+' '+pStructure.grammarPackage().path()+';';
-	
+
 		//new java.io.File("dir").
 		grammar.addToHeader(s);
 		grammar.addToHeader("");

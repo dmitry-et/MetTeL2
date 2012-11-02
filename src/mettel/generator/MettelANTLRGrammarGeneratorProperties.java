@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Properties;
 
+import mettel.generator.antlr.MettelANTLRGrammarOptions;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -48,11 +50,13 @@ public class MettelANTLRGrammarGeneratorProperties {
 
 	public String expressionLeftDelimiter="(";
 	public String expressionRightDelimiter=")";
-	
+
 	public String branchBound = null;
-	
-	
-	
+
+	//public int antlr_k = 1;
+
+	public MettelANTLRGrammarOptions grammarOptions= null;
+
 //	public static final int NONE = -1;
 //	public static final int IGNORE_HUGE_BRANCH = 0;
 //	public int acceptanceStrategy = NONE;
@@ -82,8 +86,11 @@ public class MettelANTLRGrammarGeneratorProperties {
 
 		expressionLeftDelimiter = p.getProperty("expression.left.delimiter", expressionLeftDelimiter);
 		expressionRightDelimiter = p.getProperty("expression.right.delimiter", expressionRightDelimiter);
-		
+
 		branchBound = p.getProperty("branch.bound", branchBound);
+
+		//TODO: more careful check for properties
+        grammarOptions = new MettelANTLRGrammarOptions(Integer.parseInt(p.getProperty("antlr.k","1")));
 
 		//acceptanceStrategy = p.getProperty("ignore.huge.branch") == "Yes"? 0 : -1;
 

@@ -38,8 +38,23 @@ public class MettelANTLRGrammar {
 	 */
 	private String name = null;
 
+	@SuppressWarnings("unused")
+	private MettelANTLRGrammar(){}
+
 	public MettelANTLRGrammar(String name){
+		super();
 		this.name = name;
+		this.options = new MettelANTLRGrammarOptions();
+	}
+
+	public MettelANTLRGrammar(String name, MettelANTLRGrammarOptions options){
+		super();
+		this.name = name;
+		if(options == null){
+			this.options = new MettelANTLRGrammarOptions();
+		}else{
+			this.options = options;
+		}
 	}
 
 	/**
