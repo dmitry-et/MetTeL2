@@ -42,6 +42,11 @@ public class MettelANTLRGrammarOptions {
     	this.k = k;
     }
 
+    public MettelANTLRGrammarOptions(int k, String superClass) {
+    	this(k);
+    	this.superClass = superClass;
+    }
+
     void toStringBuilder(MettelIndentedStringBuilder b) {
 	MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
 	ib.indent();

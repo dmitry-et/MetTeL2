@@ -90,7 +90,9 @@ public class MettelANTLRGrammarGeneratorProperties {
 		branchBound = p.getProperty("branch.bound", branchBound);
 
 		//TODO: more careful check for properties
-        grammarOptions = new MettelANTLRGrammarOptions(Integer.parseInt(p.getProperty("antlr.k","1")));
+        grammarOptions = new MettelANTLRGrammarOptions(
+        		Integer.parseInt(p.getProperty("antlr.k","1")),
+        		p.getProperty("grammar.superclass", "MettelAbstractLogicParser"));
 
 		//acceptanceStrategy = p.getProperty("ignore.huge.branch") == "Yes"? 0 : -1;
 
