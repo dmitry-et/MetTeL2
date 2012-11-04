@@ -180,11 +180,12 @@ public class MettelGenerator {
         		}
         	}
 
-        	if(out == null) out = new PrintWriter(
+//The following is not necessary since out and err are always defined
+/*        	if(out == null) out = new PrintWriter(
     				new OutputStreamWriter(System.out),true);
          	if(err == null) err = new PrintWriter(
     				new OutputStreamWriter(System.err),true);
-
+*/
         	CommonTokenStream tokens = new CommonTokenStream();
 
     		if(in == null) in = new ANTLRInputStream(System.in);
