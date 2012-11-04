@@ -1,0 +1,11 @@
+true
+false
+~p
+p&q
+p|q
+p->q
+p<->q
+~ ( ~(P(c)) )
+~ P(g(f(c),c)) | Q(f(c),c)
+forall x (~ P(g(f(!x),!y)) | Q(f(!y),!x))
+forall x (forall y (~ P(g(f(!x),!y))) | (exists y Q(f(!y),!x)))
