@@ -1,0 +1,2 @@
+//Satisfiable
+@l ~( ~(<q> a P) | ~( <k> a P) | ~( (~(<x> a P)) ))
