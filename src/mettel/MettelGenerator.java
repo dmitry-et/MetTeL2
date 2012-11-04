@@ -62,8 +62,10 @@ import mettel.language.MettelSpecification;
  */
 public class MettelGenerator {
 
-	private static PrintWriter out = null;
-	private static PrintWriter err = null;
+	private static PrintWriter out = new PrintWriter(
+			new OutputStreamWriter(System.out),true);
+	private static PrintWriter err = new PrintWriter(
+			new OutputStreamWriter(System.err),true);
 	private static CharStream in = null;
 	private static String outFileName = null;
 	private static String errFileName = null;
@@ -178,8 +180,12 @@ public class MettelGenerator {
         		}
         	}
 
-
-
+//The following is not necessary since out and err are always defined
+/*        	if(out == null) out = new PrintWriter(
+    				new OutputStreamWriter(System.out),true);
+         	if(err == null) err = new PrintWriter(
+    				new OutputStreamWriter(System.err),true);
+*/
         	CommonTokenStream tokens = new CommonTokenStream();
 
     		if(in == null) in = new ANTLRInputStream(System.in);
@@ -188,11 +194,6 @@ public class MettelGenerator {
 
         	tokens.setTokenSource(lexer);
         	MettelParser parser = new MettelParser(tokens);
-
-        	if(out == null) out = new PrintWriter(
-    				new OutputStreamWriter(System.out),true);
-         	if(err == null) err = new PrintWriter(
-    				new OutputStreamWriter(System.err),true);
 
          	report("I am reading the specification.");
          	MettelSpecification spec = parser.specification();

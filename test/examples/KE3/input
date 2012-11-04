@@ -1,0 +1,41 @@
+// Tableau Rules with second refined (Meeting 20th)
+//Decomposition rules
+@l (~(~P))
+@l (P&Q)
+@l (~(P&Q))
+
+@l (<>P)
+
+@l (~(<>P)) 
+@l (<>{l2}) 
+@l2 (~P)
+
+@l ( E>0 P) 
+@f1(l,P) P 
+@l ( E>1 P) 
+@f1(l,P) P 
+@f1(l,P) (~({f2(l,P)})) 
+@f2(l,P) P 
+@l ( E>2 P) 
+@f1(l,P) P 
+@f1(l,P) (~({f2(l,P)}))
+@f1(l,P) (~({f3(l,P)})) 
+@f2(l,P) P 
+@f2(l,P) (~({f3(l,P)}))
+@f3(l,P) P 
+@l ( E>3 P) 
+@f1(l,P) P 
+@f1(l,P) (~({f2(l,P)})) 
+@f1(l,P) (~({f3(l,P)})) 
+@f1(l,P) (~({f4(l,P)})) 
+@f2(l,P) P 
+@f2(l,P) (~({f3(l,P)})) 
+@f2(l,P) (~({f4(l,P)})) 
+@f3(l,P) P 
+@f3(l,P) (~({f4(l,P)})) 
+@f4(l,P) P 
+
+@l (~( E>0 P))
+@l (~( E>1 P))
+@l (~( E>2 P)) 
+@l (~( E>3 P))

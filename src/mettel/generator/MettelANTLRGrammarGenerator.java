@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import mettel.generator.antlr.MettelANTLRGrammar;
-//import mettel.generator.antlr.MettelANTLRHeader;
 import mettel.generator.antlr.MettelANTLRRule;
+import mettel.generator.antlr.MettelANTLRStandardGrammar;
 import mettel.generator.antlr.MettelANTLRToken;
 import mettel.generator.antlr.MettelANTLRRuleReference;
 import mettel.generator.antlr.MettelANTLRUnaryBNFStatement;
@@ -37,7 +37,6 @@ import mettel.language.MettelSyntax;
 import mettel.language.MettelSort;
 
 import mettel.util.MettelJavaNames;
-import static mettel.util.MettelStrings.PACKAGE_STRING;
 import static mettel.util.MettelStrings.VARIABLE_STRING;
 import static mettel.util.MettelStrings.BASIC_STRING;
 
@@ -136,7 +135,7 @@ public class MettelANTLRGrammarGenerator {
 
 		final String NAME = MettelJavaNames.firstCharToUpperCase(name);
 
-		MettelANTLRGrammar grammar = new MettelANTLRGrammar(NAME, properties.grammarOptions);
+		//MettelANTLRGrammar grammar = new MettelANTLRGrammar(NAME, properties.grammarOptions);
 		final String PATH = spec.path();
 
 		/*langPackage = new MettelJavaPackage(PATH);
@@ -145,56 +144,8 @@ public class MettelANTLRGrammarGenerator {
 		MettelJavaPackageStructure pStructure = new MettelJavaPackageStructure(PATH);
 		pStructure.appendStandardClasses(NAME);
 
-		final String s = PACKAGE_STRING+' '+pStructure.grammarPackage().path()+';';
-
-		//new java.io.File("dir").
-		grammar.addToHeader(s);
-		grammar.addToHeader("");
-		grammar.addToHeader("import java.util.Collection;");
-		grammar.addToHeader("import java.util.ArrayList;");
-		grammar.addToHeader("import java.util.LinkedHashSet;");
-		grammar.addToHeader("");
-		grammar.addToHeader("import mettel.core.MettelGeneralTableauRule;");
-		grammar.addToHeader("import mettel.generator.MettelAbstractLogicParser;");
-
-//		MettelANTLRHeader lexerHeader = new MettelANTLRHeader(MettelANTLRHeader.LEXER);
-//		lexerHeader.addStatement(s);
-		grammar.addToLexerHeader(s);
-
-/*		grammar.addToMembers("protected Object recoverFromMismatchedToken(IntStream input, int ttype, BitSet follow)");
-		grammar.addToMembers("          throws RecognitionException{");
-		grammar.addToMembers("    throw new MismatchedTokenException(ttype, input);");
-		grammar.addToMembers("}");
-
-		grammar.addToMembers("protected void mismatch(IntStream input, int ttype, BitSet follow)");
-		grammar.addToMembers("          throws RecognitionException{");
-		grammar.addToMembers("    throw new MismatchedTokenException(ttype, input);");
-		grammar.addToMembers("}");
-
-		grammar.addToMembers("public Object recoverFromMismatchedSet(IntStream input, RecognitionException e, BitSet follow)");
-		grammar.addToMembers("       throws RecognitionException{");
-		grammar.addToMembers("    reportError(e);");
-		grammar.addToMembers("    throw e;");
-		grammar.addToMembers("}");
-*/
-		grammar.addToMembers("public Object recoverFromMismatchedToken(IntStream input, int ttype, BitSet follow)");
-		grammar.addToMembers("       throws RecognitionException{");
-		grammar.addToMembers("    MismatchedTokenException e = new MismatchedTokenException(ttype, input);");
-		grammar.addToMembers("    reportError(e);");
-		grammar.addToMembers("    throw e;");
-		grammar.addToMembers("}");
-
-		grammar.addToMembers("private "+NAME+"ObjectFactory factory = "+NAME+"ObjectFactory.DEFAULT;");
-
-		grammar.addToMembers("public "+NAME+"Parser(TokenStream input, "+NAME+"ObjectFactory factory){");
-        grammar.addToMembers("    this(input);");
-        grammar.addToMembers("    this.factory = factory;");
-        grammar.addToMembers("}");
-
-		grammar.addToMembers("public "+NAME+"Parser(TokenStream input, RecognizerSharedState state, "+NAME+"ObjectFactory factory){");
-        grammar.addToMembers("    this(input,state);");
-        grammar.addToMembers("    this.factory = factory;");
-        grammar.addToMembers("}");
+		MettelANTLRStandardGrammar grammar =
+				new MettelANTLRStandardGrammar(NAME, pStructure.grammarPackage().path(), properties.grammarOptions);
 
 		final Collection<MettelSort> sorts = syn.sorts();//TODO refactoring needed
 		final int SIZE = sorts.size();

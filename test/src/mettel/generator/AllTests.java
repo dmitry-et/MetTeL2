@@ -5,26 +5,26 @@ import junit.framework.*;
 public class AllTests {
 
 	private static final String[] classNames = new String[]{
-//		"lists.language.test.ListsParserTest",
-//		"lists.tableau.test.ListsTableauTest",
-//		"bool.language.test.BooleanParserTest",
-//		"bool.tableau.test.BooleanTableauTest",
-//		"ALCO.language.test.ALCOParserTest",
-//		"ALCO.tableau.test.ALCOTableauTest",
-//		"S4.language.test.S4ParserTest",
-//		"S4.tableau.test.S4TableauTest",
-//		"ALBOid.language.test.ALBOidParserTest",
-//		"ALBOid.tableau.test.ALBOidTableauTest",
-//		"LTL.language.test.LTLParserTest",
-		"LTL.tableau.test.LTLTableauTest",
-//		"LTLC.language.test.LTLCParserTest",
-		"LTLC.tableau.test.LTLCTableauTest",
-//		"KE3.language.test.KE3ParserTest",
-//		"KE3.tableau.test.KE3TableauTest",
+		"lists.language.test.ListsParserTest",
+		"lists.tableau.test.ListsTableauTest",
+		"bool.language.test.BooleanParserTest",
+		"bool.tableau.test.BooleanTableauTest",
+		"ALCO.language.test.ALCOParserTest",
+		"ALCO.tableau.test.ALCOTableauTest",
+		"S4.language.test.S4ParserTest",
+		"S4.tableau.test.S4TableauTest",
+		"ALBOid.language.test.ALBOidParserTest",
+		"ALBOid.tableau.test.ALBOidTableauTest",
+		"LTL.language.test.LTLParserTest",
+//		"LTL.tableau.test.LTLTableauTest",
+		"LTLC.language.test.LTLCParserTest",
+//		"LTLC.tableau.test.LTLCTableauTest",
+		"KE3.language.test.KE3ParserTest",
+		"KE3.tableau.test.KE3TableauTest",
 //		"fotheory.language.test.SomeFOTheoryParserTest",
 //		"fotheory.tableau.test.SomeFOTheoryTableauTest",
-//		"IEL.language.test.IELParserTest",
-//		"IEL.tableau.test.IELTableauTest"
+		"IEL.language.test.IELParserTest",
+		"IEL.tableau.test.IELTableauTest"
 	};
 
 	public static void main(String[] args) {

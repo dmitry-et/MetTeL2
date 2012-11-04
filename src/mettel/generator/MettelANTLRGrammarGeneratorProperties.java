@@ -89,8 +89,14 @@ public class MettelANTLRGrammarGeneratorProperties {
 
 		branchBound = p.getProperty("branch.bound", branchBound);
 
+		final String antlrK = p.getProperty("antlr.k","1");
+
 		//TODO: more careful check for properties
-        grammarOptions = new MettelANTLRGrammarOptions(Integer.parseInt(p.getProperty("antlr.k","1")));
+        grammarOptions = new MettelANTLRGrammarOptions(
+        		(antlrK.indexOf('*') >= 0? 0:Integer.parseInt(p.getProperty("antlr.k","1"))),
+        		p.getProperty("antlr.superClass", "mettel.generator.MettelAbstractLogicParser"),
+        		Boolean.parseBoolean(p.getProperty("antlr.backtrack","false")),
+        		Boolean.parseBoolean(p.getProperty("antlr.memoize","false")));
 
 		//acceptanceStrategy = p.getProperty("ignore.huge.branch") == "Yes"? 0 : -1;
 
