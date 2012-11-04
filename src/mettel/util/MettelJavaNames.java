@@ -66,4 +66,9 @@ public class MettelJavaNames {
 		if(path.endsWith(FILE_SEPARATOR)) return path;
 		return path + FILE_SEPARATOR;
 	}
+
+	public static String getClassName(String path){
+		return path.substring(path.lastIndexOf('.')+1);
+	}
+
 }

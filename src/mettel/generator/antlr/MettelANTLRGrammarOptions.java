@@ -17,6 +17,7 @@
 package mettel.generator.antlr;
 
 import mettel.util.MettelIndentedStringBuilder;
+import mettel.util.MettelJavaNames;
 
 import static mettel.util.MettelStrings.OPTIONS_STRING;
 /**
@@ -27,7 +28,11 @@ import static mettel.util.MettelStrings.OPTIONS_STRING;
 public class MettelANTLRGrammarOptions {
 
     private int k = 1;
-    private String superClass = "MettelAbstractLogicParser";
+    private String superClass = "mettel.generator.MettelAbstractLogicParser";
+
+    String superClass(){
+    	return superClass;
+    }
 
     /**
      *
@@ -63,7 +68,7 @@ public class MettelANTLRGrammarOptions {
 	ibb.appendEOL();
 	ibb.indent();
 	ibb.append("superClass=");
-	ibb.append(superClass);
+	ibb.append(MettelJavaNames.getClassName(superClass));
 	ibb.append(';');
 	ibb.appendEOL();
 
