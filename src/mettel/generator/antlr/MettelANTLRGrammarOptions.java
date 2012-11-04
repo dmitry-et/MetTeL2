@@ -27,8 +27,15 @@ import static mettel.util.MettelStrings.OPTIONS_STRING;
  */
 public class MettelANTLRGrammarOptions {
 
+	/* A copy from org.antlr.tool.Grammar, ANTLR v3.1.3:
+		282		//Is there a global fixed lookahead set for this grammar? If 0, nothing specified. -1 implies we have not looked at the options table yet to set k.
+		283		protected int global_k = -1;
+
+	 */
     private int k = 1;
     private String superClass = "mettel.generator.MettelAbstractLogicParser";
+    private boolean backtrack = false;
+    private boolean memoize = false;
 
     String superClass(){
     	return superClass;
@@ -43,13 +50,19 @@ public class MettelANTLRGrammarOptions {
 
     public MettelANTLRGrammarOptions(int k) {
     	super();
-    	if(k <= 0) throw new MettelANTLRGrammarOptionsException("Wrong lookahead parameter: "+k);
+    	if(k < 0) throw new MettelANTLRGrammarOptionsException("Wrong lookahead parameter: "+k);
     	this.k = k;
     }
 
     public MettelANTLRGrammarOptions(int k, String superClass) {
     	this(k);
     	this.superClass = superClass;
+    }
+
+    public MettelANTLRGrammarOptions(int k, String superClass, boolean backtrack, boolean memoize) {
+    	this(k, superClass);
+    	this.backtrack = backtrack;
+    	this.memoize = memoize;
     }
 
     void toStringBuilder(MettelIndentedStringBuilder b) {
@@ -61,15 +74,28 @@ public class MettelANTLRGrammarOptions {
 
 	MettelIndentedStringBuilder ibb = new MettelIndentedStringBuilder(ib);
 	ibb.indent();
-	ibb.append('k');
-	ibb.append('=');
-	ibb.append(String.valueOf(k));
-	ibb.append(';');
-	ibb.appendEOL();
-	ibb.indent();
+	if(k > 0){
+		ibb.append('k');
+		ibb.append('=');
+		ibb.append(String.valueOf(k));
+		ibb.append(';');
+		ibb.appendEOL();
+		ibb.indent();
+	}
 	ibb.append("superClass=");
 	ibb.append(MettelJavaNames.getClassName(superClass));
 	ibb.append(';');
+	ibb.appendEOL();
+	ibb.indent();
+	ibb.append("backtrack=");
+	ibb.append(String.valueOf(backtrack));
+	ibb.append(';');
+	ibb.appendEOL();
+	ibb.indent();
+	ibb.append("memoize=");
+	ibb.append(String.valueOf(memoize));
+	ibb.append(';');
+
 	ibb.appendEOL();
 
 	ib.append('}');
