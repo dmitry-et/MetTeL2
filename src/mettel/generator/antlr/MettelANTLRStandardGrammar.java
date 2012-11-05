@@ -37,7 +37,7 @@ public class MettelANTLRStandardGrammar extends MettelANTLRGrammar {
 
 		addToLexerHeader(s);
 
-		if(!options.backtrack()){
+		if(!options.backtrack()){//TODO Perhaps, backtracking need special handling rather than the ANTLR default one
 			addToMembers("public Object recoverFromMismatchedToken(IntStream input, int ttype, BitSet follow)");
 			addToMembers("       throws RecognitionException{");
 			addToMembers("    MismatchedTokenException e = new MismatchedTokenException(ttype, input);");
