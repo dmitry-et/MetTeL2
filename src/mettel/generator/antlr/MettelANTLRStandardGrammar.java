@@ -37,12 +37,14 @@ public class MettelANTLRStandardGrammar extends MettelANTLRGrammar {
 
 		addToLexerHeader(s);
 
-		addToMembers("public Object recoverFromMismatchedToken(IntStream input, int ttype, BitSet follow)");
-		addToMembers("       throws RecognitionException{");
-		addToMembers("    MismatchedTokenException e = new MismatchedTokenException(ttype, input);");
-		addToMembers("    reportError(e);");
-		addToMembers("    throw e;");
-		addToMembers("}");
+		if(!options.backtrack()){
+			addToMembers("public Object recoverFromMismatchedToken(IntStream input, int ttype, BitSet follow)");
+			addToMembers("       throws RecognitionException{");
+			addToMembers("    MismatchedTokenException e = new MismatchedTokenException(ttype, input);");
+			addToMembers("    reportError(e);");
+			addToMembers("    throw e;");
+			addToMembers("}");
+		}
 
 		addToMembers("private "+NAME+"ObjectFactory factory = "+NAME+"ObjectFactory.DEFAULT;");
 

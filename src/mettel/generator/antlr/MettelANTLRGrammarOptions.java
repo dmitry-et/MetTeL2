@@ -41,6 +41,10 @@ public class MettelANTLRGrammarOptions {
     	return superClass;
     }
 
+    boolean backtrack(){
+    	return backtrack;
+    }
+
     /**
      *
      */
