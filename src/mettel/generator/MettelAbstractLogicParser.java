@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with MetTeL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package mettel.generator;
+package mettel.generator;//TODO move to a runtime package!
 
 
 import org.antlr.runtime.Parser;

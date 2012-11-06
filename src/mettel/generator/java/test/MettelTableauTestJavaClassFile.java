@@ -31,7 +31,7 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
 //	private String packNameFull = null;
 
 	private MettelJavaPackageStructure pStructure = null;
-	
+
 	public MettelTableauTestJavaClassFile(String prefix, String sort, String branchBound, MettelJavaPackageStructure pStructure) {
 		super(prefix+"TableauTest", pStructure.testTableauPackage(), "public", "TestCase", null);
 		this.pStructure = pStructure;
@@ -40,8 +40,12 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
 //		packName = pack.path();
 //		packNameFull = packName.substring(0,packName.lastIndexOf('.')+1);
 //		packName = packName.substring(0,packName.indexOf('.')+1);
-		
+
 		body(sort, branchBound);
+
+		if(branchBound != null){
+			headings.appendLine("import mettel.core.acceptor.MettelSmallTableauStateAcceptor;");
+		}
 	}
 
 	protected void imports(){
@@ -66,7 +70,7 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
 		headings.appendLine("import mettel.core.MettelSimpleTableauManager;");
 		headings.appendLine("import mettel.core.MettelGeneralTableauRule;");
 		headings.appendLine("import mettel.core.MettelTableauObjectFactory;");
-		headings.appendLine("import mettel.core.acceptor.MettelSmallTableauStateAcceptor;");
+		//headings.appendLine("import mettel.core.acceptor.MettelSmallTableauStateAcceptor;");
 
 		headings.appendLine("import "+pStructure.languagePackage().path()+".*;");
 		headings.appendEOL();

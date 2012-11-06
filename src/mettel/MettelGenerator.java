@@ -1,18 +1,17 @@
 /**
  * This file is part of MetTeL.
  *
- * MetTeL is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * MetTeL is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
- * MetTeL is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * MetTeL is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with MetTeL.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License along with
+ * MetTeL. If not, see <http://www.gnu.org/licenses/>.
  */
 package mettel;
 
@@ -63,13 +62,16 @@ import mettel.language.MettelSpecification;
 
 /**
  * @author Dmitry Tishkovsky
- * @version $Revision$ $Date$
+ * @version $Revision$ $Date: 2012-04-25 17:13:02 +0100 (Wed, 25 Apr 2012)
+ * $
  *
  */
 public class MettelGenerator {
 
-    private static PrintWriter out = null;
-    private static PrintWriter err = null;
+    private static PrintWriter out = new PrintWriter(
+            new OutputStreamWriter(System.out), true);
+    private static PrintWriter err = new PrintWriter(
+            new OutputStreamWriter(System.err), true);
     private static CharStream in = null;
     private static String outFileName = null;
     private static String errFileName = null;
@@ -183,8 +185,12 @@ public class MettelGenerator {
                 }
             }
 
-
-
+//The following is not necessary since out and err are always defined
+/*        	if(out == null) out = new PrintWriter(
+             new OutputStreamWriter(System.out),true);
+             if(err == null) err = new PrintWriter(
+             new OutputStreamWriter(System.err),true);
+             */
             CommonTokenStream tokens = new CommonTokenStream();
 
             if (in == null) {
@@ -196,14 +202,6 @@ public class MettelGenerator {
             tokens.setTokenSource(lexer);
             MettelParser parser = new MettelParser(tokens);
 
-            if (out == null) {
-                out = new PrintWriter(
-                        new OutputStreamWriter(System.out), true);
-            }
-            if (err == null) {
-                err = new PrintWriter(
-                        new OutputStreamWriter(System.err), true);
-            }
 
             report("I am reading the specification.");
             MettelSpecification spec = parser.specification();
@@ -256,38 +254,38 @@ public class MettelGenerator {
                 // create the parent directory structure if needed
                 destinationParent.mkdirs();
 
-               //System.out.println( entry.toString());
-                if (!entry.isDirectory())
-                {
+                //System.out.println( entry.toString());
+                if (!entry.isDirectory()) {
 
-                int n;
-                FileOutputStream fileoutputstream = new FileOutputStream(destFile);             
+                    int n;
+                    FileOutputStream fileoutputstream = new FileOutputStream(destFile);
 
-                while ((n = zipinputstream.read(buf, 0, 1024)) > -1)
-                    fileoutputstream.write(buf, 0, n);
+                    while ((n = zipinputstream.read(buf, 0, 1024)) > -1) {
+                        fileoutputstream.write(buf, 0, n);
+                    }
 
-                fileoutputstream.close(); 
-                zipinputstream.closeEntry();
+                    fileoutputstream.close();
+                    zipinputstream.closeEntry();
                 }
 
             }
 
 
             /*        	out.print(buf);
-            out.flush();
-            out.close();
+             out.flush();
+             out.close();
              */
             /*        	String[] antlrArgs = {"-o", "/var/tmp/", "-print", outFileName};
-            if(outFileName == null){
-            System.err.print("ANTLR file name required");
-            System.exit(0);
-            }
+             if(outFileName == null){
+             System.err.print("ANTLR file name required");
+             System.exit(0);
+             }
             
-            Tool antlr = new Tool(antlrArgs);
-            antlr.process();
-            if(ErrorManager.getNumErrors() > 0){
-            System.exit(1);
-            }
+             Tool antlr = new Tool(antlrArgs);
+             antlr.process();
+             if(ErrorManager.getNumErrors() > 0){
+             System.exit(1);
+             }
              */
             if (tableau != null) {
                 if (build(spec.path())) {
@@ -407,6 +405,7 @@ public class MettelGenerator {
         target.putNextEntry(entry);
         BufferedInputStream in = new BufferedInputStream(new FileInputStream(source));
 
+
         byte[] buffer = new byte[1024];
         while (true) {
             int count = in.read(buffer);
@@ -416,6 +415,7 @@ public class MettelGenerator {
             target.write(buffer, 0, count);
         }
         target.closeEntry();
+        in.close();
     }
 
     private static void addToJar(String prefix, File source, JarOutputStream target) throws IOException {

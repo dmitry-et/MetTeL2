@@ -75,16 +75,28 @@ public class MettelGeneralTableauStateWithRewriting extends MettelAbstractTablea
 //System.out.println("Replacement is "+replacement);
 		final MettelExpression exp = e.expression();
 		final MettelExpression exp0 = replacement.rewrite(exp);//XXX: Does not work as expected, needs fix!
+		MettelAnnotatedExpression e0 = null;
+		//boolean result = false;
 		if(exp0 != exp){
-			e = annotator.annotate(exp0, this);//TODO: Needs specific annotations to be effective
+			e0 = annotator.annotate(exp0, this);//TODO: Needs specific annotations to be effective
+			if(!expressions.contains(e0)){
+				final Set<MettelAnnotatedExpression> deps = e0.annotation().dependencies();
+				deps.addAll(e.annotation().dependencies());
+				deps.addAll(equalities);
+				//result = expressions.add(e0);
+			}
+		}else{
+			//result = expressions.add(e); 
+			e0 = e;
 		}
-		final boolean result = expressions.add(e);
+		
+		final boolean result = expressions.add(e0);
 		if(result){
-			for(MettelTableauRuleState rs:ruleStates) rs.add(e);
-			if(exp instanceof MettelEqualityExpression){
+			for(MettelTableauRuleState rs:ruleStates) rs.add(e0);
+			if(exp0 instanceof MettelEqualityExpression){
 //System.out.println("Replacement is "+replacement);				
-				equalities.add(e);
-				final MettelEqualityExpression eq = (MettelEqualityExpression)exp;
+				equalities.add(e0);
+				final MettelEqualityExpression eq = (MettelEqualityExpression)exp0;
 				if(replacement.append(eq.left(), eq.right())){
 					this.rewrite();//Immediate rewrite is faster on the specified examples
 //System.out.println("Rewriting action added");
@@ -110,7 +122,9 @@ public class MettelGeneralTableauStateWithRewriting extends MettelAbstractTablea
 				expanded = true;
 				final MettelAnnotatedExpression ae1 = annotator.annotate(e1,this/*max*/);
 				if(!expressions.contains(ae1)){
-					ae1.annotation().dependencies().addAll(equalities);
+					final Set<MettelAnnotatedExpression> deps = ae1.annotation().dependencies();
+					deps.addAll(ae.annotation().dependencies());
+					deps.addAll(equalities);
 					pool.add(ae1);
 				}
 			}
