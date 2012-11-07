@@ -27,7 +27,7 @@ import mettel.generator.antlr.MettelANTLRGrammarOptions;
  * @version $Revision$ $Date$
  *
  */
-public class MettelANTLRGrammarGeneratorProperties implements MettelANTLRGrammarDefaultOptions {
+public class MettelANTLRGrammarGeneratorProperties implements MettelANTLRGrammarGeneratorDefaultOptions {
 
 	/**
 	 *
@@ -41,15 +41,15 @@ public class MettelANTLRGrammarGeneratorProperties implements MettelANTLRGrammar
 		init(reader);
 	}
 
-	public String tableauRuleDelimiter = "$;";
-	public String tableauRuleBranchDelimiter = "$|";
-	public String tableauRulePremiseDelimiter = "/";
+	public String tableauRuleDelimiter = TABLEAU_RULE_DELIMITER;
+	public String tableauRuleBranchDelimiter = TABLEAU_RULE_BRANCH_DELIMITER;
+	public String tableauRulePremiseDelimiter = TABLEAU_RULE_PREMISE_DELIMITER;
 
-	public String listLeftDelimiter="";
-	public String listRightDelimiter="";
+	public String listLeftDelimiter = LIST_LEFT_DELIMITER;
+	public String listRightDelimiter = LIST_RIGHT_DELIMITER;
 
-	public String expressionLeftDelimiter="(";
-	public String expressionRightDelimiter=")";
+	public String expressionLeftDelimiter = EXPRESSION_LEFT_DELIMITER;
+	public String expressionRightDelimiter = EXPRESSION_RIGHT_DELIMITER;
 
 	public String branchBound = null;
 

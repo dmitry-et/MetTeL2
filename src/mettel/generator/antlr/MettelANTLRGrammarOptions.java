@@ -21,18 +21,12 @@ import mettel.util.MettelJavaNames;
 
 import static mettel.util.MettelStrings.OPTIONS_STRING;
 
-import static mettel.generator.MettelANTLRGrammarDefaultOptions.ANTLR_K;
-import static mettel.generator.MettelANTLRGrammarDefaultOptions.ANTLR_SUPERCLASS;
-import static mettel.generator.MettelANTLRGrammarDefaultOptions.ANTLR_BACKTRACK;
-import static mettel.generator.MettelANTLRGrammarDefaultOptions.ANTLR_MEMOIZE;
-
-
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public class MettelANTLRGrammarOptions {
+public class MettelANTLRGrammarOptions  implements MettelANTLRGrammarDefaultOptions{
 
 	/* A copy from org.antlr.tool.Grammar, ANTLR v3.1.3:
 		282		//Is there a global fixed lookahead set for this grammar? If 0, nothing specified. -1 implies we have not looked at the options table yet to set k.
