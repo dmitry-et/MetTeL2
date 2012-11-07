@@ -30,7 +30,7 @@ public class MettelANTLRStandardGrammar extends MettelANTLRGrammar {
 		addToHeader("import java.util.ArrayList;");
 		addToHeader("import java.util.LinkedHashSet;");
 		addToHeader("");
-		addToHeader("import mettel.core.MettelGeneralTableauRule;");
+		addToHeader("import mettel.core.tableau.MettelGeneralTableauRule;");
 
 		addToHeader("import "+options.superClass()+';');
 		//grammar.addToHeader("import mettel.generator.MettelAbstractLogicParser;");

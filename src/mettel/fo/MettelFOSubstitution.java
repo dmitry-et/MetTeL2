@@ -6,7 +6,8 @@
 package mettel.fo;
 
 import java.util.Map;
-import mettel.core.MettelSubstitution;
+
+import mettel.core.tableau.MettelSubstitution;
 public interface MettelFOSubstitution extends MettelSubstitution{
 
     MettelFOFormula getFormula(MettelFOFormulaVariable e);

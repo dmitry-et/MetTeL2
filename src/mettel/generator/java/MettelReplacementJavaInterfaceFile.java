@@ -37,7 +37,7 @@ public class MettelReplacementJavaInterfaceFile extends MettelJavaInterfaceFile 
 
 	protected void imports(){
 		headings.appendLine("import java.util.Set;");
-		headings.appendLine("import mettel.core.MettelReplacement;");
+		headings.appendLine("import mettel.core.tableau.MettelReplacement;");
 		headings.appendEOL();
 	}
 

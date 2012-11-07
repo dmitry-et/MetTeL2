@@ -20,22 +20,23 @@ import mettel.util.MettelIndentedStringBuilder;
 import mettel.util.MettelJavaNames;
 
 import static mettel.util.MettelStrings.OPTIONS_STRING;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public class MettelANTLRGrammarOptions {
+public class MettelANTLRGrammarOptions  implements MettelANTLRGrammarDefaultOptions{
 
 	/* A copy from org.antlr.tool.Grammar, ANTLR v3.1.3:
 		282		//Is there a global fixed lookahead set for this grammar? If 0, nothing specified. -1 implies we have not looked at the options table yet to set k.
 		283		protected int global_k = -1;
 
 	 */
-    private int k = 1;
-    private String superClass = "mettel.generator.MettelAbstractLogicParser";
-    private boolean backtrack = false;
-    private boolean memoize = false;
+    private int k = ANTLR_K;
+    private String superClass = ANTLR_SUPERCLASS;
+    private boolean backtrack = ANTLR_BACKTRACK;
+    private boolean memoize = ANTLR_MEMOIZE;
 
     String superClass(){
     	return superClass;
@@ -49,7 +50,7 @@ public class MettelANTLRGrammarOptions {
      *
      */
     public MettelANTLRGrammarOptions() {
-    	this(1);
+    	this(ANTLR_K);
     }
 
     public MettelANTLRGrammarOptions(int k) {

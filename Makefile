@@ -97,6 +97,11 @@ MANIFEST_FILE := $(SRC_DIR)/etc/manifest.mf
 PACKAGES_FILE := $(SRC_DIR)/etc/packages
 STATISTICS_FILE := $(SRC_DIR)/etc/statistics
 
+CORE_PACKAGE_SUBDIR = mettel/core
+CORE_JAR_FILE_NAME := $(NAME)2-core.jar
+CORE_JAR_FILE := $(LIB_DIR)/$(CORE_JAR_FILE_NAME)
+CORE_MANIFEST_FILE := $(SRC_DIR)/etc/core-manifest.mf
+
 ### Parser #########################################################################
 
 PARSER_DIR := $(SRC_DIR)/$(NAME)/language
@@ -142,6 +147,7 @@ ANTLR_FO_PARSER_LOG_FILE := antlr.fo.parser.log
 # Sources
 AST_SOURCES := $(shell find $(SRC_DIR)/$(NAME)/language -name '*.java')
 PURE_SOURCES := $(shell find $(SRC_DIR) -name '*.java' \
+! -path "*/$(CORE_PACKAGE_SUBDIR)/*" \
 ! -name $(LEXER_NAME).java \
 ! -name $(PARSER_NAME).java \
 ! -name $(FO_LEXER_NAME).java \
@@ -154,20 +160,24 @@ $(PARSER_DIR)/$(PARSER_NAME).java \
 $(FO_PARSER_DIR)/$(FO_LEXER_NAME).java \
 $(FO_PARSER_DIR)/$(FO_PARSER_NAME).java
 
+CORE_SOURCES := $(shell find $(SRC_DIR)/$(CORE_PACKAGE_SUBDIR) -name '*.java')
+
 # Classes
 #EXTRA_CLASSES := 
 CLASSES := $(shell echo $(SOURCES) | sed -e 's/\.java/\.class/g; s/src/classes/g')
 #$(EXTRA_CLASSES)
+CORE_CLASSES := $(shell echo $(CORE_SOURCES) | sed -e 's/\.java/\.class/g; s/src/classes/g')
+
 
 ### Test ###########################################################################
 
-RUNTIME_CLASSPATH:=$(ANTLR3_JAR):$(ANTLR_JAR):$(STRINGTEMPLATE_JAR):$(JAR_FILE)
+RUNTIME_CLASSPATH:=$(ANTLR3_JAR):$(ANTLR_JAR):$(STRINGTEMPLATE_JAR):$(JAR_FILE):$(CORE_JAR_FILE)
 LOGIC_GENERATION_CLASSPATH:=$(RUNTIME_CLASSPATH)
 #$(COMPILE_CLASSPATH):$(JAR_FILE)
 
 TEST_DIR := test
 TEST_JAR_FILE:=$(LIB_DIR)/test.jar
-TEST_COMPILE_CLASSPATH:=$(COMPILE_CLASSPATH):$(LIB_DIR)/junit.jar:$(JAR_FILE)
+TEST_COMPILE_CLASSPATH:=$(COMPILE_CLASSPATH):$(LIB_DIR)/junit.jar:$(JAR_FILE):$(CORE_JAR_FILE)
 TEST_CLASSPATH:=$(TEST_COMPILE_CLASSPATH):$(TEST_JAR_FILE)
 TEST_CLASSES_DIR:=$(TEST_DIR)/classes
 TEST_SRC_DIR:=$(TEST_DIR)/src
@@ -205,8 +215,7 @@ clear clean clear-ast-classes compile compile-ast clear-parser-files clear-fo-pa
 clear-log only-lexer only-parser parser only-fo-parser fo-parser lexer-doc parser-doc parser-fo-doc doc resources test \
 all compile-test packages-file java-doc clear-test-log clear-doc clear-test clear-test-jar clear-test-output\
 clear-test-classes test-jar old-test junit-test junit SPASS clear-spass-log statistics \
-libantlr tableau-bin clear-bin generateLogics generateParsers compileLogics generate
-
+libantlr tableau-bin clear-bin generateLogics generateParsers compileLogics generate core-jar
 $(NAME): jar
 
 clear-lexer-log:
@@ -281,7 +290,7 @@ clear-jar:
 	@ echo $(DELIM0)
 	@ echo "Clearing jar file"
 	@ echo $(DELIM1)
-	@ rm -f -v $(JAR_FILE)        
+	@ rm -f -v $(JAR_FILE) $(CORE_JAR_FILE)      
 
 clear-bin: 
 	@ echo $(DELIM0)
@@ -397,14 +406,21 @@ compile-ast: clear-ast-classes $(AST_SOURCES) $(CLASSES_DIR)
 	@ echo $(DELIM1)
 	@ $(JAVAC) -classpath $(COMPILE_CLASSPATH) -d "$(CLASSES_DIR)" $(AST_SOURCES) 2>$(JAVAC_LOG_FILE) || (cat $(JAVAC_LOG_FILE) && exit 1)
 
-compile: $(CLASSES) 
+compile: $(CLASSES) $(CORE_CLASSES)
 
-$(CLASSES): $(CLASSES_DIR) $(SOURCES)
+$(CORE_CLASSES) : $(CLASSES_DIR) $(CORE_SOURCES)
+#	@ echo $(CLASSES)
+	@ echo $(DELIM0)
+	@ echo "Compiling project core"
+	@ echo $(DELIM1)
+	@ $(JAVAC) -Xlint:unchecked -classpath $(COMPILE_CLASSPATH) -d "$(CLASSES_DIR)" $(CORE_SOURCES) 2>$(JAVAC_LOG_FILE) || (cat $(JAVAC_LOG_FILE) && exit 1)
+
+$(CLASSES) : $(CLASSES_DIR) $(SOURCES) $(CORE_JAR_FILE)
 #	@ echo $(CLASSES)
 	@ echo $(DELIM0)
 	@ echo "Compiling project"
 	@ echo $(DELIM1)
-	@ $(JAVAC) -Xlint:unchecked -classpath $(COMPILE_CLASSPATH) -d "$(CLASSES_DIR)" $(SOURCES) 2>$(JAVAC_LOG_FILE) || (cat $(JAVAC_LOG_FILE) && exit 1)
+	@ $(JAVAC) -Xlint:unchecked -classpath $(COMPILE_CLASSPATH):$(CORE_JAR_FILE) -d "$(CLASSES_DIR)" $(SOURCES) 2>$(JAVAC_LOG_FILE) || (cat $(JAVAC_LOG_FILE) && exit 1)
     
 resources: $(RESOURCE_FILES)
 
@@ -427,6 +443,16 @@ $(RESOURCE_FILES): $(CLASSES_DIR) $(SRC_RESOURCE_FILES)
 #	    mkdir -p $$(dirname $$j); \
 #	    cp -r $$i $$j; done
 
+
+
+core-jar: $(CORE_JAR_FILE)
+
+$(CORE_JAR_FILE): $(CORE_CLASSES) $(RESOURCE_FILES) $(CORE_MANIFEST_FILE)
+	@ echo $(DELIM0)
+	@ echo "Building runtime jar ($(CORE_JAR_FILE_NAME))"
+	@ echo $(DELIM1)
+	@ $(JAR) cvmf $(CORE_MANIFEST_FILE) $(CORE_JAR_FILE) -C $(CLASSES_DIR) $(CORE_PACKAGE_SUBDIR)
+
 jar: $(JAR_FILE)
 
 $(JAR_FILE): $(CLASSES) $(RESOURCE_FILES) $(MANIFEST_FILE)
@@ -437,7 +463,7 @@ $(JAR_FILE): $(CLASSES) $(RESOURCE_FILES) $(MANIFEST_FILE)
 #	@ cd $(CLASSES_DIR) && $(JAR) cvmf $(MANIFEST_FILE) $(JAR_FILE) *
 #	@ cd $(BASE_DIR)
 
-generateLogics: $(JAR_FILE) $(TEST_CLASSES_DIR)
+generateLogics: $(JAR_FILE) $(TEST_CLASSES_DIR) $(CORE_JAR_FILE)
 	@ echo $(DELIM0)
 	@ echo "Generating logics"
 #	@ echo $(DELIM1)
@@ -469,7 +495,7 @@ compileLogics-alone:
 
 generate: compileLogics
 
-$(TEST_CLASSES): $(TEST_SOURCES) $(JAR_FILE) $(TEST_CLASSES_DIR)
+$(TEST_CLASSES): $(TEST_SOURCES) $(JAR_FILE) $(TEST_CLASSES_DIR) $(CORE_JAR_FILE)
 	@ echo $(DELIM0)
 	@ echo "Compiling test"
 	@ echo $(DELIM1)
