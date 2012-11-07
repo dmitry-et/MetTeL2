@@ -5,9 +5,9 @@
  */
 package mettel.fo;
 
-import mettel.core.MettelExpression;
-import mettel.core.MettelSubstitution;
-import mettel.core.MettelAbstractExpression;
+import mettel.core.tableau.MettelAbstractExpression;
+import mettel.core.tableau.MettelExpression;
+import mettel.core.tableau.MettelSubstitution;
 abstract class MettelFOAbstractExpression extends MettelAbstractExpression implements MettelExpression{
 
     private static volatile int expressionCounter = 0;

@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
-import mettel.core.MettelSubstitution;
+import mettel.core.tableau.MettelSubstitution;
 public class MettelFOTreeSubstitution implements MettelFOSubstitution{
 
     protected final Map<MettelFOFormulaVariable, MettelFOFormula> formulaMap = new TreeMap<MettelFOFormulaVariable, MettelFOFormula>();

@@ -20,6 +20,13 @@ import mettel.util.MettelIndentedStringBuilder;
 import mettel.util.MettelJavaNames;
 
 import static mettel.util.MettelStrings.OPTIONS_STRING;
+
+import static mettel.generator.MettelANTLRGrammarDefaultOptions.ANTLR_K;
+import static mettel.generator.MettelANTLRGrammarDefaultOptions.ANTLR_SUPERCLASS;
+import static mettel.generator.MettelANTLRGrammarDefaultOptions.ANTLR_BACKTRACK;
+import static mettel.generator.MettelANTLRGrammarDefaultOptions.ANTLR_MEMOIZE;
+
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -32,10 +39,10 @@ public class MettelANTLRGrammarOptions {
 		283		protected int global_k = -1;
 
 	 */
-    private int k = 1;
-    private String superClass = "mettel.generator.MettelAbstractLogicParser";
-    private boolean backtrack = false;
-    private boolean memoize = false;
+    private int k = ANTLR_K;
+    private String superClass = ANTLR_SUPERCLASS;
+    private boolean backtrack = ANTLR_BACKTRACK;
+    private boolean memoize = ANTLR_MEMOIZE;
 
     String superClass(){
     	return superClass;
@@ -45,7 +52,7 @@ public class MettelANTLRGrammarOptions {
      *
      */
     public MettelANTLRGrammarOptions() {
-    	this(1);
+    	this(ANTLR_K);
     }
 
     public MettelANTLRGrammarOptions(int k) {

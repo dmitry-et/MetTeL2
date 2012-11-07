@@ -40,7 +40,7 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 		headings.appendLine("import java.util.Comparator;");
 		headings.appendEOL();
 		
-		headings.appendLine("import mettel.core.MettelExpression;");
+		headings.appendLine("import mettel.core.tableau.MettelExpression;");
 		headings.appendEOL();
 	}
 

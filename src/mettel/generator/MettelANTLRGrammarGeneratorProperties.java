@@ -27,7 +27,7 @@ import mettel.generator.antlr.MettelANTLRGrammarOptions;
  * @version $Revision$ $Date$
  *
  */
-public class MettelANTLRGrammarGeneratorProperties {
+public class MettelANTLRGrammarGeneratorProperties implements MettelANTLRGrammarDefaultOptions {
 
 	/**
 	 *
@@ -77,26 +77,26 @@ public class MettelANTLRGrammarGeneratorProperties {
 		final Properties p = new Properties();
 		p.load(reader);
 
-		tableauRuleDelimiter = p.getProperty("tableau.rule.delimiter", tableauRuleDelimiter);
-		tableauRuleBranchDelimiter = p.getProperty("tableau.rule.branch.delimiter", tableauRuleBranchDelimiter);
-		tableauRulePremiseDelimiter = p.getProperty("tableau.rule.premise.delimiter", tableauRulePremiseDelimiter);
+		tableauRuleDelimiter = p.getProperty("tableau.rule.delimiter", TABLEAU_RULE_DELIMITER);
+		tableauRuleBranchDelimiter = p.getProperty("tableau.rule.branch.delimiter", TABLEAU_RULE_BRANCH_DELIMITER);
+		tableauRulePremiseDelimiter = p.getProperty("tableau.rule.premise.delimiter", TABLEAU_RULE_PREMISE_DELIMITER);
 
-		listLeftDelimiter = p.getProperty("list.left.delimiter", listLeftDelimiter);
-		listRightDelimiter = p.getProperty("list.right.delimiter", listRightDelimiter);
+		listLeftDelimiter = p.getProperty("list.left.delimiter", LIST_LEFT_DELIMITER);
+		listRightDelimiter = p.getProperty("list.right.delimiter", LIST_RIGHT_DELIMITER);
 
-		expressionLeftDelimiter = p.getProperty("expression.left.delimiter", expressionLeftDelimiter);
-		expressionRightDelimiter = p.getProperty("expression.right.delimiter", expressionRightDelimiter);
+		expressionLeftDelimiter = p.getProperty("expression.left.delimiter", EXPRESSION_LEFT_DELIMITER);
+		expressionRightDelimiter = p.getProperty("expression.right.delimiter", EXPRESSION_RIGHT_DELIMITER);
 
 		branchBound = p.getProperty("branch.bound", branchBound);
 
-		final String antlrK = p.getProperty("antlr.k","1");
+		final String antlrK = p.getProperty("antlr.k",String.valueOf(ANTLR_K));
 
 		//TODO: more careful check for properties
         grammarOptions = new MettelANTLRGrammarOptions(
-        		(antlrK.indexOf('*') >= 0? 0:Integer.parseInt(p.getProperty("antlr.k","1"))),
-        		p.getProperty("antlr.superClass", "mettel.generator.MettelAbstractLogicParser"),
-        		Boolean.parseBoolean(p.getProperty("antlr.backtrack","false")),
-        		Boolean.parseBoolean(p.getProperty("antlr.memoize","false")));
+        		(antlrK.indexOf('*') >= 0? 0: Integer.parseInt(antlrK)),
+        		p.getProperty("antlr.superClass", ANTLR_SUPERCLASS),
+        		Boolean.parseBoolean(p.getProperty("antlr.backtrack",String.valueOf(ANTLR_BACKTRACK))),
+        		Boolean.parseBoolean(p.getProperty("antlr.memoize",String.valueOf(ANTLR_MEMOIZE))));
 
 		//acceptanceStrategy = p.getProperty("ignore.huge.branch") == "Yes"? 0 : -1;
 

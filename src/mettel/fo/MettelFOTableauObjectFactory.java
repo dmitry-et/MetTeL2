@@ -5,8 +5,8 @@
  */
 package mettel.fo;
 
-import mettel.core.MettelTableauObjectFactory;
-import mettel.core.MettelReplacement;
+import mettel.core.tableau.MettelReplacement;
+import mettel.core.tableau.MettelTableauObjectFactory;
 
 public class MettelFOTableauObjectFactory implements MettelTableauObjectFactory{
 

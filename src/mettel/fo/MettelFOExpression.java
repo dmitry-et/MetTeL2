@@ -5,7 +5,7 @@
  */
 package mettel.fo;
 
-import mettel.core.MettelExpression;
+import mettel.core.tableau.MettelExpression;
 public interface MettelFOExpression extends MettelExpression{
 
     int id();
