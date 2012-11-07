@@ -69,9 +69,9 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 	protected void imports(){
 		headings.appendLine("import java.util.Comparator;");
 		headings.appendEOL();
-		headings.appendLine("import mettel.core.MettelExpression;");
+		headings.appendLine("import mettel.core.tableau.MettelExpression;");
 		if(equality){
-			headings.appendLine("import mettel.core.MettelEqualityExpression;");
+			headings.appendLine("import mettel.core.tableau.MettelEqualityExpression;");
 		}
 		headings.appendEOL();
 	}

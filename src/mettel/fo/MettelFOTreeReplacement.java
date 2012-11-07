@@ -10,9 +10,10 @@ import java.util.TreeMap;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Map.Entry;
-import mettel.core.MettelReplacement;
-import mettel.core.MettelSubstitution;
-import mettel.core.MettelExpression;
+
+import mettel.core.tableau.MettelExpression;
+import mettel.core.tableau.MettelReplacement;
+import mettel.core.tableau.MettelSubstitution;
 
 public class MettelFOTreeReplacement implements MettelFOReplacement{
 

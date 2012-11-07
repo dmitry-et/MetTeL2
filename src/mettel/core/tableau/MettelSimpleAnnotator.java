@@ -1,0 +1,105 @@
+/**
+ * This file is part of MetTeL.
+ *
+ * MetTeL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MetTeL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MetTeL.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package mettel.core.tableau;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+/**
+ * @author Dmitry Tishkovsky
+ * @version $Revision$ $Date$
+ *
+ */
+public class MettelSimpleAnnotator implements MettelAnnotator {
+
+	public final static MettelSimpleAnnotator ANNOTATOR = new MettelSimpleAnnotator();
+
+	/**
+	 *
+	 */
+	private MettelSimpleAnnotator() {
+		super();
+	}
+
+	/* (non-Javadoc)
+	 * @see mettel.core.tableau.MettelAnnotator#substitute(mettel.core.tableau.MettelExpression, mettel.core.tableau.MettelAnnotatedSubstitution)
+	 */
+	@Override
+	public MettelAnnotatedExpression substitute(MettelExpression e,
+			MettelAnnotatedSubstitution s) {
+		return new MettelSimpleAnnotatedExpression(e.substitute(s.substitution()),s.annotation());
+	}
+
+	/* (non-Javadoc)
+	 * @see mettel.core.tableau.MettelAnnotator#merge(mettel.core.tableau.MettelAnnotatedSubstitution, mettel.core.tableau.MettelAnnotatedSubstitution)
+	 */
+	@Override
+	public MettelAnnotatedSubstitution merge(MettelAnnotatedSubstitution s0,
+			MettelAnnotatedSubstitution s1) {
+//System.out.println("s0="+s0+", s1="+s1);
+		MettelSubstitution s = s0.substitution().merge(s1.substitution());
+		if(s == null) return null;
+		return new MettelSimpleAnnotatedSubstitution(s,s0.annotation().merge(s1.annotation()));
+	}
+
+	/* (non-Javadoc)
+	 * @see mettel.core.tableau.MettelAnnotator#match(mettel.core.tableau.MettelExpression, mettel.core.tableau.MettelAnnotatedExpression)
+	 */
+	@Override
+	public MettelAnnotatedSubstitution match(MettelExpression e,
+			MettelAnnotatedExpression ae) {
+//System.out.println("e="+e+", ae="+ae);
+		final MettelSubstitution s = e.match(ae.expression());
+		if(s == null) return null;
+		final MettelSimpleTableauAnnotation a = new MettelSimpleTableauAnnotation(ae.annotation());
+		a.appendDependency(ae);
+		return new MettelSimpleAnnotatedSubstitution(s,a);
+	}
+
+	/* (non-Javadoc)
+	 * @see mettel.core.tableau.MettelAnnotator#reannotate(java.util.Set, mettel.core.tableau.MettelTableauState)
+	 */
+	@Override
+	public Set<MettelAnnotatedExpression> reannotate(
+			Set<MettelAnnotatedExpression> set, MettelTableauState state) {
+		final LinkedHashSet<MettelAnnotatedExpression> result = new LinkedHashSet<MettelAnnotatedExpression>(set.size());
+		final MettelSimpleTableauAnnotation a = new MettelSimpleTableauAnnotation(state);
+		for(MettelAnnotatedExpression ae:set){
+			result.add(new MettelSimpleAnnotatedExpression(ae.expression(),a));
+		}
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see mettel.core.tableau.MettelAnnotator#annotate(mettel.core.tableau.MettelExpression, mettel.core.tableau.MettelTableauState)
+	 */
+	@Override
+	public MettelAnnotatedExpression annotate(MettelExpression e,
+			MettelTableauState state) {
+		return new MettelSimpleAnnotatedExpression(e,new MettelSimpleTableauAnnotation(state));
+	}
+
+	/* (non-Javadoc)
+	 * @see mettel.core.tableau.MettelAnnotator#annotate(mettel.core.tableau.MettelSubstitution, mettel.core.tableau.MettelTableauState)
+	 */
+	@Override
+	public MettelAnnotatedSubstitution annotate(MettelSubstitution sub,
+			MettelTableauState state) {
+		return new MettelSimpleAnnotatedSubstitution(sub,new MettelSimpleTableauAnnotation(state));
+	}
+
+}

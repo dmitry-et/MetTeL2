@@ -5,8 +5,8 @@
  */
 package mettel.fo;
 
- import mettel.core.MettelExpression;
-import mettel.core.MettelEqualityExpression;
+ import mettel.core.tableau.MettelEqualityExpression;
+import mettel.core.tableau.MettelExpression;
 
 public class MettelFOEquivalenceFormula extends MettelFOAbstractExpression implements MettelEqualityExpression,MettelFOFormula{
 

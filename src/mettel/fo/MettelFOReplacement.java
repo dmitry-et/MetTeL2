@@ -6,7 +6,8 @@
 package mettel.fo;
 
 import java.util.Set;
-import mettel.core.MettelReplacement;
+
+import mettel.core.tableau.MettelReplacement;
 
 public interface MettelFOReplacement extends MettelReplacement{
 

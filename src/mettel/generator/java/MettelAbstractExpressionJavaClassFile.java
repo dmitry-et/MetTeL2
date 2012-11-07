@@ -40,9 +40,9 @@ public class MettelAbstractExpressionJavaClassFile extends MettelJavaClassFile {
 		headings.appendLine("import java.util.Comparator;");
 		headings.appendEOL();
 		
-	    headings.appendLine("import mettel.core.MettelExpression;");
-	    headings.appendLine("import mettel.core.MettelSubstitution;");
-		headings.appendLine("import mettel.core.MettelAbstractExpression;");
+	    headings.appendLine("import mettel.core.tableau.MettelExpression;");
+	    headings.appendLine("import mettel.core.tableau.MettelSubstitution;");
+		headings.appendLine("import mettel.core.tableau.MettelAbstractExpression;");
 	}
 
 	private void body(){

@@ -37,7 +37,7 @@ public class MettelSubstitutionJavaInterfaceFile extends MettelJavaInterfaceFile
 
 	protected void imports(){
 		headings.appendLine("import java.util.Map;");
-		headings.appendLine("import mettel.core.MettelSubstitution;");
+		headings.appendLine("import mettel.core.tableau.MettelSubstitution;");
 	}
 
 	private void body(String[] sorts){

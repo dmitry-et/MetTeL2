@@ -37,8 +37,8 @@ public class MettelTableauObjectFactoryJavaClassFile extends MettelJavaClassFile
 	}
 
 	protected void imports(){
-		headings.appendLine("import mettel.core.MettelTableauObjectFactory;");
-		headings.appendLine("import mettel.core.MettelReplacement;");
+		headings.appendLine("import mettel.core.tableau.MettelTableauObjectFactory;");
+		headings.appendLine("import mettel.core.tableau.MettelReplacement;");
 		headings.appendEOL();
 	}
 

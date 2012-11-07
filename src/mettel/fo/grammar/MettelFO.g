@@ -29,9 +29,9 @@ package mettel.fo;
 
 import java.util.Collection;
 
-import mettel.generator.MettelLogicParser;
+import mettel.core.language.MettelLogicParser;
 
-import mettel.core.MettelExpression;
+import mettel.core.tableau.MettelExpression;
 }
 
 @lexer::header{
