@@ -42,17 +42,17 @@ CLASS_PREFIX := Mettel
 BASE_DIR := $(PWD)
 
 # Log files
-JAVAC_LOG_FILE := $(BASE_DIR)/javac.log
-TEST_JAVAC_LOG_FILE := $(BASE_DIR)/javac-test.log
-TEST_LOG_FILE := $(BASE_DIR)/test.log
-TEST_ERR_FILE := $(BASE_DIR)/test.err
+JAVAC_LOG_FILE := javac.log
+TEST_JAVAC_LOG_FILE := javac-test.log
+TEST_LOG_FILE := test.log
+TEST_ERR_FILE := test.err
 
 # Project paths
-BIN_DIR := $(BASE_DIR)/bin
-SRC_DIR := $(BASE_DIR)/src
-LIB_DIR := $(BASE_DIR)/lib
-CLASSES_DIR := $(BASE_DIR)/classes
-RESOURCE_DIR := $(BASE_DIR)/rsrc
+BIN_DIR := bin
+SRC_DIR := src
+LIB_DIR := lib
+CLASSES_DIR := classes
+RESOURCE_DIR := rsrc
 #AST_CLASSES_DIR := 
 
 # Resources
@@ -60,7 +60,7 @@ SRC_RESOURCE_FILES := $(shell find $(RESOURCE_DIR) -type f ! -path '*.svn*')
 RESOURCE_FILES := $(shell echo $(SRC_RESOURCE_FILES) | sed -e 's/rsrc/classes/g')
 
 # Doc paths
-DOC_DIR := $(BASE_DIR)/doc
+DOC_DIR := doc
 JAVADOC_DIR := $(DOC_DIR)/javadoc
 
 # Javadoc options
@@ -114,8 +114,8 @@ LEXER_DOC_FILE := $(DOC_DIR)/grammar/$(LEXER_NAME).html
 PARSER_DOC_FILE := $(DOC_DIR)/grammar/$(PARSER_NAME).html
 
 # Antlr log files
-ANTLR_LEXER_LOG_FILE := $(BASE_DIR)/antlr.lexer.log
-ANTLR_PARSER_LOG_FILE := $(BASE_DIR)/antlr.parser.log
+ANTLR_LEXER_LOG_FILE := antlr.lexer.log
+ANTLR_PARSER_LOG_FILE := antlr.parser.log
 
 ### FO-Parser #########################################################################
 
@@ -134,8 +134,8 @@ FO_LEXER_DOC_FILE := $(DOC_DIR)/grammar/$(FO_LEXER_NAME).html
 FO_PARSER_DOC_FILE := $(DOC_DIR)/grammar/$(FO_PARSER_NAME).html
 
 # Antlr log files
-ANTLR_FO_LEXER_LOG_FILE := $(BASE_DIR)/antlr.fo.lexer.log
-ANTLR_FO_PARSER_LOG_FILE := $(BASE_DIR)/antlr.fo.parser.log
+ANTLR_FO_LEXER_LOG_FILE := antlr.fo.lexer.log
+ANTLR_FO_PARSER_LOG_FILE := antlr.fo.parser.log
 
 ### Compilation ####################################################################
 
@@ -165,7 +165,7 @@ RUNTIME_CLASSPATH:=$(ANTLR3_JAR):$(ANTLR_JAR):$(STRINGTEMPLATE_JAR):$(JAR_FILE)
 LOGIC_GENERATION_CLASSPATH:=$(RUNTIME_CLASSPATH)
 #$(COMPILE_CLASSPATH):$(JAR_FILE)
 
-TEST_DIR := $(BASE_DIR)/test
+TEST_DIR := test
 TEST_JAR_FILE:=$(LIB_DIR)/test.jar
 TEST_COMPILE_CLASSPATH:=$(COMPILE_CLASSPATH):$(LIB_DIR)/junit.jar:$(JAR_FILE)
 TEST_CLASSPATH:=$(TEST_COMPILE_CLASSPATH):$(TEST_JAR_FILE)
@@ -175,7 +175,7 @@ TEST_SOURCES := $(shell find $(TEST_SRC_DIR) -name '*.java')
 TEST_CLASSES := $(shell echo $(TEST_SOURCES) | sed -e 's/\.java/\.class/g; s/src/classes/g')
 
 TEST_FILE := $(TEST_DIR)/Test
-EXAMPLES_DIR := $(BASE_DIR)/examples
+EXAMPLES_DIR := examples
 TEST_OPTIONS := 
 #$(EXAMPLES_DIR)/axiomatic_system.in \
 #$(EXAMPLES_DIR)/axiomatic_system.out \
@@ -189,13 +189,13 @@ JAVA_TEST_OPTIONS := -Xfuture -Xbatch -Xms256M -Xmx1024M
 
 TEST_EXAMPLES_DIR = $(TEST_DIR)/examples
 TEST_OUTPUT_DIR = $(TEST_DIR)/output
-TEST_LOGIC_DIRS = "bool ALCO S4 ALBOid LTL LTLC lists KE3 fotheory IEL"
+TEST_LOGIC_DIRS = "ALBOidDL bool ALCO S4 ALBOid LTL LTLC lists KE3 fotheory IEL"
 TEST_LOGIC_PARSERS = $(shell find $(TEST_OUTPUT_DIR) -name '*.g')
 TEST_LOGIC_SOURCES = $(shell find $(TEST_OUTPUT_DIR) -name '*.java')
 
 DFG_FILE := $(EXAMPLES_DIR)/formulae2dfg.dfg
 TO_DFG_FILE := $(EXAMPLES_DIR)/formulae2dfg.in
-SPASS_LOG_FILE := $(BASE_DIR)/SPASS.log
+SPASS_LOG_FILE := SPASS.log
 
 ### Rules ##########################################################################
 
@@ -294,8 +294,8 @@ clear: clear-log clear-jar clear-bin clear-classes clear-parser-files clear-fo-p
 	@ echo $(DELIM0)
 	@ echo "Clearing *.bck and *~ files"
 	@ echo $(DELIM1)
-	@ rm -f -r -v $(shell find $(BASE_DIR)/ -name '*.bck')
-	@ rm -f -r -v $(shell find $(BASE_DIR)/ -name '*~')
+	@ rm -f -r -v $(shell find . -name '*.bck')
+	@ rm -f -r -v $(shell find . -name '*~')
 
 clear-doc:
 	@ echo $(DELIM0)
@@ -346,9 +346,8 @@ $(PARSER_FILES): $(GRAMMAR_FILE)
 	@ echo "Making parser and parser documentation"
 	@ echo $(DELIM1)
 	@ mkdir -p $(DOC_DIR)/grammar
-	@ cd $(PARSER_DIR)/grammar && $(JAVA) -classpath $(COMPILE_CLASSPATH) org.antlr.Tool -o $(PARSER_DIR) -print $(ANTLR_OPTIONS) $(GRAMMAR_FILE_NAME) 1>$(DOC_DIR)/grammar/$(PARSER_NAME).txt 2>$(ANTLR_PARSER_LOG_FILE) && rm -f $(TOKENS_FILE) 
+	@ $(JAVA) -classpath $(COMPILE_CLASSPATH) org.antlr.Tool -fo $(PARSER_DIR) -print $(ANTLR_OPTIONS) $(GRAMMAR_FILE) 1>$(DOC_DIR)/grammar/$(PARSER_NAME).txt 2>$(ANTLR_PARSER_LOG_FILE) && rm -f $(TOKENS_FILE) 
 	@ cat $(ANTLR_PARSER_LOG_FILE)
-	@ cd $(BASE_DIR)
 
 only-parser: $(PARSER_FILES)
        
@@ -361,9 +360,8 @@ $(FO_PARSER_FILES): $(FO_GRAMMAR_FILE)
 	@ echo "Making first-order language parser and parser documentation"
 	@ echo $(DELIM1)
 	@ mkdir -p $(DOC_DIR)/grammar
-	@ cd $(FO_PARSER_DIR)/grammar && $(JAVA) -classpath $(COMPILE_CLASSPATH) org.antlr.Tool -o $(FO_PARSER_DIR) -print $(ANTLR_OPTIONS) $(FO_GRAMMAR_FILE_NAME) 1>$(DOC_DIR)/grammar/$(FO_PARSER_NAME).txt 2>$(ANTLR_FO_PARSER_LOG_FILE) && rm -f $(FO_TOKENS_FILE) 
+	@ $(JAVA) -classpath $(COMPILE_CLASSPATH) org.antlr.Tool -fo $(FO_PARSER_DIR) -print $(ANTLR_OPTIONS) $(FO_GRAMMAR_FILE) 1>$(DOC_DIR)/grammar/$(FO_PARSER_NAME).txt 2>$(ANTLR_FO_PARSER_LOG_FILE) && rm -f $(FO_TOKENS_FILE) 
 	@ cat $(ANTLR_FO_PARSER_LOG_FILE)
-	@ cd $(BASE_DIR)
 
 only-fo-parser: $(FO_PARSER_FILES)
        
@@ -414,7 +412,9 @@ $(RESOURCE_FILES): $(CLASSES_DIR) $(SRC_RESOURCE_FILES)
 	@ echo $(DELIM0)
 	@ echo "Copying resources"
 	@ echo $(DELIM1)
-	@ cd $(RESOURCE_DIR) && cp -R -L --parents $(shell cd $(RESOURCE_DIR) && find -L . -type f ! -path '*.svn*') $(CLASSES_DIR)
+	@ cp -R -L $(RESOURCE_DIR)/* $(CLASSES_DIR)
+#@ cd $(RESOURCE_DIR) && cp -R -L $(shell cd $(RESOURCE_DIR) 1>/dev/null 2>&1 && find -L ./ -type f ! -path '*.svn*') $(CLASSES_DIR)
+#	@ cd $(BASE_DIR)
 	
 #	echo $(RESOURCE_FILES)
 #	echo $(SRC_RESOURCE_FILES)
@@ -433,8 +433,9 @@ $(JAR_FILE): $(CLASSES) $(RESOURCE_FILES) $(MANIFEST_FILE)
 	@ echo $(DELIM0)
 	@ echo "Building runtime jar ($(JAR_FILE_NAME))"
 	@ echo $(DELIM1)
-	@ cd $(CLASSES_DIR) && $(JAR) cvmf $(MANIFEST_FILE) $(JAR_FILE) *
-	@ cd $(BASE_DIR)
+	@ $(JAR) cvmf $(MANIFEST_FILE) $(JAR_FILE) -C $(CLASSES_DIR) .
+#	@ cd $(CLASSES_DIR) && $(JAR) cvmf $(MANIFEST_FILE) $(JAR_FILE) *
+#	@ cd $(BASE_DIR)
 
 generateLogics: $(JAR_FILE) $(TEST_CLASSES_DIR)
 	@ echo $(DELIM0)
@@ -488,15 +489,17 @@ test-jar-alone: $(TEST_CLASSES)
 	@ echo $(DELIM0)
 	@ echo "Building runtime jar (test.jar)"
 	@ echo $(DELIM1)
-	@ cd $(TEST_CLASSES_DIR) && $(JAR) cvf $(TEST_JAR_FILE) *
-	@ cd $(BASE_DIR)
+	@ $(JAR) cvf $(TEST_JAR_FILE) -C $(TEST_CLASSES_DIR) .
+#	@ cd $(TEST_CLASSES_DIR) && $(JAR) cvf $(TEST_JAR_FILE) *
+#	@ cd $(BASE_DIR)
 
 $(TEST_JAR_FILE): $(TEST_CLASSES) generate
 	@ echo $(DELIM0)
 	@ echo "Building runtime jar (test.jar)"
 	@ echo $(DELIM1)
-	@ cd $(TEST_CLASSES_DIR) && $(JAR) cvf $(TEST_JAR_FILE) *
-	@ cd $(BASE_DIR)
+	@ $(JAR) cvf $(TEST_JAR_FILE) -C $(TEST_CLASSES_DIR) .
+#	@ cd $(TEST_CLASSES_DIR) && $(JAR) cvf $(TEST_JAR_FILE) *
+#	@ cd $(BASE_DIR)
 
 test-jar: $(TEST_JAR_FILE)
 
@@ -527,7 +530,7 @@ junit: test
 #	@ echo $(DELIM0)
 #	@ echo "Testing parser"
 #	@ echo $(DELIM1)
-#	@ $(JAVA_HOME)/bin/java -classpath .:$(RUNTIME_CLASSPATH) $(JAVA_TEST_OPTIONS) mettel.parser.MettelParser || cat $(BASE_DIR)/examples/formulae.err
+#	@ $(JAVA_HOME)/bin/java -classpath .:$(RUNTIME_CLASSPATH) $(JAVA_TEST_OPTIONS) mettel.parser.MettelParser || cat examples/formulae.err
 ##
     
 old-test: $(TEST_JAR_FILE) 
