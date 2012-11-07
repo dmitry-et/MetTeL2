@@ -18,7 +18,7 @@ package mettel.core.tableau;
 
 import java.util.Set;
 
-import mettel.util.MettelAnnotatedObject;
+import mettel.core.util.MettelAnnotatedObject;
 
 /**
  * @author Dmitry Tishkovsky

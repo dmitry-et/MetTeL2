@@ -14,10 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with MetTeL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package mettel.util;
+package mettel.core.util;
 
 import java.util.Comparator;
 import java.util.Iterator;
+
 
 /**
  * @author Dmitry Tishkovsky

@@ -324,7 +324,7 @@ public class MettelGenerator {
 		Attributes attributes = manifest.getMainAttributes();
 		attributes.put(Attributes.Name.MANIFEST_VERSION, "1.0");
 		attributes.put(Attributes.Name.MAIN_CLASS, path+'.'+name);
-		attributes.put(Attributes.Name.CLASS_PATH, "mettel2.jar antlr3-runtime.jar");
+		attributes.put(Attributes.Name.CLASS_PATH, "mettel2-core.jar antlr3-runtime.jar");
 
 		JarOutputStream jar = new JarOutputStream(new FileOutputStream(path+".jar"), manifest);
 		addToJar(dir.getPath(),dir,jar);

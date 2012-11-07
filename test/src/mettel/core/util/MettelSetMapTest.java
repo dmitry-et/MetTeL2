@@ -1,7 +1,10 @@
-package mettel.util;
+package mettel.core.util;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+
+//import mettel.core.util.MettelAnnotatedObject;
+//import mettel.core.util.MettelTreeSetLinkedHashMap;
 
 import junit.framework.*;
 

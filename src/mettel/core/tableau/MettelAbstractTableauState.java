@@ -21,7 +21,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import mettel.core.tableau.strategy.MettelPriorityRuleSelectionStrategy;
-import mettel.util.MettelTreeSetLinkedHashMap;
+import mettel.core.util.MettelTreeSetLinkedHashMap;
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$

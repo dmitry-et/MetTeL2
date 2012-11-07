@@ -16,7 +16,7 @@
  */
 package mettel.core.tableau;
 
-import mettel.util.MettelAnnotatedObject;
+import mettel.core.util.MettelAnnotatedObject;
 
 /**
  * @author Dmitry Tishkovsky

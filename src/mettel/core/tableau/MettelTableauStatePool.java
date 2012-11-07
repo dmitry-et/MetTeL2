@@ -18,7 +18,7 @@ package mettel.core.tableau;
 
 import java.util.Comparator;
 
-import mettel.util.MettelTreeSetLinkedHashMap;
+import mettel.core.util.MettelTreeSetLinkedHashMap;
 
 /**
  * @author Dmitry Tishkovsky

@@ -1,4 +1,4 @@
-package mettel.util;
+package mettel.core.util;
 
 import junit.framework.*;
 

@@ -23,7 +23,7 @@ public class AllTests {
 
 	public static Test suite() {
 		TestSuite suite= new TestSuite("MetTeL Tests");
-		suite.addTest(mettel.util.AllTests.suite());
+		suite.addTest(mettel.core.util.AllTests.suite());
 		suite.addTest(mettel.generator.AllTests.suite());
 		suite.addTest(mettel.language.AllTests.suite());
 		suite.addTest(mettel.fo.AllTests.suite());

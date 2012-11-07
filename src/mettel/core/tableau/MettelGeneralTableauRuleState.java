@@ -19,7 +19,8 @@ package mettel.core.tableau;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import mettel.util.MettelTreeSetLinkedHashMap;
+
+import mettel.core.util.MettelTreeSetLinkedHashMap;
 
 /**
  * @author Dmitry Tishkovsky
