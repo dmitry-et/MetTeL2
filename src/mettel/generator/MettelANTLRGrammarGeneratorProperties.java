@@ -55,7 +55,9 @@ public class MettelANTLRGrammarGeneratorProperties implements MettelANTLRGrammar
 
 	//public int antlr_k = 1;
 
-	public MettelANTLRGrammarOptions grammarOptions= null;
+	public MettelANTLRGrammarOptions grammarOptions = null;
+
+	public MettelEqualityKeywords equalityKeywords = EQUALITY_KEYWORDS;
 
 //	public static final int NONE = -1;
 //	public static final int IGNORE_HUGE_BRANCH = 0;
@@ -100,5 +102,32 @@ public class MettelANTLRGrammarGeneratorProperties implements MettelANTLRGrammar
 
 		//acceptanceStrategy = p.getProperty("ignore.huge.branch") == "Yes"? 0 : -1;
 
+        String keywords = p.getProperty("equality.keywords");
+        //System.out.println("========================"+keywords);
+        if(keywords == null){
+        	equalityKeywords = EQUALITY_KEYWORDS;
+        	//System.out.println("NULL========================"+keywords);
+        }else{
+        	equalityKeywords = new MettelEqualityKeywords(keywords.trim());
+
+        	/*final int LENGTH = keywords.length();
+        	if(keywords.charAt(0) != '{' || keywords.charAt(LENGTH - 1) != '}')
+        		throw new MettelRuntimeException("Wrong equality keywords format");
+        	int i = -1, j = 0;
+        	while((i = keywords.indexOf(',', ++i)) != -1){
+        		j++;
+        	}
+        	equalityKeywords = new String[j+1];
+        	int i0 = 1, i1 = keywords.indexOf(',', i0);
+        	j = -1;
+        	while(i1 != -1){
+        		equalityKeywords[++j] = keywords.substring(i0, i1);
+        		i0 = i1 + 1;
+        	}
+        	equalityKeywords[++j] = keywords.substring(i0, LENGTH - 2);
+        	*/
+        }
+
+        //System.out.println("###############################"+equalityKeywords);
 	}
 }

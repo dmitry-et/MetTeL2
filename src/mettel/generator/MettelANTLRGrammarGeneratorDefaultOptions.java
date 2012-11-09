@@ -2,7 +2,7 @@ package mettel.generator;
 
 import mettel.generator.antlr.MettelANTLRGrammarDefaultOptions;
 
-public interface MettelANTLRGrammarGeneratorDefaultOptions extends MettelANTLRGrammarDefaultOptions{
+public interface MettelANTLRGrammarGeneratorDefaultOptions extends MettelANTLRGrammarDefaultOptions, MettelEqualityDefaultKeywords{
 
 	public static final String TABLEAU_RULE_DELIMITER = "$;";
 	public static final String TABLEAU_RULE_BRANCH_DELIMITER = "$|";
@@ -15,4 +15,5 @@ public interface MettelANTLRGrammarGeneratorDefaultOptions extends MettelANTLRGr
 	public static final String EXPRESSION_RIGHT_DELIMITER = ")";
 
 	public static final String BRANCH_BOUND = null;
+
 }
