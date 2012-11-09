@@ -1,3 +1,5 @@
+09/11/2012 Added supprot for optional equality keywords
+
 04/11/2012 Added support for ANTLR options in generated grammar files
 
 20/06/2011 Integration of the tableau core with AST generation.
