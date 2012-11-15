@@ -27,6 +27,6 @@ package mettel.generator;
  */
 public interface MettelEqualityDefaultKeywords {
 
-	public static final MettelEqualityKeywords EQUALITY_KEYWORDS = new MettelEqualityKeywords("{equality,equivalence,congruence}");
+	public static final MettelEqualityKeywords EQUALITY_KEYWORDS = new MettelEqualityKeywords("{equality}");
 
 }
