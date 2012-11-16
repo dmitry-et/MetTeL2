@@ -17,16 +17,16 @@ public class AllTests {
 		"S4.tableau.test.S4TableauTest",
 		"ALBOid.language.test.ALBOidParserTest",
 		"ALBOid.tableau.test.ALBOidTableauTest",
-		"LTL.language.test.LTLParserTest",
-//		"LTL.tableau.test.LTLTableauTest",
-		"LTLC.language.test.LTLCParserTest",
-//		"LTLC.tableau.test.LTLCTableauTest",
 		"KE3.language.test.KE3ParserTest",
 		"KE3.tableau.test.KE3TableauTest",
 //		"fotheory.language.test.SomeFOTheoryParserTest",
 //		"fotheory.tableau.test.SomeFOTheoryTableauTest",
 		"IEL.language.test.IELParserTest",
-		"IEL.tableau.test.IELTableauTest"
+		"IEL.tableau.test.IELTableauTest",
+		"LTL.language.test.LTLParserTest",
+		"LTL.tableau.test.LTLTableauTest",
+		"LTLC.language.test.LTLCParserTest",
+		"LTLC.tableau.test.LTLCTableauTest",
 	};
 
 	public static void main(String[] args) {

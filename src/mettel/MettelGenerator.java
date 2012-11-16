@@ -180,6 +180,8 @@ public class MettelGenerator {
         		}
         	}
 
+    		MettelANTLRGrammarGeneratorProperties p = (prop == null)? null: new MettelANTLRGrammarGeneratorProperties(prop);
+
 //The following is not necessary since out and err are always defined
 /*        	if(out == null) out = new PrintWriter(
     				new OutputStreamWriter(System.out),true);
@@ -193,7 +195,7 @@ public class MettelGenerator {
         	MettelLexer lexer = new MettelLexer(in);
 
         	tokens.setTokenSource(lexer);
-        	MettelParser parser = new MettelParser(tokens);
+        	MettelParser parser = new MettelParser(tokens, p.equalityKeywords);
 
          	report("I am reading the specification.");
          	MettelSpecification spec = parser.specification();
@@ -210,7 +212,7 @@ public class MettelGenerator {
         	//StringBuilder buf = new StringBuilder();
         	//spec.toBuffer(buf);
         	//System.out.print(buf);
-        	MettelANTLRGrammarGeneratorProperties p = (prop == null)? null: new MettelANTLRGrammarGeneratorProperties(prop);
+
 
         	report("I am processing the specification.");
         	MettelANTLRGrammarGenerator gen = new MettelANTLRGrammarGenerator(spec,p);
