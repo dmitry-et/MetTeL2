@@ -303,8 +303,11 @@ public class MettelANTLRGrammarGenerator {
 				r.appendLineToAfterBlock("r0 = e0;");
 				grammar.addRule(r);
 
+				final boolean equality = (s instanceof MettelEqualityBNFStatement);
+				properties.rewritingIsOn |= equality;
+
 				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, id,
-						new String[]{SORT_NAME, SORT_NAME}, s.tokens(), (s instanceof MettelEqualityBNFStatement));
+						new String[]{SORT_NAME, SORT_NAME}, s.tokens(), equality);
 
 			}else if( (SIZE == 2) &&
 					  (tokens[0] instanceof MettelSort) &&
@@ -391,8 +394,11 @@ public class MettelANTLRGrammarGenerator {
 				}
 */				grammar.addRule(r);
 
+				final boolean equality = (s instanceof MettelEqualityBNFStatement);
+				properties.rewritingIsOn |= equality;
+
 				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, id , sortStrings.toArray(new String[sortStrings.size()]),
-						s.tokens(), (s instanceof MettelEqualityBNFStatement));
+						s.tokens(), equality);
 
 			}//TODO other alternatives: ~~P, etc
 			s0 = s1;

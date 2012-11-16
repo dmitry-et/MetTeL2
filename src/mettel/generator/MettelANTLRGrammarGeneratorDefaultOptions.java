@@ -16,4 +16,6 @@ public interface MettelANTLRGrammarGeneratorDefaultOptions extends MettelANTLRGr
 
 	public static final String BRANCH_BOUND = null;
 
+	public static final boolean REWRITING_ON = false;
+
 }

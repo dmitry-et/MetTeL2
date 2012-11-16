@@ -59,6 +59,8 @@ public class MettelANTLRGrammarGeneratorProperties implements MettelANTLRGrammar
 
 	public MettelEqualityKeywords equalityKeywords = EQUALITY_KEYWORDS;
 
+	public boolean rewritingIsOn = REWRITING_ON;
+
 //	public static final int NONE = -1;
 //	public static final int IGNORE_HUGE_BRANCH = 0;
 //	public int acceptanceStrategy = NONE;
