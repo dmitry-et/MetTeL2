@@ -13,6 +13,7 @@
 ( exists ( r - ) . p )
 ( exists ( ( r | ( ~ s ) ) | ( p - ) ) . ( ( ( ( ( true ) & ( false ) ) & ( { l } ) ) -> ( ~ p ) ) <-> ( ( p & q ) | r ) ) )
 ( forall ( ( ~ r ) | ( ~ s ) ) . ( p & q ) )
+( i : p )
 
 Matching ( true ) with ( false )
 Substitution: null
@@ -42,6 +43,8 @@ Matching ( true ) with ( exists ( ( r | ( ~ s ) ) | ( p - ) ) . ( ( ( ( ( true )
 Substitution: null
 Matching ( true ) with ( forall ( ( ~ r ) | ( ~ s ) ) . ( p & q ) )
 Substitution: null
+Matching ( true ) with ( i : p )
+Substitution: null
 Matching ( false ) with ( { l } )
 Substitution: null
 Matching ( false ) with ( ~ p )
@@ -68,6 +71,8 @@ Matching ( false ) with ( exists ( ( r | ( ~ s ) ) | ( p - ) ) . ( ( ( ( ( true 
 Substitution: null
 Matching ( false ) with ( forall ( ( ~ r ) | ( ~ s ) ) . ( p & q ) )
 Substitution: null
+Matching ( false ) with ( i : p )
+Substitution: null
 Matching ( { l } ) with ( ~ p )
 Substitution: null
 Matching ( { l } ) with ( p & q )
@@ -92,6 +97,8 @@ Matching ( { l } ) with ( exists ( ( r | ( ~ s ) ) | ( p - ) ) . ( ( ( ( ( true 
 Substitution: null
 Matching ( { l } ) with ( forall ( ( ~ r ) | ( ~ s ) ) . ( p & q ) )
 Substitution: null
+Matching ( { l } ) with ( i : p )
+Substitution: null
 Matching ( ~ p ) with ( p & q )
 Substitution: null
 Matching ( ~ p ) with ( p | q )
@@ -114,6 +121,8 @@ Matching ( ~ p ) with ( exists ( ( r | ( ~ s ) ) | ( p - ) ) . ( ( ( ( ( true ) 
 Substitution: null
 Matching ( ~ p ) with ( forall ( ( ~ r ) | ( ~ s ) ) . ( p & q ) )
 Substitution: null
+Matching ( ~ p ) with ( i : p )
+Substitution: null
 Matching ( p & q ) with ( p | q )
 Substitution: null
 Matching ( p & q ) with ( p -> q )
@@ -134,6 +143,8 @@ Matching ( p & q ) with ( exists ( ( r | ( ~ s ) ) | ( p - ) ) . ( ( ( ( ( true 
 Substitution: null
 Matching ( p & q ) with ( forall ( ( ~ r ) | ( ~ s ) ) . ( p & q ) )
 Substitution: null
+Matching ( p & q ) with ( i : p )
+Substitution: null
 Matching ( p | q ) with ( p -> q )
 Substitution: null
 Matching ( p | q ) with ( p <-> q )
@@ -152,6 +163,8 @@ Matching ( p | q ) with ( exists ( ( r | ( ~ s ) ) | ( p - ) ) . ( ( ( ( ( true 
 Substitution: null
 Matching ( p | q ) with ( forall ( ( ~ r ) | ( ~ s ) ) . ( p & q ) )
 Substitution: null
+Matching ( p | q ) with ( i : p )
+Substitution: null
 Matching ( p -> q ) with ( p <-> q )
 Substitution: null
 Matching ( p -> q ) with ( exists r . p )
@@ -168,6 +181,8 @@ Matching ( p -> q ) with ( exists ( ( r | ( ~ s ) ) | ( p - ) ) . ( ( ( ( ( true
 Substitution: null
 Matching ( p -> q ) with ( forall ( ( ~ r ) | ( ~ s ) ) . ( p & q ) )
 Substitution: null
+Matching ( p -> q ) with ( i : p )
+Substitution: null
 Matching ( p <-> q ) with ( exists r . p )
 Substitution: null
 Matching ( p <-> q ) with ( forall r . p )
@@ -182,6 +197,8 @@ Matching ( p <-> q ) with ( exists ( ( r | ( ~ s ) ) | ( p - ) ) . ( ( ( ( ( tru
 Substitution: null
 Matching ( p <-> q ) with ( forall ( ( ~ r ) | ( ~ s ) ) . ( p & q ) )
 Substitution: null
+Matching ( p <-> q ) with ( i : p )
+Substitution: null
 Matching ( exists r . p ) with ( forall r . p )
 Substitution: null
 Matching ( exists r . p ) with ( exists ( ( ~ r ) | s ) . p )
@@ -194,6 +211,8 @@ Matching ( exists r . p ) with ( exists ( ( r | ( ~ s ) ) | ( p - ) ) . ( ( ( ( 
 Substitution: $[p/( ( ( ( ( true ) & ( false ) ) & ( { l } ) ) -> ( ~ p ) ) <-> ( ( p & q ) | r ) ), r/( ( r | ( ~ s ) ) | ( p - ) )]
 Matching ( exists r . p ) with ( forall ( ( ~ r ) | ( ~ s ) ) . ( p & q ) )
 Substitution: null
+Matching ( exists r . p ) with ( i : p )
+Substitution: null
 Matching ( forall r . p ) with ( exists ( ( ~ r ) | s ) . p )
 Substitution: null
 Matching ( forall r . p ) with ( exists ( r | s ) . p )
@@ -204,6 +223,8 @@ Matching ( forall r . p ) with ( exists ( ( r | ( ~ s ) ) | ( p - ) ) . ( ( ( ( 
 Substitution: null
 Matching ( forall r . p ) with ( forall ( ( ~ r ) | ( ~ s ) ) . ( p & q ) )
 Substitution: $[p/( p & q ), r/( ( ~ r ) | ( ~ s ) )]
+Matching ( forall r . p ) with ( i : p )
+Substitution: null
 Matching ( exists ( ( ~ r ) | s ) . p ) with ( exists ( r | s ) . p )
 Substitution: null
 Matching ( exists ( ( ~ r ) | s ) . p ) with ( exists ( r - ) . p )
@@ -212,15 +233,25 @@ Matching ( exists ( ( ~ r ) | s ) . p ) with ( exists ( ( r | ( ~ s ) ) | ( p - 
 Substitution: null
 Matching ( exists ( ( ~ r ) | s ) . p ) with ( forall ( ( ~ r ) | ( ~ s ) ) . ( p & q ) )
 Substitution: null
+Matching ( exists ( ( ~ r ) | s ) . p ) with ( i : p )
+Substitution: null
 Matching ( exists ( r | s ) . p ) with ( exists ( r - ) . p )
 Substitution: null
 Matching ( exists ( r | s ) . p ) with ( exists ( ( r | ( ~ s ) ) | ( p - ) ) . ( ( ( ( ( true ) & ( false ) ) & ( { l } ) ) -> ( ~ p ) ) <-> ( ( p & q ) | r ) ) )
 Substitution: $[p/( ( ( ( ( true ) & ( false ) ) & ( { l } ) ) -> ( ~ p ) ) <-> ( ( p & q ) | r ) ), r/( r | ( ~ s ) ), s/( p - )]
 Matching ( exists ( r | s ) . p ) with ( forall ( ( ~ r ) | ( ~ s ) ) . ( p & q ) )
 Substitution: null
+Matching ( exists ( r | s ) . p ) with ( i : p )
+Substitution: null
 Matching ( exists ( r - ) . p ) with ( exists ( ( r | ( ~ s ) ) | ( p - ) ) . ( ( ( ( ( true ) & ( false ) ) & ( { l } ) ) -> ( ~ p ) ) <-> ( ( p & q ) | r ) ) )
 Substitution: null
 Matching ( exists ( r - ) . p ) with ( forall ( ( ~ r ) | ( ~ s ) ) . ( p & q ) )
 Substitution: null
+Matching ( exists ( r - ) . p ) with ( i : p )
+Substitution: null
 Matching ( exists ( ( r | ( ~ s ) ) | ( p - ) ) . ( ( ( ( ( true ) & ( false ) ) & ( { l } ) ) -> ( ~ p ) ) <-> ( ( p & q ) | r ) ) ) with ( forall ( ( ~ r ) | ( ~ s ) ) . ( p & q ) )
+Substitution: null
+Matching ( exists ( ( r | ( ~ s ) ) | ( p - ) ) . ( ( ( ( ( true ) & ( false ) ) & ( { l } ) ) -> ( ~ p ) ) <-> ( ( p & q ) | r ) ) ) with ( i : p )
+Substitution: null
+Matching ( forall ( ( ~ r ) | ( ~ s ) ) . ( p & q ) ) with ( i : p )
 Substitution: null
