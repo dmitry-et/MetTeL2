@@ -1,3 +1,5 @@
+22/11/2012 Fixed a bug with stringtemplate4 library
+
 15/11/2012 Changed default equality keywords to "equality"
            Fixed a bug with LTLC tableau
 
