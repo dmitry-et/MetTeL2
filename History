@@ -1,3 +1,5 @@
+23/11/2012 Fixed a bug with missed properties
+
 22/11/2012 Fixed a bug with stringtemplate4 library
 
 15/11/2012 Changed default equality keywords to "equality"

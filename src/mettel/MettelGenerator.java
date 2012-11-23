@@ -50,6 +50,7 @@ import org.antlr.tool.ErrorManager;
 
 import mettel.generator.MettelANTLRGrammarGenerator;
 import mettel.generator.MettelANTLRGrammarGeneratorProperties;
+import mettel.generator.MettelEqualityKeywords;
 import mettel.generator.java.MettelJavaPackageStructure;
 import mettel.language.MettelLexer;
 import mettel.language.MettelParser;
@@ -180,7 +181,8 @@ public class MettelGenerator {
         		}
         	}
 
-    		MettelANTLRGrammarGeneratorProperties p = (prop == null)? null: new MettelANTLRGrammarGeneratorProperties(prop);
+    		MettelANTLRGrammarGeneratorProperties p = //(prop == null)? null:
+    			new MettelANTLRGrammarGeneratorProperties(prop);
 
 //The following is not necessary since out and err are always defined
 /*        	if(out == null) out = new PrintWriter(
