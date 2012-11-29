@@ -449,7 +449,7 @@ core-jar: $(CORE_JAR_FILE)
 
 $(CORE_JAR_FILE): $(CORE_CLASSES) $(RESOURCE_FILES) $(CORE_MANIFEST_FILE)
 	@ echo $(DELIM0)
-	@ echo "Building runtime jar ($(CORE_JAR_FILE_NAME))"
+	@ echo "Building core runtime jar ($(CORE_JAR_FILE_NAME))"
 	@ echo $(DELIM1)
 	@ $(JAR) cvmf $(CORE_MANIFEST_FILE) $(CORE_JAR_FILE) -C $(CLASSES_DIR) $(CORE_PACKAGE_SUBDIR)
 
