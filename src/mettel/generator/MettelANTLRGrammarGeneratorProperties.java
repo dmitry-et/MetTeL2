@@ -55,7 +55,7 @@ public class MettelANTLRGrammarGeneratorProperties implements MettelANTLRGrammar
 
 	//public int antlr_k = 1;
 
-	public MettelANTLRGrammarOptions grammarOptions = null;
+	public MettelANTLRGrammarOptions grammarOptions = new MettelANTLRGrammarOptions();
 
 	public MettelEqualityKeywords equalityKeywords = EQUALITY_KEYWORDS;
 
@@ -78,6 +78,8 @@ public class MettelANTLRGrammarGeneratorProperties implements MettelANTLRGrammar
 	}*/
 
 	public void init(Reader reader) throws IOException{
+		if(reader == null) return;
+
 		final Properties p = new Properties();
 		p.load(reader);
 
