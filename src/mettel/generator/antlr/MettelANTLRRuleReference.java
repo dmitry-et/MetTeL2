@@ -29,7 +29,7 @@ public class MettelANTLRRuleReference extends MettelANTLRExpression {
 
 	private String returnVariable = null;
 
-	private boolean syntacticPredicate = false;
+	//private boolean syntacticPredicate = false;
 
 	@SuppressWarnings("unused")
 	private MettelANTLRRuleReference(){}
@@ -38,34 +38,34 @@ public class MettelANTLRRuleReference extends MettelANTLRExpression {
 	 *
 	 */
 	public MettelANTLRRuleReference(String name) {
-		this(name, null, false);
+		this(name, null, null);
 	}
 
 	public MettelANTLRRuleReference(String name, String returnVariable) {
-		this(name,returnVariable,false);
+		this(name,returnVariable,null);
 	}
 
-	public MettelANTLRRuleReference(String name, String returnVariable, boolean syntacticPredicate) {
-		super();
+	public MettelANTLRRuleReference(String name, String returnVariable, MettelANTLRSyntacticPredicate syntacticPredicate) {
+		super(syntacticPredicate);
 		this.name = name;
 		this.returnVariable = returnVariable;
-		this.syntacticPredicate = syntacticPredicate;
+		//this.syntacticPredicate = syntacticPredicate;
 	}
 
 	/* (non-Javadoc)
 	 * @see mettel.generator.antlr.MettelANTLRExpression#toStringBuilder(mettel.util.MettelIndentedStringBuilder)
 	 */
 	@Override
-	void toStringBuilder0(MettelIndentedStringBuilder b) {
-		if(syntacticPredicate){
+	void toStringBuilder0(MettelIndentedStringBuilder b, boolean omitJavaBlocks) {
+		/*if(syntacticPredicate){
 			b.append('(');
 			b.append(name);
 			b.append(')');
 			b.append('=');
 			b.append('>');
 			b.append(' ');
-		}
-		if(returnVariable != null){
+		}*/
+		if(returnVariable != null && !omitJavaBlocks){
 			b.append(returnVariable);
 			b.append(" = ");
 		}

@@ -27,6 +27,16 @@ abstract class MettelANTLRExpression {
 
 	private MettelANTLRJavaBlock blockBefore = null;
 	private MettelANTLRJavaBlock blockAfter = null;
+	private MettelANTLRSyntacticPredicate syntacticPredicate = null;
+	
+	MettelANTLRExpression(){
+		this(null);
+	}
+	
+	MettelANTLRExpression(MettelANTLRSyntacticPredicate syntacticPredicate){
+		super();
+		this.syntacticPredicate = syntacticPredicate;
+	}
 
 //	abstract void toStringBuilder(StringBuilder b);
 
@@ -77,15 +87,16 @@ abstract class MettelANTLRExpression {
 	}
 */
 
-	void toStringBuilder(MettelIndentedStringBuilder ib){
-		if(blockBefore != null){
+	void toStringBuilder(MettelIndentedStringBuilder ib, boolean omitJavaBlocks){
+		if(syntacticPredicate != null) syntacticPredicate.toStringBuilder(ib);
+		if(!omitJavaBlocks && blockBefore != null){
 			ib.appendLine('(');
 		    blockBefore.toStringBuilder(ib);
 		}else{
 			ib.append('(');
 		}
-		toStringBuilder0(ib);
-		if(blockAfter != null){
+		toStringBuilder0(ib, omitJavaBlocks);
+		if(!omitJavaBlocks && blockAfter != null){
 			ib.appendEOL();
 			blockAfter.toStringBuilder(ib);
 			ib.appendLine(')');
@@ -94,6 +105,6 @@ abstract class MettelANTLRExpression {
 		}
 	}
 
-	abstract void toStringBuilder0(MettelIndentedStringBuilder ib);
+	abstract void toStringBuilder0(MettelIndentedStringBuilder ib, boolean omitJavaBlocks);
 
 }

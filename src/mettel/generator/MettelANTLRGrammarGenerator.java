@@ -22,6 +22,7 @@ import java.util.List;
 import mettel.generator.antlr.MettelANTLRGrammar;
 import mettel.generator.antlr.MettelANTLRRule;
 import mettel.generator.antlr.MettelANTLRStandardGrammar;
+import mettel.generator.antlr.MettelANTLRSyntacticPredicate;
 import mettel.generator.antlr.MettelANTLRToken;
 import mettel.generator.antlr.MettelANTLRRuleReference;
 import mettel.generator.antlr.MettelANTLRUnaryBNFStatement;
@@ -213,7 +214,9 @@ public class MettelANTLRGrammarGenerator {
 	private MettelANTLRRule makeANTLRExpressionRule(String grammarName,Collection<MettelSort> sorts){
 		MettelANTLRMultiaryBNFStatement s = new MettelANTLRMultiaryBNFStatement(MettelANTLRMultiaryBNFStatement.OR);
 		for(MettelSort sort:sorts){
-			MettelANTLRRuleReference ruleRef = new MettelANTLRRuleReference(sort.name(),sort.name()+"Expression",true);
+			MettelANTLRSyntacticPredicate syntacticPredicate = new MettelANTLRSyntacticPredicate();
+			MettelANTLRRuleReference ruleRef = new MettelANTLRRuleReference(sort.name(),sort.name()+"Expression", syntacticPredicate);
+			syntacticPredicate.setExpression(ruleRef);
 			ruleRef.appendLineToPostfix("r0 = "+sort.name()+"Expression;");
 			s.addExpression(ruleRef);
 		}

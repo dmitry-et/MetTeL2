@@ -46,7 +46,11 @@ public class MettelANTLRToken extends MettelANTLRExpression{
 	}
 
 	public MettelANTLRToken(String token, boolean returns) {
-		super();
+		this(token, returns, null);
+	}
+	
+	public MettelANTLRToken(String token, boolean returns, MettelANTLRSyntacticPredicate syntacticPredicate) {
+		super(syntacticPredicate);
 		this.token  = token;
 		this.returns = returns;
 		//appendJavaToPostfix("r0 = t.getText();");
@@ -56,10 +60,10 @@ public class MettelANTLRToken extends MettelANTLRExpression{
 	 * @see mettel.generator.antlr.MettelANTLRExpression#toStringBuilder(mettel.util.MettelIndentedStringBuilder)
 	 */
 	@Override
-	void toStringBuilder0(MettelIndentedStringBuilder b) {
+	void toStringBuilder0(MettelIndentedStringBuilder b, boolean omitJavaBlocks) {
 		//eMettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
 		//prefixOutput(ib);
-		if(returns) b.append("t = ");
+		if(returns && !omitJavaBlocks) b.append("t = ");
 		b.append(token);
 		//postfixOutput(ib);
 

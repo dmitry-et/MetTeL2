@@ -40,7 +40,11 @@ public class MettelANTLRUnaryBNFStatement extends MettelANTLRExpression {
 	 *
 	 */
 	public MettelANTLRUnaryBNFStatement(MettelANTLRExpression expression,char operator) {
-		super();
+		this(expression,operator,null);
+	}
+	
+	public MettelANTLRUnaryBNFStatement(MettelANTLRExpression expression,char operator,MettelANTLRSyntacticPredicate syntacticPredicate) {
+		super(syntacticPredicate);
 		this.expression = expression;
 		this.operator = operator;
 	}
@@ -49,12 +53,12 @@ public class MettelANTLRUnaryBNFStatement extends MettelANTLRExpression {
 	 * @see mettel.generator.antlr.MettelANTLRExpression#toStringBuilder(mettel.util.MettelIndentedStringBuilder)
 	 */
 	@Override
-	void toStringBuilder0(MettelIndentedStringBuilder b) {
+	void toStringBuilder0(MettelIndentedStringBuilder b, boolean omitJavaBlocks) {
 		MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
 		//prefixOutput(ib);
 		ib.appendEOL();
 		ib.indent();
-		expression.toStringBuilder(ib);
+		expression.toStringBuilder(ib, omitJavaBlocks);
 		ib.append(operator);
 		ib.appendEOL();
 		b.indent();

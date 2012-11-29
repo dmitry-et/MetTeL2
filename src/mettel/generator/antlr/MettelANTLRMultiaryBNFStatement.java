@@ -39,7 +39,11 @@ public class MettelANTLRMultiaryBNFStatement extends MettelANTLRExpression {
 	}
 
 	public MettelANTLRMultiaryBNFStatement(char operator){
-		super();
+		this(operator,null);
+	}
+	
+	public MettelANTLRMultiaryBNFStatement(char operator, MettelANTLRSyntacticPredicate syntacticPredicate){
+		super(syntacticPredicate);
 		this.operator = operator;
 	}
 
@@ -54,7 +58,7 @@ public class MettelANTLRMultiaryBNFStatement extends MettelANTLRExpression {
 	 * @see mettel.generator.antlr.MettelANTLRExpression#toStringBuilder(mettel.util.MettelIndentedStringBuilder)
 	 */
 	@Override
-	void toStringBuilder0(MettelIndentedStringBuilder b) {
+	void toStringBuilder0(MettelIndentedStringBuilder b, boolean omitJavaBlocks) {
 		MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
 		//prefixOutput(b);
 		MettelANTLRExpression[] es = expressions.toArray(new MettelANTLRExpression[0]);
@@ -64,7 +68,7 @@ public class MettelANTLRMultiaryBNFStatement extends MettelANTLRExpression {
 				ib.appendEOL();
 				ib.indent();
 			}
-			es[0].toStringBuilder(ib);
+			es[0].toStringBuilder(ib, omitJavaBlocks);
 			for(int i = 1; i < SIZE; i++){
 				if(i < SIZE && (operator!=SEQ)){
 					ib.appendEOL();
@@ -73,7 +77,7 @@ public class MettelANTLRMultiaryBNFStatement extends MettelANTLRExpression {
 				}
 				ib.appendEOL();
 				ib.indent();
-				es[i].toStringBuilder(ib);
+				es[i].toStringBuilder(ib, omitJavaBlocks);
 			}
 			if(SIZE>1){
 				ib.appendEOL();

@@ -181,7 +181,7 @@ public class MettelANTLRRule {
 		}
 		MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
 		ib.appendLine(':');
-		e.toStringBuilder(ib);
+		e.toStringBuilder(ib,false);
 		b.appendEOL();
 		b.appendLine(';');
 	}
