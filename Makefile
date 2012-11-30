@@ -64,8 +64,8 @@ DOC_DIR := doc
 JAVADOC_DIR := $(DOC_DIR)/javadoc
 
 #Java options
-JAVA_OPTIONS =
-JAVAC_OPTIONS = -target 1.6 
+JAVA_OPTIONS :=
+JAVAC_OPTIONS := -Xlint:unchecked -target 1.6 
 
 # Javadoc options
 JAVADOC_OPTIONS := -private -windowtitle "$(TITLE)" -author -version -use -source 1.6 -verbose
@@ -197,7 +197,7 @@ TEST_OPTIONS :=
 #$(EXAMPLES_DIR)/substitutions.in \
 #$(EXAMPLES_DIR)/substitutions.out \
 #$(EXAMPLES_DIR)/substitutions.err
-JAVA_TEST_OPTIONS := -Xfuture -Xbatch -Xms256M -Xmx1024M 
+JAVA_TEST_OPTIONS := $(JAVA_OPTIONS) -Xfuture -Xbatch -Xms256M -Xmx1024M 
 #-Xprof -agentlib:hprof=heap=sites
 #-Xnoclassgc
 
@@ -359,7 +359,7 @@ $(PARSER_FILES): $(GRAMMAR_FILE)
 	@ echo "Making parser and parser documentation"
 	@ echo $(DELIM1)
 	@ mkdir -p $(DOC_DIR)/grammar
-	@ $(JAVA) -classpath $(COMPILE_CLASSPATH) org.antlr.Tool -fo $(PARSER_DIR) -print $(ANTLR_OPTIONS) $(GRAMMAR_FILE) 1>$(DOC_DIR)/grammar/$(PARSER_NAME).txt 2>$(ANTLR_PARSER_LOG_FILE) && rm -f $(TOKENS_FILE) 
+	@ $(JAVA) $(JAVA_OPTIONS) -classpath $(COMPILE_CLASSPATH) org.antlr.Tool -fo $(PARSER_DIR) -print $(ANTLR_OPTIONS) $(GRAMMAR_FILE) 1>$(DOC_DIR)/grammar/$(PARSER_NAME).txt 2>$(ANTLR_PARSER_LOG_FILE) && rm -f $(TOKENS_FILE) 
 	@ cat $(ANTLR_PARSER_LOG_FILE)
 
 only-parser: $(PARSER_FILES)
@@ -373,7 +373,7 @@ $(FO_PARSER_FILES): $(FO_GRAMMAR_FILE)
 	@ echo "Making first-order language parser and parser documentation"
 	@ echo $(DELIM1)
 	@ mkdir -p $(DOC_DIR)/grammar
-	@ $(JAVA) -classpath $(COMPILE_CLASSPATH) org.antlr.Tool -fo $(FO_PARSER_DIR) -print $(ANTLR_OPTIONS) $(FO_GRAMMAR_FILE) 1>$(DOC_DIR)/grammar/$(FO_PARSER_NAME).txt 2>$(ANTLR_FO_PARSER_LOG_FILE) && rm -f $(FO_TOKENS_FILE) 
+	@ $(JAVA) $(JAVA_OPTIONS) -classpath $(COMPILE_CLASSPATH) org.antlr.Tool -fo $(FO_PARSER_DIR) -print $(ANTLR_OPTIONS) $(FO_GRAMMAR_FILE) 1>$(DOC_DIR)/grammar/$(FO_PARSER_NAME).txt 2>$(ANTLR_FO_PARSER_LOG_FILE) && rm -f $(FO_TOKENS_FILE) 
 	@ cat $(ANTLR_FO_PARSER_LOG_FILE)
 
 only-fo-parser: $(FO_PARSER_FILES)
