@@ -3,7 +3,7 @@ grammar Test;
 options{
 	k=1;
 //	backtrack=true;
-//	memoize=true;
+//    memoize=true;
 }
 
 individuals
@@ -39,8 +39,14 @@ basicIndividual
 
 individual
 	:
-	basicIndividual
+	individualF
 	;
+
+individualF
+	:
+	basicIndividual | 'f' '(' basicIndividual ',' concept ',' role ')' 
+	;
+
 
 concept
 	:
@@ -79,9 +85,16 @@ negationConcept
 	singletonConcept | '~' negationConcept
 	;
 
+labelledConcept
+	:	
+	(	(individual ':') => individual ':' labelledConcept )
+	|
+	negationConcept
+	;
+
 conjunctionConcept
 	:
-	negationConcept ('&'  negationConcept)*
+	labelledConcept ('&'  labelledConcept)*
 	;
 
 disjunctionConcept
@@ -106,12 +119,12 @@ equivalenceConcept
 
 existentialRestrictionConcept
 	:
-	('exists' role '.')* equivalenceConcept
+	equivalenceConcept | ('exists' role '.' existentialRestrictionConcept)
 	;
 
 universalRestrictionConcept
 	:
-	('forall' role '.')* existentialRestrictionConcept
+	existentialRestrictionConcept | 'forall' role '.' universalRestrictionConcept
 	;
 
 role
