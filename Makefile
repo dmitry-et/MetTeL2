@@ -63,6 +63,10 @@ RESOURCE_FILES := $(shell echo $(SRC_RESOURCE_FILES) | sed -e 's/rsrc/classes/g'
 DOC_DIR := doc
 JAVADOC_DIR := $(DOC_DIR)/javadoc
 
+#Java options
+JAVA_OPTIONS =
+JAVAC_OPTIONS = -target 1.6 
+
 # Javadoc options
 JAVADOC_OPTIONS := -private -windowtitle "$(TITLE)" -author -version -use -source 1.6 -verbose
 
