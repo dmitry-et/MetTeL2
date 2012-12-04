@@ -84,7 +84,7 @@ public class MettelGenerator {
 		System.out.println("-----------------------------------------------------------------");
 		System.out.println("Hello there! I am MetTeL, an automated tableau prover generator.");
 		System.out.println("I am designed and implemented by Dmitry Tishkovsky.");
-		System.out.println("Copyright (c) 2009-2011 Dmitry Tishkovsky.");
+		System.out.println("Copyright (c) 2009-2012 Dmitry Tishkovsky.");
 	    System.out.println("As a program, I have ABSOLUTELY NO WARRANTY.");//for details type `show w'.
 	    System.out.println("I am free software, and you are welcome to redistribute me");
 	    System.out.println("under certain conditions; use the option `--license' for details.");
