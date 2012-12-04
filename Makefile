@@ -3,36 +3,29 @@
 #
 
 ### General ########################################################################
-ifeq ($(JAVA_HOME),)
-	ifeq ($(JAVAC),) 
-	    JAVAC := $(shell which javac)
-	endif
-	ifeq ($(JAVA),) 
-	    JAVA := $(shell which java)
-	endif
-	ifeq ($(JAVADOC),) 
-	    JAVADOC := $(shell which javadoc)
-	endif
-	ifeq ($(JAR),) 
-	    JAR := $(shell which jar)
-	endif
-else
-    JAVA_HOME := /usr/java/jdk
-	ifeq ($(JAVAC),) 
-	    JAVAC := $(JAVA_HOME)/bin/javac
-	endif
-	ifeq ($(JAVA),) 
-	    JAVA := $(JAVA_HOME)/bin/java
-	endif
-	ifeq ($(JAVADOC),) 
-	    JAVADOC := $(JAVA_HOME)/bin/javadoc
-	endif
-	ifeq ($(JAR),) 
-	    JAR := $(JAVA_HOME)/bin/jar
-	endif
+ifeq ($(strip $(JAVA_HOME)),)
+    JAVA_HOME := /usr/lib/jvm/java
+endif
+ifeq ($(strip $(JAVAC)),) 
+    JAVAC := $(JAVA_HOME)/bin/javac
+endif
+ifeq ($(strip $(JAVA)),) 
+    JAVA := $(JAVA_HOME)/bin/java
+endif
+ifeq ($(strip $(JAVADOC)),) 
+    JAVADOC := $(JAVA_HOME)/bin/javadoc
+endif
+ifeq ($(strip $(JAR)),) 
+    JAR := $(JAVA_HOME)/bin/jar
 endif
 
-
+#Java options
+#BOOTCLASSPATH := /usr/lib/jvm/java-1.5.0/jre/lib/rt.jar
+#BOOTCLASSPATH := /usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/jre/lib/rt.jar
+BOOTCLASSPATH := $(JAVA_HOME)/jre/lib/rt.jar
+JVM_TARGET := 1.7
+JAVA_OPTIONS :=
+JAVAC_OPTIONS := -Xlint:unchecked -source $(JVM_TARGET) -target $(JVM_TARGET) -bootclasspath $(BOOTCLASSPATH)
 
 # Project name
 NAME := mettel
@@ -193,7 +186,7 @@ TEST_OPTIONS :=
 #$(EXAMPLES_DIR)/substitutions.in \
 #$(EXAMPLES_DIR)/substitutions.out \
 #$(EXAMPLES_DIR)/substitutions.err
-JAVA_TEST_OPTIONS := -Xfuture -Xbatch -Xms256M -Xmx1024M 
+JAVA_TEST_OPTIONS := $(JAVA_OPTIONS) -Xfuture -Xbatch -Xms256M -Xmx1024M 
 #-Xprof -agentlib:hprof=heap=sites
 #-Xnoclassgc
 
@@ -355,7 +348,7 @@ $(PARSER_FILES): $(GRAMMAR_FILE)
 	@ echo "Making parser and parser documentation"
 	@ echo $(DELIM1)
 	@ mkdir -p $(DOC_DIR)/grammar
-	@ $(JAVA) -classpath $(COMPILE_CLASSPATH) org.antlr.Tool -fo $(PARSER_DIR) -print $(ANTLR_OPTIONS) $(GRAMMAR_FILE) 1>$(DOC_DIR)/grammar/$(PARSER_NAME).txt 2>$(ANTLR_PARSER_LOG_FILE) && rm -f $(TOKENS_FILE) 
+	@ $(JAVA) $(JAVA_OPTIONS) -classpath $(COMPILE_CLASSPATH) org.antlr.Tool -fo $(PARSER_DIR) -print $(ANTLR_OPTIONS) $(GRAMMAR_FILE) 1>$(DOC_DIR)/grammar/$(PARSER_NAME).txt 2>$(ANTLR_PARSER_LOG_FILE) && rm -f $(TOKENS_FILE) 
 	@ cat $(ANTLR_PARSER_LOG_FILE)
 
 only-parser: $(PARSER_FILES)
@@ -369,7 +362,7 @@ $(FO_PARSER_FILES): $(FO_GRAMMAR_FILE)
 	@ echo "Making first-order language parser and parser documentation"
 	@ echo $(DELIM1)
 	@ mkdir -p $(DOC_DIR)/grammar
-	@ $(JAVA) -classpath $(COMPILE_CLASSPATH) org.antlr.Tool -fo $(FO_PARSER_DIR) -print $(ANTLR_OPTIONS) $(FO_GRAMMAR_FILE) 1>$(DOC_DIR)/grammar/$(FO_PARSER_NAME).txt 2>$(ANTLR_FO_PARSER_LOG_FILE) && rm -f $(FO_TOKENS_FILE) 
+	@ $(JAVA) $(JAVA_OPTIONS) -classpath $(COMPILE_CLASSPATH) org.antlr.Tool -fo $(FO_PARSER_DIR) -print $(ANTLR_OPTIONS) $(FO_GRAMMAR_FILE) 1>$(DOC_DIR)/grammar/$(FO_PARSER_NAME).txt 2>$(ANTLR_FO_PARSER_LOG_FILE) && rm -f $(FO_TOKENS_FILE) 
 	@ cat $(ANTLR_FO_PARSER_LOG_FILE)
 
 only-fo-parser: $(FO_PARSER_FILES)
@@ -404,7 +397,7 @@ compile-ast: clear-ast-classes $(AST_SOURCES) $(CLASSES_DIR)
 	@ echo $(DELIM0)
 	@ echo "Compiling AST"
 	@ echo $(DELIM1)
-	@ $(JAVAC) -classpath $(COMPILE_CLASSPATH) -d "$(CLASSES_DIR)" $(AST_SOURCES) 2>$(JAVAC_LOG_FILE) || (cat $(JAVAC_LOG_FILE) && exit 1)
+	@ $(JAVAC) $(JAVAC_OPTIONS) -classpath $(COMPILE_CLASSPATH) -d "$(CLASSES_DIR)" $(AST_SOURCES) 2>$(JAVAC_LOG_FILE) || (cat $(JAVAC_LOG_FILE) && exit 1)
 
 compile: $(CLASSES) $(CORE_CLASSES)
 
@@ -413,14 +406,17 @@ $(CORE_CLASSES) : $(CLASSES_DIR) $(CORE_SOURCES)
 	@ echo $(DELIM0)
 	@ echo "Compiling project core"
 	@ echo $(DELIM1)
-	@ $(JAVAC) -Xlint:unchecked -classpath $(COMPILE_CLASSPATH) -d "$(CLASSES_DIR)" $(CORE_SOURCES) 2>$(JAVAC_LOG_FILE) || (cat $(JAVAC_LOG_FILE) && exit 1)
+#	echo "$(JAVA_HOME)" 
+#	echo "$(BOOTCLASSPATH)"
+#	echo "$(JAVAC)"
+	@ $(JAVAC) $(JAVAC_OPTIONS) -classpath $(COMPILE_CLASSPATH) -d "$(CLASSES_DIR)" $(CORE_SOURCES) 2>$(JAVAC_LOG_FILE) || (cat $(JAVAC_LOG_FILE) && exit 1)
 
 $(CLASSES) : $(CLASSES_DIR) $(SOURCES) $(CORE_JAR_FILE)
 #	@ echo $(CLASSES)
 	@ echo $(DELIM0)
 	@ echo "Compiling project"
 	@ echo $(DELIM1)
-	@ $(JAVAC) -Xlint:unchecked -classpath $(COMPILE_CLASSPATH):$(CORE_JAR_FILE) -d "$(CLASSES_DIR)" $(SOURCES) 2>$(JAVAC_LOG_FILE) || (cat $(JAVAC_LOG_FILE) && exit 1)
+	@ $(JAVAC) $(JAVAC_OPTIONS) -classpath $(COMPILE_CLASSPATH):$(CORE_JAR_FILE) -d "$(CLASSES_DIR)" $(SOURCES) 2>$(JAVAC_LOG_FILE) || (cat $(JAVAC_LOG_FILE) && exit 1)
     
 resources: $(RESOURCE_FILES)
 
@@ -485,13 +481,13 @@ compileLogics: generateParsers
 	@ echo $(DELIM0)
 	@ echo "Compiling sources for logics"
 	@ echo $(DELIM1)
-	@ $(JAVAC) -classpath $(LOGIC_GENERATION_CLASSPATH):$(LIB_DIR)/junit.jar -d $(TEST_CLASSES_DIR) $(shell find $(TEST_OUTPUT_DIR) -name '*.java')
+	@ $(JAVAC) $(JAVAC_OPTIONS) -classpath $(LOGIC_GENERATION_CLASSPATH):$(LIB_DIR)/junit.jar -d $(TEST_CLASSES_DIR) $(shell find $(TEST_OUTPUT_DIR) -name '*.java')
 	
 compileLogics-alone:
 	@ echo $(DELIM0)
 	@ echo "Compiling sources for logics"
 	@ echo $(DELIM1)
-	@ $(JAVAC) -classpath $(LOGIC_GENERATION_CLASSPATH):$(LIB_DIR)/junit.jar -d $(TEST_CLASSES_DIR) $(shell find $(TEST_OUTPUT_DIR) -name '*.java')	
+	@ $(JAVAC) $(JAVAC_OPTIONS) -classpath $(LOGIC_GENERATION_CLASSPATH):$(LIB_DIR)/junit.jar -d $(TEST_CLASSES_DIR) $(shell find $(TEST_OUTPUT_DIR) -name '*.java')	
 
 generate: compileLogics
 
@@ -499,7 +495,7 @@ $(TEST_CLASSES): $(TEST_SOURCES) $(JAR_FILE) $(TEST_CLASSES_DIR) $(CORE_JAR_FILE
 	@ echo $(DELIM0)
 	@ echo "Compiling test"
 	@ echo $(DELIM1)
-	@ $(JAVAC) -classpath $(TEST_COMPILE_CLASSPATH) -d "$(TEST_CLASSES_DIR)" $(TEST_SOURCES) 2>$(TEST_JAVAC_LOG_FILE) || (cat $(TEST_JAVAC_LOG_FILE) && exit 1)
+	@ $(JAVAC) $(JAVAC_OPTIONS) -classpath $(TEST_COMPILE_CLASSPATH) -d "$(TEST_CLASSES_DIR)" $(TEST_SOURCES) 2>$(TEST_JAVAC_LOG_FILE) || (cat $(TEST_JAVAC_LOG_FILE) && exit 1)
     
 #$(TEST_FILE).class: $(TEST_FILE).java $(JAR_FILE)
 #	@ echo $(DELIM0)
@@ -530,7 +526,7 @@ $(TEST_JAR_FILE): $(TEST_CLASSES) generate
 test-jar: $(TEST_JAR_FILE)
 
 define allTests
-$(JAVA) -classpath .:$(TEST_CLASSPATH) $(JAVA_TEST_OPTIONS)	mettel.AllTests 
+$(JAVA) $(JAVA_OPTIONS) -classpath .:$(TEST_CLASSPATH) $(JAVA_TEST_OPTIONS)	mettel.AllTests 
 #2>$(TEST_ERR_FILE) || (cat $(TEST_ERR_FILE) && exit 1)
 endef
 
@@ -563,7 +559,7 @@ old-test: $(TEST_JAR_FILE)
 	@ echo $(DELIM0)
 	@ echo "Testing"
 	@ echo $(DELIM1)
-	@ $(JAVA) -classpath $(TEST_CLASSPATH) $(JAVA_TEST_OPTIONS) Test $(TEST_OPTIONS)
+	@ $(JAVA) $(JAVA_OPTIONS) -classpath $(TEST_CLASSPATH) $(JAVA_TEST_OPTIONS) Test $(TEST_OPTIONS)
 #	@ cd $(BASE_DIR)
 #	@ $(JAVA_HOME)/bin/java -classpath $(RUNTIME_CLASSPATH) bdl.language.parser.BDLParser
 
