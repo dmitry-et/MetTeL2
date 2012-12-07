@@ -48,6 +48,7 @@ public class MettelANTLRSyntacticPredicate {
 		b.append('(');
 		expression.toStringBuilder0(b, true);
 		b.append(')');
+		b.append(' ');
 		b.append('=');
 		b.append('>');
 		b.append(' ');

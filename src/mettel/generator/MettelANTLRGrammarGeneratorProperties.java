@@ -52,6 +52,8 @@ public class MettelANTLRGrammarGeneratorProperties implements MettelANTLRGrammar
 	public String expressionRightDelimiter = EXPRESSION_RIGHT_DELIMITER;
 
 	public String branchBound = null;
+	
+	public int syntacticLookahead = SYNTACTIC_LOOKAHEAD;
 
 	//public int antlr_k = 1;
 
@@ -92,7 +94,10 @@ public class MettelANTLRGrammarGeneratorProperties implements MettelANTLRGrammar
 		expressionRightDelimiter = p.getProperty("expression.right.delimiter", EXPRESSION_RIGHT_DELIMITER);
 
 		branchBound = p.getProperty("branch.bound", branchBound);
-
+		
+		final String syntacticLookaheadString = p.getProperty("syntactic.lookahead", String.valueOf(SYNTACTIC_LOOKAHEAD));
+		syntacticLookahead = syntacticLookaheadString.indexOf('*') >= 0? 0: Integer.parseInt(syntacticLookaheadString);
+		
 		final String antlrK = p.getProperty("antlr.k",String.valueOf(ANTLR_K));
 
 		//TODO: more careful check for properties
