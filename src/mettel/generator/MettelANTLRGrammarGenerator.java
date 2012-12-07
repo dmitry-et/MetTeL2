@@ -271,12 +271,20 @@ public class MettelANTLRGrammarGenerator {
 
 			MettelToken[] tokens = s.tokens().toArray(new MettelToken[0]);
 			final int SIZE = tokens.length;
-			if( (SIZE == 3) &&
-					  (tokens[0] instanceof MettelSort) &&
+
+			final boolean firstTokenIsInstanceOfMettelSort = SIZE > 0 && tokens[0] instanceof MettelSort;
+			final boolean firstTokenIsOfCurrentSort = firstTokenIsInstanceOfMettelSort && SORT_NAME.equals(((MettelSort)tokens[0]).name());
+			final boolean firstTokenIsLiteral = SIZE > 0 && tokens[0] instanceof MettelStringLiteral;
+			final boolean secondTokenIsLiteral = SIZE > 1 && tokens[1] instanceof MettelStringLiteral;
+			final boolean secondTokenIsOfCurrentSort = SIZE > 1 && tokens[1] instanceof MettelSort && SORT_NAME.equals(((MettelSort)tokens[1]).name());
+			final boolean thirdTokenIsOfCurrentSort = SIZE > 2 && tokens[2] instanceof MettelSort && SORT_NAME.equals(((MettelSort)tokens[2]).name());
+
+			if( (SIZE == 3) && firstTokenIsOfCurrentSort && secondTokenIsLiteral && thirdTokenIsOfCurrentSort
+					  /*(tokens[0] instanceof MettelSort) &&
 					  (SORT_NAME.equals(((MettelSort)tokens[0]).name())) &&
 					  (tokens[1] instanceof MettelStringLiteral) &&
 					  (tokens[2] instanceof MettelSort) &&
-					  (SORT_NAME.equals(((MettelSort)tokens[2]).name()))
+					  (SORT_NAME.equals(((MettelSort)tokens[2]).name()))*/
 					){
 
 				String id = s.identifier();
@@ -309,10 +317,10 @@ public class MettelANTLRGrammarGenerator {
 				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, id,
 						new String[]{SORT_NAME, SORT_NAME}, s.tokens(), (s instanceof MettelEqualityBNFStatement));
 
-			}else if( (SIZE == 2) &&
-					  (tokens[0] instanceof MettelSort) &&
+			}else if( (SIZE == 2) && firstTokenIsOfCurrentSort && secondTokenIsLiteral
+					  /*(tokens[0] instanceof MettelSort) &&
 					  (SORT_NAME.equals(((MettelSort)tokens[0]).name())) &&
-					  (tokens[1] instanceof MettelStringLiteral)
+					  (tokens[1] instanceof MettelStringLiteral)*/
 					){
 				MettelANTLRMultiaryBNFStatement st = new MettelANTLRMultiaryBNFStatement();
 				st.addExpression(new MettelANTLRRuleReference(s0,"e0"));
@@ -334,6 +342,32 @@ public class MettelANTLRGrammarGenerator {
 				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, s.identifier(),
 						new String[]{((MettelSort)tokens[0]).name()}, s.tokens(), false);
 
+			}else if( (SIZE == 2) && firstTokenIsLiteral && secondTokenIsOfCurrentSort
+					  /*(tokens[0] instanceof MettelSort) &&
+					  (SORT_NAME.equals(((MettelSort)tokens[0]).name())) &&
+					  (tokens[1] instanceof MettelStringLiteral)*/
+					){
+				MettelANTLRMultiaryBNFStatement st = new MettelANTLRMultiaryBNFStatement(MettelANTLRMultiaryBNFStatement.OR);
+				st.addExpression(new MettelANTLRRuleReference(s0,"e0"));
+
+				MettelANTLRMultiaryBNFStatement st0 = new MettelANTLRMultiaryBNFStatement();
+
+				MettelANTLRToken t = new MettelANTLRToken(tokens[0].toString());
+				st0.addExpression(t);
+				st0.addExpression(new MettelANTLRRuleReference(s1,"e0"));
+				st0.appendLineToPostfix("e0 = factory.create"+MettelJavaNames.firstCharToUpperCase(s.identifier())+
+						MettelJavaNames.firstCharToUpperCase(SORT_NAME)+"(e0);");
+
+				st.addExpression(st0);
+
+				MettelANTLRRule r = new MettelANTLRRule(s1,st,/*true,*/new String[]{grammar.name()+
+						//MettelJavaNames.firstCharToUpperCase(s.identifier())+
+						MettelJavaNames.firstCharToUpperCase(SORT_NAME)});
+				r.appendLineToAfterBlock("r0 = e0;");
+				grammar.addRule(r);
+
+				pStructure.appendConnectiveClass(grammar.name(), SORT_NAME, s.identifier(),
+						new String[]{((MettelSort)tokens[1]).name()}, s.tokens(), false);
 
 			}else{ //if(tokens[0] instanceof MettelStringLiteral){
 
