@@ -42,7 +42,7 @@ public class MettelSubstitutionJavaClassFile extends MettelJavaClassFile {
 		headings.appendLine("import java.util.Set;");
 		headings.appendLine("import java.util.TreeSet;");
 		headings.appendEOL();
-		headings.appendLine("import mettel.core.MettelSubstitution;");
+		headings.appendLine("import mettel.core.tableau.MettelSubstitution;");
 	}
 
 	private void body(String[] sorts){

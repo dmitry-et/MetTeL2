@@ -1,22 +1,22 @@
 /**
  * This file is part of MetTeL.
  *
- * MetTeL is free software: you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
+ * MetTeL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * MetTeL is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * MetTeL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License along with
- * MetTeL. If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Public License
+ * along with MetTeL.  If not, see <http://www.gnu.org/licenses/>.
  */
 package mettel;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,7 +29,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.URL;
 import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +54,7 @@ import org.antlr.tool.ErrorManager;
 
 import mettel.generator.MettelANTLRGrammarGenerator;
 import mettel.generator.MettelANTLRGrammarGeneratorProperties;
+import mettel.generator.MettelEqualityKeywords;
 import mettel.generator.java.MettelJavaPackageStructure;
 import mettel.language.MettelLexer;
 import mettel.language.MettelParser;
@@ -97,9 +97,6 @@ public class MettelGenerator {
             final int SIZE = args.length;
             for (int i = 0; i < SIZE; i++) {
                 if ("-q".equals(args[i]) || "--quiet".equals(args[i])) {
-
-                    quiet = true;
-
                 } else if ("-i".equals(args[i]) || "--input".equals(args[i])) {
 
                     if (i < SIZE - 1) {
@@ -185,6 +182,9 @@ public class MettelGenerator {
                 }
             }
 
+            MettelANTLRGrammarGeneratorProperties p = //(prop == null)? null:
+                    new MettelANTLRGrammarGeneratorProperties(prop);
+
 //The following is not necessary since out and err are always defined
 /*        	if(out == null) out = new PrintWriter(
              new OutputStreamWriter(System.out),true);
@@ -199,8 +199,9 @@ public class MettelGenerator {
 
             MettelLexer lexer = new MettelLexer(in);
 
+
             tokens.setTokenSource(lexer);
-            MettelParser parser = new MettelParser(tokens);
+            MettelParser parser = new MettelParser(tokens, p.equalityKeywords);
 
 
             report("I am reading the specification.");
@@ -215,13 +216,15 @@ public class MettelGenerator {
                 report("The specification is OK.");
             }
 
+
             //StringBuilder buf = new StringBuilder();
             //spec.toBuffer(buf);
             //System.out.print(buf);
-            MettelANTLRGrammarGeneratorProperties p = (prop == null) ? null : new MettelANTLRGrammarGeneratorProperties(prop);
+
 
             report("I am processing the specification.");
             MettelANTLRGrammarGenerator gen = new MettelANTLRGrammarGenerator(spec, p);
+
 //        	StringBuilder buf = new StringBuilder();
             for (MettelJavaPackageStructure pStructure : gen.processSyntaxes()) {
                 //System.out.println('#');
@@ -230,6 +233,8 @@ public class MettelGenerator {
             report("Java code of the prover is generated.");
 
 
+            //MkH: Create a zip file contain all the source
+            /*
 
             CodeSource src = MettelGenerator.class.getProtectionDomain().getCodeSource();
             String zipfile = "metsrc.zip";
@@ -269,7 +274,7 @@ public class MettelGenerator {
                 }
 
             }
-
+            */
 
             /*        	out.print(buf);
              out.flush();
@@ -377,12 +382,12 @@ public class MettelGenerator {
         String name = mainClass.getName();
         name = name.substring(0, name.lastIndexOf('.'));
 
+
         Manifest manifest = new Manifest();
         Attributes attributes = manifest.getMainAttributes();
         attributes.put(Attributes.Name.MANIFEST_VERSION, "1.0");
         attributes.put(Attributes.Name.MAIN_CLASS, path + '.' + name);
-        //attributes.put(Attributes.Name.CLASS_PATH, "mettel2.jar antlr3-runtime.jar");
-        attributes.put(Attributes.Name.CLASS_PATH, "antlr3-runtime.jar");
+        attributes.put(Attributes.Name.CLASS_PATH, "mettel2-core.jar antlr3-runtime.jar");
 
         JarOutputStream jar = new JarOutputStream(new FileOutputStream(path + ".jar"), manifest);
         addToJar(dir.getPath(), dir, jar);

@@ -26,14 +26,14 @@ import mettel.util.MettelJavaNames;
  */
 public final class MettelEqualityBNFStatement extends MettelBNFStatement {
 
-	public static final String EQUALITY = "equality";
-	public static final String EQUIVALENCE = "equivalence";
-	public static final String CONGRUENCE = "congruence";
+	//public static final String EQUALITY = "equality";
+	//public static final String EQUIVALENCE = "equivalence";
+	//public static final String CONGRUENCE = "congruence";
 
-	public static final boolean isEquality(String id){
+	/*public static final boolean isEquality(String id, String[] keywords){
 		if(id == null) return false;
 		return (EQUALITY.equalsIgnoreCase(id)||EQUIVALENCE.equalsIgnoreCase(id)||CONGRUENCE.equalsIgnoreCase(id));
-	}
+	}*/
 
 	/**
 	 *

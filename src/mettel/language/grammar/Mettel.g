@@ -50,6 +50,8 @@ tokens{
 
 @header{
 package mettel.language;
+
+import mettel.generator.MettelEqualityKeywords;
 }
 //Java imports
 //import java.util.HashMap;
@@ -59,6 +61,18 @@ package mettel.language;
 
 @lexer::header{
 package mettel.language;
+}
+
+@members{
+private MettelEqualityKeywords keywords = MettelEqualityKeywords.EQUALITY_KEYWORDS;
+public MettelParser(TokenStream input, MettelEqualityKeywords keywords){
+    this(input);
+    this.keywords = keywords;
+}
+public MettelParser(TokenStream input, RecognizerSharedState state, MettelEqualityKeywords keywords){
+    this(input,state);
+    this.keywords = keywords;
+}
 }
 
 
@@ -194,7 +208,7 @@ bnfStatement
     )?
     EQ
     {
-    if(MettelEqualityBNFStatement.isEquality(id)){
+    if(keywords.isEquality(id)){
     	statement = new MettelEqualityBNFStatement(id);
     }else{
     	statement = new MettelBNFStatement(id);

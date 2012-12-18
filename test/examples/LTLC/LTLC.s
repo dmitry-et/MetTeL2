@@ -29,8 +29,8 @@ syntax LTLC{
 	formula waitFor = formula 'W' formula;
 
 	//Tableau additions
-	formula eventualityDiamond = 'E' '(' formula ')';
-	formula eventualityU = 'EU' '(' formula ',' formula ')';
+	formula eventualityDiamond = 'E' '(' nominal ','  formula ')';
+	formula eventualityU = 'EU' '(' nominal ',' formula ',' formula ')';
 
 	formula equality = '[' nominal '=' nominal ']';
 	nominal f = 'f' '('  nominal ')'; //Skolem function == successor function

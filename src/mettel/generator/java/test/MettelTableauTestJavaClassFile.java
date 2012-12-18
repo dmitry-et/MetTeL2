@@ -44,7 +44,7 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
 		body(sort, branchBound);
 
 		if(branchBound != null){
-			headings.appendLine("import mettel.core.acceptor.MettelSmallTableauStateAcceptor;");
+			headings.appendLine("import mettel.core.tableau.acceptor.MettelSmallTableauStateAcceptor;");
 		}
 	}
 
@@ -67,10 +67,10 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
 		headings.appendLine("import org.antlr.runtime.CommonTokenStream;");
 		headings.appendLine("import org.antlr.runtime.RecognitionException;");
 
-		headings.appendLine("import mettel.core.MettelSimpleTableauManager;");
-		headings.appendLine("import mettel.core.MettelGeneralTableauRule;");
-		headings.appendLine("import mettel.core.MettelTableauObjectFactory;");
-		//headings.appendLine("import mettel.core.acceptor.MettelSmallTableauStateAcceptor;");
+		headings.appendLine("import mettel.core.tableau.MettelSimpleTableauManager;");
+		headings.appendLine("import mettel.core.tableau.MettelGeneralTableauRule;");
+		headings.appendLine("import mettel.core.tableau.MettelTableauObjectFactory;");
+		//headings.appendLine("import mettel.core.tableau.acceptor.MettelSmallTableauStateAcceptor;");
 
 		headings.appendLine("import "+pStructure.languagePackage().path()+".*;");
 		headings.appendEOL();

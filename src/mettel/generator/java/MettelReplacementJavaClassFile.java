@@ -42,9 +42,9 @@ public class MettelReplacementJavaClassFile extends MettelJavaClassFile {
 		headings.appendLine("import java.util.Set;");
 		headings.appendLine("import java.util.TreeSet;");
 		headings.appendLine("import java.util.Map.Entry;");
-		headings.appendLine("import mettel.core.MettelReplacement;");
-		headings.appendLine("import mettel.core.MettelSubstitution;");
-		headings.appendLine("import mettel.core.MettelExpression;");
+		headings.appendLine("import mettel.core.tableau.MettelReplacement;");
+		headings.appendLine("import mettel.core.tableau.MettelSubstitution;");
+		headings.appendLine("import mettel.core.tableau.MettelExpression;");
 		headings.appendEOL();
 	}
 

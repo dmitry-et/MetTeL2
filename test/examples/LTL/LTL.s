@@ -5,6 +5,8 @@ syntax LTL{
 	sort formula;
 	sort nominal;
 
+	formula badLoop = 'badLoop';//We need this for tableau
+
 	formula true = 'true';
 	formula false = 'false';
 
@@ -29,10 +31,9 @@ syntax LTL{
 	formula waitFor = formula 'W' formula;
 
 	//Tableau additions
-	formula eventualityDiamond = 'E' '(' formula ')';
-	formula eventualityU = 'EU' '(' formula ',' formula ')';
+	formula eventualityDiamond = 'E' '(' nominal ',' formula ')';
+	formula eventualityU = 'EU' '(' nominal ',' formula ',' formula ')';
 
 	formula equality = '[' nominal '=' nominal ']';
 	nominal f = 'f' '('  nominal ')'; //Skolem function == successor function
-	formula badLoop = 'badLoop';
 }

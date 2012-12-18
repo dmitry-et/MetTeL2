@@ -1,0 +1,2 @@
+//Unsatisfiable
+@l ~( ~(<q> a {l2}) | ~( <k> a {l2}) | ~( (~(<x> a {l2})) ))

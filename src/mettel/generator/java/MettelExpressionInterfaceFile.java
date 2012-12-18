@@ -35,7 +35,7 @@ public class MettelExpressionInterfaceFile extends MettelJavaInterfaceFile {
 	}
 
 	protected void imports(){
-	    headings.appendLine("import mettel.core.MettelExpression;");
+	    headings.appendLine("import mettel.core.tableau.MettelExpression;");
 	}
 
 	void body(){
