@@ -43,10 +43,12 @@ public class MettelJavaPackageStructure {
 	@SuppressWarnings("unused")
 	private MettelJavaPackageStructure(){}
 
-	private MettelJavaPackage basePackage = null, grammarPackage = null, langPackage = null, testLangPackage = null, testTableauPackage = null, tableauPackage = null;
+	private MettelJavaPackage basePackage = null, grammarPackage = null, langPackage = null, testLangPackage = null, testTableauPackage = null, tableauPackage = null, utilLangPackage = null;
 
 	private MettelObjectFactoryJavaInterfaceFile iFactory = null;
 	private MettelObjectFactoryJavaClassFile factory = null;
+	private MettelRandomObjectFactoryJavaClassFile randomObjectFactory = null;
+//	
 //	private MettelTableauObjectFactoryJavaClassFile tfactory = null;
 
 	//private MettelParserTestJavaClassFile testFile = null;
@@ -62,6 +64,8 @@ public class MettelJavaPackageStructure {
 		tableauPackage = new MettelJavaPackage(base+".tableau");
 
 		testLangPackage = new MettelJavaPackage(base+".language.test");
+		utilLangPackage = new MettelJavaPackage(base+".language.util");
+		
 		testTableauPackage = new MettelJavaPackage(base+".tableau.test");
 	}
 
@@ -82,9 +86,12 @@ public class MettelJavaPackageStructure {
 		iFactory = new MettelObjectFactoryJavaInterfaceFile(prefix,langPackage);
 		langPackage.add(iFactory);
 
+		randomObjectFactory = new MettelRandomObjectFactoryJavaClassFile(prefix,utilLangPackage);
+		utilLangPackage.add(randomObjectFactory);
+
 		factory = new MettelObjectFactoryJavaClassFile(prefix,langPackage);
 		langPackage.add(factory);
-
+		
 		langPackage.add(new MettelTableauObjectFactoryJavaClassFile(prefix,langPackage));
 	}
 
