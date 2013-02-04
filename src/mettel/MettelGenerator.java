@@ -50,7 +50,6 @@ import org.antlr.tool.ErrorManager;
 
 import mettel.generator.MettelANTLRGrammarGenerator;
 import mettel.generator.MettelANTLRGrammarGeneratorProperties;
-import mettel.generator.MettelEqualityKeywords;
 import mettel.generator.java.MettelJavaPackageStructure;
 import mettel.language.MettelLexer;
 import mettel.language.MettelParser;
