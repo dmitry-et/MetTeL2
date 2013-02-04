@@ -1,31 +1,17 @@
-@l(T P)  @l(F P) /  priority 0 $;
+@l(T P)  @l(F P) /  priority 0;
 
-@l(T(~P)) / @l(F P) priority 1 $;
+@l(T false) / priority 0;
 
-@l(F(~P)) / @l(T P) priority 1 $;
+@l(T(P|Q)) / @l(T P) || @l(T Q) priority 4;
+@l(F(P|Q)) / @l(F P) @l(F Q) priority 1;
 
-//@l(T(P|Q)) / 
+@l(T(P&Q)) / @l(T P) @l(T Q) priority 1;
+@l(F(P&Q)) / @l(F P) || @l(F Q) priority 4;
 
+@l(T(P->Q)) R(l,l0) @l0(T P) / @l0(T Q) priority 3;
+@l(F(P->Q)) / R(l,f(l,P,Q)) @f(l,P,Q)(T P) @f(l,P,Q)(F Q) priority 1;
 
-
-//F(F P) / P priority  1$;
-//F(P | Q) / F P  F Q  priority 1 $;
-//T(P & Q) / T P  T Q priority 1 $;
-
-//F P T(P|Q) / T Q  priority 2 $;
-//T P (F P|Q) / Q priority 2$;
-//~Q (P|Q) / P priority 2$;
-//Q (P|~Q) / P priority 2$;
-
-//(P | Q) (~P | R) / Q $| R priority 3$;
-//(Q | P) (~P | R) / Q $| R priority 3$;
-//(P | Q) (R | ~P) / Q $| R priority 3$;
-//(Q | P) (R | ~P) / Q $| R priority 3$;
-
-////~(P & Q) (P | R) / ~Q $| R priority 3$;
-////~(Q & P) (P | R) / ~Q $| R priority 3$;
-////~(P & Q) (R | P) / ~Q $| R priority 3$;
-////~(Q & P) (R | P) / ~Q $| R priority 3$;
-
-//P | Q / P $| Q priority 4$;
-//~(P & Q) / ~P $| ~Q priority 4
+@l P / R(l,l) priority 1;
+R(l0,l1) R(l1,l2) / R(l0,l2) priority 2;
+R(l0,l1) R(l1,l0) / [l0=l1] priority 2;
+@l(T P) R(l,l0) / @l0(T P) priority 2;

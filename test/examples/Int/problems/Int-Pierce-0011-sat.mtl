@@ -1,0 +1,3 @@
+//Satisfiable
+
+@l F(((P->Q)->P)->P)

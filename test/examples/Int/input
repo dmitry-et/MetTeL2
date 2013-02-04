@@ -1,18 +1,11 @@
-true
 false
-~p
 p&q
 p|q
 p->q
-p<->q
-~ ( ~P )
-~ P | Q
-~ (~P | Q) 
-(P | Q | R)
+(P | Q | R1)
 
 P | Q
-P & ~P
 
-i <= f(i,p)
+R(i, f(i,p,q))
 
-@i T(~(P|Q))
+@i T((P|Q)->false)

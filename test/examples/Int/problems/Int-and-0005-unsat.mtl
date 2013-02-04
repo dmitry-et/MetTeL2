@@ -1,0 +1,3 @@
+//Unsatisfiable
+
+@l F(P->(Q->(P&Q)))

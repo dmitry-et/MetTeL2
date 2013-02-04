@@ -4,9 +4,9 @@ syntax Int{
 	sort formula, individual;
 
 	//Connectives in a decreasing priority order
-	formula true = 'true';
+	//formula true = 'true';
 	formula false = 'false';
-	
+
 	formula trueValue = 'T' formula;
 	formula falseValue = 'F' formula;
 
@@ -16,8 +16,9 @@ syntax Int{
 	formula	conjunction = formula '&' formula;
 	formula	disjunction = formula '|' formula;
 	formula	implication = formula '->' formula;
-	formula	equivalence = formula '<->' formula;
+	//formula	equivalence = formula '<->' formula;
 
-	individual successor = 'f' '(' individual ',' formula ')';
-	formula ordering = individual '<=' individual;
+	individual successor = 'f' '(' individual ',' formula ',' formula ')';
+	formula relation = 'R' '(' individual ',' individual ')';
+	formula equality = '[' individual '=' individual ']';
 }
