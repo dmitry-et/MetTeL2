@@ -1,0 +1,31 @@
+@l(T P)  @l(F P) /  priority 0 $;
+
+@l(T(~P)) / @l(F P) priority 1 $;
+
+@l(F(~P)) / @l(T P) priority 1 $;
+
+//@l(T(P|Q)) / 
+
+
+
+//F(F P) / P priority  1$;
+//F(P | Q) / F P  F Q  priority 1 $;
+//T(P & Q) / T P  T Q priority 1 $;
+
+//F P T(P|Q) / T Q  priority 2 $;
+//T P (F P|Q) / Q priority 2$;
+//~Q (P|Q) / P priority 2$;
+//Q (P|~Q) / P priority 2$;
+
+//(P | Q) (~P | R) / Q $| R priority 3$;
+//(Q | P) (~P | R) / Q $| R priority 3$;
+//(P | Q) (R | ~P) / Q $| R priority 3$;
+//(Q | P) (R | ~P) / Q $| R priority 3$;
+
+////~(P & Q) (P | R) / ~Q $| R priority 3$;
+////~(Q & P) (P | R) / ~Q $| R priority 3$;
+////~(P & Q) (R | P) / ~Q $| R priority 3$;
+////~(Q & P) (R | P) / ~Q $| R priority 3$;
+
+//P | Q / P $| Q priority 4$;
+//~(P & Q) / ~P $| ~Q priority 4

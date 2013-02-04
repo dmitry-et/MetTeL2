@@ -1,0 +1,18 @@
+true
+false
+~p
+p&q
+p|q
+p->q
+p<->q
+~ ( ~P )
+~ P | Q
+~ (~P | Q) 
+(P | Q | R)
+
+P | Q
+P & ~P
+
+i <= f(i,p)
+
+@i T(~(P|Q))
