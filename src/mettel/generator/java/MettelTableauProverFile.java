@@ -154,6 +154,9 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
 	                decrementIndentLevel();
 	            appendLine('}');
 
+	            appendLine("if(out == null) out = new PrintWriter(new OutputStreamWriter(System.out),true);");
+    		    appendLine("if(err == null) err = new PrintWriter(new OutputStreamWriter(System.err),true);");
+
 	            appendLine("CharStream tin = (tableauFile == null)?");
 	            	incrementIndentLevel();
 	            	appendLine("new ANTLRInputStream("+prefix+"TableauProver.class.getResourceAsStream(\"/"+
@@ -172,9 +175,6 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
        		    appendLine("ArrayList<"+prefix+MettelJavaNames.firstCharToUpperCase(sort)+
     		    		"> list = new ArrayList<"+prefix+MettelJavaNames.firstCharToUpperCase(sort)+">();");
     		    appendLine("parser."+sort+"s(list);");
-
-    		    appendLine("if(out == null) out = new PrintWriter(new OutputStreamWriter(System.out),true);");
-    		    appendLine("if(err == null) err = new PrintWriter(new OutputStreamWriter(System.err),true);");
 
     		    appendLine("MettelTableauObjectFactory tfactory = new "+prefix+"TableauObjectFactory();");
     		    if(branchBound == null){
