@@ -18,7 +18,8 @@ syntax Int{
 	formula	implication = formula '->' formula;
 	//formula	equivalence = formula '<->' formula;
 
-	individual successor = 'f' '(' individual ',' formula ',' formula ')';
+	individual successorImp = 'f' '(' individual ',' formula ',' formula ')';
+	//individual successorNot = 'g' '(' individual ',' formula ')';
 	formula relation = 'R' '(' individual ',' individual ')';
 	formula equality = '[' individual '=' individual ']';
 }
