@@ -1,0 +1,9 @@
+false
+p|q
+(P | Q | R1)
+
+P | Q
+
+!R(i, f(i,p,q))
+
+@i (~((P|Q)|false))

@@ -1,0 +1,11 @@
+@l false / priority 0;
+
+@l P @l(~P) /  priority 1;
+
+@l ~(~P) / @l P priority 2;
+
+@l (P|Q) / @l P || @l Q priority 5;
+@l (~(P|Q)) / @l(~P) @l(~Q) priority 2;
+
+@l <R>P / !R(l,f(l,R,P)) @f(l,R,P) P priority 4;
+@l (~(<R>P)) !R(l,l0)/ @l0 ~P priority 3;
