@@ -25,6 +25,6 @@ R(l0,l1) R(l1,l2) / R(l0,l2) priority 4;
 R(l0,l1) R(l1,l0) / [l0=l1] priority 4;
 @l(T P) R(l,l0) / @l0(T P) priority 4;
 
-R(l,l) R(l0,l0) / [l=l0] || (F([l=l0])) priority 9;
+R(l,l0) / [l=l0] || (F([l=l0])) priority 9;
 (F([l=l])) / priority 0;
 
