@@ -1,0 +1,4 @@
+//Satisfiable
+@i(
+~(~P |~([~R]~P))
+)

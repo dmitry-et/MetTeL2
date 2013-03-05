@@ -1,0 +1,14 @@
+//Unsatisfiable
+@i(
+~(
+~([R](
+    ~(~([R0]false | ~([R1]false)) |
+    ~([R1]false | ~([R2]false)))
+)) |
+~([~R](
+    ~(~([R0]false | ~([R1]false)) |
+    ~([R1]false | ~([R2]false)))
+)) |
+([R0]false | ~([R2]false))
+)
+)

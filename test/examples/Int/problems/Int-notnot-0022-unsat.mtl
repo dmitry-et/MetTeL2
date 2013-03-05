@@ -1,0 +1,3 @@
+//Unsatisfiable
+
+@l F(p -> (~(~p)))

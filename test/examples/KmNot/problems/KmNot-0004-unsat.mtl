@@ -1,0 +1,9 @@
+//Unsatisfiable
+//Negated Axiom N(A,B) & N(A->C,B->D) -> N(C,D)
+@i(
+~(
+(~([R]A) | ~([~R]B) |
+~([R](~A|C)) | ~([~R](~B|D))) |
+~(~([R]C) | ~([~R]D))
+)
+)
