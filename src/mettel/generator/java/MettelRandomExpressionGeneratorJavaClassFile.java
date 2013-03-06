@@ -207,7 +207,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 
 			appendEOL();
 
-			appendLine("public " + prefix + Type + ' ' + type + "(int d){");
+			appendLine("private " + prefix + Type + ' ' + type + "(int d){");
 				incrementIndentLevel();
 				appendLine("if(depth" + Type + " > 0 && d <= 0){");
 					incrementIndentLevel();
