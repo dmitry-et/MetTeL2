@@ -60,7 +60,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 		headings.appendEOL();
 		headings.appendLine("import " + langPack.path() + '.' + prefix + "ObjectFactory;");
 		headings.appendEOL();
-		headings.appendLine("import mettel.MettelRuntimeException;");
+		headings.appendLine("import mettel.core.MettelCoreRuntimeException;");
 		headings.appendEOL();
 		headings.appendLine("import java.util.Collection;");
 		headings.appendLine("import java.util.Random;");
@@ -159,7 +159,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 
 				appendLine("public void set" + MettelJavaNames.firstCharToUpperCase(ltype) + "Frequency(int f){");
 					incrementIndentLevel();
-					appendLine("if(f < 0) throw new MettelRuntimeException(\"Frequency parameter is negative\");");
+					appendLine("if(f < 0) throw new MettelCoreRuntimeException(\"Frequency parameter is negative\");");
 					appendLine("total" + Type + "Frequency += (f - " + ltype + "Frequency);");
 					appendLine(ltype+"Frequency = f;");
 					decrementIndentLevel();
@@ -173,7 +173,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 			appendLine("private int " + vtype + "Frequency = 1;");
 			appendLine("public void set" + MettelJavaNames.firstCharToUpperCase(vtype) + "Frequency(int f){");
 				incrementIndentLevel();
-				appendLine("if(f < 0) throw new MettelRuntimeException(\"Frequency parameter is negative\");");
+				appendLine("if(f < 0) throw new MettelCoreRuntimeException(\"Frequency parameter is negative\");");
 				appendLine("total" + Type + "Frequency += (f - " + vtype + "Frequency);");
 				appendLine(vtype+"Frequency = f;");
 				decrementIndentLevel();
