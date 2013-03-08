@@ -9,6 +9,8 @@ public class AllTests {
 		"Km.tableau.test.KmTableauTest",
 		"KmNot.language.test.KmNotParserTest",
 		"KmNot.tableau.test.KmNotTableauTest",
+//		"KmNotKE.language.test.KmNotParserTest",
+		"KmNotKE.tableau.test.KmNotTableauTest",
 		"Int.language.test.IntParserTest",
 		"Int.tableau.test.IntTableauTest",
 		"lists.language.test.ListsParserTest",
