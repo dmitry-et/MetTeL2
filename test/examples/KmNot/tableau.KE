@@ -12,6 +12,8 @@
 
 ! ~R(l,l0) !R(l,l0) / priority 1;
 
+! ~(~R)(l,l0) / !R(l,l0) priority 2;
+
 @l [~R]P  @l0 Q/ !R(l,l0) || !~R(l,l0) @l0 P priority 6;
 
 @l P  @l0 Q / {l=l0} priority 4;
