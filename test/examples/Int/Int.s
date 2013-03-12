@@ -19,7 +19,7 @@ syntax Int{
 	//formula	equivalence = formula '<->' formula;
 
 	individual successorImp = 'f' '(' individual ',' formula ',' formula ')';
-	individual successorNot = 'g' '(' individual ',' formula ')';
+	//individual successorNot = 'g' '(' individual ',' formula ')';
 	formula relation = 'R' '(' individual ',' individual ')';
 	formula equality = '[' individual '=' individual ']';
 }
