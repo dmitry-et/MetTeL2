@@ -1,0 +1,5 @@
+//Unsatisfiable
+@l ~(~([R](~P | Q)) | ~([R]P) | [R]Q)
+Dom P
+Dom Q
+Rel R

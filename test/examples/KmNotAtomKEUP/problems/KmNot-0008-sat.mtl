@@ -1,0 +1,7 @@
+/* satisfiable */
+@i(
+~(~([R]~([S]~P)) | ~([~R]~([S]~P)) | [S]~P)
+)
+Dom P
+Rel R
+Rel S

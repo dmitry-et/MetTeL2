@@ -1,0 +1,7 @@
+//Satisfiable
+@i(
+~(~P |~([~R]~P))
+)
+
+Dom P
+Rel R

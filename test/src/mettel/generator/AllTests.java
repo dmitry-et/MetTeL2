@@ -13,6 +13,8 @@ public class AllTests {
 		"KmNotKE.tableau.test.KmNotTableauTest",
 //		"KmNotKEUP.language.test.KmNotParserTest",
 		"KmNotKEUP.tableau.test.KmNotTableauTest",
+		"KmNotAtomKEUP.language.test.KmNotParserTest",
+		"KmNotAtomKEUP.tableau.test.KmNotTableauTest",
 		"Int.language.test.IntParserTest",
 		"Int.tableau.test.IntTableauTest",
 		"lists.language.test.ListsParserTest",

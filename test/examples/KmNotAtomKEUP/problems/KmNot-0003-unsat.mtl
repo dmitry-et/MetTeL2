@@ -1,0 +1,7 @@
+//Unsatisfiable
+//Negated Axiom N(1,1)
+@i(
+~([R]~false) | ~([~R]~false)
+)
+
+Rel R

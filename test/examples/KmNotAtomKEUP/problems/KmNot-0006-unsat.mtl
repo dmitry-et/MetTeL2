@@ -1,0 +1,10 @@
+//Unsatisfiable
+//Negated Axiom [U]A -> [U][U]A
+@i(
+~(
+~([R]A) | ~([~R]A) | 
+~(~([R](~(~([R]A) | ~([~R]A)))) | ~([~R](~(~([R]A) | ~([~R]A)))))
+)
+)
+Dom A
+Rel R
