@@ -28,8 +28,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
@@ -54,6 +59,8 @@ import mettel.generator.java.MettelJavaPackageStructure;
 import mettel.language.MettelLexer;
 import mettel.language.MettelParser;
 import mettel.language.MettelSpecification;
+
+import mettel.core.tableau.MettelGeneralTableauRule;
 
 /**
  * @author Dmitry Tishkovsky
@@ -267,7 +274,9 @@ public class MettelGenerator {
 		}
 	}
 
-	private static boolean build(String path) throws IOException{
+	private static boolean build(String path) throws IOException,
+			ClassNotFoundException,
+			IllegalAccessException, IllegalArgumentException, NoSuchMethodException, SecurityException{ //, MismatchedTokenException{
 
 		File src = new File(outputPath+File.separatorChar+path);
 		File grammar = findGrammarFile(src);
@@ -317,11 +326,47 @@ public class MettelGenerator {
 		}
 		out0.flush(); err0.flush();
 
-		report("I am trying to make an executable jar-file with the prover.");
+		report("I am verifying the tableau calculus specification.");
 
 		File mainClass = findMainClass(src);
 		String name = mainClass.getName();
 		name = name.substring(0, name.lastIndexOf('.'));
+
+		ClassLoader currentThreadClassLoader = Thread.currentThread().getContextClassLoader();
+		URLClassLoader classLoader = new URLClassLoader(new URL[]{dir.toURI().toURL()}, currentThreadClassLoader);
+
+		//ClassLoader cl = new ClassLoader();
+		//URLClassLoader classLoader = URLClassLoader.newInstance(new URL[] { dir.toURI().toURL() });
+		Class<?> cls;
+		//try {
+		cls = Class.forName(path + '.' +name, true, classLoader);
+		//Constructor<?> constructor = cls.getConstructor();
+		//Object instance = constructor.newInstance(arg0);
+		LinkedHashSet<MettelGeneralTableauRule> calculus = new LinkedHashSet<MettelGeneralTableauRule>();
+		try{
+			cls.getMethod("parseCalculus", Set.class, String.class).invoke(null, calculus, tableau.getPath());//   .invoke(instance, (Object[]));
+		}catch(InvocationTargetException e){
+			//throw (MismatchedTokenException)e.getCause();
+			report("There are errors in the tableau calculus specification.");
+			return false;
+		}
+		/*} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		}*/
+
+		report("The tableau calculus specification is OK.");
+
+		report("I am trying to make an executable jar-file with the prover.");
 
 		Manifest manifest = new Manifest();
 		Attributes attributes = manifest.getMainAttributes();
@@ -331,8 +376,6 @@ public class MettelGenerator {
 
 		JarOutputStream jar = new JarOutputStream(new FileOutputStream(path+".jar"), manifest);
 		addToJar(dir.getPath(),dir,jar);
-
-		//ClassLoader cl = new ClassLoader();
 
 		addTableauToJar(path, tableau,jar);
 		jar.close();
