@@ -1,0 +1,11 @@
+false
+p&q
+p|q
+p->q
+(P | Q | R1)
+
+P | Q
+
+R(i, f(i,p,q))
+
+@i T((P|Q)->false)

@@ -1,0 +1,2 @@
+// Satisfiable
+@i T((p->false)->false)

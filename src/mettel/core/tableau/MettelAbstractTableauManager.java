@@ -195,6 +195,9 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 			return false;
 		}
 
+		if(input == null || input.isEmpty()){
+			throw new MettelCoreRuntimeException("Input set cannot be empty");
+		}
 		throw new MettelCoreRuntimeException("Failed to create a state containing "+input);
 	}
 

@@ -1,0 +1,2 @@
+//Unsatisfiable
+@i F((p->false) -> (((p -> false) -> false) ->false))

@@ -48,17 +48,18 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
 
 	protected void imports(){
 		headings.appendLine("import java.util.ArrayList;");
+		headings.appendLine("import java.util.Set;");
 		headings.appendLine("import java.util.LinkedHashSet;");
 		headings.appendLine("import java.io.PrintWriter;");
 		headings.appendLine("import java.io.FileWriter;");
 		headings.appendLine("import java.io.OutputStreamWriter;");
-		//headings.appendLine("import java.io.IOException;");
+		headings.appendLine("import java.io.IOException;");
 
 		headings.appendLine("import org.antlr.runtime.ANTLRFileStream;");
 		headings.appendLine("import org.antlr.runtime.ANTLRInputStream;");
 		headings.appendLine("import org.antlr.runtime.CharStream;");
 		headings.appendLine("import org.antlr.runtime.CommonTokenStream;");
-		//headings.appendLine("import org.antlr.runtime.RecognitionException;");
+		headings.appendLine("import org.antlr.runtime.RecognitionException;");
 
 		headings.appendLine("import mettel.core.tableau.MettelSimpleTableauManager;");
 		headings.appendLine("import mettel.core.tableau.MettelGeneralTableauRule;");
@@ -154,17 +155,21 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
 	                decrementIndentLevel();
 	            appendLine('}');
 
-	            appendLine("CharStream tin = (tableauFile == null)?");
-	            	incrementIndentLevel();
-	            	appendLine("new ANTLRInputStream("+prefix+"TableauProver.class.getResourceAsStream(\"/"+
-	            			MettelJavaNames.javaPath(pStructure.tableauPackage().path()+".calculus")+"\")):");
-	            	appendLine("new ANTLRFileStream(tableauFile);");
-	            	decrementIndentLevel();
+	            appendLine("if(out == null) out = new PrintWriter(new OutputStreamWriter(System.out),true);");
+    		    appendLine("if(err == null) err = new PrintWriter(new OutputStreamWriter(System.err),true);");
 
-	            appendLine("tokens.setTokenSource(new "+prefix+"Lexer(tin));");
+	            //appendLine("CharStream tin = (tableauFile == null)?");
+	            //	incrementIndentLevel();
+	            //	appendLine("new ANTLRInputStream("+prefix+"TableauProver.class.getResourceAsStream(\"/"+
+	            //			MettelJavaNames.javaPath(pStructure.tableauPackage().path()+".calculus")+"\")):");
+	            //	appendLine("new ANTLRFileStream(tableauFile);");
+	            //	decrementIndentLevel();
+
+	            //appendLine("tokens.setTokenSource(new "+prefix+"Lexer(tin));");
 
 	            appendLine("LinkedHashSet<MettelGeneralTableauRule> calculus = new LinkedHashSet<MettelGeneralTableauRule>();");
-	            appendLine("parser.tableauCalculus(calculus);");
+	            appendLine("parseCalculus(calculus, tableauFile);");
+	            //appendLine("parser.tableauCalculus(calculus);");
 
 	            appendLine("if(in == null) in = new ANTLRInputStream(System.in);");
 
@@ -172,9 +177,6 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
        		    appendLine("ArrayList<"+prefix+MettelJavaNames.firstCharToUpperCase(sort)+
     		    		"> list = new ArrayList<"+prefix+MettelJavaNames.firstCharToUpperCase(sort)+">();");
     		    appendLine("parser."+sort+"s(list);");
-
-    		    appendLine("if(out == null) out = new PrintWriter(new OutputStreamWriter(System.out),true);");
-    		    appendLine("if(err == null) err = new PrintWriter(new OutputStreamWriter(System.err),true);");
 
     		    appendLine("MettelTableauObjectFactory tfactory = new "+prefix+"TableauObjectFactory();");
     		    if(branchBound == null){
@@ -219,6 +221,22 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
 	        	decrementIndentLevel();
 	        appendLine('}');
 	        decrementIndentLevel();
+	    appendLine('}');
+
+	    appendLine("public static void parseCalculus(Set<MettelGeneralTableauRule> calculus, String path)");
+	    appendLine("throws IOException, RecognitionException{");
+	    incrementIndentLevel();
+	    	appendLine("CharStream tin = (path == null)?");
+	    	incrementIndentLevel();
+	    		appendLine("new ANTLRInputStream("+prefix+"TableauProver.class.getResourceAsStream(\"/"+
+	    				MettelJavaNames.javaPath(pStructure.tableauPackage().path()+".calculus")+"\")):");
+	    		appendLine("new ANTLRFileStream(path);");
+	    	decrementIndentLevel();
+
+	    	appendLine("tokens.setTokenSource(new "+prefix+"Lexer(tin));");
+
+	    	appendLine("parser.tableauCalculus(calculus);");
+	    decrementIndentLevel();
 	    appendLine('}');
 
 	}

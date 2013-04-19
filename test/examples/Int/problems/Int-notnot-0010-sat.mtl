@@ -1,0 +1,3 @@
+//Satisfiable
+
+@l F(((P->false)->false)->P)

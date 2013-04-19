@@ -7,6 +7,8 @@ public class AllTests {
 	private static final String[] classNames = new String[]{
 		"ALBOidDL.language.test.ALBOidDLParserTest",
 //		"ALBOidDL.tableau.test.ALBOidDLTableauTest",
+		"Int.language.test.IntParserTest",
+		"Int.tableau.test.IntTableauTest",
 		"lists.language.test.ListsParserTest",
 		"lists.tableau.test.ListsTableauTest",
 		"bool.language.test.BooleanParserTest",
