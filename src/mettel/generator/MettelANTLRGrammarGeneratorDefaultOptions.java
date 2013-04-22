@@ -15,5 +15,7 @@ public interface MettelANTLRGrammarGeneratorDefaultOptions extends MettelANTLRGr
 	public static final String EXPRESSION_RIGHT_DELIMITER = ")";
 
 	public static final String BRANCH_BOUND = null;
+	
+	public static final String NAME_SEPARATOR = "_";
 
 }

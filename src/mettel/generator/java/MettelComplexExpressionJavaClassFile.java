@@ -22,6 +22,8 @@ import mettel.language.MettelStringLiteral;
 import mettel.language.MettelToken;
 import mettel.util.MettelJavaNames;
 
+import static mettel.generator.MettelANTLRGrammarGeneratorDefaultOptions.NAME_SEPARATOR;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -35,6 +37,8 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 	private String prefix = "Mettel";
 	private String sort = null;
 	private String name = null;
+	
+	private String nameSeparator = NAME_SEPARATOR;
 
 	private boolean equality = false;
 	/**
@@ -42,8 +46,8 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 	 * @param sort
 	 * @param pack
 	 */
-	public MettelComplexExpressionJavaClassFile(String prefix, String sort, String name, String[] sorts, MettelJavaPackage pack, boolean equality){
-		super(prefix+MettelJavaNames.firstCharToUpperCase(name)+MettelJavaNames.firstCharToUpperCase(sort), pack, "public",
+	public MettelComplexExpressionJavaClassFile(String prefix, String sort, String name, String[] sorts, MettelJavaPackage pack, boolean equality, String nameSeparator){
+		super(prefix+MettelJavaNames.firstCharToUpperCase(name,nameSeparator)+MettelJavaNames.firstCharToUpperCase(sort), pack, "public",
 				prefix+"AbstractExpression",
 				equality? new String[]{"MettelEqualityExpression", prefix+MettelJavaNames.firstCharToUpperCase(sort)} :
 					      new String[]{prefix+MettelJavaNames.firstCharToUpperCase(sort)});
@@ -53,6 +57,7 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 		this.sort = sort;
 		this.name = name;
 		this.equality = equality;
+		this.nameSeparator = nameSeparator;
 		body(sorts);
 	}
 
@@ -61,8 +66,8 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 	 * @param sort
 	 * @param pack
 	 */
-	public MettelComplexExpressionJavaClassFile(String prefix, String sort, String name, String[] sorts, MettelJavaPackage pack){
-		this(prefix, sort, name, sorts, pack, false);
+	public MettelComplexExpressionJavaClassFile(String prefix, String sort, String name, String[] sorts, MettelJavaPackage pack, String nameSeparator){
+		this(prefix, sort, name, sorts, pack, false, nameSeparator);
 	}
 
 
@@ -77,7 +82,7 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 	}
 
 	private void body(String[] sorts){
-		final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(name)+MettelJavaNames.firstCharToUpperCase(sort);
+		final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(name,nameSeparator)+MettelJavaNames.firstCharToUpperCase(sort);
 		final String TYPE0 = prefix+MettelJavaNames.firstCharToUpperCase(sort);
 		final int SIZE = sorts.length;
 
@@ -162,7 +167,7 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 			incrementIndentLevel();
 				if(SIZE > 0){
 					indent();
-					append("return factory.create"+MettelJavaNames.firstCharToUpperCase(name)+MettelJavaNames.firstCharToUpperCase(sort)+'(');
+					append("return factory.create"+MettelJavaNames.firstCharToUpperCase(name,nameSeparator)+MettelJavaNames.firstCharToUpperCase(sort)+'(');
 					append('(');
 					append(prefix+MettelJavaNames.firstCharToUpperCase(sorts[0]));
 					append(')');
@@ -190,7 +195,7 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 			appendLine("if(e != null){ return e; }");
 			if(SIZE > 0){
 				indent();
-				append("final "+TYPE0+" ee = factory.create"+MettelJavaNames.firstCharToUpperCase(name)+MettelJavaNames.firstCharToUpperCase(sort)+'(');
+				append("final "+TYPE0+" ee = factory.create"+MettelJavaNames.firstCharToUpperCase(name,nameSeparator)+MettelJavaNames.firstCharToUpperCase(sort)+'(');
 				append('(');
 				append(prefix+MettelJavaNames.firstCharToUpperCase(sorts[0]));
 				append(')');
