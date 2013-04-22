@@ -18,6 +18,8 @@ package mettel.generator.java;
 
 import mettel.util.MettelJavaNames;
 
+import static mettel.generator.MettelANTLRGrammarGeneratorDefaultOptions.NAME_SEPARATOR;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -26,15 +28,18 @@ import mettel.util.MettelJavaNames;
 public class MettelObjectFactoryJavaClassFile extends MettelJavaClassFile {
 
 	private String prefix = "Mettel";
+	
+	private String nameSeparator = NAME_SEPARATOR;
 	/**
 	 * @param name
 	 * @param pack
 	 */
-	public MettelObjectFactoryJavaClassFile(String prefix, MettelJavaPackage pack) {
+	public MettelObjectFactoryJavaClassFile(String prefix, MettelJavaPackage pack, String nameSeparator) {
 		//if(name == null) throw MettelGeneratorRuntimeException("Name is null");
 		super(prefix + "DefaultObjectFactory", pack, "public", null,
 			  new String[]{prefix + "ObjectFactory"});
 		this.prefix = prefix;
+		this.nameSeparator = nameSeparator;
 		body();
 	}
 
@@ -63,7 +68,7 @@ public class MettelObjectFactoryJavaClassFile extends MettelJavaClassFile {
 
 	public void addCreateMethod(String type, String name, String[] types){
 		final String ltype = name + MettelJavaNames.firstCharToUpperCase(type);
-		final String TYPE = prefix + MettelJavaNames.firstCharToUpperCase(name) + MettelJavaNames.firstCharToUpperCase(type);
+		final String TYPE = prefix + MettelJavaNames.firstCharToUpperCase(name, nameSeparator) + MettelJavaNames.firstCharToUpperCase(type);
 		final String TYPE0 = prefix + MettelJavaNames.firstCharToUpperCase(type);
 
 		final int SIZE = types.length;
@@ -73,7 +78,7 @@ public class MettelObjectFactoryJavaClassFile extends MettelJavaClassFile {
 
 			indent();
 
-			append("public "+TYPE0+" create"+MettelJavaNames.firstCharToUpperCase(ltype) + '(');
+			append("public "+TYPE0+" create"+MettelJavaNames.firstCharToUpperCase(ltype, nameSeparator) + '(');
 			append(prefix+MettelJavaNames.firstCharToUpperCase(types[0])+" e"+0);
 			for(int i = 1; i < SIZE; i++){
 				append(", "+prefix+MettelJavaNames.firstCharToUpperCase(types[i])+" e"+i);
@@ -104,12 +109,12 @@ public class MettelObjectFactoryJavaClassFile extends MettelJavaClassFile {
 			appendEOL();
 
 		}else{
-			appendLine("private "+TYPE+' '+ltype+"Constant = new "+TYPE+"(this);");
+			appendLine("private "+TYPE+' '+ nameSeparator + ltype+"Constant = new "+TYPE+"(this);");
 			appendEOL();
 
-			appendLine("public "+TYPE+" create"+MettelJavaNames.firstCharToUpperCase(ltype) + "(){");
+			appendLine("public "+TYPE+" create"+MettelJavaNames.firstCharToUpperCase(ltype, nameSeparator) + "(){");
 			incrementIndentLevel();
-				appendLine("return "+ltype+"Constant;");
+				appendLine("return "+ nameSeparator + ltype+"Constant;");
 			decrementIndentLevel();
 			appendLine('}');
 		}

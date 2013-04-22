@@ -142,7 +142,7 @@ public class MettelANTLRGrammarGenerator {
 		grammarPackage = new MettelJavaPackage(PATH+'.'+GRAMMAR_STRING);
 */
 		MettelJavaPackageStructure pStructure = new MettelJavaPackageStructure(PATH);
-		pStructure.appendStandardClasses(NAME);
+		pStructure.appendStandardClasses(NAME,properties.nameSeparator);
 
 		MettelANTLRStandardGrammar grammar =
 				new MettelANTLRStandardGrammar(NAME, pStructure.grammarPackage().path(), properties.grammarOptions);
@@ -264,7 +264,8 @@ public class MettelANTLRGrammarGenerator {
 		String s1 = null;
 		//System.out.println(bnfs);
 		for(MettelBNFStatement s:bnfs){
-			s1 = SORT_NAME + MettelJavaNames.firstCharToUpperCase(s.identifier());
+			s1 = SORT_NAME +
+					MettelJavaNames.firstCharToUpperCase(s.identifier(),properties.nameSeparator);
 
 			MettelToken[] tokens = s.tokens().toArray(new MettelToken[0]);
 			final int SIZE = tokens.length;
@@ -289,7 +290,8 @@ public class MettelANTLRGrammarGenerator {
 				st1.addExpression(new MettelANTLRToken(tokens[1].toString()));
 
 				MettelANTLRRuleReference ref = new MettelANTLRRuleReference(s0,"e1");
-				ref.appendLineToPostfix("e0 = factory.create"+MettelJavaNames.firstCharToUpperCase(id)+
+				ref.appendLineToPostfix("e0 = factory.create"+
+						MettelJavaNames.firstCharToUpperCase(id,properties.nameSeparator)+
 						MettelJavaNames.firstCharToUpperCase(SORT_NAME)+"(e0, e1);");
 				st1.addExpression(ref);
 
@@ -315,7 +317,8 @@ public class MettelANTLRGrammarGenerator {
 				st.addExpression(new MettelANTLRRuleReference(s0,"e0"));
 
 				MettelANTLRToken t = new MettelANTLRToken(tokens[1].toString());
-				t.appendLineToPostfix("e0 = factory.create"+MettelJavaNames.firstCharToUpperCase(s.identifier())+
+				t.appendLineToPostfix("e0 = factory.create"+
+						MettelJavaNames.firstCharToUpperCase(s.identifier(),properties.nameSeparator)+
 						MettelJavaNames.firstCharToUpperCase(SORT_NAME)+"(e0);");
 
 				MettelANTLRUnaryBNFStatement st0 = new MettelANTLRUnaryBNFStatement(
@@ -364,7 +367,8 @@ public class MettelANTLRGrammarGenerator {
 					s1 = SORT_NAME+MettelJavaNames.firstCharToUpperCase(id);
 				}
 */
-				st0.appendToPostfix("r0 = factory.create"+MettelJavaNames.firstCharToUpperCase(id)+
+				st0.appendToPostfix("r0 = factory.create"+
+						MettelJavaNames.firstCharToUpperCase(id,properties.nameSeparator)+
 						MettelJavaNames.firstCharToUpperCase(SORT_NAME)+'(');
 				final int jSIZE = sortStrings.size();
 				if(jSIZE >0 ){

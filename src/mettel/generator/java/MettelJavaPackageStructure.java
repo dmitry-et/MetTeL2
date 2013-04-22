@@ -33,6 +33,8 @@ import mettel.language.MettelToken;
 import mettel.generator.java.test.MettelParserTestJavaClassFile;
 import mettel.generator.java.test.MettelTableauTestJavaClassFile;
 
+import static mettel.generator.MettelANTLRGrammarGeneratorDefaultOptions.NAME_SEPARATOR;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -49,6 +51,8 @@ public class MettelJavaPackageStructure {
 	private MettelObjectFactoryJavaClassFile factory = null;
 	private MettelExpressionGeneratorJavaInterfaceFile iExpressionGenerator = null;
 	private MettelRandomExpressionGeneratorJavaClassFile expressionGenerator = null;
+	
+	private String nameSeparator = NAME_SEPARATOR;
 //
 //	private MettelTableauObjectFactoryJavaClassFile tfactory = null;
 
@@ -74,7 +78,9 @@ public class MettelJavaPackageStructure {
 		grammarPackage.createFile(g.name(),"g").append(g.toStringBuilder());
 	}
 
-	public void appendStandardClasses(String prefix){
+	public void appendStandardClasses(String prefix, String nameSeparator){
+		this.nameSeparator = nameSeparator;
+		
 		langPackage.add(new MettelExpressionInterfaceFile(prefix,langPackage));
 		langPackage.add(new MettelVariableJavaInterfaceFile(prefix,langPackage));
 
@@ -84,16 +90,16 @@ public class MettelJavaPackageStructure {
 		langPackage.add(new MettelIDComparatorJavaClassFile(prefix,langPackage));
 		langPackage.add(new MettelLPOComparatorJavaClassFile(prefix,langPackage));
 
-		iFactory = new MettelObjectFactoryJavaInterfaceFile(prefix,langPackage);
+		iFactory = new MettelObjectFactoryJavaInterfaceFile(prefix,langPackage,nameSeparator);
 		langPackage.add(iFactory);
 
 		iExpressionGenerator = new MettelExpressionGeneratorJavaInterfaceFile(prefix,utilLangPackage,langPackage);
 		utilLangPackage.add(iExpressionGenerator);
 
-		factory = new MettelObjectFactoryJavaClassFile(prefix,langPackage);
+		factory = new MettelObjectFactoryJavaClassFile(prefix,langPackage,nameSeparator);
 		langPackage.add(factory);
 
-		expressionGenerator = new MettelRandomExpressionGeneratorJavaClassFile(prefix,utilLangPackage,langPackage);
+		expressionGenerator = new MettelRandomExpressionGeneratorJavaClassFile(prefix,utilLangPackage,langPackage,nameSeparator);
 		utilLangPackage.add(expressionGenerator);
 
 		langPackage.add(new MettelTableauObjectFactoryJavaClassFile(prefix,langPackage));
@@ -125,7 +131,7 @@ public class MettelJavaPackageStructure {
 	}
 
 	public void appendConnectiveClass(String prefix, String sort, String name, String[] sorts, List<MettelToken> tokens, boolean equality){
-		MettelComplexExpressionJavaClassFile f = new MettelComplexExpressionJavaClassFile(prefix,sort,name,sorts,langPackage,equality);
+		MettelComplexExpressionJavaClassFile f = new MettelComplexExpressionJavaClassFile(prefix,sort,name,sorts,langPackage,equality, this.nameSeparator);
 		f.addToStringMethod(tokens);
 		langPackage.add(f);
 

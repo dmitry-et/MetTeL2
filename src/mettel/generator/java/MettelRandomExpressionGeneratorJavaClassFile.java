@@ -26,11 +26,15 @@ import java.util.Hashtable;
 
 import mettel.util.MettelJavaNames;
 
+import static mettel.generator.MettelANTLRGrammarGeneratorDefaultOptions.NAME_SEPARATOR;
+
 public class MettelRandomExpressionGeneratorJavaClassFile extends
 		MettelJavaClassFile {
 
 	private String prefix = "Mettel";
 	private MettelJavaPackage langPack = null;
+	
+	private String nameSeparator = NAME_SEPARATOR;
 
 	private class Signature{
 
@@ -49,11 +53,12 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 
 	private Hashtable<String,ArrayList<Signature>> signatures = new Hashtable<String,ArrayList<Signature>>();
 
-	public MettelRandomExpressionGeneratorJavaClassFile(String prefix, MettelJavaPackage pack, MettelJavaPackage langPack) {
+	public MettelRandomExpressionGeneratorJavaClassFile(String prefix, MettelJavaPackage pack, MettelJavaPackage langPack, String nameSeparator) {
 		super(prefix + "RandomExpressionGenerator", pack, "public", null,
 				  new String[]{prefix + "ExpressionGenerator"});
 			this.prefix = prefix;
 			this.langPack = langPack;
+			this.nameSeparator = nameSeparator;
 	}
 
 	protected void imports(){
@@ -157,7 +162,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 
 				appendEOL();
 
-				appendLine("public void set" + MettelJavaNames.firstCharToUpperCase(ltype) + "Frequency(int f){");
+				appendLine("public void set" + MettelJavaNames.firstCharToUpperCase(ltype, nameSeparator) + "Frequency(int f){");
 					incrementIndentLevel();
 					appendLine("if(f < 0) throw new MettelCoreRuntimeException(\"Frequency parameter is negative\");");
 					appendLine("total" + Type + "Frequency += (f - " + ltype + "Frequency);");
@@ -227,7 +232,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 					appendLine("if(r < " + ltype + "Frequency){");
 						incrementIndentLevel();
 						indent();
-						append("return factory.create" + MettelJavaNames.firstCharToUpperCase(ltype) + '(');
+						append("return factory.create" + MettelJavaNames.firstCharToUpperCase(ltype,nameSeparator) + '(');
 							int i = 0;
 							for(String t:s.types){
 								if(i > 0){

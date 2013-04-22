@@ -18,6 +18,8 @@ package mettel.generator.java;
 
 import mettel.util.MettelJavaNames;
 
+import static mettel.generator.MettelANTLRGrammarGeneratorDefaultOptions.NAME_SEPARATOR;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -26,13 +28,16 @@ import mettel.util.MettelJavaNames;
 public class MettelObjectFactoryJavaInterfaceFile extends MettelJavaInterfaceFile {
 
 	private String prefix = "Mettel";
+	
+	private String nameSeparator = NAME_SEPARATOR;
 	/**
 	 * @param name
 	 * @param pack
 	 */
-	public MettelObjectFactoryJavaInterfaceFile(String prefix, MettelJavaPackage pack) {
+	public MettelObjectFactoryJavaInterfaceFile(String prefix, MettelJavaPackage pack, String nameSeparator) {
 		super(prefix+"ObjectFactory", pack, null);
 		this.prefix = prefix;
+		this.nameSeparator = nameSeparator;
 		fields();
 		body();
 	}
@@ -58,19 +63,19 @@ public class MettelObjectFactoryJavaInterfaceFile extends MettelJavaInterfaceFil
 
 	public String methodSignature(String type, String name, String[] types){
 		final String ltype = name + MettelJavaNames.firstCharToUpperCase(type);
-		final String TYPE = prefix + MettelJavaNames.firstCharToUpperCase(ltype);
+		final String TYPE = prefix + MettelJavaNames.firstCharToUpperCase(ltype, nameSeparator);
 		final int SIZE = types.length;
 
 		StringBuilder b  = new StringBuilder();
 		if(SIZE > 0){
-			append(prefix+MettelJavaNames.firstCharToUpperCase(type) + " create" + MettelJavaNames.firstCharToUpperCase(ltype) + '(');
+			append(prefix+MettelJavaNames.firstCharToUpperCase(type) + " create" + MettelJavaNames.firstCharToUpperCase(ltype, nameSeparator) + '(');
 			append(prefix + MettelJavaNames.firstCharToUpperCase(types[0]) +" e0");
 			for(int i = 1; i < SIZE; i++){
 				append(", " + prefix + MettelJavaNames.firstCharToUpperCase(types[i]) + " e" + i);
 			}
 			append(");");
 		}else if(SIZE == 0){
-			append(TYPE + " create" + MettelJavaNames.firstCharToUpperCase(ltype) +"();");
+			append(TYPE + " create" + MettelJavaNames.firstCharToUpperCase(ltype, nameSeparator) +"();");
 		}
 
 		return b.toString();
