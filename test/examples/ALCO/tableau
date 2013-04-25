@@ -46,3 +46,10 @@
 // last rule may not have $;
 // no comma between formulae
 
+//Blocking related
+@l{l0} / [l=l0] priority 1$;
+//[l=l0] / @l{l0} priority 1$;
+//@l~{l0} / ~([l=l0]) priority 1$;
+//~([l=l0]) / @l~{l0} priority 1$;
+//@l{l} @l0{l0} / [l=l0] $| ~([l=l0]) priority 6$;
+

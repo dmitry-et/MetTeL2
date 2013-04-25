@@ -31,6 +31,7 @@ syntax ALCO{
 	individual skolemF = 'f' '(' individual ',' role ',' concept ')';
 	individual skolemG = 'g' '(' individual ',' individual ',' role ',' role ')';
 
+	concept equality =  '[' individual '=' individual ']';
 }
 
 /*syntax ALCOTableau extends ALCO{

@@ -1,0 +1,6 @@
+//Satisfiable
+
+@ a A
+@ b B
+@ d exists hasPart-.(A & exists connectedTo.(exists hasPart-.B)) & ~(exists hasPart-.(A & B))
+@ c exists hasPart-.A
