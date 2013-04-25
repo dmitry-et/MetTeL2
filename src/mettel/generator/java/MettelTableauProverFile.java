@@ -212,6 +212,8 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
     		    decrementIndentLevel();
     		appendLine("} catch(Exception e) {");
     			incrementIndentLevel();
+	                appendLine("if(out == null) out = new PrintWriter(new OutputStreamWriter(System.out),true);");
+    			appendLine("if(err == null) err = new PrintWriter(new OutputStreamWriter(System.err),true);");
     			appendLine("out.println(\"Sorry! I detected an exceptional situation and terminate now.\");");
 	        	appendLine("out.println(\"If you can help me to avoid this situation in future, please look at my error output.\");");
 	        	appendLine("err.println(\"==Exception==========================\");");
