@@ -5,6 +5,8 @@ import junit.framework.*;
 public class AllTests {
 
 	private static final String[] classNames = new String[]{
+		"Jankov.language.test.JankovParserTest",
+		"Jankov.tableau.test.JankovTableauTest",
 		"Int.language.test.IntParserTest",
 		"Int.tableau.test.IntTableauTest",
 		"lists.language.test.ListsParserTest",
