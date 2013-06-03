@@ -320,7 +320,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	 */
 	@Override
 	public boolean add(MettelAnnotatedExpression e) {
-//System.out.println("Adding "+e);
+System.out.println("Adding "+e);
 //System.out.println("Replacement is "+replacement);
 		final MettelExpression exp = e.expression();
 		final MettelExpression exp0 = replacement.rewrite(exp);//XXX: Does not work as expected, needs fix!

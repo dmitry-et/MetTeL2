@@ -157,8 +157,11 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 				addActions(state);
 				if(acceptor.accept(state)){
 					if(state.isComplete()) return true;
-
-					addChildren(state,children);
+					if(children==null || isRedundant(state,children)){
+					    add(state);
+					}else{
+					    addChildren(state,children);
+					}
 					children = null;
 
 					//	throw new MettelCoreRuntimeException("Failed to add children of "+state);
@@ -277,6 +280,8 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 			}
 		}
 	}
+	
+	abstract protected boolean isRedundant(MettelTableauState state, Set<MettelTableauState> children);
 
 	abstract protected boolean add(MettelTableauState state);
 

@@ -23,5 +23,5 @@ syntax Jankov{
 	formula relation = 'R' '(' individual ',' individual ')';
 	formula equality = '[' individual '=' individual ']';
 
-	individual successorH = 'h' '(' individual ',' individual ',' individual ')';
+	individual successorH = 'h' '(' /*individual ','*/ individual ',' individual ')';
 }

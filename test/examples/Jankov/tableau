@@ -31,4 +31,5 @@ R(l0,l1) R(l1,l0) / [l0=l1] priority 4;
 
 
 //R(l0,l1) R(l0,l2) R(l1,l2) / [l1=h(l0,l1,l2)] priority 11;
-R(l0,l1) R(l0,l2) F([l0=l1]) F([l0=l2]) F([l1=l2]) / R(l1,h(l0,l1,l2)) R(l2,h(l0,l1,l2)) F([l0=h(l0,l1,l2)]) priority 12;
+//R(l0,l1) R(l0,l2) F([l0=l1]) F([l0=l2]) F([l1=l2]) / R(l1,h(l0,l1,l2)) R(l2,h(l0,l1,l2)) F([l0=h(l0,l1,l2)]) priority 12;
+R(l0,l1) R(l0,l2) F([l0=l1]) F([l0=l2]) F([l1=l2]) / R(l1,h(l1,l2)) R(l2,h(l1,l2)) F([l0=h(l1,l2)]) [h(l1,l2)=h(l2,l1)] priority 12;

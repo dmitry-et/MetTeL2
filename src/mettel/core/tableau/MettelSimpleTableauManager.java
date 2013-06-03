@@ -18,6 +18,7 @@ package mettel.core.tableau;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.TreeSet;
 
 /**
@@ -52,6 +53,14 @@ public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 	}
 
 	private final MettelTableauStateComparator comparator = new MettelTableauStateComparator();
+
+	protected boolean isRedundant(MettelTableauState state, Set<MettelTableauState> children){
+	    for(MettelTableauState s:children){
+	        if(comparator.compare(state, s) == 0) return true;
+	    }
+	    return false;
+	}
+
 
 	protected boolean add(MettelTableauState state){
 		if(state.isExpanded()){
