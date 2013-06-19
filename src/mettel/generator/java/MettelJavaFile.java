@@ -33,13 +33,18 @@ public class MettelJavaFile extends MettelFile {
 	 * @param pack
 	 */
 	public MettelJavaFile(String fileName, MettelJavaPackage pack) {
-		super(fileName, "java", pack);
+		this(fileName, "java", pack);
 		headings.append(MettelStrings.PACKAGE_STRING);
 		headings.append(' ');
 		headings.append(pack.path());
 		headings.append(';');
 		headings.appendEOL();
 		headings.appendEOL();
+	}
+	
+	//TODO: Create separate file for ordinary files like property files 
+	public MettelJavaFile(String fileName, String extension, MettelJavaPackage pack) {
+		super(fileName, extension, pack);
 	}
 
 	protected MettelIndentedStringBuilder headings = new MettelIndentedStringBuilder(new StringBuilder());

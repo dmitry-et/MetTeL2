@@ -52,6 +52,10 @@ public class MettelJavaPackageStructure {
 	private MettelExpressionGeneratorJavaInterfaceFile iExpressionGenerator = null;
 	private MettelRandomExpressionGeneratorJavaClassFile expressionGenerator = null;
 	
+	// added by tomas
+	private MettelRandomExpressionPropertiesFile randomExpressionPropertiesFile = null;
+	private MettelRandomExpressionConfigurator randomExpressionConfigurator = null;
+	
 	private String nameSeparator = NAME_SEPARATOR;
 //
 //	private MettelTableauObjectFactoryJavaClassFile tfactory = null;
@@ -70,7 +74,7 @@ public class MettelJavaPackageStructure {
 
 		testLangPackage = new MettelJavaPackage(base+".language.test");
 		utilLangPackage = new MettelJavaPackage(base+".language.util");
-
+		
 		testTableauPackage = new MettelJavaPackage(base+".tableau.test");
 	}
 
@@ -102,6 +106,12 @@ public class MettelJavaPackageStructure {
 		expressionGenerator = new MettelRandomExpressionGeneratorJavaClassFile(prefix,utilLangPackage,langPackage,nameSeparator);
 		utilLangPackage.add(expressionGenerator);
 
+		// added by tomas
+		randomExpressionPropertiesFile = new MettelRandomExpressionPropertiesFile(prefix,utilLangPackage,langPackage,nameSeparator);
+		utilLangPackage.add(randomExpressionPropertiesFile);
+		randomExpressionConfigurator = new MettelRandomExpressionConfigurator(prefix,utilLangPackage,langPackage,nameSeparator);
+		utilLangPackage.add(randomExpressionConfigurator);
+		
 		langPackage.add(new MettelTableauObjectFactoryJavaClassFile(prefix,langPackage));
 	}
 
@@ -126,8 +136,16 @@ public class MettelJavaPackageStructure {
 			factory.addMap(sort);
 			iExpressionGenerator.addMethod(sort);
 			expressionGenerator.appendSignature(sort);
+			
+			//added by tomas
+			randomExpressionPropertiesFile.appendSignature(sort);
+			randomExpressionConfigurator.appendSignature(sort);
 		}
 		expressionGenerator.generateBody();
+		
+		//added by tomas
+		randomExpressionPropertiesFile.generateBody();
+		randomExpressionConfigurator.generateBody();
 	}
 
 	public void appendConnectiveClass(String prefix, String sort, String name, String[] sorts, List<MettelToken> tokens, boolean equality){
@@ -138,6 +156,10 @@ public class MettelJavaPackageStructure {
 		factory.addCreateMethod(sort, name, sorts);
 		iFactory.addCreateMethod(sort, name, sorts);
 		expressionGenerator.appendSignature(sort, name, sorts);
+		
+		//added by tomas
+		randomExpressionPropertiesFile.appendSignature(sort, name, sorts);
+		randomExpressionConfigurator.appendSignature(sort,name, sorts);
 	}
 
 	/*public void appendLexer(String name, MettelANTLRHeader h, InputStream stream){
