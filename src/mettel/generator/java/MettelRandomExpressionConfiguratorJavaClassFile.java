@@ -67,7 +67,7 @@ public class MettelRandomExpressionConfiguratorJavaClassFile extends MettelJavaC
 			appendLine("configuration.load(new FileReader(path));");
 			appendEOL();
 			
-			// properties are repeating from MettelRandomExpressionPropertiesFile  
+			// properties are repeating from MettelRandomExpressionPropertiesFile
 			
 			for(String type:signatures.keySet()){
 				
@@ -93,6 +93,12 @@ public class MettelRandomExpressionConfiguratorJavaClassFile extends MettelJavaC
 				appendLine("generator.set" + Type + "VariablesSize(Integer.parseInt(configuration.getProperty(\"" + type + ".variables.size\", \"3\")));");
 				appendEOL();
 				
+			}
+
+			// Function call for actually generating some sorts (types) must be the last one because
+			// i.e. we have nominal and function sort; if you first generate nominals before 
+			// setting formula variables you would get default formula variables instead the set ones 
+			for(String type:signatures.keySet()){
 				appendLine("int " + type + "TimesToRun = Integer.parseInt(configuration.getProperty(\"" + type + ".generate\", \"5\"));");
 				appendLine("for (int i = 0; i < " + type + "TimesToRun; i++)");
 					incrementIndentLevel();
@@ -100,8 +106,8 @@ public class MettelRandomExpressionConfiguratorJavaClassFile extends MettelJavaC
 					decrementIndentLevel();
 				appendEOL();
 			}
+			
 			decrementIndentLevel();
 		appendLine("}");
-	}
-
+	}	
 }
