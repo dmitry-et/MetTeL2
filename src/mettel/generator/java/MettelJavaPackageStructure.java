@@ -46,7 +46,10 @@ public class MettelJavaPackageStructure {
 	private MettelJavaPackageStructure(){}
 
 	private MettelJavaPackage basePackage = null, grammarPackage = null, langPackage = null, testLangPackage = null, testTableauPackage = null, tableauPackage = null, utilLangPackage = null;
-
+	// added by tomas
+	private MettelJavaPackage utilLangPropertiesPackage = null;
+	
+	
 	private MettelObjectFactoryJavaInterfaceFile iFactory = null;
 	private MettelObjectFactoryJavaClassFile factory = null;
 	private MettelExpressionGeneratorJavaInterfaceFile iExpressionGenerator = null;
@@ -74,6 +77,9 @@ public class MettelJavaPackageStructure {
 
 		testLangPackage = new MettelJavaPackage(base+".language.test");
 		utilLangPackage = new MettelJavaPackage(base+".language.util");
+		
+		//added by tomas
+		utilLangPropertiesPackage = new MettelJavaPackage(base+".language.util.properties");
 		
 		testTableauPackage = new MettelJavaPackage(base+".tableau.test");
 	}
@@ -107,8 +113,8 @@ public class MettelJavaPackageStructure {
 		utilLangPackage.add(expressionGenerator);
 
 		// added by tomas
-		randomExpressionPropertiesFile = new MettelRandomExpressionPropertiesFile(prefix,utilLangPackage);
-		utilLangPackage.add(randomExpressionPropertiesFile);
+		randomExpressionPropertiesFile = new MettelRandomExpressionPropertiesFile(prefix,utilLangPropertiesPackage);
+		utilLangPropertiesPackage.add(randomExpressionPropertiesFile);
 		randomExpressionConfigurator = new MettelRandomExpressionConfiguratorJavaClassFile(prefix,utilLangPackage);
 		utilLangPackage.add(randomExpressionConfigurator);
 		
@@ -205,6 +211,9 @@ public class MettelJavaPackageStructure {
 		testTableauPackage.flush(outputPath);
 
 		utilLangPackage.flush(outputPath);
+		
+		// added by tomas
+		utilLangPropertiesPackage.flush(outputPath);
 	}
 
 	/**

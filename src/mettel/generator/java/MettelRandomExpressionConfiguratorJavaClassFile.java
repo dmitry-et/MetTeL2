@@ -86,7 +86,7 @@ public class MettelRandomExpressionConfiguratorJavaClassFile extends MettelJavaC
 				// default is {} because we always delete first and last chars so it would be empty string
 				appendLine("String " + type + "VariablesLine = configuration.getProperty(\"" + type + ".variables\", \"{}\");");
 				appendLine(type + "VariablesLine = " + type + "VariablesLine.substring(1, " + type + "VariablesLine.length() - 1);");
-				appendLine("String [] " + type + "Variables = " + type + "VariablesLine.split(\"\\\\s*+\");");
+				appendLine("String [] " + type + "Variables = " + type + "VariablesLine.split(\",\\\\s*+\");");
 				appendLine("generator.set" + Type + "Variables(" + type + "Variables);");
 				appendEOL();
 				
