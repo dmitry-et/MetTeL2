@@ -7,6 +7,7 @@ package mettel.generator.java;
  * @author alijevt1
  *
  */
+// put into same class? MettelRandomExpressionDefaultPropertiesNames and MettelRandomExpressionDefaultPropertiesValues?
 public class MettelRandomExpressionDefaultPropertiesNames {
 
 	public static String sortConnectiveFrequencyProperty(String sort, String connective) {

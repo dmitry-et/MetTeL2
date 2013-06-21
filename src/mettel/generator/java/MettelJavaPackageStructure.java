@@ -115,7 +115,7 @@ public class MettelJavaPackageStructure {
 		// added by tomas
 		randomExpressionPropertiesFile = new MettelRandomExpressionPropertiesFile(prefix,utilLangPropertiesPackage);
 		utilLangPropertiesPackage.add(randomExpressionPropertiesFile);
-		randomExpressionConfigurator = new MettelRandomExpressionConfiguratorJavaClassFile(prefix,utilLangPackage);
+		randomExpressionConfigurator = new MettelRandomExpressionConfiguratorJavaClassFile(prefix,utilLangPackage,nameSeparator);
 		utilLangPackage.add(randomExpressionConfigurator);
 		
 		langPackage.add(new MettelTableauObjectFactoryJavaClassFile(prefix,langPackage));

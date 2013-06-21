@@ -8,6 +8,8 @@ import java.util.Hashtable;
 
 import mettel.util.MettelJavaNames;
 
+import static mettel.generator.MettelANTLRGrammarGeneratorDefaultOptions.NAME_SEPARATOR;
+
 /**
  * @author alijevt1
  *
@@ -15,14 +17,16 @@ import mettel.util.MettelJavaNames;
 public class MettelRandomExpressionConfiguratorJavaClassFile extends MettelJavaClassFile implements MettelRandomExpressionDefaultPropertiesValues{
 	
 	private String prefix = "Mettel";
-
+	private String nameSeparator = NAME_SEPARATOR;
+	
 	// Can't think of how I can use just ArrayList or HashSet? unless make one array of strings for types and then 2-d array of strings row index being type name and columns
 	// perhaps rename
 	private Hashtable<String,ArrayList<String>> signatures = new Hashtable<String,ArrayList<String>>();
 	
-	public MettelRandomExpressionConfiguratorJavaClassFile(String prefix, MettelJavaPackage pack) {
+	public MettelRandomExpressionConfiguratorJavaClassFile(String prefix, MettelJavaPackage pack, String nameSeparator) {
 		super(prefix + "RandomExpressionConfigurator", pack, "public", null, null);
 		this.prefix = prefix;
+		this.nameSeparator = nameSeparator;
 	}
 
 	protected void imports(){
@@ -32,7 +36,7 @@ public class MettelRandomExpressionConfiguratorJavaClassFile extends MettelJavaC
 		headings.appendLine("import java.io.FileReader;");
 		headings.appendLine("import java.util.Properties;");
 		headings.appendLine("import java.io.IOException;");
-		headings.appendEOL();		
+		headings.appendEOL();
 	}	
 	
 	// perhaps rename also repeating code
@@ -74,23 +78,23 @@ public class MettelRandomExpressionConfiguratorJavaClassFile extends MettelJavaC
 				final String Type = MettelJavaNames.firstCharToUpperCase(type);
 				
 				for(String name:signatures.get(type)){
-					final String Name = MettelJavaNames.firstCharToUpperCase(name);
-					appendLine("generator.set" + Name + Type + "Frequency(Integer.parseInt(configuration.getProperty(\"" + type + "." + name + ".frequency\", \"" + SORT_CONNECTIVE_FREQUENCY + "\")));");
+					final String ltype = name + Type;
+					appendLine("generator.set" + MettelJavaNames.firstCharToUpperCase(ltype, nameSeparator) + "Frequency(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortConnectiveFrequencyProperty(type, name) + "\", \"" + SORT_CONNECTIVE_FREQUENCY + "\")));");
 				}
 				appendEOL();
 				
-				appendLine("generator.set" + Type + "VariableFrequency(Integer.parseInt(configuration.getProperty(\"" + type + ".variable.frequency\", \"" + SORT_VARIABLE_FREQUENCY +"\")));");
-				appendLine("generator.setDepth" + Type + "(Integer.parseInt(configuration.getProperty(\"" + type + ".depth\", \"" + SORT_VARIABLE_DEPTH + "\")));");
+				final String vtype = type + "Variable";
+				appendLine("generator.set" + MettelJavaNames.firstCharToUpperCase(vtype) + "Frequency(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariableFrequencyProperty(type) + "\", \"" + SORT_VARIABLE_FREQUENCY +"\")));");
+				appendLine("generator.setDepth" + Type + "(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariableDepthProperty(type) + "\", \"" + SORT_VARIABLE_DEPTH + "\")));");
 				appendEOL();
 				
-				// default is {} because we always delete first and last chars so it would be empty string
-				appendLine("String " + type + "VariablesLine = configuration.getProperty(\"" + type + ".variables\", \"" + SORT_VARIABLES + "\");");
+				appendLine("String " + type + "VariablesLine = configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariablesProperty(type) + "\", \"" + SORT_VARIABLES + "\");");
 				appendLine(type + "VariablesLine = " + type + "VariablesLine.substring(1, " + type + "VariablesLine.length() - 1);");
 				appendLine("String [] " + type + "Variables = " + type + "VariablesLine.split(\",\\\\s*+\");");
 				appendLine("generator.set" + Type + "Variables(" + type + "Variables);");
 				appendEOL();
 				
-				appendLine("generator.set" + Type + "VariablesSize(Integer.parseInt(configuration.getProperty(\"" + type + ".variables.size\", \"" + SORT_VARIABLES_SIZE + "\")));");
+				appendLine("generator.set" + Type + "VariablesSize(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariablesSizeProperty(type) + "\", \"" + SORT_VARIABLES_SIZE + "\")));");
 				appendEOL();
 				
 			}
@@ -99,7 +103,7 @@ public class MettelRandomExpressionConfiguratorJavaClassFile extends MettelJavaC
 			// i.e. we have nominal and function sort; if you first generate nominals before 
 			// setting formula variables you would get default formula variables instead the set ones 
 			for(String type:signatures.keySet()){
-				appendLine("int " + type + "TimesToRun = Integer.parseInt(configuration.getProperty(\"" + type + ".generate\", \"" + SORT_GENERATE + "\"));");
+				appendLine("int " + type + "TimesToRun = Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortGenerateProperty(type) + "\", \"" + SORT_GENERATE + "\"));");
 				appendLine("for (int i = 0; i < " + type + "TimesToRun; i++)");
 					incrementIndentLevel();
 					appendLine("System.out.println(generator." + type + "());");
