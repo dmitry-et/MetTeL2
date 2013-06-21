@@ -10,19 +10,19 @@ import java.util.Hashtable;
  * @author alijevt1
  *
  */
-public class MettelRandomExpressionPropertiesFile extends MettelJavaFile implements MettelRandomExpressionDefaultPropertiesValues {
+public class MettelRandomExpressionGeneratorPropertiesFile extends MettelJavaFile implements MettelRandomExpressionDefaultPropertiesValues {
 	// Can't think of how I can use just ArrayList or HashSet? unless make one array of strings for types and then 2-d array of strings row index being type name and columns
 	// perhaps rename
 	private Hashtable<String,ArrayList<String>> signatures = new Hashtable<String,ArrayList<String>>();
 	
 	//TODO make sure it creates properties directory to do that probably needs new class
 	// for creating ordinary files (not extending MettelJavaFile)
-	public MettelRandomExpressionPropertiesFile(String prefix, MettelJavaPackage pack) {
+	public MettelRandomExpressionGeneratorPropertiesFile(String prefix, MettelJavaPackage pack) {
 		super(prefix + "RandomExpressionPropertiesFile", null, pack);
 	}
 	
-	// perhaps rename also repeating code
-	public void appendSignature(String type) {
+	//TODO perhaps rename also repeating code
+	void appendSignature(String type) {
 		ArrayList<String> ss = signatures.get(type);
 		if(ss == null){
 			ss = new ArrayList<String>();
@@ -30,7 +30,7 @@ public class MettelRandomExpressionPropertiesFile extends MettelJavaFile impleme
 		}
 	}
 	
-	public void appendSignature(String type, String name) {
+	void appendSignature(String type, String name) {
 		ArrayList<String> ss = signatures.get(type);
 		if(ss == null){
 			ss = new ArrayList<String>();
@@ -48,8 +48,8 @@ public class MettelRandomExpressionPropertiesFile extends MettelJavaFile impleme
 			
 			appendLine(MettelRandomExpressionDefaultPropertiesNames.sortVariableFrequencyProperty(type) +" = " + SORT_VARIABLE_FREQUENCY);
 			appendLine(MettelRandomExpressionDefaultPropertiesNames.sortVariableDepthProperty(type) + " = " + SORT_VARIABLE_DEPTH);
-			appendLine(MettelRandomExpressionDefaultPropertiesNames.sortVariablesProperty(type) + " = " + SORT_VARIABLES);
-			appendLine(MettelRandomExpressionDefaultPropertiesNames.sortVariablesSizeProperty(type) + " = " + SORT_VARIABLES_SIZE);
+			appendLine(MettelRandomExpressionDefaultPropertiesNames.sortVariablesProperty(type) + " = " + SORT_VARIABLES_TEXT);
+			appendLine(MettelRandomExpressionDefaultPropertiesNames.sortVariablesSizeProperty(type) + " = " + SORT_VARIABLES_NUMBER);
 			appendEOL();
 			
 			appendLine(MettelRandomExpressionDefaultPropertiesNames.sortGenerateProperty(type) + " = " + SORT_GENERATE);

@@ -56,7 +56,7 @@ public class MettelJavaPackageStructure {
 	private MettelRandomExpressionGeneratorJavaClassFile expressionGenerator = null;
 	
 	// added by tomas
-	private MettelRandomExpressionPropertiesFile randomExpressionPropertiesFile = null;
+	private MettelRandomExpressionGeneratorPropertiesFile randomExpressionPropertiesFile = null;
 	private MettelRandomExpressionConfiguratorJavaClassFile randomExpressionConfigurator = null;
 	
 	private String nameSeparator = NAME_SEPARATOR;
@@ -113,7 +113,7 @@ public class MettelJavaPackageStructure {
 		utilLangPackage.add(expressionGenerator);
 
 		// added by tomas
-		randomExpressionPropertiesFile = new MettelRandomExpressionPropertiesFile(prefix,utilLangPropertiesPackage);
+		randomExpressionPropertiesFile = new MettelRandomExpressionGeneratorPropertiesFile(prefix,utilLangPropertiesPackage);
 		utilLangPropertiesPackage.add(randomExpressionPropertiesFile);
 		randomExpressionConfigurator = new MettelRandomExpressionConfiguratorJavaClassFile(prefix,utilLangPackage,nameSeparator);
 		utilLangPackage.add(randomExpressionConfigurator);

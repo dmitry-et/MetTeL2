@@ -39,8 +39,8 @@ public class MettelRandomExpressionConfiguratorJavaClassFile extends MettelJavaC
 		headings.appendEOL();
 	}	
 	
-	// perhaps rename also repeating code
-	public void appendSignature(String type) {
+	//TODO perhaps rename also repeating code
+	void appendSignature(String type) {
 		ArrayList<String> ss = signatures.get(type);
 		if(ss == null){
 			ss = new ArrayList<String>();
@@ -48,7 +48,7 @@ public class MettelRandomExpressionConfiguratorJavaClassFile extends MettelJavaC
 		}
 	}
 	
-	public void appendSignature(String type, String name) {
+	void appendSignature(String type, String name) {
 		ArrayList<String> ss = signatures.get(type);
 		if(ss == null){
 			ss = new ArrayList<String>();
@@ -71,7 +71,6 @@ public class MettelRandomExpressionConfiguratorJavaClassFile extends MettelJavaC
 			appendLine("configuration.load(new FileReader(path));");
 			appendEOL();
 			
-			// properties are repeating from MettelRandomExpressionPropertiesFile
 			
 			for(String type:signatures.keySet()){
 				
@@ -94,7 +93,7 @@ public class MettelRandomExpressionConfiguratorJavaClassFile extends MettelJavaC
 				appendLine("generator.set" + Type + "Variables(" + type + "Variables);");
 				appendEOL();
 				
-				appendLine("generator.set" + Type + "VariablesSize(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariablesSizeProperty(type) + "\", \"" + SORT_VARIABLES_SIZE + "\")));");
+				appendLine("generator.set" + Type + "VariablesSize(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariablesSizeProperty(type) + "\", \"" + SORT_VARIABLES_NUMBER + "\")));");
 				appendEOL();
 				
 			}

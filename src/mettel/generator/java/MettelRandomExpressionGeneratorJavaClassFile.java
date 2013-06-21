@@ -29,13 +29,14 @@ import mettel.util.MettelJavaNames;
 import static mettel.generator.MettelANTLRGrammarGeneratorDefaultOptions.NAME_SEPARATOR;
 
 public class MettelRandomExpressionGeneratorJavaClassFile extends
-		MettelJavaClassFile {
+		MettelJavaClassFile implements MettelRandomExpressionDefaultPropertiesValues{
 
 	private String prefix = "Mettel";
 	private MettelJavaPackage langPack = null;
 	
 	private String nameSeparator = NAME_SEPARATOR;
 
+	//TODO make new public class
 	private class Signature{
 
 	//	private String type;
@@ -72,7 +73,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 		headings.appendEOL();
 	}
 
-	public void appendSignature(String type){
+	void appendSignature(String type){
 		ArrayList<Signature> ss = signatures.get(type);
 		if(ss == null){
 			ss = new ArrayList<Signature>();
@@ -80,7 +81,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 		}
 	}
 
-	public void appendSignature(String type, String name, String[] types){
+	void appendSignature(String type, String name, String[] types){
 		ArrayList<Signature> ss = signatures.get(type);
 		if(ss == null){
 			ss = new ArrayList<Signature>();
@@ -102,9 +103,13 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 				incrementIndentLevel();
 
 				appendLine(prefix + "RandomExpressionGenerator g = new " + prefix + "RandomExpressionGenerator();");
-
+				appendEOL();
+				
 				for(String type:signatures.keySet()){
-					appendLine("System.out.println(g." + type + "());");
+					appendLine("for (int i = 0; i < g." + type + "TimesToRun; i++)");
+						incrementIndentLevel();
+						appendLine("System.out.println(g." + type + "());");
+						decrementIndentLevel();
 					appendLine("System.out.println();");
 				}
 
@@ -157,7 +162,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 			for(Signature s:signatures.get(type)){
 				final String ltype = s.name + Type;
 
-				appendLine("private int " + ltype + "Frequency = 1;");
+				appendLine("private int " + ltype + "Frequency = " + SORT_CONNECTIVE_FREQUENCY + ";");
 				total++;
 
 				appendEOL();
@@ -175,7 +180,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 
 			final String vtype = type + "Variable";
 
-			appendLine("private int " + vtype + "Frequency = 1;");
+			appendLine("private int " + vtype + "Frequency = " + SORT_VARIABLE_FREQUENCY + ";");
 			appendLine("public void set" + MettelJavaNames.firstCharToUpperCase(vtype) + "Frequency(int f){");
 				incrementIndentLevel();
 				appendLine("if(f < 0) throw new MettelCoreRuntimeException(\"Frequency parameter is negative\");");
@@ -190,7 +195,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 
 			appendEOL();
 
-			appendLine("private int depth" + Type + " = 3;");
+			appendLine("private int depth" + Type + " = " + SORT_VARIABLE_DEPTH + ";");
 
 			appendEOL();
 
@@ -263,8 +268,9 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 
 			appendEOL();
 
-			appendLine("String[] " + type + "Variables = null;");
-			appendLine("int " + type + "VariablesSize = 3;");
+		    //TODO private. Shouldn't it be private as well?
+			appendLine("String[] " + type + "Variables = " + SORT_VARIABLES + ";");
+			appendLine("int " + type + "VariablesSize = " + SORT_VARIABLES_NUMBER + ";");
 
 			appendEOL();
 
@@ -303,12 +309,26 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 				appendLine(type + "VariablesSize = size;");
 				decrementIndentLevel();
 			appendLine('}');
-
+			
+			appendEOL();
+			
 			appendLine("protected final " + prefix + Type + "Variable " + type + "Variable(){");
 				incrementIndentLevel();
 				appendLine("int r = random.nextInt(" + type + "VariablesSize);");
 				appendLine("return factory.create" + Type + "Variable((" + type + "Variables != null && r < " + type + "Variables.length)? " +
 						type + "Variables[r]: \"$" + type + "Variable\"+r );");
+				decrementIndentLevel();
+			appendLine('}');
+			
+			appendEOL();
+			
+			// added by tomas
+			appendLine("private int " + type + "TimesToRun = " + SORT_GENERATE + ";");
+			appendEOL();
+			
+			appendLine("public void set" + Type + "TimesToRun(int times) {");
+				incrementIndentLevel();
+				appendLine(type + "TimesToRun = times;");
 				decrementIndentLevel();
 			appendLine('}');
 		}

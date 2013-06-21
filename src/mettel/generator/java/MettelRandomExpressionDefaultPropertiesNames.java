@@ -27,7 +27,7 @@ public class MettelRandomExpressionDefaultPropertiesNames {
 	}
 	
 	public static String sortVariablesSizeProperty(String sort) {
-		return sort + ".variables.size";
+		return sort + ".variables.number";
 	}
 	
 	public static String sortGenerateProperty(String sort) {
