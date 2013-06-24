@@ -31,6 +31,7 @@ import mettel.util.MettelJavaNames;
 import static mettel.generator.MettelANTLRGrammarGeneratorDefaultOptions.NAME_SEPARATOR;
 
 import static mettel.util.MettelStrings.FILE_SEPARATOR;
+//TODO also if you generate nominal sort do you need to print information about formula sort? also do you need to print information in standard output?"
 
 public class MettelRandomExpressionGeneratorJavaClassFile extends
 		MettelJavaClassFile implements MettelRandomExpressionDefaultPropertiesValues{
@@ -301,6 +302,9 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 						appendLine("out.newLine();");
 						appendEOL();
 						
+						// if variables array is null then write empty string
+						// otherwise for each string in array write in and add comma with space
+						// at the end remove 2 last characters (", " comma and space)
 						appendLine("variablesNamesLine = \"\";");
 						appendLine("if (g." + type1 + "Variables != null){");
 							incrementIndentLevel();

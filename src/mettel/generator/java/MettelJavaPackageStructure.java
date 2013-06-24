@@ -57,7 +57,6 @@ public class MettelJavaPackageStructure {
 	
 	// added by tomas
 	private MettelRandomExpressionGeneratorPropertiesFile randomExpressionPropertiesFile = null;
-	private MettelRandomExpressionConfiguratorJavaClassFile randomExpressionConfigurator = null;
 	
 	private String nameSeparator = NAME_SEPARATOR;
 //
@@ -115,8 +114,6 @@ public class MettelJavaPackageStructure {
 		// added by tomas
 		randomExpressionPropertiesFile = new MettelRandomExpressionGeneratorPropertiesFile(prefix,utilLangPropertiesPackage);
 		utilLangPropertiesPackage.add(randomExpressionPropertiesFile);
-		randomExpressionConfigurator = new MettelRandomExpressionConfiguratorJavaClassFile(prefix,utilLangPackage,nameSeparator);
-		utilLangPackage.add(randomExpressionConfigurator);
 		
 		langPackage.add(new MettelTableauObjectFactoryJavaClassFile(prefix,langPackage));
 	}
@@ -145,13 +142,11 @@ public class MettelJavaPackageStructure {
 			
 			//added by tomas
 			randomExpressionPropertiesFile.appendSignature(sort);
-			randomExpressionConfigurator.appendSignature(sort);
 		}
 		expressionGenerator.generateBody();
 		
 		//added by tomas
 		randomExpressionPropertiesFile.generateBody();
-		randomExpressionConfigurator.generateBody();
 	}
 
 	public void appendConnectiveClass(String prefix, String sort, String name, String[] sorts, List<MettelToken> tokens, boolean equality){
@@ -166,7 +161,6 @@ public class MettelJavaPackageStructure {
 		//added by tomas
 		//randomExpressionPropertiesFile.appendSignature(sort, name, sorts);
 		randomExpressionPropertiesFile.appendSignature(sort, name);
-		randomExpressionConfigurator.appendSignature(sort, name);
 	}
 
 	/*public void appendLexer(String name, MettelANTLRHeader h, InputStream stream){
