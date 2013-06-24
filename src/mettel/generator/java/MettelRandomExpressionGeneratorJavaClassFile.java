@@ -71,6 +71,8 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 		headings.appendLine("import java.util.Collection;");
 		headings.appendLine("import java.util.Random;");
 		headings.appendEOL();
+		headings.appendLine("import java.io.BufferedWriter;");
+		headings.appendLine("import java.util.StringTokenizer;");
 	}
 
 	void appendSignature(String type){
@@ -91,6 +93,13 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 	}
 
 	public void generateBody(){
+		appendLine("private static BufferedWriter out = null;");
+		appendLine("private static FileReader prop = null;");
+		appendLine("private static boolean standardOutput = false;");
+		appendLine("private static String outputPath = \"random_problems\";");
+		appendLine("private static int fileIndex = 0;");
+		appendEOL();
+		
 		appendLine("public static void main(String[] args) {");
 			incrementIndentLevel();
 			appendLine("System.out.println(\"-------------------------------------------------------------------\");");
@@ -101,7 +110,9 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 			appendLine("System.out.println(\"-------------------------------------------------------------------\");");
 			appendLine("try{");
 				incrementIndentLevel();
-
+				appendLine("parseCommandLineArguments();");
+				appendEOL();
+				
 				appendLine(prefix + "RandomExpressionGenerator g = new " + prefix + "RandomExpressionGenerator();");
 				appendEOL();
 				
@@ -126,9 +137,69 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 	        appendLine('}');
 	        decrementIndentLevel();
         appendLine('}');
-
+        
         appendEOL();
 
+        appendLine("private static void parseCommandLineArguments(){");
+        	incrementIndentLevel();
+        	appendLine("final int SIZE = args.length;");
+			appendLine("for(int i = 0; i < SIZE; i++){");
+				incrementIndentLevel();
+				appendLine("if(\"-\".equals(args[i])){");
+					incrementIndentLevel();
+					appendLine("standardOutput = true;");
+					decrementIndentLevel();
+				appendLine("}else if(\"-d\".equals(args[i])||\"--output-directory\".equals(args[i])){");
+					incrementIndentLevel();
+					appendLine("if(i < SIZE-1){");
+						incrementIndentLevel();
+						appendLine("outputPath = args[++i];");
+						appendLine("System.out.println(\"Output path: \"+outputPath);");
+						decrementIndentLevel();
+					appendLine("}else{");
+						incrementIndentLevel();
+						appendLine("System.out.println(\"I need a name of directory where I will put generated random expressions.\");");
+						appendLine("System.exit(-1);");
+						decrementIndentLevel();
+					appendLine('{');
+					decrementIndentLevel();
+				appendLine("}else if(\"-p\".equals(args[i])||\"--properties\".equals(args[i])){");
+					incrementIndentLevel();
+					appendLine("if(i < SIZE-1){");
+						incrementIndentLevel();
+						appendLine("prop = new FileReader(args[++i]);");
+						appendLine("System.out.println(\"Properties file: \"+args[i]);");
+						decrementIndentLevel();
+					appendLine("}else{");
+						incrementIndentLevel();
+						appendLine("System.out.println(\"I need a name of file where you have specified properties of the random expression generator.\");");
+						appendLine("System.exit(-1);");
+						decrementIndentLevel();
+					appendLine('{');
+					decrementIndentLevel();
+				appendLine("}else if(\"--file-index\".equals(args[i])){");
+					incrementIndentLevel();
+					appendLine("if(i < SIZE-1){");
+						incrementIndentLevel();
+						appendLine("fileIndex = Integer.parseInt(args[++i]);");
+						appendLine("System.out.println(\"Starting file index is: \"+args[++i]);");
+						decrementIndentLevel();
+					appendLine("}else{");
+						incrementIndentLevel();
+						appendLine("System.out.println(\"I need a number which specified starting index of file names\");");
+						appendLine("System.exit(-1);");
+						decrementIndentLevel();
+					appendLine('{');
+					decrementIndentLevel();
+				appendLine('{');
+				decrementIndentLevel();
+			appendLine('{');
+			decrementIndentLevel();
+		appendLine('{');
+		decrementIndentLevel();
+
+		appendEOL();
+        
 		appendLine("private " + prefix + "ObjectFactory factory = " + prefix + "ObjectFactory.DEFAULT;");
 
 		appendEOL();
