@@ -30,6 +30,8 @@ import mettel.util.MettelJavaNames;
 
 import static mettel.generator.MettelANTLRGrammarGeneratorDefaultOptions.NAME_SEPARATOR;
 
+import static mettel.util.MettelStrings.FILE_SEPARATOR;
+
 public class MettelRandomExpressionGeneratorJavaClassFile extends
 		MettelJavaClassFile implements MettelRandomExpressionDefaultPropertiesValues{
 
@@ -129,14 +131,6 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 				
 				appendLine("outputGeneratedExpressions();");
 				appendEOL();
-				
-				for(String type:signatures.keySet()){
-					appendLine("for (int i = 0; i < g." + type + "TimesToRun; i++)");
-						incrementIndentLevel();
-						appendLine("System.out.println(g." + type + "());");
-						decrementIndentLevel();
-					appendLine("System.out.println();");
-				}
 
 				decrementIndentLevel();
 			appendLine("} catch(Exception e) {");
@@ -168,7 +162,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 					appendLine("if(i < SIZE-1){");
 						incrementIndentLevel();
 						appendLine("outputPath = args[++i];");
-						appendLine("System.out.println(\"Output path: \"+outputPath);");
+						appendLine("System.out.println(\"Output path: \" + outputPath);");
 						decrementIndentLevel();
 					appendLine("}else{");
 						incrementIndentLevel();
@@ -182,7 +176,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 					appendLine("if(i < SIZE-1){");
 						incrementIndentLevel();
 						appendLine("prop = new FileReader(args[++i]);");
-						appendLine("System.out.println(\"Properties file: \"+args[i]);");
+						appendLine("System.out.println(\"Properties file: \" + args[i]);");
 						decrementIndentLevel();
 					appendLine("}else{");
 						incrementIndentLevel();
@@ -196,7 +190,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 					appendLine("if(i < SIZE-1){");
 						incrementIndentLevel();
 						appendLine("fileIndex = Integer.parseInt(args[++i]);");
-						appendLine("System.out.println(\"Starting file index is: \"+args[++i]);");
+						appendLine("System.out.println(\"Starting file index is: \" + fileIndex);");
 						decrementIndentLevel();
 					appendLine("}else{");
 						incrementIndentLevel();
@@ -210,7 +204,6 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 			appendLine('}');
 			decrementIndentLevel();
 		appendLine('}');
-		decrementIndentLevel();
 
 		appendEOL();
 		
@@ -272,17 +265,65 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 			appendLine("new File(outputPath).mkdir();");
 			appendLine("File outputFile;");
 			appendLine("String generatedExpression;");
+			appendLine("String variablesNamesLine;");
 			appendEOL();
 			
 			for(String type:signatures.keySet()){
-				appendLine("for (int i = fileIndex; i < g." + type + "TimesToRun; i++){");
+				appendLine("for (int i = 0; i < g." + type + "TimesToRun; i++){");
 					incrementIndentLevel();
-					appendLine("while ((outputFile = new File(outputPath + \"" + nameSeparator + prefix + "\" + fileIndex + \".mtl\")).exists())");
+					appendLine("while ((outputFile = new File(outputPath + \"" + FILE_SEPARATOR + prefix + "_\" + fileIndex + \".mtl\")).exists())");
 						incrementIndentLevel();
 						appendLine("fileIndex++;");
 						decrementIndentLevel();
 					appendLine("out = new BufferedWriter(new FileWriter(outputFile));");
+					appendEOL();
+					
+					appendLine("out.write(\"#MetTeL.version = TODO\");");
+		        	appendLine("out.newLine();");
+		        	appendLine("out.write(\"#syntax = <pathTODO>\");");
+		        	appendLine("out.newLine();");
+		        	appendLine("out.newLine();");
+		        	appendEOL();
+					
+					for(String type1:signatures.keySet()){
+						final String Type1 = MettelJavaNames.firstCharToUpperCase(type1);
+						for(Signature s:signatures.get(type1)){
+							final String ltype = s.name + Type1;
+							appendLine("out.write(\"#" + MettelRandomExpressionDefaultPropertiesNames.sortConnectiveFrequencyProperty(type1, s.name) + " = \" + g." + ltype + "Frequency);");
+							appendLine("out.newLine();");
+						}
+						appendLine("out.newLine();");
+						appendEOL();
+
+						appendLine("out.write(\"#" + MettelRandomExpressionDefaultPropertiesNames.sortVariableFrequencyProperty(type1) +" = \" + g." + type1 + "VariableFrequency);");
+						appendLine("out.newLine();");
+						appendLine("out.write(\"#" + MettelRandomExpressionDefaultPropertiesNames.sortVariableDepthProperty(type1) + " = \" + g.depth" + Type1 + ");");
+						appendLine("out.newLine();");
+						appendEOL();
+						
+						appendLine("variablesNamesLine = \"\";");
+						appendLine("if (g." + type1 + "Variables != null){");
+							incrementIndentLevel();
+							appendLine("for (String variableName : g." + type1 + "Variables)");
+								incrementIndentLevel();
+								appendLine("variablesNamesLine += variableName + \", \";");
+								decrementIndentLevel();
+							appendLine("variablesNamesLine = variablesNamesLine.substring(0, variablesNamesLine.length() - 2);");
+							decrementIndentLevel();
+						appendLine('}');
+						appendEOL();
+						
+						appendLine("out.write(\"#" + MettelRandomExpressionDefaultPropertiesNames.sortVariablesProperty(type1) + " = \" + " + "variablesNamesLine);");
+						appendLine("out.newLine();");
+						appendLine("out.write(\"#" + MettelRandomExpressionDefaultPropertiesNames.sortVariablesSizeProperty(type1) + " = \" + g." + type1 + "VariablesSize);");
+						appendLine("out.newLine();");
+						appendLine("out.newLine();");
+						appendEOL();
+						
+					}
 					appendLine("generatedExpression = g." + type + "().toString();");
+					appendEOL();
+					
 					appendLine("out.write(generatedExpression);");
 					appendLine("out.close();");
 					appendLine("if (standardOutput)");
