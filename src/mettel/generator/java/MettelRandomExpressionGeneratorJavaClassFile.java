@@ -32,6 +32,8 @@ import static mettel.generator.MettelANTLRGrammarGeneratorDefaultOptions.NAME_SE
 
 import static mettel.util.MettelStrings.FILE_SEPARATOR;
 //TODO also if you generate nominal sort do you need to print information about formula sort? also do you need to print information in standard output?"
+//TODO can use specify same named variables?
+//TODO exceptions?
 
 public class MettelRandomExpressionGeneratorJavaClassFile extends
 		MettelJavaClassFile implements MettelRandomExpressionDefaultPropertiesValues{
@@ -218,20 +220,25 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 			appendLine("Properties configuration = new Properties();");
 			appendLine("configuration.load(prop);");
 			for(String type:signatures.keySet()){
-				
 				final String Type = MettelJavaNames.firstCharToUpperCase(type);
 				
+				// for each sorts connective create that connectives frequency
 				for(Signature s:signatures.get(type)){
 					final String ltype = s.name + Type;
 					appendLine("g.set" + MettelJavaNames.firstCharToUpperCase(ltype, nameSeparator) + "Frequency(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortConnectiveFrequencyProperty(type, s.name) + "\", \"" + SORT_CONNECTIVE_FREQUENCY + "\")));");
 				}
 				appendEOL();
 				
+				// for each sort set variable frequency, depth
 				final String vtype = type + "Variable";
 				appendLine("g.set" + MettelJavaNames.firstCharToUpperCase(vtype) + "Frequency(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariableFrequencyProperty(type) + "\", \"" + SORT_VARIABLE_FREQUENCY +"\")));");
 				appendLine("g.setDepth" + Type + "(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariableDepthProperty(type) + "\", \"" + SORT_VARIABLE_DEPTH + "\")));");
 				appendEOL();
 				
+				// for each sort set variables names
+				// tokenize variables names line by comma
+				// if found 0 tokens it means it's empty and set string array to null
+				// otherwise add each token to the array of strings
 				appendLine("variablesNamesLine = configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariablesProperty(type) + "\", \"" + SORT_VARIABLES + "\");");
 				appendLine("variablesNamesTokenizer = new StringTokenizer(variablesNamesLine, \",\");");
 				appendLine("if (variablesNamesTokenizer.countTokens() == 0){");
@@ -250,10 +257,12 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 				appendLine("g.set" + Type + "Variables(variablesNames);");
 				appendEOL();
 				
+				// for each sort set variables number used
 				// must be set AFTER variables names
 				appendLine("g.set" + Type + "VariablesSize(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariablesSizeProperty(type) + "\", \"" + SORT_VARIABLES_NUMBER + "\")));");
 				appendEOL();
 				
+				// for each sort set how many times it will be generated
 				appendLine("g.set" + Type + "TimesToRun(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortGenerateProperty(type) + "\", \"" + SORT_GENERATE + "\")));");
 			}
 			decrementIndentLevel();
@@ -286,6 +295,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 		        	appendLine("out.newLine();");
 		        	appendEOL();
 					
+		        	// print configuration of the generated expression
 					for(String type1:signatures.keySet()){
 						final String Type1 = MettelJavaNames.firstCharToUpperCase(type1);
 						for(Signature s:signatures.get(type1)){
@@ -323,8 +333,8 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 						appendLine("out.newLine();");
 						appendLine("out.newLine();");
 						appendEOL();
-						
 					}
+					
 					appendLine("generatedExpression = g." + type + "().toString();");
 					appendEOL();
 					
