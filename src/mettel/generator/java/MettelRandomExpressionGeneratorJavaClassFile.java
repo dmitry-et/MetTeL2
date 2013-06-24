@@ -74,6 +74,11 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 		headings.appendLine("import java.util.Random;");
 		headings.appendEOL();
 		headings.appendLine("import java.io.BufferedWriter;");
+		headings.appendLine("import java.io.File;");
+		headings.appendLine("import java.io.FileReader;");
+		headings.appendLine("import java.io.FileWriter;");
+		headings.appendLine("import java.io.IOException;");
+		headings.appendLine("import java.util.Properties;");
 		headings.appendLine("import java.util.StringTokenizer;");
 	}
 
@@ -113,13 +118,16 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 			appendLine("System.out.println(\"-------------------------------------------------------------------\");");
 			appendLine("try{");
 				incrementIndentLevel();
-				appendLine("parseCommandLineArguments();");
+				appendLine("parseCommandLineArguments(args);");
 				appendEOL();
 				
 				appendLine("if (prop != null)");
 					incrementIndentLevel();
 					appendLine("setProperties();");
 					decrementIndentLevel();
+				appendEOL();
+				
+				appendLine("outputGeneratedExpressions();");
 				appendEOL();
 				
 				for(String type:signatures.keySet()){
@@ -146,7 +154,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
         
         appendEOL();
 
-        appendLine("private static void parseCommandLineArguments(){");
+        appendLine("private static void parseCommandLineArguments(String[] args) throws IOException{");
         	incrementIndentLevel();
         	appendLine("final int SIZE = args.length;");
 			appendLine("for(int i = 0; i < SIZE; i++){");
@@ -167,7 +175,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 						appendLine("System.out.println(\"I need a name of directory where I will put generated random expressions.\");");
 						appendLine("System.exit(-1);");
 						decrementIndentLevel();
-					appendLine('{');
+					appendLine('}');
 					decrementIndentLevel();
 				appendLine("}else if(\"-p\".equals(args[i])||\"--properties\".equals(args[i])){");
 					incrementIndentLevel();
@@ -181,7 +189,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 						appendLine("System.out.println(\"I need a name of file where you have specified properties of the random expression generator.\");");
 						appendLine("System.exit(-1);");
 						decrementIndentLevel();
-					appendLine('{');
+					appendLine('}');
 					decrementIndentLevel();
 				appendLine("}else if(\"--file-index\".equals(args[i])){");
 					incrementIndentLevel();
@@ -195,18 +203,18 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 						appendLine("System.out.println(\"I need a number which specified starting index of file names\");");
 						appendLine("System.exit(-1);");
 						decrementIndentLevel();
-					appendLine('{');
+					appendLine('}');
 					decrementIndentLevel();
-				appendLine('{');
+				appendLine('}');
 				decrementIndentLevel();
-			appendLine('{');
+			appendLine('}');
 			decrementIndentLevel();
-		appendLine('{');
+		appendLine('}');
 		decrementIndentLevel();
 
 		appendEOL();
 		
-		appendLine("private static void setProperties(){");
+		appendLine("private static void setProperties() throws IOException{");
 			incrementIndentLevel();
 			appendLine("String variablesNamesLine;");
 			appendLine("StringTokenizer variablesNamesTokenizer;");
@@ -248,6 +256,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 				appendLine("g.set" + Type + "Variables(variablesNames);");
 				appendEOL();
 				
+				// must be set AFTER variables names
 				appendLine("g.set" + Type + "VariablesSize(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariablesSizeProperty(type) + "\", \"" + SORT_VARIABLES_NUMBER + "\")));");
 				appendEOL();
 				
@@ -255,6 +264,36 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 			}
 			decrementIndentLevel();
 		appendLine('}');
+		
+		appendEOL();
+		
+		appendLine("private static void outputGeneratedExpressions() throws IOException{");
+			incrementIndentLevel();
+			appendLine("new File(outputPath).mkdir();");
+			appendLine("File outputFile;");
+			appendLine("String generatedExpression;");
+			appendEOL();
+			
+			for(String type:signatures.keySet()){
+				appendLine("for (int i = fileIndex; i < g." + type + "TimesToRun; i++){");
+					incrementIndentLevel();
+					appendLine("while ((outputFile = new File(outputPath + \"" + nameSeparator + prefix + "\" + fileIndex + \".mtl\")).exists())");
+						incrementIndentLevel();
+						appendLine("fileIndex++;");
+						decrementIndentLevel();
+					appendLine("out = new BufferedWriter(new FileWriter(outputFile));");
+					appendLine("generatedExpression = g." + type + "().toString();");
+					appendLine("out.write(generatedExpression);");
+					appendLine("out.close();");
+					appendLine("if (standardOutput)");
+						incrementIndentLevel();
+						appendLine("System.out.println(generatedExpression);");
+						decrementIndentLevel();
+					decrementIndentLevel();
+				appendLine('}');
+			}
+			decrementIndentLevel();
+		appendLine('}');			
 		
 		appendEOL();
 		
