@@ -27,4 +27,7 @@ public interface MettelRandomExpressionDefaultPropertiesValues {
 	public static final String SORT_VARIABLES_NUMBER = "3";
 	
 	public static final String SORT_GENERATE = "5";
+	
+	public static final String SORT_TOP_CONNECTIVES = "null";
+	public static final String SORT_TOP_CONNECTIVES_TEXT = "";
 }

@@ -34,39 +34,7 @@ public class MettelRandomExpressionDefaultPropertiesNames {
 		return sort + ".generate";
 	}
 	
-	/*
-	// or perhaps create an object 
-	private String sort, connective;
-	
-	public MettelRandomExpressionDefaultPropertiesNames(String sort, String connective) {
-		this.sort = sort;
-		this.connective = connective;
+	public static String sortTopConnectives(String sort) {
+		return sort + ".top.connectives";
 	}
-	
-	public String sortConnectiveFrequencyProperty(String sort, String connective) {
-		return sort + "." + connective + ".frequency";
-	}
-	
-	public String sortVariableFrequencyProperty(String sort) {
-		return sort + ".variable.frequency";
-	}
-	
-	public String sortVariableDepthProperty(String sort) {
-		return sort + ".depth";
-	}
-	
-	public String sortVariablesProperty(String sort) {
-		return sort + ".variables";
-	}
-	
-	public String sortVariablesSizeProperty(String sort) {
-		return sort + ".variables.size";
-	}
-	
-	public String sortGenerateProperty(String sort) {
-		return sort + ".generate";
-	}
-
-	*/
-	
 }

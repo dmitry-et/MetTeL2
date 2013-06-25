@@ -18,7 +18,7 @@ public class MettelRandomExpressionGeneratorPropertiesFile extends MettelJavaFil
 	//TODO make sure it creates properties directory to do that probably needs new class
 	// for creating ordinary files (not extending MettelJavaFile)
 	public MettelRandomExpressionGeneratorPropertiesFile(String prefix, MettelJavaPackage pack) {
-		super(prefix + "RandomExpressionPropertiesFile", null, pack);
+		super(prefix + "RandomExpressionGenerator.properties", null, pack);
 	}
 	
 	//TODO perhaps rename also repeating code
@@ -53,6 +53,9 @@ public class MettelRandomExpressionGeneratorPropertiesFile extends MettelJavaFil
 			appendEOL();
 			
 			appendLine(MettelRandomExpressionDefaultPropertiesNames.sortGenerateProperty(type) + " = " + SORT_GENERATE);
+			appendEOL();
+			
+			appendLine(MettelRandomExpressionDefaultPropertiesNames.sortTopConnectives(type) + " = " + SORT_TOP_CONNECTIVES_TEXT);
 			appendEOL();
 		}
 	}
