@@ -41,6 +41,7 @@ TEST_LOG_FILE := test.log
 TEST_ERR_FILE := test.err
 
 # Project paths
+VERSION = 2.0-$(shell svn info | grep 'Revision' | awk -F': ' '{print $$2}')
 BIN_DIR := bin
 SRC_DIR := src
 LIB_DIR := lib
@@ -208,8 +209,13 @@ clear clean clear-ast-classes compile compile-ast clear-parser-files clear-fo-pa
 clear-log only-lexer only-parser parser only-fo-parser fo-parser lexer-doc parser-doc parser-fo-doc doc resources test \
 all compile-test packages-file java-doc clear-test-log clear-doc clear-test clear-test-jar clear-test-output\
 clear-test-classes test-jar old-test junit-test junit SPASS clear-spass-log statistics \
-libantlr tableau-bin clear-bin generateLogics generateParsers compileLogics generate core-jar
+libantlr tableau-bin clear-bin generateLogics generateParsers compileLogics generate core-jar \
+version
+
 $(NAME): jar
+
+version:
+	@ echo $(VERSION)
 
 clear-lexer-log:
 	@ echo $(DELIM0)
