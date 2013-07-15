@@ -27,11 +27,13 @@ public class MettelExpressionGeneratorJavaInterfaceFile extends MettelJavaInterf
 
 	private String prefix = "Mettel";
 	private MettelJavaPackage langPack = null;
+	private String nameSeparator = "";
 
-	public MettelExpressionGeneratorJavaInterfaceFile(String prefix, MettelJavaPackage pack, MettelJavaPackage langPack) {
+	public MettelExpressionGeneratorJavaInterfaceFile(String prefix, MettelJavaPackage pack, MettelJavaPackage langPack, String nameSeparator) {
 		super(prefix+"ExpressionGenerator", pack, null);
 		this.prefix = prefix;
 		this.langPack = langPack;
+		this.nameSeparator = nameSeparator;
 	}
 
 	protected void imports(){
@@ -39,7 +41,7 @@ public class MettelExpressionGeneratorJavaInterfaceFile extends MettelJavaInterf
 	}
 
 	public void addMethod(String sort){
-		final String TYPE = prefix + MettelJavaNames.firstCharToUpperCase(sort);
+		final String TYPE = prefix + MettelJavaNames.firstCharToUpperCase(sort, nameSeparator);
 		headings.appendLine("import " + langPack.path() + '.' + TYPE + ';');
 
 		appendLine(TYPE + ' ' + sort + "();");

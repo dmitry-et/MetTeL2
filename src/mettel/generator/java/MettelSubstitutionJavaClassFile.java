@@ -26,12 +26,14 @@ import mettel.util.MettelJavaNames;
 public class MettelSubstitutionJavaClassFile extends MettelJavaClassFile {
 
 	private String prefix = "Mettel";
+	private String nameSeparator = "";
 
 	public MettelSubstitutionJavaClassFile(String prefix,
-			MettelJavaPackage pack, String[] sorts) {
+			MettelJavaPackage pack, String[] sorts, String nameSeparator) {
 		super(prefix+"TreeSubstitution", pack, "public", null, //prefix+"TreeReplacement",
 				new String[]{prefix+"Substitution"});
 		this.prefix = prefix;
+		this.nameSeparator = nameSeparator;
 		body(sorts);
 	}
 
@@ -47,10 +49,10 @@ public class MettelSubstitutionJavaClassFile extends MettelJavaClassFile {
 
 	private void body(String[] sorts){
 		for(String sort:sorts){
-			final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(sort);
+			final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(sort, nameSeparator);
 			appendLine("protected final Map<"+TYPE+"Variable, "+TYPE+"> "+sort+"Map = new TreeMap<"+TYPE+"Variable, "+TYPE+">();");
 
-			appendLine("public " + TYPE+" get"+MettelJavaNames.firstCharToUpperCase(sort)+'('+TYPE+"Variable v){");
+			appendLine("public " + TYPE+" get"+MettelJavaNames.firstCharToUpperCase(sort, nameSeparator)+'('+TYPE+"Variable v){");
 			incrementIndentLevel();
 				appendLine("return "+sort+"Map.get(v);");
 			decrementIndentLevel();
@@ -114,7 +116,7 @@ public class MettelSubstitutionJavaClassFile extends MettelJavaClassFile {
 		appendLine("public boolean append("+prefix+"Substitution s){");
 		incrementIndentLevel();
 			for(String sort:sorts){
-				final String uSort = MettelJavaNames.firstCharToUpperCase(sort);
+				final String uSort = MettelJavaNames.firstCharToUpperCase(sort, nameSeparator);
 				final String TYPE = prefix+uSort;
 				appendLine("final Map<"+TYPE+"Variable, "+TYPE+"> m"+uSort+" = s."+sort+"Map();");
 				appendLine("for("+TYPE+"Variable key:m"+uSort+".keySet()){");
@@ -182,8 +184,8 @@ public class MettelSubstitutionJavaClassFile extends MettelJavaClassFile {
 	    	appendLine("for(int i = 0; i < SIZE; i++){");
 	    	incrementIndentLevel();
 	    	for(String sort:sorts){
-	    		final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(sort);
-	    		final String ENTRY_SET = "entry"+MettelJavaNames.firstCharToUpperCase(sort)+"Set";
+	    		final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(sort, nameSeparator);
+	    		final String ENTRY_SET = "entry"+MettelJavaNames.firstCharToUpperCase(sort, nameSeparator)+"Set";
 	    		appendLine("Set<Entry<"+TYPE+"Variable, "+TYPE+">> "+ENTRY_SET+" = (("+prefix+"Substitution)array[i])."+sort+"Map().entrySet();");
 	    		appendLine("for(Entry<"+TYPE+"Variable, "+TYPE+"> entry:"+ENTRY_SET+"){");
 	    		incrementIndentLevel();
@@ -223,7 +225,7 @@ public class MettelSubstitutionJavaClassFile extends MettelJavaClassFile {
 		incrementIndentLevel();
 			appendLine("if(s == this){ return 0; }");
 			for(String sort:sorts){
-				final String uSort = MettelJavaNames.firstCharToUpperCase(sort);
+				final String uSort = MettelJavaNames.firstCharToUpperCase(sort, nameSeparator);
 				final String TYPE = prefix+uSort;
 				appendLine("final Set<"+TYPE+"Variable> keys"+uSort+"0 = "+sort+"Map.keySet();");
 				appendLine("final Set<"+TYPE+"Variable> keys"+uSort+"1 = (("+prefix+"Substitution)s)."+sort+"Map().keySet();");
@@ -299,7 +301,7 @@ public class MettelSubstitutionJavaClassFile extends MettelJavaClassFile {
 
 	    	appendLine("boolean notFirst = false;");
 	    	for(String sort:sorts){
-	    		final String NAME = prefix+MettelJavaNames.firstCharToUpperCase(sort);
+	    		final String NAME = prefix+MettelJavaNames.firstCharToUpperCase(sort, nameSeparator);
 
 	    		appendLine("Set<Entry<"+NAME+"Variable, "+NAME+">> "+sort+"EntrySet = "+sort+"Map.entrySet();");
 		    	appendLine("for(Entry<"+NAME+"Variable, "+NAME+"> entry:"+sort+"EntrySet){");
