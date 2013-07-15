@@ -51,8 +51,12 @@ public class MettelJavaPackageStructure {
 	private MettelObjectFactoryJavaClassFile factory = null;
 	private MettelExpressionGeneratorJavaInterfaceFile iExpressionGenerator = null;
 	private MettelRandomExpressionGeneratorJavaClassFile expressionGenerator = null;
-	
+
 	private String nameSeparator = NAME_SEPARATOR;
+
+	public String nameSeparator(){
+		return nameSeparator;
+	}
 //
 //	private MettelTableauObjectFactoryJavaClassFile tfactory = null;
 
@@ -80,7 +84,7 @@ public class MettelJavaPackageStructure {
 
 	public void appendStandardClasses(String prefix, String nameSeparator){
 		this.nameSeparator = nameSeparator;
-		
+
 		langPackage.add(new MettelExpressionInterfaceFile(prefix,langPackage));
 		langPackage.add(new MettelVariableJavaInterfaceFile(prefix,langPackage));
 
@@ -93,7 +97,7 @@ public class MettelJavaPackageStructure {
 		iFactory = new MettelObjectFactoryJavaInterfaceFile(prefix,langPackage,nameSeparator);
 		langPackage.add(iFactory);
 
-		iExpressionGenerator = new MettelExpressionGeneratorJavaInterfaceFile(prefix,utilLangPackage,langPackage);
+		iExpressionGenerator = new MettelExpressionGeneratorJavaInterfaceFile(prefix,utilLangPackage,langPackage,nameSeparator);
 		utilLangPackage.add(iExpressionGenerator);
 
 		factory = new MettelObjectFactoryJavaClassFile(prefix,langPackage,nameSeparator);
@@ -106,10 +110,10 @@ public class MettelJavaPackageStructure {
 	}
 
 	public void appendStandardClasses(String prefix, String[] sorts, String branchBound){
-		langPackage.add(new MettelReplacementJavaInterfaceFile(prefix,langPackage,sorts));
-		langPackage.add(new MettelSubstitutionJavaInterfaceFile(prefix,langPackage,sorts));
-		langPackage.add(new MettelReplacementJavaClassFile(prefix,langPackage,sorts));
-		langPackage.add(new MettelSubstitutionJavaClassFile(prefix,langPackage,sorts));
+		langPackage.add(new MettelReplacementJavaInterfaceFile(prefix,langPackage,sorts, nameSeparator));
+		langPackage.add(new MettelSubstitutionJavaInterfaceFile(prefix,langPackage,sorts, nameSeparator));
+		langPackage.add(new MettelReplacementJavaClassFile(prefix,langPackage,sorts, nameSeparator));
+		langPackage.add(new MettelSubstitutionJavaClassFile(prefix,langPackage,sorts, nameSeparator));
 
 		if(sorts.length > 0){
 			basePackage.add(new MettelTableauProverFile(prefix,sorts[0], branchBound, this));
@@ -119,8 +123,8 @@ public class MettelJavaPackageStructure {
 		}
 
 		for(String sort:sorts){
-			langPackage.add(new MettelComplexExpressionJavaInterfaceFile(prefix,sort,langPackage));
-			langPackage.add(new MettelVariableJavaClassFile(prefix,sort,langPackage));
+			langPackage.add(new MettelComplexExpressionJavaInterfaceFile(prefix,sort,langPackage,nameSeparator));
+			langPackage.add(new MettelVariableJavaClassFile(prefix,sort,langPackage,nameSeparator));
 			iFactory.addVariableMethod(sort);
 			factory.addVariableMethod(sort);
 			factory.addMap(sort);

@@ -260,7 +260,7 @@ public class MettelANTLRGrammarGenerator {
 	 */
 	private void processBNFs(MettelANTLRGrammar grammar, MettelJavaPackageStructure pStructure, MettelSort sort, List<MettelBNFStatement> bnfs) {
 		final String SORT_NAME = sort.name();
-		String s0 = BASIC_STRING + MettelJavaNames.firstCharToUpperCase(SORT_NAME);
+		String s0 = BASIC_STRING + MettelJavaNames.firstCharToUpperCase(SORT_NAME,properties.nameSeparator);
 		String s1 = null;
 		//System.out.println(bnfs);
 		for(MettelBNFStatement s:bnfs){
@@ -292,7 +292,7 @@ public class MettelANTLRGrammarGenerator {
 				MettelANTLRRuleReference ref = new MettelANTLRRuleReference(s0,"e1");
 				ref.appendLineToPostfix("e0 = factory.create"+
 						MettelJavaNames.firstCharToUpperCase(id,properties.nameSeparator)+
-						MettelJavaNames.firstCharToUpperCase(SORT_NAME)+"(e0, e1);");
+						MettelJavaNames.firstCharToUpperCase(SORT_NAME,properties.nameSeparator)+"(e0, e1);");
 				st1.addExpression(ref);
 
 				MettelANTLRUnaryBNFStatement st0 = new MettelANTLRUnaryBNFStatement(
@@ -301,7 +301,7 @@ public class MettelANTLRGrammarGenerator {
 
 				MettelANTLRRule r =new MettelANTLRRule(s1,st,/*true,*/new String[]{grammar.name()+
 						//MettelJavaNames.firstCharToUpperCase(s.identifier())+
-						MettelJavaNames.firstCharToUpperCase(SORT_NAME)});
+						MettelJavaNames.firstCharToUpperCase(SORT_NAME, properties.nameSeparator)});
 				r.appendLineToAfterBlock("r0 = e0;");
 				grammar.addRule(r);
 
@@ -319,7 +319,7 @@ public class MettelANTLRGrammarGenerator {
 				MettelANTLRToken t = new MettelANTLRToken(tokens[1].toString());
 				t.appendLineToPostfix("e0 = factory.create"+
 						MettelJavaNames.firstCharToUpperCase(s.identifier(),properties.nameSeparator)+
-						MettelJavaNames.firstCharToUpperCase(SORT_NAME)+"(e0);");
+						MettelJavaNames.firstCharToUpperCase(SORT_NAME, properties.nameSeparator)+"(e0);");
 
 				MettelANTLRUnaryBNFStatement st0 = new MettelANTLRUnaryBNFStatement(
 						t ,MettelANTLRUnaryBNFStatement.STAR);
@@ -327,7 +327,7 @@ public class MettelANTLRGrammarGenerator {
 
 				MettelANTLRRule r =new MettelANTLRRule(s1,st,/*true,*/new String[]{grammar.name()+
 						//MettelJavaNames.firstCharToUpperCase(s.identifier())+
-						MettelJavaNames.firstCharToUpperCase(SORT_NAME)});
+						MettelJavaNames.firstCharToUpperCase(SORT_NAME, properties.nameSeparator)});
 				r.appendLineToAfterBlock("r0 = e0;");
 				grammar.addRule(r);
 
@@ -369,7 +369,7 @@ public class MettelANTLRGrammarGenerator {
 */
 				st0.appendToPostfix("r0 = factory.create"+
 						MettelJavaNames.firstCharToUpperCase(id,properties.nameSeparator)+
-						MettelJavaNames.firstCharToUpperCase(SORT_NAME)+'(');
+						MettelJavaNames.firstCharToUpperCase(SORT_NAME, properties.nameSeparator)+'(');
 				final int jSIZE = sortStrings.size();
 				if(jSIZE >0 ){
 					st0.appendToPostfix("e10");
@@ -382,7 +382,7 @@ public class MettelANTLRGrammarGenerator {
 
 				MettelANTLRRule r = new MettelANTLRRule(s1,st,/*true,*/new String[]{grammar.name()+
 						//MettelJavaNames.firstCharToUpperCase(s.identifier())+
-						MettelJavaNames.firstCharToUpperCase(SORT_NAME)});
+						MettelJavaNames.firstCharToUpperCase(SORT_NAME, properties.nameSeparator)});
 /*				r.appendToAfterBlock("r0 = factory.create"+MettelJavaNames.firstCharToUpperCase(s.identifier())+
 						MettelJavaNames.firstCharToUpperCase(SORT_NAME)+'(');
 				final int jSIZE = sortStrings.size();
@@ -402,7 +402,7 @@ public class MettelANTLRGrammarGenerator {
 			s0 = s1;
 		}
 		MettelANTLRRule r = new MettelANTLRRule(SORT_NAME,new MettelANTLRRuleReference(s0,"e0"),
-				new String[]{grammar.name()+MettelJavaNames.firstCharToUpperCase(SORT_NAME)});
+				new String[]{grammar.name()+MettelJavaNames.firstCharToUpperCase(SORT_NAME, properties.nameSeparator)});
 		r.appendLineToAfterBlock("r0 = e0;");
 		grammar.addRule(r);
 
@@ -434,8 +434,8 @@ public class MettelANTLRGrammarGenerator {
 		s0.addExpression(new MettelANTLRRuleReference(NAME,"e0"));
 		s0.addExpression(new MettelANTLRToken("'"+properties.expressionRightDelimiter+"'"));//MettelANTLRToken.RBRACE);
 		s.addExpression(s0);
-		MettelANTLRRule r = new MettelANTLRRule(BASIC_STRING+MettelJavaNames.firstCharToUpperCase(NAME),s/*,true*/,
-				new String[]{grammarName+MettelJavaNames.firstCharToUpperCase(NAME)});
+		MettelANTLRRule r = new MettelANTLRRule(BASIC_STRING+MettelJavaNames.firstCharToUpperCase(NAME, properties.nameSeparator),s/*,true*/,
+				new String[]{grammarName+MettelJavaNames.firstCharToUpperCase(NAME, properties.nameSeparator)});
 		r.appendLineToAfterBlock("r0 = e0;");
 		return r;
 	}
@@ -447,8 +447,8 @@ public class MettelANTLRGrammarGenerator {
 	private MettelANTLRRule makeANTLRVariableRule(String grammarName, MettelSort sort) {
 		final String NAME = sort.name();
 		MettelANTLRRule r = new MettelANTLRRule(sort.name()+VARIABLE_STRING,MettelANTLRToken.ID/*,true*/,
-				new String[]{grammarName+MettelJavaNames.firstCharToUpperCase(NAME)});
-		r.appendLineToAfterBlock("r0 = factory.create"+MettelJavaNames.firstCharToUpperCase(NAME)+"Variable(t.getText());");
+				new String[]{grammarName+MettelJavaNames.firstCharToUpperCase(NAME, properties.nameSeparator)});
+		r.appendLineToAfterBlock("r0 = factory.create"+MettelJavaNames.firstCharToUpperCase(NAME, properties.nameSeparator)+"Variable(t.getText());");
 		return r;
 	}
 
@@ -465,7 +465,7 @@ public class MettelANTLRGrammarGenerator {
 						ruleRef,MettelANTLRUnaryBNFStatement.STAR));
 		s.addExpression(MettelANTLRToken.EOF);
 		return new MettelANTLRRule(NAME+'s',s/*,false*/,
-				new String[]{"Collection<"+grammarName+MettelJavaNames.firstCharToUpperCase(NAME)+'>'},null);
+				new String[]{"Collection<"+grammarName+MettelJavaNames.firstCharToUpperCase(NAME, properties.nameSeparator)+'>'},null);
 	}
 
 /*	private MettelANTLRRule makeANTLREqualityRule(String grammarName,Collection<MettelSort> sorts){

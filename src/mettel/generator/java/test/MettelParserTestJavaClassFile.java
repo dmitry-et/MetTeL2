@@ -29,19 +29,19 @@ public class MettelParserTestJavaClassFile extends MettelJavaClassFile {
 	private String prefix = "Mettel";
 //	private String packName = null;
 //	private String packNameFull = null;
-	
+
 	private MettelJavaPackageStructure pStructure = null;
-	
+
 	public MettelParserTestJavaClassFile(String prefix, String sort, MettelJavaPackageStructure pStructure) {
 		super(prefix+"ParserTest", pStructure.testLanguagePackage(), "public", "TestCase", null);
 		this.pStructure = pStructure;
-		
+
 		this.prefix = prefix;
-		
+
 //		packName = pack.path();
 //		packNameFull = packName.substring(0,packName.lastIndexOf('.')+1);
 //		packName = packName.substring(0,packName.indexOf('.')+1);
-		
+
 		body(sort);
 	}
 
@@ -78,12 +78,12 @@ public class MettelParserTestJavaClassFile extends MettelJavaClassFile {
 		appendLine("tokens.setTokenSource(lexer);");
     	appendLine(prefix+"Parser parser = new "+prefix+"Parser(tokens);");
 
-        appendLine("ArrayList<"+prefix+MettelJavaNames.firstCharToUpperCase(sort)+
-        		"> list = new ArrayList<"+prefix+MettelJavaNames.firstCharToUpperCase(sort)+">();");
+        appendLine("ArrayList<"+prefix+MettelJavaNames.firstCharToUpperCase(sort, pStructure.nameSeparator())+
+        		"> list = new ArrayList<"+prefix+MettelJavaNames.firstCharToUpperCase(sort, pStructure.nameSeparator())+">();");
         appendLine("parser."+sort+"s(list);");
 
         appendLine("StringBuilder b = new StringBuilder();");
-        appendLine("for("+prefix+MettelJavaNames.firstCharToUpperCase(sort)+" e:list){");
+        appendLine("for("+prefix+MettelJavaNames.firstCharToUpperCase(sort, pStructure.nameSeparator())+" e:list){");
         	incrementIndentLevel();
         	appendLine("b.append(e);");
         	//appendLine("System.out.println(e);");
@@ -98,8 +98,8 @@ public class MettelParserTestJavaClassFile extends MettelJavaClassFile {
         appendLine("lexer = new "+prefix+"Lexer(in);");
         appendLine("tokens.setTokenSource(lexer);");
 
-        appendLine("ArrayList<"+prefix+MettelJavaNames.firstCharToUpperCase(sort)+
-        		"> list0 = new ArrayList<"+prefix+MettelJavaNames.firstCharToUpperCase(sort)+">();");
+        appendLine("ArrayList<"+prefix+MettelJavaNames.firstCharToUpperCase(sort, pStructure.nameSeparator())+
+        		"> list0 = new ArrayList<"+prefix+MettelJavaNames.firstCharToUpperCase(sort, pStructure.nameSeparator())+">();");
         appendLine("parser."+sort+"s(list0);");
 
         appendLine("assertEquals(list,list0);");

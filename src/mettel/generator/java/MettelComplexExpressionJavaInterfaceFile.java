@@ -35,8 +35,8 @@ public class MettelComplexExpressionJavaInterfaceFile extends MettelJavaInterfac
 	 * @param sort
 	 * @param pack
 	 */
-	public MettelComplexExpressionJavaInterfaceFile(String prefix, String sort, MettelJavaPackage pack){
-		super(prefix+MettelJavaNames.firstCharToUpperCase(sort), pack, new String[]{prefix+"Expression"});
+	public MettelComplexExpressionJavaInterfaceFile(String prefix, String sort, MettelJavaPackage pack, String nameSeparator){
+		super(prefix+MettelJavaNames.firstCharToUpperCase(sort, nameSeparator), pack, new String[]{prefix+"Expression"});
 		sortid = ++counter;
 //		this.prefix = prefix;
 //		this.sort = sort;

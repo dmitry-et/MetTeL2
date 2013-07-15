@@ -33,7 +33,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 
 	private String prefix = "Mettel";
 	private MettelJavaPackage langPack = null;
-	
+
 	private String nameSeparator = NAME_SEPARATOR;
 
 	private class Signature{
@@ -151,7 +151,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 
 		for(String type:signatures.keySet()){
 
-			final String Type = MettelJavaNames.firstCharToUpperCase(type);
+			final String Type = MettelJavaNames.firstCharToUpperCase(type, nameSeparator);
 
 			int total = 0;
 			for(Signature s:signatures.get(type)){
@@ -176,7 +176,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 			final String vtype = type + "Variable";
 
 			appendLine("private int " + vtype + "Frequency = 1;");
-			appendLine("public void set" + MettelJavaNames.firstCharToUpperCase(vtype) + "Frequency(int f){");
+			appendLine("public void set" + MettelJavaNames.firstCharToUpperCase(vtype, nameSeparator) + "Frequency(int f){");
 				incrementIndentLevel();
 				appendLine("if(f < 0) throw new MettelCoreRuntimeException(\"Frequency parameter is negative\");");
 				appendLine("total" + Type + "Frequency += (f - " + vtype + "Frequency);");
