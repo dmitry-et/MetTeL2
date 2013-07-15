@@ -37,7 +37,7 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 	private String prefix = "Mettel";
 	private String sort = null;
 	private String name = null;
-	
+
 	private String nameSeparator = NAME_SEPARATOR;
 
 	private boolean equality = false;
@@ -47,10 +47,10 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 	 * @param pack
 	 */
 	public MettelComplexExpressionJavaClassFile(String prefix, String sort, String name, String[] sorts, MettelJavaPackage pack, boolean equality, String nameSeparator){
-		super(prefix+MettelJavaNames.firstCharToUpperCase(name,nameSeparator)+MettelJavaNames.firstCharToUpperCase(sort), pack, "public",
+		super(prefix+MettelJavaNames.firstCharToUpperCase(name,nameSeparator)+MettelJavaNames.firstCharToUpperCase(sort, nameSeparator), pack, "public",
 				prefix+"AbstractExpression",
-				equality? new String[]{"MettelEqualityExpression", prefix+MettelJavaNames.firstCharToUpperCase(sort)} :
-					      new String[]{prefix+MettelJavaNames.firstCharToUpperCase(sort)});
+				equality? new String[]{"MettelEqualityExpression", prefix+MettelJavaNames.firstCharToUpperCase(sort, nameSeparator)} :
+					      new String[]{prefix+MettelJavaNames.firstCharToUpperCase(sort, nameSeparator)});
 		priority = ++counter;
 
 		this.prefix = prefix;
@@ -82,8 +82,8 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 	}
 
 	private void body(String[] sorts){
-		final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(name,nameSeparator)+MettelJavaNames.firstCharToUpperCase(sort);
-		final String TYPE0 = prefix+MettelJavaNames.firstCharToUpperCase(sort);
+		final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(name,nameSeparator)+MettelJavaNames.firstCharToUpperCase(sort,nameSeparator);
+		final String TYPE0 = prefix+MettelJavaNames.firstCharToUpperCase(sort,nameSeparator);
 		final int SIZE = sorts.length;
 
 		appendLine("static final int PRIORITY = "+priority+';');
@@ -91,16 +91,16 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 		appendLine("private final int LENGTH;");
 
 		for(int i = 0; i < SIZE; i++){
-			appendLine("protected "+prefix+MettelJavaNames.firstCharToUpperCase(sorts[i])+" e"+i+" = null;");
+			appendLine("protected "+prefix+MettelJavaNames.firstCharToUpperCase(sorts[i], nameSeparator)+" e"+i+" = null;");
 		}
 		appendEOL();
 
 		indent();
 		append("public "+TYPE+'(');
 		if(SIZE>0){
-			append(prefix+MettelJavaNames.firstCharToUpperCase(sorts[0])+" e"+0);
+			append(prefix+MettelJavaNames.firstCharToUpperCase(sorts[0], nameSeparator)+" e"+0);
 			for(int i = 1; i<SIZE; i++){
-				append(", "+prefix+MettelJavaNames.firstCharToUpperCase(sorts[i])+" e"+i);
+				append(", "+prefix+MettelJavaNames.firstCharToUpperCase(sorts[i], nameSeparator)+" e"+i);
 			}
 			append(", ");
 		}
@@ -167,15 +167,15 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 			incrementIndentLevel();
 				if(SIZE > 0){
 					indent();
-					append("return factory.create"+MettelJavaNames.firstCharToUpperCase(name,nameSeparator)+MettelJavaNames.firstCharToUpperCase(sort)+'(');
+					append("return factory.create"+MettelJavaNames.firstCharToUpperCase(name,nameSeparator)+MettelJavaNames.firstCharToUpperCase(sort, nameSeparator)+'(');
 					append('(');
-					append(prefix+MettelJavaNames.firstCharToUpperCase(sorts[0]));
+					append(prefix+MettelJavaNames.firstCharToUpperCase(sorts[0], nameSeparator));
 					append(')');
 					append("e0.substitute(s)");
 					for(int i = 1; i < SIZE; i++){
 						append(", ");
 						append('(');
-						append(prefix+MettelJavaNames.firstCharToUpperCase(sorts[i]));
+						append(prefix+MettelJavaNames.firstCharToUpperCase(sorts[i], nameSeparator));
 						append(')');
 						append("e"+i+".substitute(s)");
 					}
@@ -191,25 +191,26 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 
 		appendLine("public "+prefix+"Expression rewrite("+prefix+"Replacement s){");
 		incrementIndentLevel();
-			appendLine(prefix+"Expression e = s.get"+MettelJavaNames.firstCharToUpperCase(sort)+"(this);");
+			appendLine(prefix+"Expression e = s.get"+MettelJavaNames.firstCharToUpperCase(sort, nameSeparator)+"(this);");
 			appendLine("if(e != null){ return e; }");
 			if(SIZE > 0){
 				indent();
-				append("final "+TYPE0+" ee = factory.create"+MettelJavaNames.firstCharToUpperCase(name,nameSeparator)+MettelJavaNames.firstCharToUpperCase(sort)+'(');
+				append("final "+TYPE0+" ee = factory.create"+
+						MettelJavaNames.firstCharToUpperCase(name,nameSeparator)+MettelJavaNames.firstCharToUpperCase(sort, nameSeparator)+'(');
 				append('(');
-				append(prefix+MettelJavaNames.firstCharToUpperCase(sorts[0]));
+				append(prefix+MettelJavaNames.firstCharToUpperCase(sorts[0], nameSeparator));
 				append(')');
 				append("e0.rewrite(s)");
 				for(int i = 1; i < SIZE; i++){
 					append(", ");
 					append('(');
-					append(prefix+MettelJavaNames.firstCharToUpperCase(sorts[i]));
+					append(prefix+MettelJavaNames.firstCharToUpperCase(sorts[i], nameSeparator));
 					append(')');
 					append("e"+i+".rewrite(s)");
 				}
 				append(");");
 				appendEOL();
-				appendLine("e = s.get"+MettelJavaNames.firstCharToUpperCase(sort)+"(ee);");
+				appendLine("e = s.get"+MettelJavaNames.firstCharToUpperCase(sort, nameSeparator)+"(ee);");
 				appendLine("if(e == null){ return ee; }else{ return e; }");
 			}else{
 				appendLine("return this;");
@@ -259,7 +260,7 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 		appendEOL();
 
 		//appendLine("public int compareTo(MettelExpression e){ return id() - e.id(); }");
-		
+
 		appendLine("int compareArgumentsTo("+prefix+"AbstractExpression e, Comparator<"+prefix+"AbstractExpression> c){");
 		incrementIndentLevel();
 			if(SIZE >0 ){
@@ -287,21 +288,21 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 			appendLine("return 0;");
 		decrementIndentLevel();
 		appendLine('}');
-		
-		
+
+
 /*		appendLine("public int compareTo(MettelExpression e){");
 		incrementIndentLevel();
 			appendLine("if(e == this){ return 0; }");
 			appendLine("if(!(e instanceof "+prefix+MettelJavaNames.firstCharToUpperCase(sort)+")){ return SORTID - (("+
 					prefix+"AbstractExpression)e).sortId(); }");
 			appendLine("if(e instanceof "+prefix+MettelJavaNames.firstCharToUpperCase(sort)+"Variable){ return 1; }");
-			
+
 			appendLine("final int PRE0 = preCompareTo(e);");
 			appendLine("if(PRE0 != 0){return PRE0;}");
-			
+
 			appendLine("final int PRE1 = (("+prefix+"AbstractExpression)e).preCompareTo(this);");
 			appendLine("if(PRE1 != 0){return -PRE1;}");
-			
+
 			if(SIZE >0 ){
 				appendLine(TYPE+" ee = ("+TYPE+") e;");
 				appendLine("int result = 0;");
@@ -317,9 +318,9 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 		appendLine("public int compareTo(MettelExpression e){");
 		incrementIndentLevel();
 			appendLine("if(e == this){ return 0; }");
-			appendLine("if(!(e instanceof "+prefix+MettelJavaNames.firstCharToUpperCase(sort)+")){ return SORTID - (("+
+			appendLine("if(!(e instanceof "+prefix+MettelJavaNames.firstCharToUpperCase(sort, nameSeparator)+")){ return SORTID - (("+
 					prefix+"AbstractExpression)e).sortId(); }");
-			appendLine("if(e instanceof "+prefix+MettelJavaNames.firstCharToUpperCase(sort)+"Variable){ return 1; }");
+			appendLine("if(e instanceof "+prefix+MettelJavaNames.firstCharToUpperCase(sort, nameSeparator)+"Variable){ return 1; }");
 			appendLine("if(!(e instanceof "+TYPE+")){ return PRIORITY - (("+
 					prefix+"AbstractExpression)e).priority(); }");
 			if(SIZE >0 ){
@@ -333,9 +334,9 @@ public class MettelComplexExpressionJavaClassFile extends MettelJavaClassFile {
 			appendLine("return 0;");
 		decrementIndentLevel();
 		appendLine('}');
-		
+
 		appendEOL();
-		
+
 		if(equality){
 			appendLine("public MettelExpression left(){");
 			incrementIndentLevel();

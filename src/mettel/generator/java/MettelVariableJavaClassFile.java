@@ -27,25 +27,27 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 
 	private String prefix = "Mettel";
 	private String type = null;
+	private String nameSeparator = "";
 
-	public MettelVariableJavaClassFile(String prefix, String type, MettelJavaPackage pack) {
-		super(prefix + MettelJavaNames.firstCharToUpperCase(type) + "Variable", pack, "public",
-				prefix + "AbstractVariable", new String[]{prefix + MettelJavaNames.firstCharToUpperCase(type)});
+	public MettelVariableJavaClassFile(String prefix, String type, MettelJavaPackage pack, String nameSeparator) {
+		super(prefix + MettelJavaNames.firstCharToUpperCase(type, nameSeparator) + "Variable", pack, "public",
+				prefix + "AbstractVariable", new String[]{prefix + MettelJavaNames.firstCharToUpperCase(type, nameSeparator)});
 		this.prefix = prefix;
 		this.type = type;
+		this.nameSeparator = nameSeparator;
 		body();
 	}
 
 	protected void imports(){
 		headings.appendLine("import java.util.Comparator;");
 		headings.appendEOL();
-		
+
 		headings.appendLine("import mettel.core.tableau.MettelExpression;");
 		headings.appendEOL();
 	}
 
 	private void body(){
-		final String TYPE = prefix + MettelJavaNames.firstCharToUpperCase(type);
+		final String TYPE = prefix + MettelJavaNames.firstCharToUpperCase(type, nameSeparator);
 
 		appendLine("public " + TYPE + "Variable(String name, " + prefix + "ObjectFactory factory) {");
 		incrementIndentLevel();
@@ -75,8 +77,8 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 
 		appendLine("public boolean match("+prefix+"Expression e, "+prefix+"Substitution s){");
 		incrementIndentLevel();
-		    appendLine("if(!(e instanceof "+prefix+MettelJavaNames.firstCharToUpperCase(type)+")){ return false; }");
-		    appendLine("return s.append(this,("+prefix+MettelJavaNames.firstCharToUpperCase(type)+")e);");
+		    appendLine("if(!(e instanceof "+prefix+MettelJavaNames.firstCharToUpperCase(type, nameSeparator)+")){ return false; }");
+		    appendLine("return s.append(this,("+prefix+MettelJavaNames.firstCharToUpperCase(type, nameSeparator)+")e);");
 		decrementIndentLevel();
 		appendLine('}');
 
@@ -84,7 +86,7 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 
 	    appendLine("public " + prefix + "Expression rewrite(" + prefix + "Replacement r) {");
 	    incrementIndentLevel();
-	    	appendLine(TYPE + " e = r.get" + MettelJavaNames.firstCharToUpperCase(type) +"(this);");
+	    	appendLine(TYPE + " e = r.get" + MettelJavaNames.firstCharToUpperCase(type, nameSeparator) +"(this);");
 	    	appendLine("return (e == null) ? this : e;");
 	   	decrementIndentLevel();
 	   	appendLine('}');
@@ -93,7 +95,7 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 
 	   	appendLine("public " + prefix + "Expression substitute(" + prefix + "Substitution s) {");
 	   	incrementIndentLevel();
-	   		appendLine(TYPE + " e = s.get" + MettelJavaNames.firstCharToUpperCase(type) +"(this);");
+	   		appendLine(TYPE + " e = s.get" + MettelJavaNames.firstCharToUpperCase(type, nameSeparator) +"(this);");
 	   		appendLine("return (e == null) ? this : e;");
     	decrementIndentLevel();
 	   	appendLine('}');
@@ -139,10 +141,10 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 		appendLine('}');
 
 		appendEOL();
-		
+
 		appendLine("int compareArgumentsTo("+prefix+"AbstractExpression e, Comparator<"+prefix+"AbstractExpression> c){return 0;}");
 		appendLine("int compareArguments("+prefix+"AbstractExpression e, Comparator<"+prefix+"AbstractExpression> c){return 0;}");
-		
+
 		appendEOL();
 
 		appendLine("public boolean equals(Object o){");
@@ -152,9 +154,9 @@ public class MettelVariableJavaClassFile extends MettelJavaClassFile {
 			appendLine("return name.equals((("+TYPE+"Variable)o).name());");
 		decrementIndentLevel();
 		appendLine('}');
-		
+
 		appendEOL();
-		
+
 		appendLine("public boolean isEquality(){");
 		incrementIndentLevel();
 			appendLine("return false;");
