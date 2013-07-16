@@ -57,6 +57,7 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 	protected void imports(){
 		headings.appendEOL();
 		headings.appendLine("import java.io.IOException;");
+		headings.appendLine("import java.io.InputStream;");		
 		headings.appendEOL();
 		headings.appendLine("import java.util.ArrayList;");
 		headings.appendLine("import java.util.Collections;");
@@ -67,6 +68,7 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 		headings.appendLine("import java.util.Properties;");
 		headings.appendEOL();
 		headings.appendLine("import org.antlr.runtime.ANTLRFileStream;");
+		headings.appendLine("import org.antlr.runtime.ANTLRInputStream;");
 		headings.appendLine("import org.antlr.runtime.CharStream;");
 		headings.appendLine("import org.antlr.runtime.CommonTokenStream;");
 		headings.appendLine("import org.antlr.runtime.RecognitionException;");
@@ -74,8 +76,8 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 	
 	public void generateBody(){
 		appendLine("// UNLISTED_DEPTH must be lower than STARTING_DEPTH");
-		appendLine("private static int STARTING_DEPTH = 0;");
-		appendLine("private static int UNLISTED_DEPTH = -1;");
+		appendLine("private final static int STARTING_DEPTH = 0;");
+		appendLine("private final static int UNLISTED_DEPTH = -1;");
 		appendEOL();
 		
 		appendLine("private static int currentDepth = STARTING_DEPTH - 1;");
@@ -112,6 +114,31 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 			decrementIndentLevel();
 		appendLine('}');
 		appendEOL();
+		
+		//TODO same code merge with other constructor
+		appendLine("public " + prefix + "ProblemAnalyzer(InputStream problemReader) throws IOException, RecognitionException{");
+			incrementIndentLevel();
+			appendLine("CharStream in = new ANTLRInputStream(problemReader);");
+			appendLine("CommonTokenStream tokens = new CommonTokenStream();");
+			appendLine(prefix + "Parser parser = new " + prefix + "Parser(tokens);");
+			appendLine("tokens.setTokenSource(new " + prefix + "Lexer(in));");
+			appendLine("ArrayList<" + prefix + "Expression> list = parser.expressions();");
+			appendEOL();
+			
+			appendLine("for (" + prefix + "Expression expression : list){");
+				incrementIndentLevel();
+					appendLine("if (totalSymbolsMaxLength < expression.length()){");
+						incrementIndentLevel();
+							appendLine("totalSymbolsMaxLength = expression.length();");
+						decrementIndentLevel();
+					appendLine('}');
+					appendLine("determineSymbol(expression);");
+				decrementIndentLevel();
+			appendLine('}');
+			decrementIndentLevel();
+		appendLine('}');
+	appendEOL();
+
 		
 		appendLine("private void determineSymbol(" + prefix + "Expression expression){");
 			incrementIndentLevel();
@@ -457,7 +484,7 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 		
 		appendLine("public int totalSymbolsMaxDepth(){");
 			incrementIndentLevel();
-			appendLine("return totalVariablesOccurences() + totalConnectivesOccurences();");
+			appendLine("return totalVariablesMaxDepth() + totalConnectivesMaxDepth();");
 			decrementIndentLevel();
 		appendLine('}');
 		appendEOL();

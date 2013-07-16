@@ -37,4 +37,8 @@ public class MettelRandomExpressionDefaultPropertiesNames {
 	public static String sortTopConnectives(String sort) {
 		return sort + ".top.connectives";
 	}
+	
+	public static String METTEL_VERSION = "MetTeL.version";
+	
+	public static String SYNTAX = "syntax.file";
 }

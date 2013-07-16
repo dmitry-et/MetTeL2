@@ -112,6 +112,6 @@ public class MettelRandomExpressionConfiguratorJavaClassFile extends MettelJavaC
 			}
 			
 			decrementIndentLevel();
-		appendLine("}");
+		appendLine('}');
 	}	
 }

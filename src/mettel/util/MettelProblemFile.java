@@ -35,6 +35,8 @@ public class MettelProblemFile{
 	private MettelProperties statusProperties = new MettelProperties();
 	private StringBuilder expressions = new StringBuilder();
 	
+	
+	
 	public MettelProblemFile(String fileName) throws IOException{
 		this(new File(fileName));
 	}
@@ -42,27 +44,29 @@ public class MettelProblemFile{
 	public MettelProblemFile(File file) throws IOException{
 		this.file = file;
 		this.path = file.toString();
-		BufferedReader inReader = new BufferedReader(new FileReader(file));
-		try{
-			
-			String line = null;
-			while((line = inReader.readLine()) != null){
-				if (line.trim().equals(GENERATOR_HEADER)){
-					extractGeneratorProperties(inReader);
-					skipEmptyLine(inReader);
-				}else if(line.trim().equals(STATISTICS_HEADER)){
-					extractStatisticsProperties(inReader);
-					skipEmptyLine(inReader);
-				}else if(line.trim().equals(STATUS_HEADER)){
-					extractStatusProperties(inReader);
-					skipEmptyLine(inReader);
-				}else{
-					expressions.append(line);
-					expressions.append(LINE_SEPARATOR);
+		if (file.exists()){
+			BufferedReader inReader = new BufferedReader(new FileReader(file));
+			try{
+				
+				String line = null;
+				while((line = inReader.readLine()) != null){
+					if (line.trim().equals(GENERATOR_HEADER)){
+						extractGeneratorProperties(inReader);
+						skipEmptyLine(inReader);
+					}else if(line.trim().equals(STATISTICS_HEADER)){
+						extractStatisticsProperties(inReader);
+						skipEmptyLine(inReader);
+					}else if(line.trim().equals(STATUS_HEADER)){
+						extractStatusProperties(inReader);
+						skipEmptyLine(inReader);
+					}else{
+						expressions.append(line);
+						expressions.append(LINE_SEPARATOR);
+					}
 				}
+			}finally{
+				inReader.close();
 			}
-		}finally{
-			inReader.close();
 		}
 	}
 	// TODO won't work if one properties block finishes and another one starts instantly
@@ -179,7 +183,9 @@ public class MettelProblemFile{
 	}
 	
 	public void writeToFile() throws IOException{
-		makeBackupOldFile();
+		if (file.exists()){
+			makeBackupOldFile();
+		}
 		BufferedWriter outWriter = null;
 		outWriter = new BufferedWriter(new FileWriter(file));
 		try{

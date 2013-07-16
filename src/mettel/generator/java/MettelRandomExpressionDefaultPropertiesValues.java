@@ -30,4 +30,7 @@ public interface MettelRandomExpressionDefaultPropertiesValues {
 	
 	public static final String SORT_TOP_CONNECTIVES = "null";
 	public static final String SORT_TOP_CONNECTIVES_TEXT = "";
+	
+	public static final String METTEL_VERSION_VALUE = "TODO";
+	public static final String SYNTAX_PATH = "TODO";
 }

@@ -6,6 +6,8 @@ package mettel.generator.java;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
+
 /**
  * @author alijevt1
  *
@@ -39,13 +41,15 @@ public class MettelRandomExpressionGeneratorPropertiesFile extends MettelJavaFil
 	}
 	
 	public void generateBody() {
+		appendLine(MettelRandomExpressionDefaultPropertiesNames.METTEL_VERSION + " = " + METTEL_VERSION_VALUE);
+		appendLine(MettelRandomExpressionDefaultPropertiesNames.SYNTAX + " = " + SYNTAX_PATH);
 		for(String type:signatures.keySet()){
 			for(String name:signatures.get(type)){
 				appendLine(MettelRandomExpressionDefaultPropertiesNames.sortConnectiveFrequencyProperty(type, name) + " = " + SORT_CONNECTIVE_FREQUENCY);
 			}
 			appendEOL();
 			
-			appendLine(MettelRandomExpressionDefaultPropertiesNames.sortVariableFrequencyProperty(type) +" = " + SORT_VARIABLE_FREQUENCY);
+			appendLine(MettelRandomExpressionDefaultPropertiesNames.sortVariableFrequencyProperty(type) + " = " + SORT_VARIABLE_FREQUENCY);
 			appendLine(MettelRandomExpressionDefaultPropertiesNames.sortVariableDepthProperty(type) + " = " + SORT_VARIABLE_DEPTH);
 			appendLine(MettelRandomExpressionDefaultPropertiesNames.sortVariablesProperty(type) + " = " + SORT_VARIABLES_TEXT);
 			appendLine(MettelRandomExpressionDefaultPropertiesNames.sortVariablesSizeProperty(type) + " = " + SORT_VARIABLES_NUMBER);
