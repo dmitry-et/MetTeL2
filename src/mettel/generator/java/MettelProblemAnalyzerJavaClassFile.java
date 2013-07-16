@@ -118,7 +118,7 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 			appendLine("currentDepth++;");
 			boolean firstIteration = true;
 			for(String sort : signatures.keySet()){
-				final String Sort = MettelJavaNames.firstCharToUpperCase(sort);
+				final String Sort = MettelJavaNames.firstCharToUpperCase(sort, nameSeparator);
 				final String prefixSort = prefix + Sort;
 				if (!firstIteration){
 					indent();
@@ -168,7 +168,7 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 			appendEOL();
 		
 		for(String sort : signatures.keySet()){
-			final String Sort = MettelJavaNames.firstCharToUpperCase(sort); 
+			final String Sort = MettelJavaNames.firstCharToUpperCase(sort, nameSeparator); 
 			appendLine("private void update" + Sort + "ConnectiveOccurences(String connective){");
 				incrementIndentLevel();
 				appendLine("Integer value;");
@@ -199,7 +199,7 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 		}
 
 		for(String sort : signatures.keySet()){
-			final String Sort = MettelJavaNames.firstCharToUpperCase(sort); 
+			final String Sort = MettelJavaNames.firstCharToUpperCase(sort, nameSeparator); 
 			
 			appendLine("public Set<String> " + sort + "VariablesNames(){");
 				incrementIndentLevel();
@@ -367,7 +367,8 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 				incrementIndentLevel();
 				appendLine("int sum = 0;");
 				for(String sort : signatures.keySet()){
-					appendLine("sum += total" + MettelJavaNames.firstCharToUpperCase(sort) + "VariablesOccurences();");
+					final String Sort = MettelJavaNames.firstCharToUpperCase(sort, nameSeparator);
+					appendLine("sum += total" + Sort + "VariablesOccurences();");
 				}
 				appendLine("return sum;");
 				decrementIndentLevel();
@@ -389,7 +390,8 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 				appendLine("int maxDepth = UNLISTED_DEPTH;");
 				appendLine("int tempDepth = 0;");
 				for(String sort : signatures.keySet()){
-					appendLine("tempDepth = total" + MettelJavaNames.firstCharToUpperCase(sort) + "VariablesMaxDepth();");
+					final String Sort = MettelJavaNames.firstCharToUpperCase(sort, nameSeparator);
+					appendLine("tempDepth = total" + Sort + "VariablesMaxDepth();");
 					appendLine("maxDepth = maxDepth > tempDepth ? maxDepth : tempDepth;");
 				}
 				appendLine("return maxDepth;");
@@ -412,7 +414,8 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 				incrementIndentLevel();
 				appendLine("int sum = 0;");
 				for(String sort : signatures.keySet()){
-					appendLine("sum += total" + MettelJavaNames.firstCharToUpperCase(sort) + "ConnectivesOccurences();");
+					final String Sort = MettelJavaNames.firstCharToUpperCase(sort, nameSeparator);
+					appendLine("sum += total" + Sort + "ConnectivesOccurences();");
 				}
 				appendLine("return sum;");
 				decrementIndentLevel();
@@ -434,7 +437,8 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 				appendLine("int maxDepth = UNLISTED_DEPTH;");
 				appendLine("int tempDepth = 0;");
 				for(String sort : signatures.keySet()){
-					appendLine("tempDepth = total" + MettelJavaNames.firstCharToUpperCase(sort) + "ConnectivesMaxDepth();");
+					final String Sort = MettelJavaNames.firstCharToUpperCase(sort, nameSeparator);
+					appendLine("tempDepth = total" + Sort + "ConnectivesMaxDepth();");
 					appendLine("maxDepth = maxDepth > tempDepth ? maxDepth : tempDepth;");
 				}
 				appendLine("return maxDepth;");
@@ -470,7 +474,7 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 			appendEOL();
 			
 			for(String sort : signatures.keySet()){
-				final String Sort = MettelJavaNames.firstCharToUpperCase(sort);
+				final String Sort = MettelJavaNames.firstCharToUpperCase(sort, nameSeparator);
 				appendLine("st.setProperty(\"" + MettelProblemAnalyzerDefaultPropertiesNames.sortVariablesNames(sort) + "\", variableNamesString(" + sort + "VariablesNames()));");
 				appendLine("st.setProperty(\"" + MettelProblemAnalyzerDefaultPropertiesNames.totalNumberOfSortVariables(sort) + "\", String.valueOf(totalNumberOf" + Sort + "Variables()));");
 				appendEOL();

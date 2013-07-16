@@ -44,7 +44,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 	void appendSignature(String type){
 		if (mainConnective == null){
 			mainConnective = new String(type);
-			MainConnective = new String(MettelJavaNames.firstCharToUpperCase(type));
+			MainConnective = new String(MettelJavaNames.firstCharToUpperCase(type, nameSeparator));
 		}
 		ArrayList<Signature> ss = signatures.get(type);
 		if(ss == null){

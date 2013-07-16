@@ -223,7 +223,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 			appendLine("Properties configuration = new Properties();");
 			appendLine("configuration.load(prop);");
 			for(String type:signatures.keySet()){
-				final String Type = MettelJavaNames.firstCharToUpperCase(type);
+				final String Type = MettelJavaNames.firstCharToUpperCase(type, nameSeparator);
 				
 				// read and set frequency for each sort's connective
 				for(Signature s:signatures.get(type)){
@@ -233,8 +233,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 				appendEOL();
 				
 				// read and set variable frequency and depth for for each sort
-				final String vtype = type + "Variable";
-				appendLine("g.set" + MettelJavaNames.firstCharToUpperCase(vtype) + "Frequency(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariableFrequencyProperty(type) + "\", \"" + SORT_VARIABLE_FREQUENCY +"\")));");
+				appendLine("g.set" + Type + "VariableFrequency(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariableFrequencyProperty(type) + "\", \"" + SORT_VARIABLE_FREQUENCY +"\")));");
 				appendLine("g.setDepth" + Type + "(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariableDepthProperty(type) + "\", \"" + SORT_VARIABLE_DEPTH + "\")));");
 				appendEOL();
 				
@@ -300,7 +299,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 		appendLine("private static void checkPropertiesValidity() {");
 			incrementIndentLevel();
 			for(String type:signatures.keySet()){
-				final String Type = MettelJavaNames.firstCharToUpperCase(type);
+				final String Type = MettelJavaNames.firstCharToUpperCase(type, nameSeparator);
 				String constantVariables = "";
 				for(Signature s:signatures.get(type)){
 					final String ltype = s.name + Type;
@@ -349,7 +348,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 		        	// print configuration of the generated expression
 		        	//TODO repeating type1
 					for(String type1:signatures.keySet()){
-						final String Type1 = MettelJavaNames.firstCharToUpperCase(type1);
+						final String Type1 = MettelJavaNames.firstCharToUpperCase(type1, nameSeparator);
 						for(Signature s:signatures.get(type1)){
 							final String ltype = s.name + Type1;
 							appendLine("out.write(\"" + MettelRandomExpressionDefaultPropertiesNames.sortConnectiveFrequencyProperty(type1, s.name) + " = \" + g." + ltype + "Frequency);");
