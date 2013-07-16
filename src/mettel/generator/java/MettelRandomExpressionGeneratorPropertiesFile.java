@@ -11,7 +11,6 @@ import java.util.Hashtable;
  *
  */
 public class MettelRandomExpressionGeneratorPropertiesFile extends MettelJavaFile implements MettelRandomExpressionDefaultPropertiesValues {
-	// Can't think of how I can use just ArrayList or HashSet? unless make one array of strings for types and then 2-d array of strings row index being type name and columns
 	// perhaps rename
 	private Hashtable<String,ArrayList<String>> signatures = new Hashtable<String,ArrayList<String>>();
 	

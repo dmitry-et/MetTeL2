@@ -1,2 +1,2 @@
 Main-Class: mettel.MettelGenerator
-Class-Path: antlr3.jar antlr.jar stringtemplate4.jar antlr3-runtime.jar
+Class-Path: antlr3.jar antlr.jar stringtemplate4.jar antlr3-runtime.jar opencsv.jar

@@ -44,7 +44,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 	
 	private String nameSeparator = NAME_SEPARATOR;
 
-	//TODO make new public class
+	//TODO make new public class?
 	private class Signature{
 
 	//	private String type;
@@ -337,7 +337,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 					appendLine("out = new BufferedWriter(new FileWriter(outputFile));");
 					appendEOL();
 					
-					appendLine("out.write(\"/*\");");
+					appendLine("out.write(\"/** Generator Properties **\");");
 					appendLine("out.newLine();");
 					appendLine("out.write(\"MetTeL.version = TODO\");");
 		        	appendLine("out.newLine();");
@@ -412,7 +412,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 					appendLine("generatedExpression = g." + type + "().toString();");
 					appendEOL();
 
-					appendLine("out.write(\"*/\");");
+					appendLine("out.write(\"** End of Generator Properties **/\");");
 					appendLine("out.newLine();");
 					appendEOL();
 					

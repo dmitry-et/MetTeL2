@@ -57,6 +57,8 @@ public class MettelJavaPackageStructure {
 	
 	// added by tomas
 	private MettelRandomExpressionGeneratorPropertiesFile randomExpressionPropertiesFile = null;
+	private MettelProblemAnalyzerJavaClassFile problemAnalyzerGenerator = null;
+	private MettelBenchmarkJavaClassFile benchmarkGenerator = null;
 	
 	private String nameSeparator = NAME_SEPARATOR;
 //
@@ -115,6 +117,12 @@ public class MettelJavaPackageStructure {
 		randomExpressionPropertiesFile = new MettelRandomExpressionGeneratorPropertiesFile(prefix,utilLangPropertiesPackage);
 		utilLangPropertiesPackage.add(randomExpressionPropertiesFile);
 		
+		problemAnalyzerGenerator = new MettelProblemAnalyzerJavaClassFile(prefix, langPackage, nameSeparator);
+		langPackage.add(problemAnalyzerGenerator);
+
+		benchmarkGenerator = new MettelBenchmarkJavaClassFile(prefix, tableauPackage, nameSeparator);
+		tableauPackage.add(benchmarkGenerator);
+		
 		langPackage.add(new MettelTableauObjectFactoryJavaClassFile(prefix,langPackage));
 	}
 
@@ -142,11 +150,15 @@ public class MettelJavaPackageStructure {
 			
 			//added by tomas
 			randomExpressionPropertiesFile.appendSignature(sort);
+			problemAnalyzerGenerator.appendSignature(sort);
+			benchmarkGenerator.appendSignature(sort);
 		}
 		expressionGenerator.generateBody();
 		
 		//added by tomas
 		randomExpressionPropertiesFile.generateBody();
+		problemAnalyzerGenerator.generateBody();
+		benchmarkGenerator.generateBody();
 	}
 
 	public void appendConnectiveClass(String prefix, String sort, String name, String[] sorts, List<MettelToken> tokens, boolean equality){
@@ -159,8 +171,10 @@ public class MettelJavaPackageStructure {
 		expressionGenerator.appendSignature(sort, name, sorts);
 		
 		//added by tomas
-		//randomExpressionPropertiesFile.appendSignature(sort, name, sorts);
 		randomExpressionPropertiesFile.appendSignature(sort, name);
+		problemAnalyzerGenerator.appendSignature(sort, name, sorts);
+		//probably not needed and do like randomexpresionpropertiesfile?
+		benchmarkGenerator.appendSignature(sort, name, sorts);
 	}
 
 	/*public void appendLexer(String name, MettelANTLRHeader h, InputStream stream){
