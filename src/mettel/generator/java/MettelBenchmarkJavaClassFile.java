@@ -148,7 +148,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 			appendLine("try{");
 				incrementIndentLevel();
 				appendLine("parseCommandLineArguments(args);");
-				appendLine("File csvFile = new File(inDir + FILE_SEPARATOR + \"S4.csv\");");
+				appendLine("File csvFile = new File(inDir + FILE_SEPARATOR + \"" + prefix + ".csv\");");
 				appendLine("boolean fileExisted = false;");
 				appendLine("if (csvFile.exists()){");
 					incrementIndentLevel();

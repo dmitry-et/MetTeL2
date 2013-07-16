@@ -216,7 +216,7 @@ public class MettelProblemFile{
 	}
 	
 	private void makeBackupOldFile(){
-		File backupFile = new File(path.replace(".mtl", ".~mtl"));
+		File backupFile = new File(path.replace(".mtl", ".mtl~"));
 		if (backupFile.exists() && !backupFile.delete())
 			throw new MettelCoreRuntimeException("Couldn't delete old backup file");
 		
