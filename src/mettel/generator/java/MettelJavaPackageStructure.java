@@ -120,7 +120,7 @@ public class MettelJavaPackageStructure {
 		problemAnalyzerGenerator = new MettelProblemAnalyzerJavaClassFile(prefix, langPackage, nameSeparator);
 		langPackage.add(problemAnalyzerGenerator);
 
-		benchmarkGenerator = new MettelBenchmarkJavaClassFile(prefix, tableauPackage, nameSeparator);
+		benchmarkGenerator = new MettelBenchmarkJavaClassFile(prefix, tableauPackage, langPackage, nameSeparator);
 		tableauPackage.add(benchmarkGenerator);
 		
 		langPackage.add(new MettelTableauObjectFactoryJavaClassFile(prefix,langPackage));

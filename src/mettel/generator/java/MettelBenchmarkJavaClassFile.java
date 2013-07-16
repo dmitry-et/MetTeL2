@@ -11,6 +11,7 @@ import mettel.util.MettelJavaNames;
 public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 	private String prefix = "Mettel";
 	private String nameSeparator = NAME_SEPARATOR;
+	private MettelJavaPackage langPack = null; 
 	
 	private String mainConnective = null;
 	private String MainConnective = null;
@@ -32,10 +33,11 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 	
 	private Hashtable<String,ArrayList<Signature>> signatures = new Hashtable<String,ArrayList<Signature>>();
 
-	public MettelBenchmarkJavaClassFile(String prefix, MettelJavaPackage pack, String nameSeparator) {
+	public MettelBenchmarkJavaClassFile(String prefix, MettelJavaPackage pack, MettelJavaPackage langPack, String nameSeparator) {
 		super(prefix + "Benchmark", pack, "public", null, null);
 			this.prefix = prefix;
 			this.nameSeparator = nameSeparator;
+			this.langPack = langPack;
 	}
 
 	//TODO perhaps rename also repeating code everywhere with signature class
@@ -94,11 +96,11 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 		headings.appendEOL();
 		headings.appendLine("import au.com.bytecode.opencsv.CSVWriter;");
 		headings.appendEOL();
-		headings.appendLine("import " + prefix + ".language." + prefix + MainConnective + ';');
-		headings.appendLine("import " + prefix + ".language." + prefix + "Lexer;");
-		headings.appendLine("import " + prefix + ".language." + prefix + "Parser;");
-		headings.appendLine("import " + prefix + ".language." + prefix + "ProblemAnalyzer;");
-		headings.appendLine("import " + prefix + ".language." + prefix + "TableauObjectFactory;");
+		headings.appendLine("import " + langPack.path() + "." + prefix + MainConnective + ';');
+		headings.appendLine("import " + langPack.path() + "." + prefix + "Lexer;");
+		headings.appendLine("import " + langPack.path() + "." + prefix + "Parser;");
+		headings.appendLine("import " + langPack.path() + "." + prefix + "ProblemAnalyzer;");
+		headings.appendLine("import " + langPack.path() + "." + prefix + "TableauObjectFactory;");
 		headings.appendEOL();
 		headings.appendLine("import static mettel.util.MettelStrings.FILE_SEPARATOR;");
 	}
