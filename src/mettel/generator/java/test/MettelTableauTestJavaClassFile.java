@@ -137,8 +137,8 @@ appendLine("System.out.print(\"\"+counter+\". \"+fileName+\"...\");");
     	        		    appendLine("lexer = new "+prefix+"Lexer(in);");
     	        		    appendLine("tokens.setTokenSource(lexer);");
 
-    	        		    appendLine("ArrayList<"+prefix+MettelJavaNames.firstCharToUpperCase(sort)+
-    	        		    		"> list = new ArrayList<"+prefix+MettelJavaNames.firstCharToUpperCase(sort)+">();");
+    	        		    appendLine("ArrayList<"+prefix+MettelJavaNames.firstCharToUpperCase(sort, pStructure.nameSeparator())+
+    	        		    		"> list = new ArrayList<"+prefix+MettelJavaNames.firstCharToUpperCase(sort, pStructure.nameSeparator())+">();");
     	        		    appendLine("parser."+sort+"s(list);");
 
 //    	        		    appendLine("TreeSet<MettelAnnotatedExpression> annotated = new TreeSet<MettelAnnotatedExpression>();");
@@ -153,7 +153,7 @@ appendLine("System.out.print(\"\"+counter+\". \"+fileName+\"...\");");
 //
     	        		    }else{
     	        		    	appendLine("int branchBound = 0;");
-    	        		    	appendLine("for("+prefix+MettelJavaNames.firstCharToUpperCase(sort)+" e:list){");
+    	        		    	appendLine("for("+prefix+MettelJavaNames.firstCharToUpperCase(sort, pStructure.nameSeparator())+" e:list){");
     	        		    	incrementIndentLevel();
     	        		    		appendLine("branchBound += "+branchBound.replaceAll("%l", "e.length()")+';');
     	        		    	decrementIndentLevel();

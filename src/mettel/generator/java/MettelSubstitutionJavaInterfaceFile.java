@@ -26,12 +26,14 @@ import mettel.util.MettelJavaNames;
 public class MettelSubstitutionJavaInterfaceFile extends MettelJavaInterfaceFile {
 
 	private String prefix = "Mettel";
+	private String nameSeparator = "";
 
 	public MettelSubstitutionJavaInterfaceFile(String prefix,
-			MettelJavaPackage pack, String[] sorts) {
+			MettelJavaPackage pack, String[] sorts, String nameSeparator) {
 		super(prefix+"Substitution", pack,
 				new String[]{"MettelSubstitution"});//, prefix+"Replacement"});
 		this.prefix = prefix;
+		this.nameSeparator = nameSeparator;
 		body(sorts);
 	}
 
@@ -42,8 +44,8 @@ public class MettelSubstitutionJavaInterfaceFile extends MettelJavaInterfaceFile
 
 	private void body(String[] sorts){
 		for(String sort:sorts){
-			final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(sort);
-			appendLine(TYPE+" get"+MettelJavaNames.firstCharToUpperCase(sort)+'('+TYPE+"Variable e);");appendEOL();
+			final String TYPE = prefix+MettelJavaNames.firstCharToUpperCase(sort, nameSeparator);
+			appendLine(TYPE+" get"+MettelJavaNames.firstCharToUpperCase(sort, nameSeparator)+'('+TYPE+"Variable e);");appendEOL();
 //			appendLine("Iterator<"+TYPE+"> "+sort+"Iterator();");appendEOL();
 			appendLine("Map<"+TYPE+"Variable, "+TYPE+"> "+sort+"Map();");appendEOL();
 			appendLine("boolean append("+TYPE+"Variable e0, "+TYPE+" e1);");appendEOL();

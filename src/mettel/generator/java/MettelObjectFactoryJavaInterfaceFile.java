@@ -28,7 +28,7 @@ import static mettel.generator.MettelANTLRGrammarGeneratorDefaultOptions.NAME_SE
 public class MettelObjectFactoryJavaInterfaceFile extends MettelJavaInterfaceFile {
 
 	private String prefix = "Mettel";
-	
+
 	private String nameSeparator = NAME_SEPARATOR;
 	/**
 	 * @param name
@@ -62,16 +62,16 @@ public class MettelObjectFactoryJavaInterfaceFile extends MettelJavaInterfaceFil
 	}
 
 	public String methodSignature(String type, String name, String[] types){
-		final String ltype = name + MettelJavaNames.firstCharToUpperCase(type);
+		final String ltype = name + MettelJavaNames.firstCharToUpperCase(type, nameSeparator);
 		final String TYPE = prefix + MettelJavaNames.firstCharToUpperCase(ltype, nameSeparator);
 		final int SIZE = types.length;
 
 		StringBuilder b  = new StringBuilder();
 		if(SIZE > 0){
-			append(prefix+MettelJavaNames.firstCharToUpperCase(type) + " create" + MettelJavaNames.firstCharToUpperCase(ltype, nameSeparator) + '(');
-			append(prefix + MettelJavaNames.firstCharToUpperCase(types[0]) +" e0");
+			append(prefix+MettelJavaNames.firstCharToUpperCase(type, nameSeparator) + " create" + MettelJavaNames.firstCharToUpperCase(ltype, nameSeparator) + '(');
+			append(prefix + MettelJavaNames.firstCharToUpperCase(types[0], nameSeparator) +" e0");
 			for(int i = 1; i < SIZE; i++){
-				append(", " + prefix + MettelJavaNames.firstCharToUpperCase(types[i]) + " e" + i);
+				append(", " + prefix + MettelJavaNames.firstCharToUpperCase(types[i], nameSeparator) + " e" + i);
 			}
 			append(");");
 		}else if(SIZE == 0){
@@ -89,7 +89,7 @@ public class MettelObjectFactoryJavaInterfaceFile extends MettelJavaInterfaceFil
 
 	public void addVariableMethod(String type){
 		final String TYPE = type + "Variable";
-		appendLine(prefix + MettelJavaNames.firstCharToUpperCase(TYPE) + " create" + MettelJavaNames.firstCharToUpperCase(TYPE) + "(String name);");
+		appendLine(prefix + MettelJavaNames.firstCharToUpperCase(TYPE, nameSeparator) + " create" + MettelJavaNames.firstCharToUpperCase(TYPE, nameSeparator) + "(String name);");
 		appendEOL();
 	}
 
