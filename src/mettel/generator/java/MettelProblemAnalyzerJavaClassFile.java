@@ -244,6 +244,13 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 			appendLine('}');
 			appendEOL();
 			
+			appendLine("public int totalNumberOf" + Sort + "Connectives(){");
+				incrementIndentLevel();
+				appendLine("return " + sort + "ConnectivesOccurences.size();");
+				decrementIndentLevel();
+			appendLine('}');
+			appendEOL();
+			
 			appendLine("public HashMap<String, Integer> " + sort + "VariablesOccurences(){");
 				incrementIndentLevel();
 				appendLine("return " + sort + "VariablesOccurences;");
@@ -431,6 +438,28 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 		appendLine('}');
 		appendEOL();
 		
+		appendLine("private Integer totalNumberOfVariables = null;");
+		appendEOL();
+		appendLine("public int totalNumberOfVariables(){");
+			incrementIndentLevel();
+			appendLine("if (totalNumberOfVariables != null){");
+				incrementIndentLevel();
+				appendLine("return totalNumberOfVariables;");
+				decrementIndentLevel();
+			appendLine("}else{");
+				incrementIndentLevel();
+				appendLine("int sum = 0;");
+				for(String sort : signatures.keySet()){
+					final String Sort = MettelJavaNames.firstCharToUpperCase(sort, nameSeparator);
+					appendLine("sum += totalNumberOf" + Sort + "Variables();");
+				}
+				appendLine("return sum;");
+				decrementIndentLevel();
+			appendLine('}');
+			decrementIndentLevel();
+		appendLine('}');
+		appendEOL();
+		
 		appendLine("private Integer totalConnectivesOccurences = null;");
 		appendEOL();		
 		appendLine("public int totalConnectivesOccurences(){");
@@ -477,6 +506,29 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 		appendLine('}');
 		appendEOL();
 				
+		appendLine("private Integer totalNumberOfConnectives = null;");
+		appendEOL();
+		appendLine("public int totalNumberOfConnectives(){");
+			incrementIndentLevel();
+			appendLine("if (totalNumberOfConnectives != null){");
+				incrementIndentLevel();
+				appendLine("return totalNumberOfConnectives;");
+				decrementIndentLevel();
+			appendLine("}else{");
+				incrementIndentLevel();
+				appendLine("int sum = 0;");
+				for(String sort : signatures.keySet()){
+					final String Sort = MettelJavaNames.firstCharToUpperCase(sort, nameSeparator);
+					appendLine("sum += totalNumberOf" + Sort + "Connectives();");
+				}
+				appendLine("return sum;");
+				decrementIndentLevel();
+			appendLine('}');
+			decrementIndentLevel();
+		appendLine('}');
+		appendEOL();
+		
+		
 		appendLine("public int totalSymbolsMaxDepth(){");
 			incrementIndentLevel();
 			appendLine("return totalVariablesMaxDepth() > totalConnectivesMaxDepth() ? totalVariablesMaxDepth() : totalConnectivesMaxDepth();");
@@ -499,6 +551,7 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 				final String Sort = MettelJavaNames.firstCharToUpperCase(sort, nameSeparator);
 				appendLine("st.setProperty(\"" + MettelProblemAnalyzerDefaultPropertiesNames.sortVariablesNames(sort) + "\", variableNamesString(" + sort + "VariablesNames()));");
 				appendLine("st.setProperty(\"" + MettelProblemAnalyzerDefaultPropertiesNames.totalNumberOfSortVariables(sort) + "\", String.valueOf(totalNumberOf" + Sort + "Variables()));");
+				appendLine("st.setProperty(\"" + MettelProblemAnalyzerDefaultPropertiesNames.totalNumberOfSortConnectives(sort) + "\", String.valueOf(totalNumberOf" + Sort + "Connectives()));");
 				appendEOL();
 				
 				appendLine("for (Map.Entry<String, Integer> entry : " + sort + "VariablesOccurences().entrySet()){");
@@ -533,10 +586,12 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 			
 			appendLine("st.setProperty(\"" + MettelProblemAnalyzerDefaultPropertiesNames.TOTAL_VARIABLES_OCCURENCES + "\", String.valueOf(totalVariablesOccurences()));");
 			appendLine("st.setProperty(\"" + MettelProblemAnalyzerDefaultPropertiesNames.TOTAL_VARIABLES_MAX_DEPTH + "\", String.valueOf(totalVariablesMaxDepth()));");
+			appendLine("st.setProperty(\"" + MettelProblemAnalyzerDefaultPropertiesNames.TOTAL_NUMBER_OF_VARIABLES + "\", String.valueOf(totalNumberOfVariables()));");
 			appendEOL();
 			
 			appendLine("st.setProperty(\"" + MettelProblemAnalyzerDefaultPropertiesNames.TOTAL_CONNECTIVES_OCCURENCES + "\", String.valueOf(totalConnectivesOccurences()));");
 			appendLine("st.setProperty(\"" + MettelProblemAnalyzerDefaultPropertiesNames.TOTAL_CONNECTIVES_MAX_DEPTH + "\", String.valueOf(totalConnectivesMaxDepth()));");
+			appendLine("st.setProperty(\"" + MettelProblemAnalyzerDefaultPropertiesNames.TOTAL_NUMBER_OF_CONNECTIVES + "\", String.valueOf(totalNumberOfConnectives()));");
 			appendEOL();
 			
 			appendLine("st.setProperty(\"" + MettelProblemAnalyzerDefaultPropertiesNames.TOTAL_SYMBOLS_MAX_DEPTH + "\", String.valueOf(totalSymbolsMaxDepth()));");
