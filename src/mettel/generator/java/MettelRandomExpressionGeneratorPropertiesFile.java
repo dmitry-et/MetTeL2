@@ -6,8 +6,6 @@ package mettel.generator.java;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
-
 /**
  * @author alijevt1
  *
