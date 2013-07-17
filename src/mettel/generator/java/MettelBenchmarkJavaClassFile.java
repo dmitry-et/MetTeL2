@@ -394,8 +394,6 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 			i++;
 			appendLine("problemInfo[" + i + "] = pStat.getProperty(\"" + MettelProblemAnalyzerDefaultPropertiesNames.TOTAL_CONNECTIVES_MAX_DEPTH + "\");");
 			i++;
-			appendLine("problemInfo[" + i + "] = pStat.getProperty(\"" + MettelProblemAnalyzerDefaultPropertiesNames.TOTAL_SYMBOLS_OCCURENCES + "\");");
-			i++;
 			appendLine("problemInfo[" + i + "] = pStat.getProperty(\"" + MettelProblemAnalyzerDefaultPropertiesNames.TOTAL_SYMBOLS_MAX_DEPTH + "\");");
 			i++;
 			appendLine("problemInfo[" + i + "] = pStat.getProperty(\"" + MettelProblemAnalyzerDefaultPropertiesNames.TOTAL_SYMBOLS_MAX_LENGTH + "\");");
@@ -501,7 +499,6 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 		header.append("\"" + MettelProblemAnalyzerDefaultPropertiesNames.TOTAL_VARIABLES_MAX_DEPTH + "\", ");
 		header.append("\"" + MettelProblemAnalyzerDefaultPropertiesNames.TOTAL_CONNECTIVES_OCCURENCES + "\", ");
 		header.append("\"" + MettelProblemAnalyzerDefaultPropertiesNames.TOTAL_CONNECTIVES_MAX_DEPTH + "\", ");
-		header.append("\"" + MettelProblemAnalyzerDefaultPropertiesNames.TOTAL_SYMBOLS_OCCURENCES + "\", ");
 		header.append("\"" + MettelProblemAnalyzerDefaultPropertiesNames.TOTAL_SYMBOLS_MAX_DEPTH + "\", ");
 		header.append("\"" + MettelProblemAnalyzerDefaultPropertiesNames.TOTAL_SYMBOLS_MAX_LENGTH + "\"");
 		return header.toString();

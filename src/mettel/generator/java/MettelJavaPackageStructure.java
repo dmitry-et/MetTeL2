@@ -84,7 +84,7 @@ public class MettelJavaPackageStructure {
 		utilLangPackage = new MettelJavaPackage(base+".language.util");
 		
 		//added by tomas
-		utilLangPropertiesPackage = new MettelJavaPackage(base+".language.util.properties");
+		utilLangPropertiesPackage = new MettelJavaPackage("etc");
 		
 		testTableauPackage = new MettelJavaPackage(base+".tableau.test");
 	}

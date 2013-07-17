@@ -238,13 +238,13 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 				// read and set frequency for each sort's connective
 				for(Signature s:signatures.get(type)){
 					final String ltype = s.name + Type;
-					appendLine("g.set" + MettelJavaNames.firstCharToUpperCase(ltype, nameSeparator) + "Frequency(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortConnectiveFrequencyProperty(type, s.name) + "\", \"" + SORT_CONNECTIVE_FREQUENCY + "\")));");
+					appendLine("g.set" + MettelJavaNames.firstCharToUpperCase(ltype, nameSeparator) + "Frequency(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortConnectiveFrequencyProperty(type, s.name) + "\", \"" + SORT_CONNECTIVE_FREQUENCY + "\").trim()));");
 				}
 				appendEOL();
 				
 				// read and set variable frequency and depth for for each sort
-				appendLine("g.set" + Type + "VariableFrequency(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariableFrequencyProperty(type) + "\", \"" + SORT_VARIABLE_FREQUENCY +"\")));");
-				appendLine("g.setDepth" + Type + "(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariableDepthProperty(type) + "\", \"" + SORT_VARIABLE_DEPTH + "\")));");
+				appendLine("g.set" + Type + "VariableFrequency(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariableFrequencyProperty(type) + "\", \"" + SORT_VARIABLE_FREQUENCY +"\").trim()));");
+				appendLine("g.setDepth" + Type + "(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariableDepthProperty(type) + "\", \"" + SORT_VARIABLE_DEPTH + "\").trim()));");
 				appendEOL();
 				
 				// read and set set variables names for each sort
@@ -272,11 +272,11 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 				
 				// read and set variables number used for each sort
 				// must be set AFTER variables names
-				appendLine("g.set" + Type + "VariablesSize(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariablesSizeProperty(type) + "\", \"" + SORT_VARIABLES_NUMBER + "\")));");
+				appendLine("g.set" + Type + "VariablesSize(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariablesSizeProperty(type) + "\", \"" + SORT_VARIABLES_NUMBER + "\").trim()));");
 				appendEOL();
 				
 				// read and set how many times expression will be generated for each sort
-				appendLine("g.set" + Type + "TimesToRun(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortGenerateProperty(type) + "\", \"" + SORT_GENERATE + "\")));");
+				appendLine("g.set" + Type + "TimesToRun(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortGenerateProperty(type) + "\", \"" + SORT_GENERATE + "\").trim()));");
 				appendEOL();
 				
 				// read and set top connectives

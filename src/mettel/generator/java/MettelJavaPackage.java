@@ -53,7 +53,7 @@ public class MettelJavaPackage {
 		return file;
 	}
 
-	public void add(MettelJavaFile file){
+	public void add(MettelFile file){
 		files.add(file);
 	}
 

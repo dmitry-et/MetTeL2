@@ -56,8 +56,9 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 	
 	protected void imports(){
 		headings.appendEOL();
+		headings.appendLine("import java.io.InputStream;");
 		headings.appendLine("import java.io.IOException;");
-		headings.appendLine("import java.io.InputStream;");		
+		headings.appendLine("import java.io.FileInputStream;");		
 		headings.appendEOL();
 		headings.appendLine("import java.util.ArrayList;");
 		headings.appendLine("import java.util.Collections;");
@@ -94,23 +95,24 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 		
 		appendLine("public " + prefix + "ProblemAnalyzer(String problemFile) throws IOException, RecognitionException{");
 			incrementIndentLevel();
-			appendLine("CharStream in = new ANTLRFileStream(problemFile);");
-			appendLine("CommonTokenStream tokens = new CommonTokenStream();");
-			appendLine(prefix + "Parser parser = new " + prefix + "Parser(tokens);");
-			appendLine("tokens.setTokenSource(new " + prefix + "Lexer(in));");
-			appendLine("ArrayList<" + prefix + "Expression> list = parser.expressions();");
-			appendEOL();
-			
-			appendLine("for (" + prefix + "Expression expression : list){");
-				incrementIndentLevel();
-					appendLine("if (totalSymbolsMaxLength < expression.length()){");
-						incrementIndentLevel();
-							appendLine("totalSymbolsMaxLength = expression.length();");
-						decrementIndentLevel();
-					appendLine('}');
-					appendLine("determineSymbol(expression);");
-				decrementIndentLevel();
-			appendLine('}');
+			appendLine("this(new FileInputStream(problemFile));");
+//			appendLine("CharStream in = new ANTLRFileStream(problemFile);");
+//			appendLine("CommonTokenStream tokens = new CommonTokenStream();");
+//			appendLine(prefix + "Parser parser = new " + prefix + "Parser(tokens);");
+//			appendLine("tokens.setTokenSource(new " + prefix + "Lexer(in));");
+//			appendLine("ArrayList<" + prefix + "Expression> list = parser.expressions();");
+//			appendEOL();
+//			
+//			appendLine("for (" + prefix + "Expression expression : list){");
+//				incrementIndentLevel();
+//					appendLine("if (totalSymbolsMaxLength < expression.length()){");
+//						incrementIndentLevel();
+//							appendLine("totalSymbolsMaxLength = expression.length();");
+//						decrementIndentLevel();
+//					appendLine('}');
+//					appendLine("determineSymbol(expression);");
+//				decrementIndentLevel();
+//			appendLine('}');
 			decrementIndentLevel();
 		appendLine('}');
 		appendEOL();
@@ -474,17 +476,10 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 			decrementIndentLevel();
 		appendLine('}');
 		appendEOL();
-		
-		appendLine("public int totalSymbolsOccurences(){");
-			incrementIndentLevel();
-			appendLine("return totalVariablesOccurences() + totalConnectivesOccurences();");
-			decrementIndentLevel();
-		appendLine('}');
-		appendEOL();
-		
+				
 		appendLine("public int totalSymbolsMaxDepth(){");
 			incrementIndentLevel();
-			appendLine("return totalVariablesMaxDepth() + totalConnectivesMaxDepth();");
+			appendLine("return totalVariablesMaxDepth() > totalConnectivesMaxDepth() ? totalVariablesMaxDepth() : totalConnectivesMaxDepth();");
 			decrementIndentLevel();
 		appendLine('}');
 		appendEOL();
@@ -544,7 +539,6 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 			appendLine("st.setProperty(\"" + MettelProblemAnalyzerDefaultPropertiesNames.TOTAL_CONNECTIVES_MAX_DEPTH + "\", String.valueOf(totalConnectivesMaxDepth()));");
 			appendEOL();
 			
-			appendLine("st.setProperty(\"" + MettelProblemAnalyzerDefaultPropertiesNames.TOTAL_SYMBOLS_OCCURENCES + "\", String.valueOf(totalSymbolsOccurences()));");
 			appendLine("st.setProperty(\"" + MettelProblemAnalyzerDefaultPropertiesNames.TOTAL_SYMBOLS_MAX_DEPTH + "\", String.valueOf(totalSymbolsMaxDepth()));");
 			appendLine("st.setProperty(\"" + MettelProblemAnalyzerDefaultPropertiesNames.TOTAL_SYMBOLS_MAX_LENGTH + "\", String.valueOf(totalSymbolsMaxLength()));");
 			appendEOL();
@@ -563,7 +557,7 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 				incrementIndentLevel();
 				appendLine("if(notStart){");
 					incrementIndentLevel();
-					appendLine("variableNames.append(' ');");
+					appendLine("variableNames.append(\", \");");
 					decrementIndentLevel();
 				appendLine("}else{");
 					incrementIndentLevel();

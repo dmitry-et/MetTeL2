@@ -49,7 +49,13 @@ public class MettelFile extends MettelIndentedStringBuilder{
 		this.extension = extension;
 		this.pack = pack;
 	}
-
+	
+	protected MettelFile(String fileName, String extension, MettelJavaPackage pack, String[] header) {
+		this(fileName,extension,pack);
+		if(header != null)
+			this.header = new String[header.length];
+		System.arraycopy(header, 0, this.header, 0, header.length);
+	}
 	//private StringBuilder content = null; //new StringBuilder();
 
 	/* (non-Javadoc)
