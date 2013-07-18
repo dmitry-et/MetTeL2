@@ -145,6 +145,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 		appendLine("");
 
 		//TODO close properly streams in finally
+		appendLine("@SuppressWarnings(\"deprecation\")");
 		appendLine("public static void main(String[] args) throws IOException{");
 			incrementIndentLevel();
 			appendLine("try{");
