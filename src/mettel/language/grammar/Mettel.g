@@ -33,7 +33,7 @@ tokens{
 	ALL			=	'all';
 	PROBLEM		=	'problem';
 	SYNTAX		=	'syntax';
-	SEMANTICS		=	'semantics';
+	SEMANTICS	=	'semantics';
 	TABLEAU		=	'tableau';
 
 	SORT			=	'sort';
@@ -51,6 +51,7 @@ tokens{
 @header{
 package mettel.language;
 
+import mettel.language.MettelParserException;
 import mettel.generator.MettelEqualityKeywords;
 }
 //Java imports
@@ -81,6 +82,7 @@ public MettelParser(TokenStream input, RecognizerSharedState state, MettelEquali
 *****************************************************************************************/
 specification
     returns [MettelSpecification spec = null]
+//throws MettelParserException
     :
     SPECIFICATION
     p = path
@@ -129,9 +131,13 @@ path
 
 block
     [MettelSpecification spec]
+//throws MettelParserException
     :
     (syn  = syntax[spec]
      {spec.addSyntax(syn);}
+     |
+     tab = tableau[spec]
+     {spec.addTableau(tab);}
     )
     ;
 
@@ -141,7 +147,7 @@ syntax[MettelSpecification spec]
     SYNTAX id = IDENTIFIER
     	(paths = extendsBlock)?
     	{
-    	syn = new MettelSyntax(id.getText(), spec.get(paths));
+    	syn = new MettelSyntax(id.getText(), spec.getSyntaxes(paths));
     	}
     	LBRACE
 		    (
@@ -285,6 +291,25 @@ charOrStringLiteral
     l = STRINGLITERAL
     {literal = new MettelStringLiteral(l.getText());}
     ;
+
+tableau[MettelSpecification spec]
+returns [MettelTableau tab = null]
+//throws MettelParserException
+	:
+	TABLEAU	 id = IDENTIFIER
+    	(paths = extendsBlock)?
+    	{
+    	String name = id.getText();
+    	if(spec.getSyntax(name) == null)
+    		throw new MettelParserException("The syntax "+ name + " is undefined", id.getLine(), id.getCharPositionInLine());
+    	tab = new MettelTableau(id.getText(), spec.getTableaux(paths));
+    	}
+    	//(SYNTAX synId = IDENTIFIER)?
+		LBRACE
+			t = (~RBRACE)*
+			{tab.setContent(t.getText());}
+    	RBRACE
+	;
 
 semantics
 	:
@@ -711,6 +736,12 @@ LBRACE
 RBRACE
     :   '}'
     ;
+
+/*BLOCK
+	:
+	(~RBRACE)*
+	;
+*/
 
 LBRACKET
     :   '['

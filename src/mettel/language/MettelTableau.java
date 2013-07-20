@@ -16,36 +16,54 @@
  */
 package mettel.language;
 
-import org.antlr.runtime.IntStream;
-import org.antlr.runtime.RecognitionException;
+import java.util.List;
 
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public class MettelRecognitionException extends RecognitionException {
+public class MettelTableau implements MettelBlock {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = -6523022868000940084L;
+	private String name = null;
 
-	/**
-	 *
-	 */
-	public MettelRecognitionException() {}
+	private List<MettelTableau> parents = null;
 
-	/**
-	 * @param input
-	 */
-	public MettelRecognitionException(IntStream input) {
-		super(input);
-		// TODO Auto-generated constructor stub
+	public String name(){
+		return name;
 	}
 
-	public String toString(){
-		return "at line "+line+" at position "+charPositionInLine;
+	public List<MettelTableau> parents(){
+		return parents;
+	}
+
+	/*TODO implement hierarchical extension mechanism
+     */
+
+	private String content = null;
+
+	public String content(){
+		return content;
+	}
+
+	void setContent(String content){
+		this.content = content;
+	}
+
+	/**
+	 *
+	 */
+    @SuppressWarnings("unused")
+	private MettelTableau(){};
+
+	MettelTableau(String name) {
+		this(name, null);
+	}
+
+	MettelTableau(String name, List<MettelTableau> parents) {
+		super();
+		this.name = name;
+		this.parents = parents;
 	}
 
 }
