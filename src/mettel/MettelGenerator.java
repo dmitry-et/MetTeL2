@@ -307,7 +307,7 @@ public class MettelGenerator {
 		//arguments.add("-verbose");
 		arguments.add("-d");
 		arguments.add(dir.getAbsolutePath());
-		arguments.addAll(listFileNames(src));
+		arguments.addAll(listFileNames(src)); 
 
 		OutputStream out0 = System.out;
 		if(outFileName != null){
@@ -375,11 +375,13 @@ public class MettelGenerator {
 		attributes.put(Attributes.Name.CLASS_PATH, "mettel2-core.jar antlr3-runtime.jar");
 
 		JarOutputStream jar = new JarOutputStream(new FileOutputStream(path+".jar"), manifest);
-		addToJar(dir.getPath(),dir,jar);
-
-		addTableauToJar(path, tableau,jar);
-		jar.close();
-
+		try{
+			addToJar(dir.getPath(),dir,jar);
+	
+			addTableauToJar(path, tableau,jar);
+		}finally{
+			jar.close();
+		}
 		report("The jar is made.");
 
 		deleteFiles(dir);
@@ -391,51 +393,57 @@ public class MettelGenerator {
 		JarEntry entry = new JarEntry(path+"/tableau/calculus");
 		entry.setTime(source.lastModified());
 		target.putNextEntry(entry);
-		BufferedInputStream in = new BufferedInputStream(new FileInputStream(source));
-
-		byte[] buffer = new byte[1024];
-		while(true){
-			int count = in.read(buffer);
-			if(count == -1) break;
-			target.write(buffer, 0, count);
+		try{
+			BufferedInputStream in = new BufferedInputStream(new FileInputStream(source));
+			try{
+				byte[] buffer = new byte[1024];
+				while(true){
+					int count = in.read(buffer);
+					if(count == -1) break;
+					target.write(buffer, 0, count);
+				}
+			}finally{
+				in.close();
+			}
+		}finally{
+			target.closeEntry();
 		}
-		target.closeEntry();
-		in.close();
 	}
 
 	private static void addToJar(String prefix, File source, JarOutputStream target) throws IOException{
-		BufferedInputStream in = null;
+		
+		String name = source.getPath().replace(prefix,"").replace(File.separator, "/");
+		if(name.startsWith("/")) name = name.substring(1);
+		
+		if (source.isDirectory()){
+			if(!name.isEmpty()){
+				if(!name.endsWith("/")) name += "/";
+				JarEntry entry = new JarEntry(name);
+				entry.setTime(source.lastModified());
+				target.putNextEntry(entry);
+				target.closeEntry();
+			}
+			for(File nestedFile: source.listFiles()) addToJar(prefix,nestedFile, target);
+			return;
+		}
+
+		JarEntry entry = new JarEntry(name);
+		entry.setTime(source.lastModified());
+		target.putNextEntry(entry);
 		try{
-			if (source.isDirectory()){
-				String name = source.getPath().replace(prefix,"").replace(File.separator, "/");
-				if(!name.isEmpty()){
-					if(!name.endsWith("/")) name += "/";
-					if(name.startsWith("/")) name = name.substring(1);
-					JarEntry entry = new JarEntry(name);
-					entry.setTime(source.lastModified());
-					target.putNextEntry(entry);
-					target.closeEntry();
+			BufferedInputStream in = new BufferedInputStream(new FileInputStream(source));
+			try{
+				byte[] buffer = new byte[1024];
+				while(true){
+					int count = in.read(buffer);
+					if(count == -1) break;
+					target.write(buffer, 0, count);
 				}
-				for(File nestedFile: source.listFiles()) addToJar(prefix,nestedFile, target);
-				return;
+			}finally{
+				in.close();
 			}
-
-			String name = source.getPath().replace(prefix,"").replace(File.separator, "/");
-			if(name.startsWith("/")) name = name.substring(1);
-			JarEntry entry = new JarEntry(name);
-			entry.setTime(source.lastModified());
-			target.putNextEntry(entry);
-			in = new BufferedInputStream(new FileInputStream(source));
-
-			byte[] buffer = new byte[1024];
-			while(true){
-				int count = in.read(buffer);
-				if(count == -1) break;
-				target.write(buffer, 0, count);
-			}
-			target.closeEntry();
 		}finally{
-			if(in != null) in.close();
+			target.closeEntry();
 		}
 	}
 
