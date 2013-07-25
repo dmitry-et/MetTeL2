@@ -76,6 +76,10 @@ public MettelParser(TokenStream input, RecognizerSharedState state, MettelEquali
 }
 }
 
+@lexer::members{
+	int tableauOrSemanticsBlock = -1;
+}
+
 
 /*****************************************************************************************
                                 Parser section
@@ -296,24 +300,38 @@ tableau[MettelSpecification spec]
 returns [MettelTableau tab = null]
 //throws MettelParserException
 	:
-	TABLEAU	 id = IDENTIFIER
+	TABLEAU	 synName = syntaxName id = IDENTIFIER
     	(paths = extendsBlock)?
     	{
     	String name = id.getText();
-    	if(spec.getSyntax(name) == null)
-    		throw new MettelParserException("The syntax "+ name + " is undefined", id.getLine(), id.getCharPositionInLine());
-    	tab = new MettelTableau(id.getText(), spec.getTableaux(paths));
+    	if(synName == null) synName = name;
+    	MettelSyntax syntax = spec.getSyntax(synName); 
+    	if(syntax == null)
+    		throw new MettelParserException("The syntax "+ synName + " is undefined", id.getLine(), id.getCharPositionInLine());
+    	tab = new MettelTableau(name, syntax, spec.getTableaux(paths));
     	}
-    	//(SYNTAX synId = IDENTIFIER)?
+    	//(IN SYNTAX? synId = IDENTIFIER)?
 		LBRACE
-			t = (~RBRACE)*
+			t = BLOCK
 			{tab.setContent(t.getText());}
     	RBRACE
 	;
 
+fragment
+syntaxName
+returns [String name = null]
+	:
+	(
+	LPAREN
+		id = IDENTIFIER
+		{name = id.getText();}
+	RPAREN
+	)?
+	;
+	
 semantics
 	:
-	SEMANTICS IDENTIFIER (EXTENDS path)?
+	SEMANTICS synName = syntaxName IDENTIFIER (EXTENDS path)?
     	LBRACE
 		    semanticOperator?
 		    (SEMI
@@ -508,219 +526,14 @@ LINE_COMMENT
             }
     ;
 
-/*
-ABSTRACT
-    :   'abstract'
-    ;
+TABLEAU
+	:
+	'tableau'
+	{
+	tableauOrSemanticsBlock = 0;
+	}
+	;
 
-ASSERT
-    :   'assert'
-    ;
-
-BOOLEAN
-    :   'boolean'
-    ;
-
-BREAK
-    :   'break'
-    ;
-
-BYTE
-    :   'byte'
-    ;
-
-CASE
-    :   'case'
-    ;
-
-CATCH
-    :   'catch'
-    ;
-
-CHAR
-    :   'char'
-    ;
-
-CLASS
-    :   'class'
-    ;
-
-CONST
-    :   'const'
-    ;
-
-CONTINUE
-    :   'continue'
-    ;
-
-DEFAULT
-    :   'default'
-    ;
-
-DO
-    :   'do'
-    ;
-
-DOUBLE
-    :   'double'
-    ;
-
-ELSE
-    :   'else'
-    ;
-
-ENUM
-    :   'enum'
-    ;
-
-EXTENDS
-    :   'extends'
-    ;
-
-FINAL
-    :   'final'
-    ;
-
-FINALLY
-    :   'finally'
-    ;
-
-FLOAT
-    :   'float'
-    ;
-
-FOR
-    :   'for'
-    ;
-
-GOTO
-    :   'goto'
-    ;
-
-IF
-    :   'if'
-    ;
-
-IMPLEMENTS
-    :   'implements'
-    ;
-
-IMPORT
-    :   'import'
-    ;
-
-INSTANCEOF
-    :   'instanceof'
-    ;
-
-INT
-    :   'int'
-    ;
-
-INTERFACE
-    :   'interface'
-    ;
-
-LONG
-    :   'long'
-    ;
-
-NATIVE
-    :   'native'
-    ;
-
-NEW
-    :   'new'
-    ;
-
-PACKAGE
-    :   'package'
-    ;
-
-PRIVATE
-    :   'private'
-    ;
-
-PROTECTED
-    :   'protected'
-    ;
-
-PUBLIC
-    :   'public'
-    ;
-
-RETURN
-    :   'return'
-    ;
-
-SHORT
-    :   'short'
-    ;
-
-STATIC
-    :   'static'
-    ;
-
-STRICTFP
-    :   'strictfp'
-    ;
-
-SUPER
-    :   'super'
-    ;
-
-SWITCH
-    :   'switch'
-    ;
-
-SYNCHRONIZED
-    :   'synchronized'
-    ;
-
-THIS
-    :   'this'
-    ;
-
-THROW
-    :   'throw'
-    ;
-
-THROWS
-    :   'throws'
-    ;
-
-TRANSIENT
-    :   'transient'
-    ;
-
-TRY
-    :   'try'
-    ;
-
-VOID
-    :   'void'
-    ;
-
-VOLATILE
-    :   'volatile'
-    ;
-
-WHILE
-    :   'while'
-    ;
-
-TRUE
-    :   'true'
-    ;
-
-FALSE
-    :   'false'
-    ;
-
-NULL
-    :   'null'
-    ;
-*/
 LPAREN
     :   '('
     ;
@@ -731,17 +544,24 @@ RPAREN
 
 LBRACE
     :   '{'
+    {
+    if(tableauOrSemanticsBlock == 0) tableauOrSemanticsBlock = 1;
+    }
     ;
 
 RBRACE
     :   '}'
+    {
+    if(tableauOrSemanticsBlock == 1) tableauOrSemanticsBlock = -1;
+    }
     ;
 
-/*BLOCK
+BLOCK
 	:
-	(~RBRACE)*
+	'{'
+	'}'
+	{tableauOrSemanticsBlock == 1}? => (~'}')*
 	;
-*/
 
 LBRACKET
     :   '['

@@ -26,6 +26,8 @@ import java.util.List;
 public class MettelTableau implements MettelBlock {
 
 	private String name = null;
+	
+	private MettelSyntax syntax = null;
 
 	private List<MettelTableau> parents = null;
 
@@ -33,6 +35,10 @@ public class MettelTableau implements MettelBlock {
 		return name;
 	}
 
+	public MettelSyntax syntax(){
+		return syntax;
+	}
+	
 	public List<MettelTableau> parents(){
 		return parents;
 	}
@@ -56,13 +62,14 @@ public class MettelTableau implements MettelBlock {
     @SuppressWarnings("unused")
 	private MettelTableau(){};
 
-	MettelTableau(String name) {
-		this(name, null);
+	MettelTableau(String name, MettelSyntax syntax) {
+		this(name, syntax, null);
 	}
 
-	MettelTableau(String name, List<MettelTableau> parents) {
+	MettelTableau(String name, MettelSyntax syntax, List<MettelTableau> parents) {
 		super();
 		this.name = name;
+		this.syntax = syntax;
 		this.parents = parents;
 	}
 
