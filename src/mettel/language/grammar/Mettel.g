@@ -311,10 +311,10 @@ returns [MettelTableau tab = null]
     	tab = new MettelTableau(name, syntax, spec.getTableaux(paths));
     	}
     	//(IN SYNTAX? synId = IDENTIFIER)?
-		LBRACE
+		//LBRACE
 			t = BLOCK
 			{tab.setContent(t.getText());}
-    	RBRACE
+    	//RBRACE
 	;
 
 fragment
@@ -559,8 +559,8 @@ RBRACE
 BLOCK
 	:
 	'{'
+	(options {greedy=false;} : . )*
 	'}'
-	{tableauOrSemanticsBlock == 1}? => (~'}')*
 	;
 
 LBRACKET
