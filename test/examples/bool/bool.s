@@ -13,3 +13,11 @@ syntax boolean{
 	formula	equivalence = formula '<->' formula;
 
 }
+
+tableau(boolean) bt{start
+
+jokarnyj babaj
+
+solnyshko lesnoje
+
+end}

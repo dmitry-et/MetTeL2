@@ -40,6 +40,8 @@ tokens{
 	EXTENDS		=	'extends';
 	ANTLR			=	'antlr';
 
+//	BLOCK;
+
 /*	PREDICATE   =   'predicate'; I think, it will be easy to determine the type of any symbol from its context
 	FUNCTION    =   'function';
 	CONSTANT    =   'constant';
@@ -77,7 +79,7 @@ public MettelParser(TokenStream input, RecognizerSharedState state, MettelEquali
 }
 
 @lexer::members{
-	int tableauOrSemanticsBlock = -1;
+	boolean futureBlock = false;
 }
 
 
@@ -305,7 +307,7 @@ returns [MettelTableau tab = null]
     	{
     	String name = id.getText();
     	if(synName == null) synName = name;
-    	MettelSyntax syntax = spec.getSyntax(synName); 
+    	MettelSyntax syntax = spec.getSyntax(synName);
     	if(syntax == null)
     		throw new MettelParserException("The syntax "+ synName + " is undefined", id.getLine(), id.getCharPositionInLine());
     	tab = new MettelTableau(name, syntax, spec.getTableaux(paths));
@@ -313,7 +315,9 @@ returns [MettelTableau tab = null]
     	//(IN SYNTAX? synId = IDENTIFIER)?
 		//LBRACE
 			t = BLOCK
-			{tab.setContent(t.getText());}
+			{
+			tab.setContent(t.getText());
+			}
     	//RBRACE
 	;
 
@@ -328,7 +332,7 @@ returns [String name = null]
 	RPAREN
 	)?
 	;
-	
+
 semantics
 	:
 	SEMANTICS synName = syntaxName IDENTIFIER (EXTENDS path)?
@@ -530,9 +534,10 @@ TABLEAU
 	:
 	'tableau'
 	{
-	tableauOrSemanticsBlock = 0;
+	futureBlock = true;
 	}
 	;
+
 
 LPAREN
     :   '('
@@ -544,24 +549,45 @@ RPAREN
 
 LBRACE
     :   '{'
-    {
-    if(tableauOrSemanticsBlock == 0) tableauOrSemanticsBlock = 1;
-    }
+    	(
+    	{futureBlock}? =>
+    	(
+    	{
+    	_type = BLOCK;
+    	state.tokenStartCharIndex = getCharIndex();
+    	}
+		(options{greedy=false;} : . )*
+		{setText(getText());}
+		'}'
+		{futureBlock = false;}
+    	)
+    	)?
+//    {
+//    if(tableauOrSemanticsBlock == 0) tableauOrSemanticsBlock = 1;
+//    }
     ;
 
 RBRACE
     :   '}'
-    {
-    if(tableauOrSemanticsBlock == 1) tableauOrSemanticsBlock = -1;
-    }
+//    {
+//    if(tableauOrSemanticsBlock == 1) tableauOrSemanticsBlock = -1;
+//    }
     ;
 
 BLOCK
 	:
-	'{'
-	(options {greedy=false;} : . )*
-	'}'
 	;
+
+/*BLOCK
+	:
+	LBRACE
+	{state.tokenStartCharIndex = getCharIndex();}
+	(options{greedy=false;} : . )*
+	{setText(getText());}
+	RBRACE
+	;
+*/
+
 
 LBRACKET
     :   '['
