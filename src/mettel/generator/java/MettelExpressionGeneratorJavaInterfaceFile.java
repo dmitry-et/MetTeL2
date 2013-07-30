@@ -1,6 +1,6 @@
 /**
  * MetTeL is a tableau prover generator.
- * Copyright (C) 2009-2011 Dmitry Tishkovsky
+ * Copyright (C) 2009-2013 Dmitry Tishkovsky
  *
  * This file is part of MetTeL.
  *

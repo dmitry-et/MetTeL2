@@ -23,11 +23,9 @@ package mettel.generator.java;
 
 
 
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import mettel.core.MettelCoreRuntimeException;
 import mettel.util.MettelJavaNames;
 
 import static mettel.generator.MettelANTLRGrammarGeneratorDefaultOptions.NAME_SEPARATOR;
