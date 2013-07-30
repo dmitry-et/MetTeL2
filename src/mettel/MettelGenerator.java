@@ -324,7 +324,7 @@ public class MettelGenerator {
 			report("Compilation failed.");
 			return false;
 		}
-		out0.flush(); err0.flush();
+		out0.flush(); err0.flush();//TODO: copy resource files into classes dir
 
 		report("I am verifying the tableau calculus specification.");
 
