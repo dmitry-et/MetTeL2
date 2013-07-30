@@ -17,9 +17,15 @@
 package mettel.language;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+
+import mettel.generator.MettelANTLRGrammarGeneratorProperties;
+import mettel.generator.antlr.MettelANTLRStandardGrammar;
+import mettel.generator.java.MettelJavaPackageStructure;
+import mettel.util.MettelJavaNames;
 
 import static mettel.util.MettelStrings.LINE_SEPARATOR;
 
@@ -293,54 +299,30 @@ public class MettelSyntax implements MettelBlock {
 		return list;
 	}
 
-//	/**
-//	 * @return the statements
-//	 */
-//	ArrayList<MettelBNFStatement> statements() {
-//		return statements;
-//	}
+	public void process(MettelJavaPackageStructure pStructure, MettelANTLRGrammarGeneratorProperties properties){
+		unravel();
+		final String NAME = MettelJavaNames.firstCharToUpperCase(name);
 
-	/*TODO implement hierarchical extension mechanism
-	 *
-	void unravel(){
-		while(parent!= null){
-			sorts.addAll(0,parent.sorts);
-			statements.addAll(0,parent.statements);
-			parent = parent.parent();
+		pStructure.appendStandardClasses(NAME);
+		pStructure.appendStandardLanguageClasses(name, NAME, properties.nameSeparator);
+
+		MettelANTLRStandardGrammar grammar =
+				new MettelANTLRStandardGrammar(NAME, pStructure.grammarPackage(name).path(), properties.grammarOptions);
+
+		String[] sortStrings = new String[sorts.size()];
+		int i = 0;
+		for(MettelSort sort:sorts){
+			sortStrings[i++] = sort.name();
+			processSort(grammar,sort);
+			processBNFs(grammar,pStructure,sort,syn.getBNFs(sort));
 		}
+		pStructure.appendStandardLanguageClasses(name, NAME, sortStrings, properties.branchBound);
+
+		grammar.addRule(makeANTLRExpressionListRule(NAME));
+		grammar.addRule(makeANTLRExpressionRule(NAME, sorts));
+		grammar.addRule(makeANTLRTableauRule(grammar.name()));
+		grammar.addRule(makeANTLRTableauCalculusRule(grammar.name()));
+
+		pStructure.appendParser(name, grammar);
 	}
-	*/
-
-	/**
-	 *
-	 */
-//	void generateParser(PrintWriter out){
-//		//TODO header
-//		for(MettelSort sort:bnfs.keySet()){
-//			ArrayList<MettelBNFStatement> statements = bnfs.get(sort);
-//			String nodeName = sort.name()+"Primitive";
-//			out.println(nodeName);
-//			out.println(':');
-//				out.println("IDENTIFIER");
-//			out.println(';');
-//			int i = 0;
-//			for(MettelBNFStatement s:statements){
-//				if(i == 0){
-//					//identifier
-//					so = s;
-//				}else{
-//					buf.append(LINE_SEPARATOR);
-//					buf.append("\t| ");
-//				}
-//				s.toBuffer(buf);
-//				i++;
-//			}
-//			if(i > 0){
-//				buf.append(';');
-//				buf.append(LINE_SEPARATOR);
-//			}
-//		}
-//		//TODO footer
-//	}
-
 }

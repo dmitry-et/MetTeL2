@@ -48,10 +48,12 @@ import static mettel.util.MettelStrings.BASIC_STRING;
 public class MettelANTLRGrammarGenerator {
 
 	@SuppressWarnings("unused")
-	private MettelANTLRGrammarGenerator(){ spec = null; properties = null;}
+	private MettelANTLRGrammarGenerator(){ spec = null; properties = null; pStructure = null;}
 
 	private final MettelSpecification spec;
 	private final MettelANTLRGrammarGeneratorProperties properties;
+	private final MettelJavaPackageStructure pStructure;
+
 	/**
 	 *
 	 */
@@ -59,6 +61,7 @@ public class MettelANTLRGrammarGenerator {
 		super();
 		this.spec = spec;
 		this.properties = (properties == null)? new MettelANTLRGrammarGeneratorProperties() : properties;
+		this.pStructure = new MettelJavaPackageStructure(spec.path());
 	}
 
 /*	//TODO use of output path
@@ -492,12 +495,10 @@ public class MettelANTLRGrammarGenerator {
 	/**
 	 *
 	 */
-	public Collection<MettelJavaPackageStructure> processSyntaxes() {
-		ArrayList<MettelJavaPackageStructure> grammars = new ArrayList<MettelJavaPackageStructure>();
+	public void processSyntaxes() {
 		for(MettelSyntax syn:spec.syntaxes()){
-			grammars.add(processSyntax(syn.name()));
+			syn.process(this.pStructure);
 		}
-		return grammars;
 	}
 
 }
