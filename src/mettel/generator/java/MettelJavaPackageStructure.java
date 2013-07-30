@@ -16,19 +16,12 @@
  */
 package mettel.generator.java;
 
-//import static mettel.util.MettelStrings.GRAMMAR_STRING;
-//import static mettel.util.MettelStrings.LEXER_STRING;
-
-
-//import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
-//import java.io.InputStream;
-//import java.io.InputStreamReader;
 
 import mettel.generator.antlr.MettelANTLRGrammar;
 import mettel.language.MettelToken;
-//import mettel.util.MettelJavaNames;
 
 import mettel.generator.java.test.MettelParserTestJavaClassFile;
 import mettel.generator.java.test.MettelTableauTestJavaClassFile;
@@ -45,19 +38,10 @@ public class MettelJavaPackageStructure {
 	@SuppressWarnings("unused")
 	private MettelJavaPackageStructure(){}
 
-	private MettelJavaPackage basePackage = null, grammarPackage = null, langPackage = null, testLangPackage = null, testTableauPackage = null, tableauPackage = null, utilLangPackage = null;
-	// added by tomas
-	private MettelJavaPackage utilLangPropertiesPackage = null;
+	private MettelJavaPackage basePackage = null;
+	private MettelJavaPackage etcPackage = null;
 	
-	
-	private MettelObjectFactoryJavaInterfaceFile iFactory = null;
-	private MettelObjectFactoryJavaClassFile factory = null;
-	private MettelExpressionGeneratorJavaInterfaceFile iExpressionGenerator = null;
-	private MettelRandomExpressionGeneratorJavaClassFile expressionGenerator = null;
-
-	// added by tomas
 	private MettelRandomExpressionGeneratorPropertiesFile randomExpressionPropertiesFile = null;
-	private MettelProblemAnalyzerJavaClassFile problemAnalyzerGenerator = null;
 	private MettelBenchmarkJavaClassFile benchmarkGenerator = null;
 	
 	private String nameSeparator = NAME_SEPARATOR;
@@ -65,36 +49,86 @@ public class MettelJavaPackageStructure {
 	public String nameSeparator(){
 		return nameSeparator;
 	}
-//
-//	private MettelTableauObjectFactoryJavaClassFile tfactory = null;
 
-	//private MettelParserTestJavaClassFile testFile = null;
+	private class LanguagePackages{
+		
+		private LanguagePackages(String name){
+			String path = basePackage.path()+".language."+name;
+			
+			grammarPackage = new MettelJavaPackage(path);
+			langPackage = grammarPackage;
 
+			testLangPackage = new MettelJavaPackage(path+".test");
+			utilLangPackage = new MettelJavaPackage(path+".util");
+		}
+		
+		private MettelJavaPackage grammarPackage = null, langPackage = null, testLangPackage = null, utilLangPackage = null;
+		
+		private MettelObjectFactoryJavaInterfaceFile iFactory = null;
+		private MettelObjectFactoryJavaClassFile factory = null;
+		private MettelExpressionGeneratorJavaInterfaceFile iExpressionGenerator = null;
+		private MettelRandomExpressionGeneratorJavaClassFile expressionGenerator = null;
+		private MettelProblemAnalyzerJavaClassFile problemAnalyzer = null;
+	}
+	
+	private HashMap<String,LanguagePackages> langPacks = new HashMap<String,LanguagePackages>();
+
+	public LanguagePackages initLanguage(String name){
+		LanguagePackages packs = langPacks.get(name);
+		if(packs == null){
+			packs = new LanguagePackages(name);
+			langPacks.put(name, packs);
+		}
+		return packs;
+	}
+	
+    private class TableauPackages{
+		
+		private TableauPackages(String name){
+			String path = basePackage.path()+".tableau."+name;
+					
+			tableauPackage = new MettelJavaPackage(path);
+			testTableauPackage = new MettelJavaPackage(path+".test");
+		}
+		
+		private MettelJavaPackage testTableauPackage = null, tableauPackage = null;
+		MettelBenchmarkJavaClassFile benchmark = null;
+		
+	}
+	
+	private HashMap<String,TableauPackages> tabPacks = new HashMap<String,TableauPackages>();
+
+	public TableauPackages initTableau(String name){
+		TableauPackages packs = tabPacks.get(name);
+		if(packs == null){
+			packs = new TableauPackages(name);
+			tabPacks.put(name, packs);
+		}
+		return packs;
+	}
+	
 	public MettelJavaPackageStructure(String base){
 		super();
-
 		basePackage =  new MettelJavaPackage(base);
-
-		grammarPackage = new MettelJavaPackage(base+".language");// +'.'+GRAMMAR_STRING);
-		langPackage = new MettelJavaPackage(base+".language");
-
-		tableauPackage = new MettelJavaPackage(base+".tableau");
-
-		testLangPackage = new MettelJavaPackage(base+".language.test");
-		utilLangPackage = new MettelJavaPackage(base+".language.util");
-		
-		//added by tomas
-		utilLangPropertiesPackage = new MettelJavaPackage("etc");
-		
-		testTableauPackage = new MettelJavaPackage(base+".tableau.test");
+		etcPackage = new MettelJavaPackage("etc");
 	}
 
-	public void appendParser(MettelANTLRGrammar g){
-		grammarPackage.createFile(g.name(),"g").append(g.toStringBuilder());
+	public void appendParser(String name, MettelANTLRGrammar g){
+		LanguagePackages packs = initLanguage(name);
+		packs.grammarPackage.createFile(g.name(),"g").append(g.toStringBuilder());
 	}
 
-	public void appendStandardClasses(String prefix, String nameSeparator){
+	public void appendStandardClasses(String prefix){
+		randomExpressionPropertiesFile = new MettelRandomExpressionGeneratorPropertiesFile(prefix,etcPackage);
+		etcPackage.add(randomExpressionPropertiesFile);
+	}
+	
+	public void appendStandardLanguageClasses(String name, String prefix, String nameSeparator){
 		this.nameSeparator = nameSeparator;
+		
+		LanguagePackages packs = initLanguage(name);		
+		MettelJavaPackage langPackage = packs.langPackage;
+		MettelJavaPackage utilLangPackage = packs.utilLangPackage;
 
 		langPackage.add(new MettelExpressionInterfaceFile(prefix,langPackage));
 		langPackage.add(new MettelVariableJavaInterfaceFile(prefix,langPackage));
@@ -105,30 +139,43 @@ public class MettelJavaPackageStructure {
 		langPackage.add(new MettelIDComparatorJavaClassFile(prefix,langPackage));
 		langPackage.add(new MettelLPOComparatorJavaClassFile(prefix,langPackage));
 
-		iFactory = new MettelObjectFactoryJavaInterfaceFile(prefix,langPackage,nameSeparator);
+		MettelObjectFactoryJavaInterfaceFile iFactory = new MettelObjectFactoryJavaInterfaceFile(prefix,langPackage,nameSeparator);
 		langPackage.add(iFactory);
-
-		iExpressionGenerator = new MettelExpressionGeneratorJavaInterfaceFile(prefix,utilLangPackage,langPackage,nameSeparator);
+		packs.iFactory = iFactory;
+		
+		MettelExpressionGeneratorJavaInterfaceFile iExpressionGenerator = new MettelExpressionGeneratorJavaInterfaceFile(prefix,utilLangPackage,langPackage,nameSeparator);
 		utilLangPackage.add(iExpressionGenerator);
+		packs.iExpressionGenerator = iExpressionGenerator;
 
-		factory = new MettelObjectFactoryJavaClassFile(prefix,langPackage,nameSeparator);
+		MettelObjectFactoryJavaClassFile factory = new MettelObjectFactoryJavaClassFile(prefix,langPackage,nameSeparator);
 		langPackage.add(factory);
-
-		expressionGenerator = new MettelRandomExpressionGeneratorJavaClassFile(prefix,utilLangPackage,langPackage,nameSeparator);
+		packs.factory = factory;
+		
+		MettelRandomExpressionGeneratorJavaClassFile expressionGenerator = new MettelRandomExpressionGeneratorJavaClassFile(prefix,utilLangPackage,langPackage,nameSeparator);
 		utilLangPackage.add(expressionGenerator);
-
-		// added by tomas
-		randomExpressionPropertiesFile = new MettelRandomExpressionGeneratorPropertiesFile(prefix,utilLangPropertiesPackage);
-		utilLangPropertiesPackage.add(randomExpressionPropertiesFile);
+		packs.expressionGenerator = expressionGenerator;
 		
-		problemAnalyzerGenerator = new MettelProblemAnalyzerJavaClassFile(prefix, langPackage, nameSeparator);
-		langPackage.add(problemAnalyzerGenerator);
+		MettelProblemAnalyzerJavaClassFile problemAnalyzer = new MettelProblemAnalyzerJavaClassFile(prefix, langPackage, nameSeparator);
+		langPackage.add(problemAnalyzer);
+		packs.problemAnalyzer = problemAnalyzer;
 
-		benchmarkGenerator = new MettelBenchmarkJavaClassFile(prefix, tableauPackage, langPackage, nameSeparator);
-		tableauPackage.add(benchmarkGenerator);
-		
 		langPackage.add(new MettelTableauObjectFactoryJavaClassFile(prefix,langPackage));
 	}
+	
+	public void appendStandardTableauClasses(String tabName, String synName, String prefix, String nameSeparator){
+		this.nameSeparator = nameSeparator;
+		
+		TableauPackages tabPacks = initTableau(tabName);		
+		MettelJavaPackage tableauPackage = tabPacks.tableauPackage;
+		
+		LanguagePackages synPacks = initLanguage(synName);		
+		MettelJavaPackage langPackage = synPacks.langPackage;
+		
+		MettelBenchmarkJavaClassFile benchmark = new MettelBenchmarkJavaClassFile(prefix, tableauPackage, langPackage, nameSeparator);
+		tableauPackage.add(benchmark);
+		tabPacks.benchmark = benchmark; 
+	}
+	
 
 	public void appendStandardClasses(String prefix, String[] sorts, String branchBound){
 		langPackage.add(new MettelReplacementJavaInterfaceFile(prefix,langPackage,sorts, nameSeparator));
