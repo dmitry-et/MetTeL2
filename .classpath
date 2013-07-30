@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="lib/antlr3-runtime.jar"/>
 	<classpathentry kind="lib" path="lib/junit.jar"/>
 	<classpathentry kind="lib" path="lib/antlr3.jar"/>
+	<classpathentry kind="lib" path="lib/opencsv.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

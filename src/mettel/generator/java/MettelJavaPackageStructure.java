@@ -46,12 +46,20 @@ public class MettelJavaPackageStructure {
 	private MettelJavaPackageStructure(){}
 
 	private MettelJavaPackage basePackage = null, grammarPackage = null, langPackage = null, testLangPackage = null, testTableauPackage = null, tableauPackage = null, utilLangPackage = null;
-
+	// added by tomas
+	private MettelJavaPackage utilLangPropertiesPackage = null;
+	
+	
 	private MettelObjectFactoryJavaInterfaceFile iFactory = null;
 	private MettelObjectFactoryJavaClassFile factory = null;
 	private MettelExpressionGeneratorJavaInterfaceFile iExpressionGenerator = null;
 	private MettelRandomExpressionGeneratorJavaClassFile expressionGenerator = null;
 
+	// added by tomas
+	private MettelRandomExpressionGeneratorPropertiesFile randomExpressionPropertiesFile = null;
+	private MettelProblemAnalyzerJavaClassFile problemAnalyzerGenerator = null;
+	private MettelBenchmarkJavaClassFile benchmarkGenerator = null;
+	
 	private String nameSeparator = NAME_SEPARATOR;
 
 	public String nameSeparator(){
@@ -74,7 +82,10 @@ public class MettelJavaPackageStructure {
 
 		testLangPackage = new MettelJavaPackage(base+".language.test");
 		utilLangPackage = new MettelJavaPackage(base+".language.util");
-
+		
+		//added by tomas
+		utilLangPropertiesPackage = new MettelJavaPackage("etc");
+		
 		testTableauPackage = new MettelJavaPackage(base+".tableau.test");
 	}
 
@@ -106,6 +117,16 @@ public class MettelJavaPackageStructure {
 		expressionGenerator = new MettelRandomExpressionGeneratorJavaClassFile(prefix,utilLangPackage,langPackage,nameSeparator);
 		utilLangPackage.add(expressionGenerator);
 
+		// added by tomas
+		randomExpressionPropertiesFile = new MettelRandomExpressionGeneratorPropertiesFile(prefix,utilLangPropertiesPackage);
+		utilLangPropertiesPackage.add(randomExpressionPropertiesFile);
+		
+		problemAnalyzerGenerator = new MettelProblemAnalyzerJavaClassFile(prefix, langPackage, nameSeparator);
+		langPackage.add(problemAnalyzerGenerator);
+
+		benchmarkGenerator = new MettelBenchmarkJavaClassFile(prefix, tableauPackage, langPackage, nameSeparator);
+		tableauPackage.add(benchmarkGenerator);
+		
 		langPackage.add(new MettelTableauObjectFactoryJavaClassFile(prefix,langPackage));
 	}
 
@@ -130,8 +151,18 @@ public class MettelJavaPackageStructure {
 			factory.addMap(sort);
 			iExpressionGenerator.addMethod(sort);
 			expressionGenerator.appendSignature(sort);
+			
+			//added by tomas
+			randomExpressionPropertiesFile.appendSignature(sort);
+			problemAnalyzerGenerator.appendSignature(sort);
+			benchmarkGenerator.appendSignature(sort);
 		}
 		expressionGenerator.generateBody();
+		
+		//added by tomas
+		randomExpressionPropertiesFile.generateBody();
+		problemAnalyzerGenerator.generateBody();
+		benchmarkGenerator.generateBody();
 	}
 
 	public void appendConnectiveClass(String prefix, String sort, String name, String[] sorts, List<MettelToken> tokens, boolean equality){
@@ -142,6 +173,12 @@ public class MettelJavaPackageStructure {
 		factory.addCreateMethod(sort, name, sorts);
 		iFactory.addCreateMethod(sort, name, sorts);
 		expressionGenerator.appendSignature(sort, name, sorts);
+		
+		//added by tomas
+		randomExpressionPropertiesFile.appendSignature(sort, name);
+		problemAnalyzerGenerator.appendSignature(sort, name, sorts);
+		//probably not needed and do like randomexpresionpropertiesfile?
+		benchmarkGenerator.appendSignature(sort, name, sorts);
 	}
 
 	/*public void appendLexer(String name, MettelANTLRHeader h, InputStream stream){
@@ -186,6 +223,9 @@ public class MettelJavaPackageStructure {
 		testTableauPackage.flush(outputPath);
 
 		utilLangPackage.flush(outputPath);
+		
+		// added by tomas
+		utilLangPropertiesPackage.flush(outputPath);
 	}
 
 	/**

@@ -49,7 +49,13 @@ public class MettelFile extends MettelIndentedStringBuilder{
 		this.extension = extension;
 		this.pack = pack;
 	}
-
+	
+	protected MettelFile(String fileName, String extension, MettelJavaPackage pack, String[] header) {
+		this(fileName,extension,pack);
+		if(header != null)
+			this.header = new String[header.length];
+		System.arraycopy(header, 0, this.header, 0, header.length);
+	}
 	//private StringBuilder content = null; //new StringBuilder();
 
 	/* (non-Javadoc)
@@ -90,6 +96,10 @@ public class MettelFile extends MettelIndentedStringBuilder{
 
 		int result = 0;
 
+		//TODO: check that the code works (ObjectFactory is not rewritten)
+		// this occurs if you compile S4 with a property file where there's NO separator specified
+		// and later try to compile it again with a property file where there IS separator specified
+		// or vice-versa
 		try{
 			LineNumberReader r = new LineNumberReader(new FileReader(path));
 			try{
