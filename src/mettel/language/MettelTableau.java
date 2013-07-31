@@ -18,6 +18,11 @@ package mettel.language;
 
 import java.util.List;
 
+import mettel.generator.MettelANTLRGrammarGeneratorProperties;
+import mettel.generator.java.MettelFile;
+import mettel.generator.java.MettelJavaPackageStructure;
+import mettel.util.MettelJavaNames;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -73,4 +78,39 @@ public class MettelTableau implements MettelBlock {
 		this.parents = parents;
 	}
 
+	/*public MettelTableau unravel(){
+		if(parents == null) return this;
+		MettelTableau tab = new MettelTableau(name);
+		for(MettelTableau s:parents){
+			MettelTableau s0 = s.unravel();
+			for(MettelSort sort:s0.sorts){
+				if(! syn.sortExists(sort.name())){
+					syn.sorts.add(sort);
+				}
+			}
+			for(MettelSort sort:s0.bnfs.keySet()){
+				List<MettelBNFStatement> statements = s0.getBNFs(sort);
+				syn.bnfs.put(sort,new ArrayList<MettelBNFStatement>(statements));
+			}
+		}
+		return syn;
+	}*/
+	
+	
+	//private MettelANTLRGrammarGeneratorProperties properties = null;
+	//private MettelJavaPackageStructure pStructure = null;
+	
+	void process(MettelJavaPackageStructure pStructure, MettelANTLRGrammarGeneratorProperties properties){
+		//this.pStructure = pStructure;
+		//this.properties = properties;
+		
+		//unravel();
+		
+		final String prefix = MettelJavaNames.firstCharToUpperCase(name);
+		pStructure.appendStandardTableauClasses(name, syntax.name(), prefix, properties.nameSeparator);
+		pStructure.appendStandardTableauClasses(name, prefix, syntax.sortStrings, properties.branchBound);
+		pStructure.appendTableauFile(name,content);
+		
+		
+	}
 }

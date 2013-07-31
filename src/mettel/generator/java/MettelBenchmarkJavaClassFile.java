@@ -48,12 +48,16 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 		}
 	
 	private Hashtable<String,ArrayList<Signature>> signatures = new Hashtable<String,ArrayList<Signature>>();
-
-	public MettelBenchmarkJavaClassFile(String prefix, MettelJavaPackage pack, MettelJavaPackage langPack, String nameSeparator) {
+	private String synName = null;
+	private String SynName = null;
+	
+	public MettelBenchmarkJavaClassFile(String prefix, MettelJavaPackage pack, MettelJavaPackage langPack, String nameSeparator, String synName) {
 		super(prefix + "Benchmark", pack, "public", null, null);
 			this.prefix = prefix;
 			this.nameSeparator = nameSeparator;
 			this.langPack = langPack;
+			this.synName = synName;
+			SynName = MettelJavaNames.firstCharToUpperCase(synName);
 	}
 
 	//TODO perhaps rename also repeating code everywhere with signature class
@@ -112,11 +116,11 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 		headings.appendEOL();
 		headings.appendLine("import au.com.bytecode.opencsv.CSVWriter;");
 		headings.appendEOL();
-		headings.appendLine("import " + langPack.path() + "." + prefix + MainConnective + ';');
-		headings.appendLine("import " + langPack.path() + "." + prefix + "Lexer;");
-		headings.appendLine("import " + langPack.path() + "." + prefix + "Parser;");
-		headings.appendLine("import " + langPack.path() + "." + prefix + "ProblemAnalyzer;");
-		headings.appendLine("import " + langPack.path() + "." + prefix + "TableauObjectFactory;");
+		headings.appendLine("import " + langPack.path() + "." + SynName + MainConnective + ';');
+		headings.appendLine("import " + langPack.path() + "." + SynName + "Lexer;");
+		headings.appendLine("import " + langPack.path() + "." + SynName + "Parser;");
+		headings.appendLine("import " + langPack.path() + "." + SynName + "ProblemAnalyzer;");
+		headings.appendLine("import " + langPack.path() + "." + SynName + "TableauObjectFactory;");
 		headings.appendEOL();
 		headings.appendLine("import static mettel.util.MettelStrings.FILE_SEPARATOR;");
 	}
@@ -131,7 +135,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 		appendLine("private static LinkedHashSet<MettelGeneralTableauRule> calculus;");
 		appendLine("private static int numberOfThreads = Runtime.getRuntime().availableProcessors() - 2 > 0 ? Runtime.getRuntime().availableProcessors() - 2 : 1;");
 		appendLine("final private static CommonTokenStream tokens = new CommonTokenStream();");
-		appendLine("final private static " + prefix + "Parser parser = new " + prefix + "Parser(tokens);");
+		appendLine("final private static " + SynName + "Parser parser = new " + SynName + "Parser(tokens);");
 		appendLine("final private static ThreadMXBean mxBean = ManagementFactory.getThreadMXBean();");
 		appendLine("private static HashSet<MettelProverThread> threads = new HashSet<MettelProverThread>(numberOfThreads);");
 		appendLine("private static Properties pStat = null;");
@@ -267,11 +271,11 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 		appendLine("private static MettelProverThread createAndStartNewThread(String problemFile) throws IOException, RecognitionException, InterruptedException{");
 			incrementIndentLevel();
 			appendLine("in = new ANTLRFileStream(inDir + FILE_SEPARATOR + problemFile);");
-			appendLine("tokens.setTokenSource(new " + prefix + "Lexer(in));");
-			appendLine("ArrayList<" + prefix + MainConnective + "> list = new ArrayList<" + prefix + MainConnective + ">();");
+			appendLine("tokens.setTokenSource(new " + SynName + "Lexer(in));");
+			appendLine("ArrayList<" + SynName + MainConnective + "> list = new ArrayList<" + SynName + MainConnective + ">();");
 			//TODO better way to add s
 			appendLine("parser." + mainConnective + "s(list);");
-			appendLine(prefix + "TableauObjectFactory tfactory = new " + prefix + "TableauObjectFactory();");
+			appendLine(SynName + "TableauObjectFactory tfactory = new " + SynName + "TableauObjectFactory();");
 			appendLine("MettelProverThread pt = new MettelProverThread(calculus, list, tfactory, mxBean);");
 			appendLine("pt.setName(problemFile);");
 			appendLine("pt.start();");
@@ -310,7 +314,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 			appendLine("MettelProblemFile pFile = new MettelProblemFile(problemPath);");
 			appendLine("if(!pFile.existsStatisticsProperties()){");
 				incrementIndentLevel();
-				appendLine(prefix + "ProblemAnalyzer pAnalyzer = new " + prefix + "ProblemAnalyzer(problemPath);");
+				appendLine(SynName + "ProblemAnalyzer pAnalyzer = new " + SynName + "ProblemAnalyzer(problemPath);");
 				appendLine("pStat = pAnalyzer.getStatistics();");
 				appendLine("pFile.setStatisticsProperties(pStat);");
 				decrementIndentLevel();
@@ -497,7 +501,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 			incrementIndentLevel();
 			// is it ok?
 			appendLine("CharStream tin = new ANTLRInputStream(" + prefix + "Benchmark.class.getResourceAsStream(\"/" + prefix + "/tableau/calculus\"));");
-			appendLine("tokens.setTokenSource(new " + prefix + "Lexer(tin));");
+			appendLine("tokens.setTokenSource(new " + SynName + "Lexer(tin));");
 			appendLine("parser.tableauCalculus(calculus);");
 			decrementIndentLevel();
 		appendLine('}');

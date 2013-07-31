@@ -167,9 +167,11 @@ public class MettelJavaPackageStructure {
     private class TableauPackages{
 
     	private String name = null;
+    	private String synName = null;
     	
-		private TableauPackages(String name){
+		private TableauPackages(String name, String synName){
 			this.name = name;
+			this.synName = synName;
 			
 			String path = basePackage.path()+".tableau."+name;
 
@@ -181,14 +183,14 @@ public class MettelJavaPackageStructure {
 		private MettelBenchmarkJavaClassFile benchmark = null;
 
 		private void appendStandardClasses(MettelJavaPackage langPackage, String prefix, String nameSeparator){
-			benchmark = new MettelBenchmarkJavaClassFile(prefix, tableauPackage, langPackage, nameSeparator);
+			benchmark = new MettelBenchmarkJavaClassFile(prefix, tableauPackage, langPackage, nameSeparator, synName);
 			tableauPackage.add(benchmark);
 		}
 
 		private void appendStandardClasses(String prefix, String[] sorts, String branchBound){
 			if(sorts.length > 0){
-				basePackage.add(new MettelTableauProverFile(prefix, sorts[0], branchBound, MettelJavaPackageStructure.this, name));
-				testTableauPackage.add(new MettelTableauTestJavaClassFile(prefix,sorts[0],branchBound,MettelJavaPackageStructure.this, name));
+				basePackage.add(new MettelTableauProverFile(prefix, sorts[0], branchBound, MettelJavaPackageStructure.this, name, synName));
+				testTableauPackage.add(new MettelTableauTestJavaClassFile(prefix,sorts[0],branchBound,MettelJavaPackageStructure.this, name, synName));
 			}
 			for(String sort:sorts){
 				benchmark.appendSignature(sort);
@@ -208,13 +210,17 @@ public class MettelJavaPackageStructure {
 
 	private HashMap<String,TableauPackages> tabPacks = new HashMap<String,TableauPackages>();
 
-	public TableauPackages tableau(String name){
-		TableauPackages packs = tabPacks.get(name);
+	public TableauPackages tableau(String name, String synName){
+		TableauPackages packs = tableau(name);
 		if(packs == null){
-			packs = new TableauPackages(name);
+			packs = new TableauPackages(name, synName);
 			tabPacks.put(name, packs);
 		}
 		return packs;
+	}
+	
+	public TableauPackages tableau(String name){
+		return tabPacks.get(name);
 	}
 
 	public MettelJavaPackageStructure(String base){
@@ -240,7 +246,7 @@ public class MettelJavaPackageStructure {
 
 	public void appendStandardTableauClasses(String tabName, String synName, String prefix, String nameSeparator){
 		this.nameSeparator = nameSeparator;
-		tableau(tabName).appendStandardClasses(language(synName).langPackage, prefix, nameSeparator);
+		tableau(tabName,synName).appendStandardClasses(language(synName).langPackage, prefix, nameSeparator);
 	}
 
 	public void appendStandardLanguageClasses(String synName, String prefix, String[] sorts, String branchBound){
@@ -311,6 +317,13 @@ public class MettelJavaPackageStructure {
 	 */
 	public MettelJavaPackage tableauPackage(String tabName) {
 		return tableau(tabName).tableauPackage;
+	}
+
+	public void appendTableauFile(String name, String content) {
+		MettelJavaPackage pack = tableauPackage(name);
+		MettelFile tableau = new MettelFile("calculus", null, pack);
+		tableau.append(content);
+		pack.add(tableau);
 	}
 
 }

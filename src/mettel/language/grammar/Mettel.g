@@ -39,6 +39,7 @@ tokens{
 	SORT			=	'sort';
 	EXTENDS		=	'extends';
 	ANTLR			=	'antlr';
+	IN			= 	'in';
 
 //	BLOCK;
 
@@ -302,7 +303,7 @@ tableau[MettelSpecification spec]
 returns [MettelTableau tab = null]
 //throws MettelParserException
 	:
-	TABLEAU	 synName = syntaxName id = IDENTIFIER
+	TABLEAU	id = IDENTIFIER synName = syntaxName
     	(paths = extendsBlock)?
     	{
     	String name = id.getText();
@@ -326,10 +327,9 @@ syntaxName
 returns [String name = null]
 	:
 	(
-	LPAREN
+	IN (SYNTAX)?
 		id = IDENTIFIER
 		{name = id.getText();}
-	RPAREN
 	)?
 	;
 
@@ -557,21 +557,23 @@ LBRACE
     	state.tokenStartCharIndex = getCharIndex();
     	}
 		(options{greedy=false;} : . )*
+		('\r\n' | '\r' | '\n' )
+		(
+             ' '
+        |    '\t'
+        |    '\u000C'
+        )*
 		{setText(getText());}
 		'}'
-		{futureBlock = false;}
+		{
+		futureBlock = false;
+		}
     	)
     	)?
-//    {
-//    if(tableauOrSemanticsBlock == 0) tableauOrSemanticsBlock = 1;
-//    }
     ;
 
 RBRACE
     :   '}'
-//    {
-//    if(tableauOrSemanticsBlock == 1) tableauOrSemanticsBlock = -1;
-//    }
     ;
 
 BLOCK

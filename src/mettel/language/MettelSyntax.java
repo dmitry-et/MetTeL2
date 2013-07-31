@@ -268,7 +268,7 @@ public class MettelSyntax implements MettelBlock {
 		return bnfs.get(sort);
 	}
 
-	public MettelSyntax unravel(){
+	/*public MettelSyntax unravel(){
 		if(parents == null) return this;
 		MettelSyntax syn = new MettelSyntax(name);
 		for(MettelSyntax s:parents){
@@ -284,7 +284,7 @@ public class MettelSyntax implements MettelBlock {
 			}
 		}
 		return syn;
-	}
+	}*/
 
 	public List<MettelSort> allSorts(){
 		if(parents == null) return sorts;
@@ -308,12 +308,13 @@ public class MettelSyntax implements MettelBlock {
 
 	private MettelANTLRGrammarGeneratorProperties properties = null;
 	private MettelJavaPackageStructure pStructure = null;
-		
+	String[] sortStrings = null;	
+	
 	public void process(MettelJavaPackageStructure pStructure, MettelANTLRGrammarGeneratorProperties properties){
 		this.pStructure = pStructure;
 		this.properties = properties;
 		
-		unravel();
+		//unravel();
 		final String NAME = MettelJavaNames.firstCharToUpperCase(name);
 
 		pStructure.appendStandardClasses(NAME);
@@ -322,7 +323,7 @@ public class MettelSyntax implements MettelBlock {
 		MettelANTLRStandardGrammar grammar =
 				new MettelANTLRStandardGrammar(NAME, pStructure.grammarPackage(name).path(), properties.grammarOptions);
 
-		String[] sortStrings = new String[sorts.size()];
+		sortStrings = new String[sorts.size()];
 		int i = 0;
 		for(MettelSort sort:sorts){
 			sortStrings[i++] = sort.name();

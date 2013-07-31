@@ -144,6 +144,11 @@ public class MettelSpecification {
 			syn.process(pStructure, properties);
 		}
 		
+		for(MettelTableau tab:tableaux){
+			tab.process(pStructure, properties);
+		}
+		
 		return pStructure;
 	}
+	
 }

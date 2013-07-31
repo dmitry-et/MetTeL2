@@ -37,13 +37,17 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
     private String sort = null;
     
     private String tabName = null;
+    private String synName = null;
+    private String SynName = null;
 	
-	public MettelTableauProverFile(String prefix, String sort, String branchBound, MettelJavaPackageStructure pStructure, String tabName) {
+	public MettelTableauProverFile(String prefix, String sort, String branchBound, MettelJavaPackageStructure pStructure, String tabName, String synName) {
 		super(prefix+"TableauProver", pStructure.basePackage(), "public", null, null);
 		this.pStructure = pStructure;
 		this.prefix = prefix;
 		this.sort = sort;
 		this.tabName = tabName;
+		this.synName = synName;
+		SynName = MettelJavaNames.firstCharToUpperCase(synName);
 
 		body(branchBound);
 
@@ -72,14 +76,14 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
 		headings.appendLine("import mettel.core.tableau.MettelTableauObjectFactory;");
 		//headings.appendLine("import mettel.core.tableau.acceptor.MettelSmallTableauStateAcceptor;");
 
-		headings.appendLine("import "+pStructure.languagePackage(tabName).path()+".*;");
+		headings.appendLine("import "+pStructure.languagePackage(synName).path()+".*;");
 		headings.appendEOL();
 	}
 
 	private void body(String branchBound){
 
 		appendLine("final private static CommonTokenStream tokens = new CommonTokenStream();");
-		appendLine("final private static "+prefix+"Parser parser = new "+prefix+"Parser(tokens);");
+		appendLine("final private static "+ SynName +"Parser parser = new "+ SynName + "Parser(tokens);");
 		appendEOL();
 		appendLine("private static PrintWriter out = null;");
 		appendLine("private static PrintWriter err = null;");
@@ -179,17 +183,17 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
 
 	            appendLine("if(in == null) in = new ANTLRInputStream(System.in);");
 
-	            appendLine("tokens.setTokenSource(new "+prefix+"Lexer(in));");
-       		    appendLine("ArrayList<"+prefix+MettelJavaNames.firstCharToUpperCase(sort, pStructure.nameSeparator())+
-    		    		"> list = new ArrayList<"+prefix+MettelJavaNames.firstCharToUpperCase(sort, pStructure.nameSeparator())+">();");
+	            appendLine("tokens.setTokenSource(new "+SynName+"Lexer(in));");
+       		    appendLine("ArrayList<"+SynName+MettelJavaNames.firstCharToUpperCase(sort, pStructure.nameSeparator())+
+    		    		"> list = new ArrayList<"+SynName+MettelJavaNames.firstCharToUpperCase(sort, pStructure.nameSeparator())+">();");
     		    appendLine("parser."+sort+"s(list);");
 
-    		    appendLine("MettelTableauObjectFactory tfactory = new "+prefix+"TableauObjectFactory();");
+    		    appendLine("MettelTableauObjectFactory tfactory = new "+SynName+"TableauObjectFactory();");
     		    if(branchBound == null){
     		    	appendLine("MettelSimpleTableauManager m = new MettelSimpleTableauManager(tfactory, calculus);");
     		    }else{
     		    	appendLine("int branchBound = 0;");
-    		    	appendLine("for("+prefix+MettelJavaNames.firstCharToUpperCase(sort, pStructure.nameSeparator())+" e:list){");
+    		    	appendLine("for("+SynName+MettelJavaNames.firstCharToUpperCase(sort, pStructure.nameSeparator())+" e:list){");
     		    	incrementIndentLevel();
     		    		appendLine("branchBound += "+branchBound.replaceAll("%l", "e.length()")+';');
     		    	decrementIndentLevel();
@@ -241,7 +245,7 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
 	    		appendLine("new ANTLRFileStream(path);");
 	    	decrementIndentLevel();
 
-	    	appendLine("tokens.setTokenSource(new "+prefix+"Lexer(tin));");
+	    	appendLine("tokens.setTokenSource(new "+SynName+"Lexer(tin));");
 
 	    	appendLine("parser.tableauCalculus(calculus);");
 	    decrementIndentLevel();

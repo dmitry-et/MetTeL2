@@ -169,7 +169,7 @@ public class MettelGenerator {
 
 					System.exit(0);
 
-        		}else if("-t".equals(args[i])||"--tableau".equals(args[i])){
+/*        		}else if("-t".equals(args[i])||"--tableau".equals(args[i])){
 
         			if(i < SIZE-1){
        					tableau = new File(args[++i]);
@@ -178,7 +178,7 @@ public class MettelGenerator {
                         System.out.println("I need a name of file where you defined tableau rules.");
                         System.exit(-1);
                     }
-
+*/
         		}
         	}
 
