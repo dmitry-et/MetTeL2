@@ -113,4 +113,9 @@ public class MettelTableau implements MettelBlock {
 		
 		
 	}
+	
+	void init(MettelJavaPackageStructure pStructure, MettelANTLRGrammarGeneratorProperties properties){
+		final String prefix = MettelJavaNames.firstCharToUpperCase(name);
+		pStructure.appendStandardTableauClasses(name, syntax.name(), prefix, properties.nameSeparator);
+	}
 }

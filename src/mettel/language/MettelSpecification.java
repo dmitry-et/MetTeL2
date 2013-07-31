@@ -140,6 +140,10 @@ public class MettelSpecification {
 	public MettelJavaPackageStructure process(MettelANTLRGrammarGeneratorProperties properties) {
 		final MettelJavaPackageStructure pStructure = new MettelJavaPackageStructure(path);
 		
+		//for(MettelTableau tab:tableaux){
+		//	tab.init(pStructure, properties);
+		//}
+		
 		for(MettelSyntax syn:syntaxes){
 			syn.process(pStructure, properties);
 		}

@@ -18,6 +18,7 @@ package mettel.generator.java;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import mettel.generator.antlr.MettelANTLRGrammar;
@@ -150,6 +151,11 @@ public class MettelJavaPackageStructure {
 
 			utilLangPackage.flush(outputPath);
 		}
+		
+		private void antlr(String outputPath){
+			
+			
+		}
 
 	}
 
@@ -208,15 +214,26 @@ public class MettelJavaPackageStructure {
 		}
 	}
 
-	private HashMap<String,TableauPackages> tabPacks = new HashMap<String,TableauPackages>();
+	private HashMap<String, TableauPackages> tabPacks = new HashMap<String, TableauPackages>();
+	private HashMap<String, LinkedHashSet<TableauPackages>> synToTabPacks = new HashMap<String, LinkedHashSet<TableauPackages>>();
 
 	public TableauPackages tableau(String name, String synName){
 		TableauPackages packs = tableau(name);
 		if(packs == null){
 			packs = new TableauPackages(name, synName);
 			tabPacks.put(name, packs);
+			LinkedHashSet<TableauPackages> set = tableaux(synName);
+			if(set == null){
+				set = new LinkedHashSet<TableauPackages>();
+				synToTabPacks.put(synName, set);
+			}
+			set.add(packs);
 		}
 		return packs;
+	}
+	
+	private LinkedHashSet<TableauPackages> tableaux(String synName){
+		return synToTabPacks.get(synName);
 	}
 	
 	public TableauPackages tableau(String name){
@@ -230,8 +247,7 @@ public class MettelJavaPackageStructure {
 	}
 
 	public void appendParser(String name, MettelANTLRGrammar g){
-		LanguagePackages packs = language(name);
-		packs.grammarPackage.createFile(g.name(),"g").append(g.toStringBuilder());
+		grammarPackage(name).createFile(g.name(),"g").append(g.toStringBuilder());
 	}
 
 	public void appendStandardClasses(String prefix){
@@ -261,9 +277,9 @@ public class MettelJavaPackageStructure {
 		language(synName).appendConnectiveClass(prefix, sort, name, sorts, tokens, equality);
 	}
 
-	public void appendConnectiveTableauClass(String tabName, String sort, String name, String[] sorts){
-		tableau(tabName).appendConnectiveClass(sort, name, sorts);
-	}
+//	public void appendConnectiveTableauClass(String tabName, String sort, String name, String[] sorts){
+//		tableau(tabName).appendConnectiveClass(sort, name, sorts);
+//	}
 
 	public void flush(String outputPath) throws IOException {
 		basePackage.flush(outputPath);
@@ -320,10 +336,7 @@ public class MettelJavaPackageStructure {
 	}
 
 	public void appendTableauFile(String name, String content) {
-		MettelJavaPackage pack = tableauPackage(name);
-		MettelFile tableau = new MettelFile("calculus", null, pack);
-		tableau.append(content);
-		pack.add(tableau);
+		tableauPackage(name).createFile("calculus", null).append(content);
 	}
 
 }

@@ -48,7 +48,6 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 		}
 	
 	private Hashtable<String,ArrayList<Signature>> signatures = new Hashtable<String,ArrayList<Signature>>();
-	private String synName = null;
 	private String SynName = null;
 	
 	public MettelBenchmarkJavaClassFile(String prefix, MettelJavaPackage pack, MettelJavaPackage langPack, String nameSeparator, String synName) {
@@ -56,7 +55,6 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 			this.prefix = prefix;
 			this.nameSeparator = nameSeparator;
 			this.langPack = langPack;
-			this.synName = synName;
 			SynName = MettelJavaNames.firstCharToUpperCase(synName);
 	}
 
