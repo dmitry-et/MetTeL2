@@ -49,13 +49,8 @@ import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.tool.ErrorManager;
-//import org.antlr.tool.ErrorManager;
 
-//import org.antlr.Tool;
-
-import mettel.generator.MettelANTLRGrammarGenerator;
 import mettel.generator.MettelANTLRGrammarGeneratorProperties;
-import mettel.generator.java.MettelJavaPackageStructure;
 import mettel.language.MettelLexer;
 import mettel.language.MettelParser;
 import mettel.language.MettelSpecification;
