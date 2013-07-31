@@ -31,17 +31,22 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
 //	private String packNameFull = null;
 
 	private MettelJavaPackageStructure pStructure = null;
-
-	public MettelTableauTestJavaClassFile(String prefix, String sort, String branchBound, MettelJavaPackageStructure pStructure) {
-		super(prefix+"TableauTest", pStructure.testTableauPackage(), "public", "TestCase", null);
+	private String sort = null;
+	private String synName = null;
+	
+	
+	public MettelTableauTestJavaClassFile(String prefix, String sort, String branchBound, MettelJavaPackageStructure pStructure, String synName) {
+		super(prefix+"TableauTest", pStructure.testTableauPackage(synName), "public", "TestCase", null);
 		this.pStructure = pStructure;
 		this.prefix = prefix;
-
+		this.sort = sort;
+		this.synName = synName;
+		
 //		packName = pack.path();
 //		packNameFull = packName.substring(0,packName.lastIndexOf('.')+1);
 //		packName = packName.substring(0,packName.indexOf('.')+1);
 
-		body(sort, branchBound);
+		body(branchBound);
 
 		if(branchBound != null){
 			headings.appendLine("import mettel.core.tableau.acceptor.MettelSmallTableauStateAcceptor;");
@@ -72,11 +77,11 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
 		headings.appendLine("import mettel.core.tableau.MettelTableauObjectFactory;");
 		//headings.appendLine("import mettel.core.tableau.acceptor.MettelSmallTableauStateAcceptor;");
 
-		headings.appendLine("import "+pStructure.languagePackage().path()+".*;");
+		headings.appendLine("import "+pStructure.languagePackage(synName).path()+".*;");
 		headings.appendEOL();
 	}
 
-	private void body(String sort, String branchBound){
+	private void body(String branchBound){
 
     	appendLine("final static String tableauFile = \""+MettelJavaNames.quote(MettelJavaNames.systemPath("test.examples."+pStructure.basePackage().path()+".tableau"))+"\";");
     	appendLine("final static String inDir = \""+MettelJavaNames.quote(MettelJavaNames.systemPath("test.examples."+pStructure.basePackage().path()+".problems"))+"\";");

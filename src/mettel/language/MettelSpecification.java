@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import mettel.generator.MettelANTLRGrammarGeneratorProperties;
+import mettel.generator.java.MettelJavaPackageStructure;
+
 import static mettel.util.MettelStrings.LINE_SEPARATOR;
 
 /**
@@ -134,4 +137,13 @@ public class MettelSpecification {
 		return tableaux;
 	}
 
+	public MettelJavaPackageStructure process(MettelANTLRGrammarGeneratorProperties properties) {
+		final MettelJavaPackageStructure pStructure = new MettelJavaPackageStructure(path);
+		
+		for(MettelSyntax syn:syntaxes){
+			syn.process(pStructure, properties);
+		}
+		
+		return pStructure;
+	}
 }

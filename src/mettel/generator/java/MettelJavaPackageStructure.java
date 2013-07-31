@@ -50,8 +50,12 @@ public class MettelJavaPackageStructure {
 	}
 
 	private class LanguagePackages{
+		
+		private String name  = null;
 
 		private LanguagePackages(String name){
+			this.name = name;
+			
 			String path = basePackage.path()+".language."+name;
 
 			grammarPackage = new MettelJavaPackage(path);
@@ -104,7 +108,7 @@ public class MettelJavaPackageStructure {
 			langPackage.add(new MettelSubstitutionJavaClassFile(prefix,langPackage,sorts, nameSeparator));
 
 			if(sorts.length > 0){
-				testLangPackage.add(new MettelParserTestJavaClassFile(prefix,sorts[0], MettelJavaPackageStructure.this));
+				testLangPackage.add(new MettelParserTestJavaClassFile(prefix, sorts[0], MettelJavaPackageStructure.this, name));
 			}
 
 			for(String sort:sorts){
@@ -162,7 +166,11 @@ public class MettelJavaPackageStructure {
 
     private class TableauPackages{
 
+    	private String name = null;
+    	
 		private TableauPackages(String name){
+			this.name = name;
+			
 			String path = basePackage.path()+".tableau."+name;
 
 			tableauPackage = new MettelJavaPackage(path);
@@ -179,7 +187,8 @@ public class MettelJavaPackageStructure {
 
 		private void appendStandardClasses(String prefix, String[] sorts, String branchBound){
 			if(sorts.length > 0){
-				testTableauPackage.add(new MettelTableauTestJavaClassFile(prefix,sorts[0],branchBound,MettelJavaPackageStructure.this));
+				basePackage.add(new MettelTableauProverFile(prefix, sorts[0], branchBound, MettelJavaPackageStructure.this, name));
+				testTableauPackage.add(new MettelTableauTestJavaClassFile(prefix,sorts[0],branchBound,MettelJavaPackageStructure.this, name));
 			}
 			for(String sort:sorts){
 				benchmark.appendSignature(sort);
@@ -234,16 +243,12 @@ public class MettelJavaPackageStructure {
 		tableau(tabName).appendStandardClasses(language(synName).langPackage, prefix, nameSeparator);
 	}
 
-	public void appendStandardClasses(String prefix, String sort, String branchBound){
-		basePackage.add(new MettelTableauProverFile(prefix, sort, branchBound, this));
-	}
-
 	public void appendStandardLanguageClasses(String synName, String prefix, String[] sorts, String branchBound){
 	    language(synName).appendStandardClasses(prefix, sorts, branchBound);
 	}
 
 	public void appendStandardTableauClasses(String tabName, String prefix, String[] sorts, String branchBound){
-	    tableau(tabName).appendStandardClasses(prefix, sorts, branchBound);
+		tableau(tabName).appendStandardClasses(prefix, sorts, branchBound);
 	}
 
 	public void appendConnectiveLanguageClass(String synName, String prefix, String sort, String name, String[] sorts, List<MettelToken> tokens, boolean equality){

@@ -223,12 +223,9 @@ public class MettelGenerator {
 
 
         	report("I am processing the specification.");
-        	MettelANTLRGrammarGenerator gen = new MettelANTLRGrammarGenerator(spec,p);
-//        	StringBuilder buf = new StringBuilder();
-        	for(MettelJavaPackageStructure pStructure:gen.processSyntaxes()){
-        		//System.out.println('#');
-        		pStructure.flush(outputPath);
-        	}
+        	
+        	spec.process(p).flush(outputPath);
+        	
         	report("Java code of the prover is generated.");
 /*        	out.print(buf);
         	out.flush();

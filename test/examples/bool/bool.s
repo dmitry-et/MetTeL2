@@ -1,6 +1,6 @@
 specification bool;
 
-syntax boolean{
+syntax Boolean{
 	sort formula;
 
 	//Connectives in a decreasing priority order
@@ -14,7 +14,7 @@ syntax boolean{
 
 }
 
-tableau(boolean) bt{start
+tableau(Boolean) bt{start
 
 jokarnyj babaj
 

@@ -33,13 +33,19 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
 	private String prefix = "Mettel";
 
 	private MettelJavaPackageStructure pStructure = null;
-
-	public MettelTableauProverFile(String prefix, String sort, String branchBound, MettelJavaPackageStructure pStructure) {
+	
+    private String sort = null;
+    
+    private String tabName = null;
+	
+	public MettelTableauProverFile(String prefix, String sort, String branchBound, MettelJavaPackageStructure pStructure, String tabName) {
 		super(prefix+"TableauProver", pStructure.basePackage(), "public", null, null);
 		this.pStructure = pStructure;
 		this.prefix = prefix;
+		this.sort = sort;
+		this.tabName = tabName;
 
-		body(sort, branchBound);
+		body(branchBound);
 
 		if(branchBound != null){
 			headings.appendLine("import mettel.core.tableau.acceptor.MettelSmallTableauStateAcceptor;");
@@ -66,11 +72,11 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
 		headings.appendLine("import mettel.core.tableau.MettelTableauObjectFactory;");
 		//headings.appendLine("import mettel.core.tableau.acceptor.MettelSmallTableauStateAcceptor;");
 
-		headings.appendLine("import "+pStructure.languagePackage().path()+".*;");
+		headings.appendLine("import "+pStructure.languagePackage(tabName).path()+".*;");
 		headings.appendEOL();
 	}
 
-	private void body(String sort, String branchBound){
+	private void body(String branchBound){
 
 		appendLine("final private static CommonTokenStream tokens = new CommonTokenStream();");
 		appendLine("final private static "+prefix+"Parser parser = new "+prefix+"Parser(tokens);");
@@ -231,7 +237,7 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
 	    	appendLine("CharStream tin = (path == null)?");
 	    	incrementIndentLevel();
 	    		appendLine("new ANTLRInputStream("+prefix+"TableauProver.class.getResourceAsStream(\"/"+
-	    				MettelJavaNames.javaPath(pStructure.tableauPackage().path()+".calculus")+"\")):");
+	    				MettelJavaNames.javaPath(pStructure.tableauPackage(tabName).path()+".calculus")+"\")):");
 	    		appendLine("new ANTLRFileStream(path);");
 	    	decrementIndentLevel();
 
