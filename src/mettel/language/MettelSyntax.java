@@ -308,12 +308,12 @@ public class MettelSyntax implements MettelBlock {
 
 	private MettelANTLRGrammarGeneratorProperties properties = null;
 	private MettelJavaPackageStructure pStructure = null;
-	String[] sortStrings = null;	
-	
+	String[] sortStrings = null;
+
 	public void process(MettelJavaPackageStructure pStructure, MettelANTLRGrammarGeneratorProperties properties){
 		this.pStructure = pStructure;
 		this.properties = properties;
-		
+
 		//unravel();
 		final String NAME = MettelJavaNames.firstCharToUpperCase(name);
 
@@ -330,6 +330,7 @@ public class MettelSyntax implements MettelBlock {
 			sort.process(grammar, properties);
 			processBNFs(grammar, sort);
 		}
+		//for(String s:sortStrings) System.out.print(s+ " "); System.out.println();
 		pStructure.appendStandardLanguageClasses(name, NAME, sortStrings, properties.branchBound);
 
 		grammar.addRule(makeANTLRExpressionListRule(NAME));
@@ -339,7 +340,7 @@ public class MettelSyntax implements MettelBlock {
 
 		pStructure.appendParser(name, grammar);
 	}
-	
+
 	private void processBNFs(MettelANTLRGrammar grammar, MettelSort sort) {
 		final String SORT_NAME = sort.name();
 		String s0 = BASIC_STRING + MettelJavaNames.firstCharToUpperCase(SORT_NAME,properties.nameSeparator);
@@ -420,7 +421,7 @@ public class MettelSyntax implements MettelBlock {
 				ref.appendLineToPostfix("r0 = e00;");
 				st.addExpression(ref);
 				MettelANTLRMultiaryBNFStatement st0 = new MettelANTLRMultiaryBNFStatement();
-				
+
 				ArrayList<String> sortStrings = new ArrayList<String>();
 				for(int i = 0, j = 0; i < SIZE; i++){
 					if(tokens[i] instanceof MettelStringLiteral){
@@ -466,7 +467,7 @@ public class MettelSyntax implements MettelBlock {
 		grammar.addRule(r);
 
 	}
-	
+
 	private MettelANTLRRule makeANTLRTableauCalculusRule(String grammarName) {
 		final String NAME = "tableauRule";
 

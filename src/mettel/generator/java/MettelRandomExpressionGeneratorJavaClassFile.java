@@ -23,9 +23,10 @@ package mettel.generator.java;
 
 
 
-import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.LinkedHashSet;
+import java.util.HashMap;
 
+import mettel.generator.util.MettelSignature;
 import mettel.util.MettelJavaNames;
 
 import static mettel.generator.MettelANTLRGrammarGeneratorDefaultOptions.NAME_SEPARATOR;
@@ -43,23 +44,11 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 
 	private String nameSeparator = NAME_SEPARATOR;
 
-	//TODO make new public class?
-	private class Signature{
+	private HashMap<String, LinkedHashSet<MettelSignature>> signatures = null;
 
-	//	private String type;
-		private String name;
-		private String[] types;
-
-		Signature(String name, String[] types){
-			super();
-	//		this.type = type;
-			this.name = name;
-			this.types = types;
-		}
-
+	public void setSignatures(HashMap<String, LinkedHashSet<MettelSignature>> signatures){
+		this.signatures = signatures;
 	}
-
-	private Hashtable<String,ArrayList<Signature>> signatures = new Hashtable<String,ArrayList<Signature>>();
 
 	public MettelRandomExpressionGeneratorJavaClassFile(String prefix, MettelJavaPackage pack, MettelJavaPackage langPack, String nameSeparator) {
 		super(prefix + "RandomExpressionGenerator", pack, "public", null,
@@ -88,25 +77,8 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 		headings.appendLine("import java.io.ByteArrayInputStream;");
 		headings.appendLine("import java.util.Properties;");
 		headings.appendLine("import java.util.StringTokenizer;");
-		headings.appendEOL();		
+		headings.appendEOL();
 		headings.appendLine("import org.antlr.runtime.RecognitionException;");
-	}
-
-	void appendSignature(String type){
-		ArrayList<Signature> ss = signatures.get(type);
-		if(ss == null){
-			ss = new ArrayList<Signature>();
-			signatures.put(type, ss);
-		}
-	}
-
-	void appendSignature(String type, String name, String[] types){
-		ArrayList<Signature> ss = signatures.get(type);
-		if(ss == null){
-			ss = new ArrayList<Signature>();
-			signatures.put(type, ss);
-		}
-		ss.add(new Signature(name, types));
 	}
 
 	public void generateBody(){
@@ -118,7 +90,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 		appendLine("private static Properties configuration = new Properties();");
 		appendLine("private static " + prefix + "RandomExpressionGenerator g = new " + prefix + "RandomExpressionGenerator();");
 		appendEOL();
-		
+
 		appendLine("public static void main(String[] args) {");
 			incrementIndentLevel();
 			appendLine("System.out.println(\"-------------------------------------------------------------------\");");
@@ -131,7 +103,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 				incrementIndentLevel();
 				appendLine("parseCommandLineArguments(args);");
 				appendEOL();
-				
+
 				appendLine("if (prop != null){");
 					incrementIndentLevel();
 					appendLine("setProperties();");
@@ -143,7 +115,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 					decrementIndentLevel();
 				appendLine('}');
 				appendEOL();
-				
+
 				appendLine("outputGeneratedExpressions();");
 				appendEOL();
 
@@ -160,7 +132,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 	        appendLine('}');
 	        decrementIndentLevel();
         appendLine('}');
-        
+
         appendEOL();
 
         appendLine("private static void parseCommandLineArguments(String[] args) throws IOException{");
@@ -221,30 +193,33 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 		appendLine('}');
 
 		appendEOL();
-		
+
 		appendLine("private static void setProperties() throws IOException{");
 			incrementIndentLevel();
 			appendLine("String variablesNamesLine;");
 			appendLine("StringTokenizer variablesNamesTokenizer;");
 			appendLine("String[] variablesNames;");
 			appendEOL();
-			
+
 			appendLine("configuration.load(prop);");
 			for(String type:signatures.keySet()){
 				final String Type = MettelJavaNames.firstCharToUpperCase(type, nameSeparator);
-				
+
 				// read and set frequency for each sort's connective
-				for(Signature s:signatures.get(type)){
-					final String ltype = s.name + Type;
-					appendLine("g.set" + MettelJavaNames.firstCharToUpperCase(ltype, nameSeparator) + "Frequency(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortConnectiveFrequencyProperty(type, s.name) + "\", \"" + SORT_CONNECTIVE_FREQUENCY + "\").trim()));");
+				for(MettelSignature s:signatures.get(type)){
+					final String ltype = s.name() + Type;
+					appendLine("g.set" + MettelJavaNames.firstCharToUpperCase(ltype, nameSeparator) +
+							"Frequency(Integer.parseInt(configuration.getProperty(\"" +
+							MettelRandomExpressionDefaultPropertiesNames.sortConnectiveFrequencyProperty(type, s.name()) +
+							"\", \"" + SORT_CONNECTIVE_FREQUENCY + "\").trim()));");
 				}
 				appendEOL();
-				
+
 				// read and set variable frequency and depth for for each sort
 				appendLine("g.set" + Type + "VariableFrequency(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariableFrequencyProperty(type) + "\", \"" + SORT_VARIABLE_FREQUENCY +"\").trim()));");
 				appendLine("g.setDepth" + Type + "(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariableDepthProperty(type) + "\", \"" + SORT_VARIABLE_DEPTH + "\").trim()));");
 				appendEOL();
-				
+
 				// read and set set variables names for each sort
 				// tokenize variables names line by comma
 				// if found 0 tokens it means it's empty and set string array to null
@@ -267,16 +242,16 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 				appendLine('}');
 				appendLine("g.set" + Type + "Variables(variablesNames);");
 				appendEOL();
-				
+
 				// read and set variables number used for each sort
 				// must be set AFTER variables names
 				appendLine("g.set" + Type + "VariablesSize(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariablesSizeProperty(type) + "\", \"" + SORT_VARIABLES_NUMBER + "\").trim()));");
 				appendEOL();
-				
+
 				// read and set how many times expression will be generated for each sort
 				appendLine("g.set" + Type + "TimesToRun(Integer.parseInt(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortGenerateProperty(type) + "\", \"" + SORT_GENERATE + "\").trim()));");
 				appendEOL();
-				
+
 				// read and set top connectives
 				//TODO create method for that
 				appendLine("variablesNamesLine = configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortTopConnectives(type) + "\", \"" + SORT_TOP_CONNECTIVES + "\");");
@@ -300,19 +275,19 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 			}
 			decrementIndentLevel();
 		appendLine('}');
-		
+
 		appendEOL();
-		
+
 		//TODO check top connective
 		appendLine("private static void checkPropertiesValidity() {");
 			incrementIndentLevel();
 			for(String type:signatures.keySet()){
 				final String Type = MettelJavaNames.firstCharToUpperCase(type, nameSeparator);
 				String constantVariables = "";
-				for(Signature s:signatures.get(type)){
-					final String ltype = s.name + Type;
-					if (s.types.length == 0){
-						constantVariables += "g." + ltype + "Frequency == 0 & ";						
+				for(MettelSignature s:signatures.get(type)){
+					final String ltype = s.name() + Type;
+					if (s.arguments().length == 0){
+						constantVariables += "g." + ltype + "Frequency == 0 & ";
 					}
 				}
 				constantVariables += "g." + type + "VariableFrequency == 0";
@@ -323,13 +298,13 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 			}
 			decrementIndentLevel();
 		appendLine('}');
-		
+
 		appendEOL();
-		
+
 		appendLine("private static void outputGeneratedExpressions() throws IOException, RecognitionException{");
 			incrementIndentLevel();
 			appendLine("new File(outputPath).mkdir();");
-			
+
 			appendLine("File outputFile;");
 			appendLine("String generatedExpression;");
 			for(String type:signatures.keySet()){
@@ -341,7 +316,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 						appendLine("fileIndex++;");
 						decrementIndentLevel();
 					appendLine('}');
-					
+
 					appendLine("MettelProblemFile problemFile = new MettelProblemFile(outputFile);");
 					appendLine("generatedExpression = g." + type + "().toString();");
 					appendLine("ByteArrayInputStream expressionStream = new ByteArrayInputStream(generatedExpression.getBytes());");
@@ -356,14 +331,16 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 			decrementIndentLevel();
 		appendLine('}');
 		appendEOL();
-					
+
 		appendLine("private static void setDefaultProperties(){");
 			incrementIndentLevel();
 			appendLine("configuration.setProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.METTEL_VERSION + "\", \"" + METTEL_VERSION_VALUE + "\");");
 			appendLine("configuration.setProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.SYNTAX + "\", \"" + SYNTAX_PATH + "\");");
 			for(String type:signatures.keySet()){
-				for(Signature s:signatures.get(type)){
-					appendLine("configuration.setProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortConnectiveFrequencyProperty(type, s.name) + "\", \"" + SORT_CONNECTIVE_FREQUENCY + "\");");
+				for(MettelSignature s:signatures.get(type)){
+					appendLine("configuration.setProperty(\"" +
+							MettelRandomExpressionDefaultPropertiesNames.sortConnectiveFrequencyProperty(type, s.name()) +
+							"\", \"" + SORT_CONNECTIVE_FREQUENCY + "\");");
 				}
 				appendLine("configuration.setProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariableFrequencyProperty(type) + "\", \"" + SORT_VARIABLE_FREQUENCY + "\");");
 				appendLine("configuration.setProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariableDepthProperty(type) + "\", \"" + SORT_VARIABLE_DEPTH + "\");");
@@ -373,8 +350,8 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 				appendLine("configuration.setProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.sortTopConnectives(type) + "\", \"" + SORT_TOP_CONNECTIVES_TEXT + "\");");
 			}
 			decrementIndentLevel();
-		appendLine('}');		
-			
+		appendLine('}');
+
 //		appendLine("private static void outputGeneratedExpressions() throws IOException{");
 //			incrementIndentLevel();
 //			appendLine("new File(outputPath).mkdir();");
@@ -382,7 +359,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 //			appendLine("String generatedExpression;");
 //			appendLine("String variablesNamesLine;");
 //			appendEOL();
-//			
+//
 //			for(String type:signatures.keySet()){
 //				appendLine("for (int i = 0; i < g." + type + "TimesToRun; i++){");
 //					incrementIndentLevel();
@@ -392,7 +369,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 //						decrementIndentLevel();
 //					appendLine("out = new BufferedWriter(new FileWriter(outputFile));");
 //					appendEOL();
-//					
+//
 //					appendLine("out.write(\"/** Generator Properties **\");");
 //					appendLine("out.newLine();");
 //					appendLine("out.write(\"MetTeL.version = TODO\");");
@@ -401,7 +378,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 //		        	appendLine("out.newLine();");
 //		        	appendLine("out.newLine();");
 //		        	appendEOL();
-//					
+//
 //		        	// print configuration of the generated expression
 //		        	//TODO repeating type1
 //					for(String type1:signatures.keySet()){
@@ -419,7 +396,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 //						appendLine("out.write(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariableDepthProperty(type1) + " = \" + g.depth" + Type1 + ");");
 //						appendLine("out.newLine();");
 //						appendEOL();
-//						
+//
 //						// if variables array is null then write empty string
 //						// otherwise for each string in array write in and add comma with space
 //						// at the end remove 2 last characters (", " comma and space)
@@ -435,7 +412,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 //							decrementIndentLevel();
 //						appendLine('}');
 //						appendEOL();
-//						
+//
 //						appendLine("out.write(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariablesProperty(type1) + " = \" + " + "variablesNamesLine);");
 //						appendLine("out.newLine();");
 //						appendLine("out.write(\"" + MettelRandomExpressionDefaultPropertiesNames.sortVariablesSizeProperty(type1) + " = \" + g." + type1 + "VariablesSize);");
@@ -454,24 +431,24 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 //							appendLine("variablesNamesLine = variablesNamesLine.substring(0, variablesNamesLine.length() - 2);");
 //							decrementIndentLevel();
 //						appendLine('}');
-//							
+//
 //						appendEOL();
-//							
+//
 //						appendLine("out.write(\"" + MettelRandomExpressionDefaultPropertiesNames.sortTopConnectives(type1) + " = \" + " + "variablesNamesLine);");
-//						appendLine("out.newLine();");							
+//						appendLine("out.newLine();");
 //						appendEOL();
 //
 //						appendLine("out.newLine();");
 //						appendEOL();
 //					}
-//					
+//
 //					appendLine("generatedExpression = g." + type + "().toString();");
 //					appendEOL();
 //
 //					appendLine("out.write(\"** End of Generator Properties **/\");");
 //					appendLine("out.newLine();");
 //					appendEOL();
-//					
+//
 //					appendLine("out.write(generatedExpression);");
 //					appendLine("out.close();");
 //					appendLine("if (standardOutput)");
@@ -482,10 +459,10 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 //				appendLine('}');
 //			}
 //			decrementIndentLevel();
-//		appendLine('}');			
-		
+//		appendLine('}');
+
 		appendEOL();
-		
+
 		appendLine("private " + prefix + "ObjectFactory factory = " + prefix + "ObjectFactory.DEFAULT;");
 
 		appendEOL();
@@ -516,14 +493,14 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 
 			int total = 0;
 			int totalVariablesConstants = 0;
-			for(Signature s:signatures.get(type)){
-				final String ltype = s.name + Type;
+			for(MettelSignature s:signatures.get(type)){
+				final String ltype = s.name() + Type;
 
 				appendLine("private int " + ltype + "Frequency = " + SORT_CONNECTIVE_FREQUENCY + ";");
-				
+
 				total++;
 				// just increase count if we got constant connective
-				if (s.types.length == 0)
+				if (s.arguments().length == 0)
 					totalVariablesConstants++;
 
 				appendEOL();
@@ -533,7 +510,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 					appendLine("if(f < 0) throw new MettelCoreRuntimeException(\"Frequency parameter is negative\");");
 					appendLine("total" + Type + "Frequency += (f - " + ltype + "Frequency);");
 					// if it's constant increase count
-					if (s.types.length == 0)
+					if (s.arguments().length == 0)
 						appendLine("total" + Type + "ConstantsVariablesFrequency += (f - " + ltype + "Frequency);");
 					appendLine(ltype+"Frequency = f;");
 					decrementIndentLevel();
@@ -543,6 +520,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 			}
 
 			final String vtype = type + "Variable";
+			//headings.appendLine("import " + langPack.path() + '.' + prefix + vtype +';');
 
 			appendLine("private int " + vtype + "Frequency = " + SORT_VARIABLE_FREQUENCY + ";");
 			appendLine("public void set" + MettelJavaNames.firstCharToUpperCase(vtype, nameSeparator) + "Frequency(int f){");
@@ -558,7 +536,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 
 			appendLine("private int total" + Type + "Frequency = " + (total + Integer.parseInt(SORT_VARIABLE_FREQUENCY)) + ';');
 			appendLine("private int total" + Type + "ConstantsVariablesFrequency = " + (totalVariablesConstants + Integer.parseInt(SORT_VARIABLE_FREQUENCY)) + ';');
-			
+
 			appendEOL();
 
 			appendLine("private int depth" + Type + " = " + SORT_VARIABLE_DEPTH + ";");
@@ -581,10 +559,10 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 					incrementIndentLevel();
 					appendLine("int totalTopConnectivesFrequency = 0;");
 					appendLine("for (String connective : " + type + "TopConnectives){");
-					for(Signature s:signatures.get(type)){
-						final String ltype = s.name + Type;
+					for(MettelSignature s:signatures.get(type)){
+						final String ltype = s.name() + Type;
 							incrementIndentLevel();
-							appendLine("if (\"" + s.name + "\".equals(connective)){");
+							appendLine("if (\"" + s.name() + "\".equals(connective)){");
 								incrementIndentLevel();
 								appendLine("totalTopConnectivesFrequency += " + ltype + "Frequency;");
 								decrementIndentLevel();
@@ -593,17 +571,17 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 					}
 					appendLine('}');
 					appendLine("int r = random.nextInt(totalTopConnectivesFrequency);");
-					
+
 					appendLine("for (String connective : " + type + "TopConnectives){");
 						incrementIndentLevel();
-						for(Signature s:signatures.get(type)){
-							final String ltype = s.name + Type;
-							appendLine("if (\"" + s.name + "\".equals(connective) && r < " + ltype + "Frequency){");
+						for(MettelSignature s:signatures.get(type)){
+							final String ltype = s.name() + Type;
+							appendLine("if (\"" + s.name() + "\".equals(connective) && r < " + ltype + "Frequency){");
 								incrementIndentLevel();
 								indent();
 								append("return factory.create" + MettelJavaNames.firstCharToUpperCase(ltype,nameSeparator) + '(');
 									int i = 0;
-									for(String t:s.types){
+									for(String t:s.arguments()){
 										if(i > 0){
 											append(", ");
 										}
@@ -614,20 +592,20 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 								decrementIndentLevel();
 							appendLine("}else{");
 								incrementIndentLevel();
-								appendLine("if (\"" + s.name + "\".equals(connective))");
+								appendLine("if (\"" + s.name() + "\".equals(connective))");
 									incrementIndentLevel();
 									appendLine("r -= " + ltype + "Frequency;");
 									decrementIndentLevel();
-						}	
+						}
 						//TODO repeating list2
-						final ArrayList<Signature> list2 = signatures.get(type);
+						final LinkedHashSet<MettelSignature> list2 = signatures.get(type);
 						final int SIZE2 = list2.size();
 						for(int i = 0; i < SIZE2; i++) {
 							decrementIndentLevel();
 							appendLine('}');
 						}
-	
-						decrementIndentLevel();		
+
+						decrementIndentLevel();
 					appendLine('}');
 					decrementIndentLevel();
 				appendLine("}else{");
@@ -635,7 +613,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 					appendLine("return " + type + "(depth" + Type + ");");
 					decrementIndentLevel();
 				appendLine('}');
-				//TODO I think shouldn't happen but couldn't compile because of missing return which 
+				//TODO I think shouldn't happen but couldn't compile because of missing return which
 				// occurs probably because compiler is not sure that it always terminates?
 				appendLine("throw new MettelCoreRuntimeException(\"Something wrong with top.connectives\");");
 				decrementIndentLevel();
@@ -648,9 +626,9 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 				appendLine("if(depth" + Type + " > 0 && d <= 0){");
 					incrementIndentLevel();
 					appendLine("int r = random.nextInt(total" + Type + "ConstantsVariablesFrequency);");
-					for(Signature s:signatures.get(type)){
-						final String ltype = s.name + Type;
-						if (s.types.length == 0){
+					for(MettelSignature s:signatures.get(type)){
+						final String ltype = s.name() + Type;
+						if (s.arguments().length == 0){
 							appendLine("if(r < " + ltype + "Frequency){");
 								incrementIndentLevel();
 								appendLine("return factory.create" + MettelJavaNames.firstCharToUpperCase(ltype,nameSeparator) + "();");
@@ -661,8 +639,8 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 							}
 						}
 						appendLine("return " + type + "Variable();");
-						for(Signature s:signatures.get(type)){
-							if (s.types.length == 0){
+						for(MettelSignature s:signatures.get(type)){
+							if (s.arguments().length == 0){
 								decrementIndentLevel();
 								appendLine('}');
 							}
@@ -677,15 +655,15 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 
 				appendEOL();
 
-				for(Signature s:signatures.get(type)){
-					final String ltype = s.name + Type;
+				for(MettelSignature s:signatures.get(type)){
+					final String ltype = s.name() + Type;
 
 					appendLine("if(r < " + ltype + "Frequency){");
 						incrementIndentLevel();
 						indent();
 						append("return factory.create" + MettelJavaNames.firstCharToUpperCase(ltype,nameSeparator) + '(');
 							int i = 0;
-							for(String t:s.types){
+							for(String t:s.arguments()){
 								if(i > 0){
 									append(", ");
 								}
@@ -702,7 +680,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 				appendLine("return " + type + "Variable();");
 
 
-				final ArrayList<Signature> list = signatures.get(type);
+				final LinkedHashSet<MettelSignature> list = signatures.get(type);
 				final int SIZE = list.size();
 				for(int i = 0; i < SIZE; i++) {
 					decrementIndentLevel();
@@ -754,9 +732,9 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 				appendLine(type + "VariablesSize = size;");
 				decrementIndentLevel();
 			appendLine('}');
-			
+
 			appendEOL();
-			
+
 			appendLine("protected final " + prefix + Type + "Variable " + type + "Variable(){");
 				incrementIndentLevel();
 				appendLine("int r = random.nextInt(" + type + "VariablesSize);");
@@ -764,29 +742,29 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 						type + "Variables[r]: \"$" + type + "Variable\"+r );");
 				decrementIndentLevel();
 			appendLine('}');
-			
+
 			appendEOL();
-			
+
 			// added by tomas
 			appendLine("private int " + type + "TimesToRun = " + SORT_GENERATE + ";");
 			appendEOL();
-			
+
 			appendLine("public void set" + Type + "TimesToRun(int times){");
 				incrementIndentLevel();
 				appendLine(type + "TimesToRun = times;");
 				decrementIndentLevel();
 			appendLine('}');
-			
+
 			appendEOL();
-			
+
 			appendLine("private String[] " + type + "TopConnectives = " + SORT_TOP_CONNECTIVES + ";");
 			appendEOL();
-			
+
 			appendLine("public void set" + Type + "TopConnectives(String[] topConnectives){");
 				incrementIndentLevel();
 				appendLine(type + "TopConnectives = topConnectives;");
 				decrementIndentLevel();
-			appendLine('}');			
+			appendLine('}');
 		}
 	}
 }
