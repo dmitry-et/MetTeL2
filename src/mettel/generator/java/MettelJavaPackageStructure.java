@@ -16,13 +16,25 @@
  */
 package mettel.generator.java;
 
+import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
+import org.antlr.Tool;
+import org.antlr.tool.ErrorManager;
+
+import mettel.core.tableau.MettelGeneralTableauRule;
 import mettel.generator.antlr.MettelANTLRGrammar;
 import mettel.language.MettelToken;
+import mettel.util.MettelJavaNames;
+import mettel.util.MettelReport;
 
 import mettel.generator.java.test.MettelParserTestJavaClassFile;
 import mettel.generator.java.test.MettelTableauTestJavaClassFile;
@@ -214,11 +226,6 @@ public class MettelJavaPackageStructure {
 			utilLangPackage.flush(outputPath);
 		}
 
-		private void antlr(String outputPath){
-
-
-		}
-
 	}
 
 	private HashMap<String,LanguagePackages> langPacks = new HashMap<String,LanguagePackages>();
@@ -401,6 +408,54 @@ public class MettelJavaPackageStructure {
 
 	public void appendTableauFile(String name, String content) {
 		tableauPackage(name).createFile("calculus", null).append(content);
+	}
+
+	public boolean antlr(String outputPath, MettelReport report){
+		
+		for(String lang:langPacks.keySet()){
+			
+			LanguagePackages packs = language(lang);
+			final String path = MettelJavaNames.addSeparator(outputPath) +
+					MettelJavaNames.addSeparator(MettelJavaNames.systemPath(packs.grammarPackage.path())) + MettelJavaNames.firstCharToUpperCase(lang)+".g"; 
+			final String[] antlrArguments = {
+					path
+			};
+
+			report.report("\t ANTLR is generating a parser for the syntax "+lang+'.');
+			Tool antlr = new Tool(antlrArguments);
+	        antlr.process();
+	        final int errorNumber = ErrorManager.getNumErrors();
+	        if ( errorNumber > 0) {
+	        		report.report("\t ANTLR reported "+errorNumber+" errors for the syntax "+lang+'.');
+	                return false;
+	        }
+	        report.report("\t The Java code of the parser for the syntax "+lang+" is generated.");
+		}
+        return true;
+	}
+	
+	public boolean verifyTableaux(String outputPath, File dir, MettelReport report) throws MalformedURLException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, NoSuchMethodException, SecurityException{
+		for(String name:tabPacks.keySet()){
+			report.report("\t I am verifying the tableau calculus specification "+name+'.');
+
+			TableauPackages packs = tableau(name);
+			final String tableau = MettelJavaNames.addSeparator(outputPath) +
+					MettelJavaNames.addSeparator(MettelJavaNames.systemPath(packs.tableauPackage.path())) + "calculus"; 
+			final String mainClass = basePackage.path() + '.' + MettelJavaNames.firstCharToUpperCase(name) + "TableauProver";
+			
+			ClassLoader currentThreadClassLoader = Thread.currentThread().getContextClassLoader();
+			URLClassLoader classLoader = new URLClassLoader(new URL[]{dir.toURI().toURL()}, currentThreadClassLoader);
+	
+			Class<?> cls = Class.forName(mainClass, true, classLoader);
+			LinkedHashSet<MettelGeneralTableauRule> calculus = new LinkedHashSet<MettelGeneralTableauRule>();
+			try{
+				cls.getMethod("parseCalculus", Set.class, String.class).invoke(null, calculus, tableau);
+			}catch(InvocationTargetException e){
+				report.report("\t There are errors in the tableau calculus specification "+ name+'.');
+				return false;
+			}
+		}
+		return true;
 	}
 
 }

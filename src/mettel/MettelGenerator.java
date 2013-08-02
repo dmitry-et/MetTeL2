@@ -28,13 +28,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
@@ -43,19 +38,16 @@ import java.util.jar.Manifest;
 import javax.tools.ToolProvider;
 import javax.tools.JavaCompiler;
 
-import org.antlr.Tool;
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
-import org.antlr.tool.ErrorManager;
-
 import mettel.generator.MettelANTLRGrammarGeneratorProperties;
+import mettel.generator.java.MettelJavaPackageStructure;
 import mettel.language.MettelLexer;
 import mettel.language.MettelParser;
 import mettel.language.MettelSpecification;
-
-import mettel.core.tableau.MettelGeneralTableauRule;
+import mettel.util.MettelReport;
 
 /**
  * @author Dmitry Tishkovsky
@@ -63,6 +55,8 @@ import mettel.core.tableau.MettelGeneralTableauRule;
  *
  */
 public class MettelGenerator {
+	
+	private static MettelReport report = null;;
 
 	private static PrintWriter out = new PrintWriter(
 			new OutputStreamWriter(System.out),true);
@@ -181,6 +175,8 @@ public class MettelGenerator {
 */
         		}
         	}
+    		
+    		report = new MettelReport(out,err,quiet);
 
     		MettelANTLRGrammarGeneratorProperties p = //(prop == null)? null:
     			new MettelANTLRGrammarGeneratorProperties(prop);
@@ -206,42 +202,41 @@ public class MettelGenerator {
         	final int errorNumber = parser.getNumberOfSyntaxErrors();
         	if( errorNumber > 0){
         		report("The specification contains "+errorNumber+" syntax errors.");
-//        		err.println("I found "+errorNumber +"syntax errors in the specification.");
         		System.exit(1);
         	}else{
             	report("The specification is OK.");
         	}
 
-        	//StringBuilder buf = new StringBuilder();
-        	//spec.toBuffer(buf);
-        	//System.out.print(buf);
-
-
         	report("I am processing the specification.");
         	
-        	spec.process(p).flush(outputPath);
+        	MettelJavaPackageStructure pStructure = spec.process(p);
+        	pStructure.flush(outputPath);
         	
         	report("Java code of the prover is generated.");
-/*        	out.print(buf);
-        	out.flush();
-        	out.close();
-*/
-/*        	String[] antlrArgs = {"-o", "/var/tmp/", "-print", outFileName};
-        	if(outFileName == null){
-        		System.err.print("ANTLR file name required");
-        		System.exit(0);
+        	
+        	report.report("I have asked ANTLR to generate parsers for the syntaxes.");
+        	if(pStructure.antlr(outputPath, report)){
+        		report("The Java code of all the parsers is generated.");
+        	}else{
+        		System.exit(2);
         	}
 
-        	Tool antlr = new Tool(antlrArgs);
-            antlr.process();
-            if(ErrorManager.getNumErrors() > 0){
-            	System.exit(1);
-            }
-*/
-        	if(tableau != null){
-        		if(build(spec.path())) System.exit(0);
-        		System.exit(1);
+        	File src = new File(outputPath + File.separatorChar + spec.path());
+        	File dir = createTempDir(spec.path());
+        	compile(src, dir);
+      	
+        	report("I am verifying the tableau calculi specifications.");
+        	if(pStructure.verifyTableaux(outputPath, dir, report)){
+        		report("All the tableau calculi specifications are OK.");
+        	}else{
+        		System.exit(4);
         	}
+        	
+        	if(!build(spec.path(), src, dir)){
+        		System.exit(5);
+        	}
+        	
+        	deleteFiles(dir);
 
         	System.exit(0);
         } catch(Exception e) {
@@ -260,103 +255,48 @@ public class MettelGenerator {
 	}
 
 	private static void report(String s){
-		if(!quiet){
-			out.println(s);
-			out.flush();
-		}
+		report.report(s);
 	}
 
-	private static boolean build(String path) throws IOException,
+	private static void compile(File src, File dir) throws IOException{
+		 	report("I am trying to compile the generated code.");
+			JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+
+			if(compiler == null)
+				throw new RuntimeException("No compiler available");
+
+			List<String> arguments = new ArrayList<String>();
+			//arguments.add("-verbose");
+			arguments.add("-d");
+			arguments.add(dir.getAbsolutePath());
+			arguments.addAll(listFileNames(src)); 
+
+			OutputStream out0 = System.out;
+			if(outFileName != null){
+				out0 = new FileOutputStream(outFileName,true);
+			}
+
+			OutputStream err0 = System.err;
+			if(errFileName != null){
+				err0 = new FileOutputStream(errFileName,true);
+			}
+
+			if(compiler.run(null, out0, err0, arguments.toArray(new String[arguments.size()])) != 0){
+				out0.flush(); err0.flush();
+				report("Compilation failed.");
+				System.exit(3);
+			}
+			out0.flush(); err0.flush();//TODO: copy resource files into classes dir
+	}
+	
+	
+	private static boolean build(String path, File src, File dir) throws IOException,
 			ClassNotFoundException,
 			IllegalAccessException, IllegalArgumentException, NoSuchMethodException, SecurityException{ //, MismatchedTokenException{
-
-		File src = new File(outputPath+File.separatorChar+path);
-		File grammar = findGrammarFile(src);
-
-		String[] antlrArguments = {
-				grammar.getAbsolutePath()
-		};
-
-		report("I have asked ANTLR to generate a parser for the prover.");
-		Tool antlr = new Tool(antlrArguments);
-        antlr.process();
-        final int errorNumber = ErrorManager.getNumErrors();
-        if ( errorNumber > 0) {
-        		report("ANTLR reported "+errorNumber+" errors.");
-                return false;
-        }
-        report("The Java code for the parser is generated.");
-
-        report("I am trying to compile the generated code.");
-		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-
-		if(compiler == null)
-			throw new RuntimeException("No compiler available");
-
-		File dir = createTempDir(path);
-
-		List<String> arguments = new ArrayList<String>();
-		//arguments.add("-verbose");
-		arguments.add("-d");
-		arguments.add(dir.getAbsolutePath());
-		arguments.addAll(listFileNames(src)); 
-
-		OutputStream out0 = System.out;
-		if(outFileName != null){
-			out0 = new FileOutputStream(outFileName,true);
-		}
-
-		OutputStream err0 = System.err;
-		if(errFileName != null){
-			err0 = new FileOutputStream(errFileName,true);
-		}
-
-		if(compiler.run(null, out0, err0, arguments.toArray(new String[arguments.size()])) != 0){
-			out0.flush(); err0.flush();
-			report("Compilation failed.");
-			return false;
-		}
-		out0.flush(); err0.flush();//TODO: copy resource files into classes dir
-
-		report("I am verifying the tableau calculus specification.");
 
 		File mainClass = findMainClass(src);
 		String name = mainClass.getName();
 		name = name.substring(0, name.lastIndexOf('.'));
-
-		ClassLoader currentThreadClassLoader = Thread.currentThread().getContextClassLoader();
-		URLClassLoader classLoader = new URLClassLoader(new URL[]{dir.toURI().toURL()}, currentThreadClassLoader);
-
-		//ClassLoader cl = new ClassLoader();
-		//URLClassLoader classLoader = URLClassLoader.newInstance(new URL[] { dir.toURI().toURL() });
-		Class<?> cls;
-		//try {
-		cls = Class.forName(path + '.' +name, true, classLoader);
-		//Constructor<?> constructor = cls.getConstructor();
-		//Object instance = constructor.newInstance(arg0);
-		LinkedHashSet<MettelGeneralTableauRule> calculus = new LinkedHashSet<MettelGeneralTableauRule>();
-		try{
-			cls.getMethod("parseCalculus", Set.class, String.class).invoke(null, calculus, tableau.getPath());//   .invoke(instance, (Object[]));
-		}catch(InvocationTargetException e){
-			//throw (MismatchedTokenException)e.getCause();
-			report("There are errors in the tableau calculus specification.");
-			return false;
-		}
-		/*} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		}*/
-
-		report("The tableau calculus specification is OK.");
 
 		report("I am trying to make an executable jar-file with the prover.");
 
@@ -370,18 +310,16 @@ public class MettelGenerator {
 		try{
 			addToJar(dir.getPath(),dir,jar);
 	
-			addTableauToJar(path, tableau,jar);
+			//addTableauToJar(path, tableau,jar);
 		}finally{
 			jar.close();
 		}
 		report("The jar is made.");
 
-		deleteFiles(dir);
-
 		return true;
 	}
 
-	private static void addTableauToJar(String path, File source, JarOutputStream target) throws IOException{
+	/*private static void addTableauToJar(String path, File source, JarOutputStream target) throws IOException{
 		JarEntry entry = new JarEntry(path+"/tableau/calculus");
 		entry.setTime(source.lastModified());
 		target.putNextEntry(entry);
@@ -400,7 +338,7 @@ public class MettelGenerator {
 		}finally{
 			target.closeEntry();
 		}
-	}
+	}*/
 
 	private static void addToJar(String prefix, File source, JarOutputStream target) throws IOException{
 		
@@ -487,7 +425,7 @@ public class MettelGenerator {
 	    dir.delete();
 	}
 
-	private static File findGrammarFile(File dir){
+	/*private static File findGrammarFile(File dir){
 
 	    if(!dir.isDirectory()){
 	    	String name = dir.getName();
@@ -502,7 +440,7 @@ public class MettelGenerator {
 	    	if(result != null) return result;
 	    }
 	    return null;
-	}
+	}*/
 
 	private static File findMainClass(File dir){
 

@@ -120,7 +120,7 @@ public class MettelFile extends MettelIndentedStringBuilder{
 
 		return result;
 	}
-
+	
 	public void flush(String outputPath) throws IOException {
 		final String fileFullName = MettelJavaNames.addSeparator(outputPath) +
 				MettelJavaNames.addSeparator(MettelJavaNames.systemPath(pack != null ? pack.path() : "" )) + fileName +
