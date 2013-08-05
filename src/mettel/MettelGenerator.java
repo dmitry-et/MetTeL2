@@ -303,8 +303,11 @@ public class MettelGenerator {
 	private static void copyResources(File src, String dest) throws IOException{
 		List<File> resources = listResources(null, src);
 		for(File f:resources){
-			System.out.println(f.getPath());
-			System.out.println(f.getPath().replaceFirst(outputPath, dest));
+			File dir = new File(f.getParent().replaceFirst(outputPath, dest));
+			if(!dir.exists() && !dir.mkdirs()) throw new IOException("Cannot create directory " + dir.getPath());
+
+//			System.out.println(f.getPath());
+//			System.out.println(f.getPath().replaceFirst(outputPath, dest));
 			FileInputStream i = new FileInputStream(f);
 			try{
 				FileOutputStream o = new FileOutputStream(f.getPath().replaceFirst(outputPath, dest));

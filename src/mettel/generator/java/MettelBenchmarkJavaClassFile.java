@@ -471,7 +471,9 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 		appendLine("public static void parseCalculus(Set<MettelGeneralTableauRule> calculus) throws IOException, RecognitionException{");
 			incrementIndentLevel();
 			// is it ok?
-			appendLine("CharStream tin = new ANTLRInputStream(" + prefix + "Benchmark.class.getResourceAsStream(\"/" + prefix + "/tableau/calculus\"));");
+			appendLine("CharStream tin = new ANTLRInputStream(" +
+					prefix + "Benchmark.class.getResourceAsStream(\"calculus\"));");
+							//"/"	+ prefix + "/tableau/calculus\"));");
 			appendLine("tokens.setTokenSource(new " + SynName + "Lexer(tin));");
 			appendLine("parser.tableauCalculus(calculus);");
 			decrementIndentLevel();

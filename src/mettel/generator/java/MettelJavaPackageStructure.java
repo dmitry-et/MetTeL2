@@ -315,7 +315,7 @@ public class MettelJavaPackageStructure {
 	public MettelJavaPackageStructure(String base){
 		super();
 		basePackage =  new MettelJavaPackage(base);
-		etcPackage = new MettelJavaPackage("etc");
+		etcPackage = new MettelJavaPackage(base+".etc");
 	}
 
 	public void appendParser(String name, MettelANTLRGrammar g){
