@@ -1,12 +1,16 @@
 // Specification of modal logic KEn discussed with michal
 specification KE3;
 
+options{
+name.separator=
+}
+
 syntax KE3{
 	sort formula;
 
 	// to express pi
 	sort nominal;
-	 
+
 	formula singleton = '{' nominal '}';
 	formula at = '@' nominal formula;
 	nominal f = 'f' '('  nominal ',' formula  ')'; //Skolem function
@@ -15,13 +19,13 @@ syntax KE3{
 	nominal f2 = 'f2' '('  nominal ',' formula  ')';
 	nominal f3 = 'f3' '('  nominal ',' formula  ')';
 	nominal f4 = 'f4' '('  nominal ',' formula  ')';
-	
+
 	formula true = 'true';
 	formula false = 'false';
 	formula	negation = '~' formula;
 	formula	conjunction  = formula '&' formula;
 	formula	disjuntion  = formula '|' formula;
-	
+
 	formula diamond = '<>' formula;
 	formula existl1 = 'E<1' formula;
 	formula existl2 = 'E<2' formula;
@@ -35,7 +39,7 @@ syntax KE3{
 	formula existg2 = 'E>2' formula;
 	formula existg3 = 'E>3' formula;
 
-	
+
 
 	formula equivalence = formula  '<->' formula; //Testing some features
 	formula equality = '[' nominal '=' nominal ']';
@@ -61,9 +65,9 @@ tableau KE3{
 @l (~( E>1 P)) @l1 ({l1}) @l2 ({l2})  / @l1 (~ P) $| @l2 (~ P) $|  @l1 ({l2}) priority 4$;
 @l (~( E>2 P)) @l1 ({l1}) @l2 ({l2}) @l3 ({l3})  / @l1 (~ P) $| @l2 (~ P) $| @l3 (~ P) $|  @l1 ({l2}) $| @l1 ({l3}) $| @l2 ({l3}) priority 5$;
 @l (~( E>3 P)) @l1 ({l1}) @l2 ({l2}) @l3 ({l3}) @l4 ({l4})  / @l1 (~ P) $| @l2 (~ P) $| @l3 (~ P) $| @l4 (~ P) $|  @l1 ({l2}) $| @l1 ({l3}) $| @l1 ({l4}) $| @l2 ({l3}) $| @l2 ({l4}) $| @l3 ({l4}) priority 6$;
-     
 
-// Rewrite rules for lessThan and eqaul (from michal's paper) 
+
+// Rewrite rules for lessThan and eqaul (from michal's paper)
 @l (E<1 P) / @l (~(E>0 P)) priority 1$;
 @l (E<2 P) / @l (~(E>1 P)) priority 1$;
 @l (E<3 P) / @l (~(E>2 P)) priority 1$;

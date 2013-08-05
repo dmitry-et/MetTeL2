@@ -21,7 +21,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
+//import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -66,7 +66,7 @@ public class MettelGenerator {
 	private static String outFileName = null;
 	private static String errFileName = null;
 	private static String outputPath = "output";
-	private static FileReader prop = null;
+	//private static FileReader prop = null;
 	//private static File tableau = null;
 
 	private static boolean  quiet = false;
@@ -133,7 +133,7 @@ public class MettelGenerator {
                         System.exit(-1);
                     }
 
-        		}else if("-p".equals(args[i])||"--properties".equals(args[i])){
+        		/*}else if("-p".equals(args[i])||"--properties".equals(args[i])){
 
         			if(i < SIZE-1){
        					prop = new FileReader(args[++i]);
@@ -142,7 +142,7 @@ public class MettelGenerator {
                         System.out.println("I need a name of file where you have specified properties of the program I am going to generate.");
                         System.exit(-1);
                     }
-
+				*/
         		}else if("--license".equals(args[i])){
 
         			BufferedReader r = new BufferedReader(
@@ -178,8 +178,8 @@ public class MettelGenerator {
 
     		report = new MettelReport(out,err,quiet);
 
-    		MettelANTLRGrammarGeneratorProperties p = //(prop == null)? null:
-    			new MettelANTLRGrammarGeneratorProperties(prop);
+ /*   		MettelANTLRGrammarGeneratorProperties p = //(prop == null)? null:
+    			new MettelANTLRGrammarGeneratorProperties(prop);*/
 
 //The following is not necessary since out and err are always defined
 /*        	if(out == null) out = new PrintWriter(
@@ -197,10 +197,11 @@ public class MettelGenerator {
         	MettelLexer lexer = new MettelLexer(in);
 
         	tokens.setTokenSource(lexer);
-        	MettelParser parser = new MettelParser(tokens, p.equalityKeywords);
+        	MettelParser parser = new MettelParser(tokens);//, p.equalityKeywords);
 
          	report("I am reading the specification.");
          	MettelSpecification spec = parser.specification();
+         	MettelANTLRGrammarGeneratorProperties p = parser.properties();
 
         	final int errorNumber = parser.getNumberOfSyntaxErrors();
         	if( errorNumber > 0){

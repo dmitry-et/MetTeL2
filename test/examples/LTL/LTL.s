@@ -1,6 +1,14 @@
 // Specification of linear temporal logic LTL
 specification LTL;
 
+options{
+branch.bound=((int)(java.lang.Math.pow(2,%l+1)+java.lang.Math.pow(4,%l+1)))
+
+equality.keywords={equality,equivalence}
+
+name.separator=
+}
+
 syntax LTL{
 	sort formula;
 	sort nominal;

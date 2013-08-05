@@ -1,5 +1,9 @@
 specification Kleene4;
 
+options{
+name.separator=
+}
+
 syntax Kleene4{
 	sort valuation, formula;
 	//Connectives in a decreasing priority order

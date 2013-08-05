@@ -1,6 +1,10 @@
 // Specification of modal logic S4
 specification S4;
 
+options{
+name.separator=
+}
+
 syntax S4{
 	sort formula;
 	sort nominal;
