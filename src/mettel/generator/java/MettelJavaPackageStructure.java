@@ -264,7 +264,8 @@ public class MettelJavaPackageStructure {
 
 		private void appendStandardClasses(String prefix, String[] sorts, String branchBound){
 			if(sorts.length > 0){
-				basePackage.add(new MettelTableauProverFile(prefix, sorts[0], branchBound, MettelJavaPackageStructure.this, name, synName));
+				//basePackage.add(new MettelTableauProverFile(prefix, sorts[0], branchBound, MettelJavaPackageStructure.this, name, synName));
+				tableauPackage.add(new MettelTableauProverFile(prefix, sorts[0], branchBound, MettelJavaPackageStructure.this, name, synName));
 			    testTableauPackage.add(new MettelTableauTestJavaClassFile(prefix,sorts[0],branchBound,MettelJavaPackageStructure.this, name, synName));
 			    benchmark.setMainSort(sorts[0]);
 			}
@@ -411,17 +412,17 @@ public class MettelJavaPackageStructure {
 	}
 
 	public boolean antlr(String outputPath, MettelReport report){
-		
+
 		for(String lang:langPacks.keySet()){
-			
+
 			LanguagePackages packs = language(lang);
 			final String path = MettelJavaNames.addSeparator(outputPath) +
-					MettelJavaNames.addSeparator(MettelJavaNames.systemPath(packs.grammarPackage.path())) + MettelJavaNames.firstCharToUpperCase(lang)+".g"; 
+					MettelJavaNames.addSeparator(MettelJavaNames.systemPath(packs.grammarPackage.path())) + MettelJavaNames.firstCharToUpperCase(lang)+".g";
 			final String[] antlrArguments = {
 					path
 			};
 
-			report.report("\t ANTLR is generating a parser for the syntax "+lang+'.');
+			report.report("  ANTLR is generating a parser for the syntax "+lang+'.');
 			Tool antlr = new Tool(antlrArguments);
 	        antlr.process();
 	        final int errorNumber = ErrorManager.getNumErrors();
@@ -429,33 +430,39 @@ public class MettelJavaPackageStructure {
 	        		report.report("\t ANTLR reported "+errorNumber+" errors for the syntax "+lang+'.');
 	                return false;
 	        }
-	        report.report("\t The Java code of the parser for the syntax "+lang+" is generated.");
+	        report.report("  The Java code of the parser for the syntax "+lang+" is generated.");
 		}
         return true;
 	}
-	
+
 	public boolean verifyTableaux(String outputPath, File dir, MettelReport report) throws MalformedURLException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, NoSuchMethodException, SecurityException{
 		for(String name:tabPacks.keySet()){
-			report.report("\t I am verifying the tableau calculus specification "+name+'.');
+			report.report("  I am verifying the tableau calculus specification "+name+'.');
 
 			TableauPackages packs = tableau(name);
 			final String tableau = MettelJavaNames.addSeparator(outputPath) +
-					MettelJavaNames.addSeparator(MettelJavaNames.systemPath(packs.tableauPackage.path())) + "calculus"; 
-			final String mainClass = basePackage.path() + '.' + MettelJavaNames.firstCharToUpperCase(name) + "TableauProver";
-			
+					MettelJavaNames.addSeparator(MettelJavaNames.systemPath(packs.tableauPackage.path())) + "calculus";
+			final String mainClass = //basePackage.path() +
+									 packs.tableauPackage.path() +
+					'.' + MettelJavaNames.firstCharToUpperCase(name) + "TableauProver";
+
 			ClassLoader currentThreadClassLoader = Thread.currentThread().getContextClassLoader();
 			URLClassLoader classLoader = new URLClassLoader(new URL[]{dir.toURI().toURL()}, currentThreadClassLoader);
-	
+
 			Class<?> cls = Class.forName(mainClass, true, classLoader);
 			LinkedHashSet<MettelGeneralTableauRule> calculus = new LinkedHashSet<MettelGeneralTableauRule>();
 			try{
 				cls.getMethod("parseCalculus", Set.class, String.class).invoke(null, calculus, tableau);
 			}catch(InvocationTargetException e){
-				report.report("\t There are errors in the tableau calculus specification "+ name+'.');
+				report.report("  There are errors in the tableau calculus specification "+ name+'.');
 				return false;
 			}
 		}
 		return true;
+	}
+
+	public void generateMainClass(){
+//TODO fill in
 	}
 
 }

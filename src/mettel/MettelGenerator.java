@@ -55,7 +55,7 @@ import mettel.util.MettelReport;
  *
  */
 public class MettelGenerator {
-	
+
 	private static MettelReport report = null;;
 
 	private static PrintWriter out = new PrintWriter(
@@ -67,7 +67,7 @@ public class MettelGenerator {
 	private static String errFileName = null;
 	private static String outputPath = "output";
 	private static FileReader prop = null;
-	private static File tableau = null;
+	//private static File tableau = null;
 
 	private static boolean  quiet = false;
 
@@ -95,7 +95,7 @@ public class MettelGenerator {
 
         	        if(i < SIZE-1){
             		    in = new ANTLRFileStream(args[++i]);
-            		    System.out.println("Input file: "+args[i]);
+            		    System.out.println("Specification file: "+args[i]);
                     }else{
                         System.out.println("I need a name of the input file.");
                         System.exit(-1);
@@ -175,7 +175,7 @@ public class MettelGenerator {
 */
         		}
         	}
-    		
+
     		report = new MettelReport(out,err,quiet);
 
     		MettelANTLRGrammarGeneratorProperties p = //(prop == null)? null:
@@ -189,7 +189,10 @@ public class MettelGenerator {
 */
         	CommonTokenStream tokens = new CommonTokenStream();
 
-    		if(in == null) in = new ANTLRInputStream(System.in);
+    		if(in == null){
+    			in = new ANTLRInputStream(System.in);
+    			report("Reading specification from standard input");
+    		}
 
         	MettelLexer lexer = new MettelLexer(in);
 
@@ -208,12 +211,12 @@ public class MettelGenerator {
         	}
 
         	report("I am processing the specification.");
-        	
+
         	MettelJavaPackageStructure pStructure = spec.process(p);
         	pStructure.flush(outputPath);
-        	
-        	report("Java code of the prover is generated.");
-        	
+
+        	report("Java code of the provers is generated.");
+
         	report.report("I have asked ANTLR to generate parsers for the syntaxes.");
         	if(pStructure.antlr(outputPath, report)){
         		report("The Java code of all the parsers is generated.");
@@ -224,18 +227,26 @@ public class MettelGenerator {
         	File src = new File(outputPath + File.separatorChar + spec.path());
         	File dir = createTempDir(spec.path());
         	compile(src, dir);
-      	
+
         	report("I am verifying the tableau calculi specifications.");
         	if(pStructure.verifyTableaux(outputPath, dir, report)){
         		report("All the tableau calculi specifications are OK.");
         	}else{
         		System.exit(4);
         	}
-        	
+
+        	try{
+        		report("Copying resources");
+        		copyResources(src, dir.getPath());
+        	}catch(IOException e){
+        		report("I cannot copy resources.");
+        		throw e;
+        	}
+
         	if(!build(spec.path(), src, dir)){
         		System.exit(5);
         	}
-        	
+
         	deleteFiles(dir);
 
         	System.exit(0);
@@ -269,7 +280,7 @@ public class MettelGenerator {
 			//arguments.add("-verbose");
 			arguments.add("-d");
 			arguments.add(dir.getAbsolutePath());
-			arguments.addAll(listFileNames(src)); 
+			arguments.addAll(listFileNames(src));
 
 			OutputStream out0 = System.out;
 			if(outFileName != null){
@@ -288,28 +299,56 @@ public class MettelGenerator {
 			}
 			out0.flush(); err0.flush();//TODO: copy resource files into classes dir
 	}
-	
-	
+
+	private static void copyResources(File src, String dest) throws IOException{
+		List<File> resources = listResources(null, src);
+		for(File f:resources){
+			System.out.println(f.getPath());
+			System.out.println(f.getPath().replaceFirst(outputPath, dest));
+			FileInputStream i = new FileInputStream(f);
+			try{
+				FileOutputStream o = new FileOutputStream(f.getPath().replaceFirst(outputPath, dest));
+				try{
+					byte[] buf = new byte[1024];
+					int len = 0;
+					while((len = i.read(buf)) > 0){
+						o.write(buf, 0, len);
+					}
+				}finally{
+					o.close();
+				}
+			}finally{
+				i.close();
+			}
+		}
+	}
+
 	private static boolean build(String path, File src, File dir) throws IOException,
 			ClassNotFoundException,
 			IllegalAccessException, IllegalArgumentException, NoSuchMethodException, SecurityException{ //, MismatchedTokenException{
 
-		File mainClass = findMainClass(src);
-		String name = mainClass.getName();
-		name = name.substring(0, name.lastIndexOf('.'));
-
-		report("I am trying to make an executable jar-file with the prover.");
+		report("I am trying to make an executable jar-file with the provers.");
 
 		Manifest manifest = new Manifest();
 		Attributes attributes = manifest.getMainAttributes();
 		attributes.put(Attributes.Name.MANIFEST_VERSION, "1.0");
-		attributes.put(Attributes.Name.MAIN_CLASS, path+'.'+name);
+		File mainClass = findMainClass(src);
+		if(mainClass == null){
+			report("I could not find any main class.");
+		}else{
+			String name = mainClass.getPath();
+			name = name.substring(0, name.lastIndexOf('.'));
+			name = name.replaceFirst(outputPath+'.', "");
+			name = name.replace(File.separatorChar, '.');
+			attributes.put(Attributes.Name.MAIN_CLASS, name);
+					//path+'.'+name);
+		}
 		attributes.put(Attributes.Name.CLASS_PATH, "mettel2-core.jar antlr3-runtime.jar");
 
 		JarOutputStream jar = new JarOutputStream(new FileOutputStream(path+".jar"), manifest);
 		try{
 			addToJar(dir.getPath(),dir,jar);
-	
+
 			//addTableauToJar(path, tableau,jar);
 		}finally{
 			jar.close();
@@ -341,10 +380,10 @@ public class MettelGenerator {
 	}*/
 
 	private static void addToJar(String prefix, File source, JarOutputStream target) throws IOException{
-		
+
 		String name = source.getPath().replace(prefix,"").replace(File.separator, "/");
 		if(name.startsWith("/")) name = name.substring(1);
-		
+
 		if (source.isDirectory()){
 			if(!name.isEmpty()){
 				if(!name.endsWith("/")) name += "/";
@@ -393,6 +432,24 @@ public class MettelGenerator {
 		  throw new IllegalStateException("Failed to create directory "
 			  + prefix + random +" within " + TEMP_DIR_ATTEMPTS);
 
+	}
+
+	private static List<File> listResources(List<File> files, File dir){
+
+	    if(files == null) files = new ArrayList<File>();
+
+	    if(!dir.isDirectory()){
+	    	String name = dir.getName();
+	        if(!name.endsWith(".java") && !name.endsWith(".g")){
+	        		files.add(dir);
+	    	}
+	        return files;
+	    }
+
+	    if(!dir.getName().equals("test")){
+	    	for(File file: dir.listFiles()) listResources(files, file);
+	    }
+	    return files;
 	}
 
 	private static List<File> listFiles(List<File> files, File dir){

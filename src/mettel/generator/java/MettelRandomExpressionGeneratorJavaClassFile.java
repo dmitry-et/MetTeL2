@@ -69,10 +69,10 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 		headings.appendLine("import java.util.Collection;");
 		headings.appendLine("import java.util.Random;");
 		headings.appendEOL();
-		headings.appendLine("import java.io.BufferedWriter;");
+		//headings.appendLine("import java.io.BufferedWriter;");
 		headings.appendLine("import java.io.File;");
 		headings.appendLine("import java.io.FileReader;");
-		headings.appendLine("import java.io.FileWriter;");
+		//headings.appendLine("import java.io.FileWriter;");
 		headings.appendLine("import java.io.IOException;");
 		headings.appendLine("import java.io.ByteArrayInputStream;");
 		headings.appendLine("import java.util.Properties;");
@@ -82,7 +82,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 	}
 
 	public void generateBody(){
-		appendLine("private static BufferedWriter out = null;");
+		//appendLine("private static BufferedWriter out = null;");
 		appendLine("private static FileReader prop = null;");
 		appendLine("private static boolean standardOutput = false;");
 		appendLine("private static String outputPath = \"random_problems\";");

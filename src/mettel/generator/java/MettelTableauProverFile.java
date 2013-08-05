@@ -33,15 +33,15 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
 	private String prefix = "Mettel";
 
 	private MettelJavaPackageStructure pStructure = null;
-	
+
     private String sort = null;
-    
+
     private String tabName = null;
     private String synName = null;
     private String SynName = null;
-	
+
 	public MettelTableauProverFile(String prefix, String sort, String branchBound, MettelJavaPackageStructure pStructure, String tabName, String synName) {
-		super(prefix+"TableauProver", pStructure.basePackage(), "public", null, null);
+		super(prefix+"TableauProver", pStructure.tableauPackage(tabName), "public", null, null);
 		this.pStructure = pStructure;
 		this.prefix = prefix;
 		this.sort = sort;
@@ -240,8 +240,8 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
 	    incrementIndentLevel();
 	    	appendLine("CharStream tin = (path == null)?");
 	    	incrementIndentLevel();
-	    		appendLine("new ANTLRInputStream("+prefix+"TableauProver.class.getResourceAsStream(\"/"+
-	    				MettelJavaNames.javaPath(pStructure.tableauPackage(tabName).path()+".calculus")+"\")):");
+	    		appendLine("new ANTLRInputStream("+prefix+"TableauProver.class.getResourceAsStream(\"calculus\")):");
+	    				//\"/"+MettelJavaNames.javaPath(pStructure.tableauPackage(tabName).path()+".calculus")+"\")):");
 	    		appendLine("new ANTLRFileStream(path);");
 	    	decrementIndentLevel();
 

@@ -19,7 +19,6 @@ package mettel.language;
 import java.util.List;
 
 import mettel.generator.MettelANTLRGrammarGeneratorProperties;
-import mettel.generator.java.MettelFile;
 import mettel.generator.java.MettelJavaPackageStructure;
 import mettel.util.MettelJavaNames;
 
@@ -31,7 +30,7 @@ import mettel.util.MettelJavaNames;
 public class MettelTableau implements MettelBlock {
 
 	private String name = null;
-	
+
 	private MettelSyntax syntax = null;
 
 	private List<MettelTableau> parents = null;
@@ -43,7 +42,7 @@ public class MettelTableau implements MettelBlock {
 	public MettelSyntax syntax(){
 		return syntax;
 	}
-	
+
 	public List<MettelTableau> parents(){
 		return parents;
 	}
@@ -95,25 +94,25 @@ public class MettelTableau implements MettelBlock {
 		}
 		return syn;
 	}*/
-	
-	
+
+
 	//private MettelANTLRGrammarGeneratorProperties properties = null;
 	//private MettelJavaPackageStructure pStructure = null;
-	
+
 	void process(MettelJavaPackageStructure pStructure, MettelANTLRGrammarGeneratorProperties properties){
 		//this.pStructure = pStructure;
 		//this.properties = properties;
-		
+
 		//unravel();
-		
+
 		final String prefix = MettelJavaNames.firstCharToUpperCase(name);
 		pStructure.appendStandardTableauClasses(name, syntax.name(), prefix, properties.nameSeparator);
 		pStructure.appendStandardTableauClasses(name, prefix, syntax.sortStrings, properties.branchBound);
 		pStructure.appendTableauFile(name,content);
-		
-		
+
+
 	}
-	
+
 	void init(MettelJavaPackageStructure pStructure, MettelANTLRGrammarGeneratorProperties properties){
 		final String prefix = MettelJavaNames.firstCharToUpperCase(name);
 		pStructure.appendStandardTableauClasses(name, syntax.name(), prefix, properties.nameSeparator);
