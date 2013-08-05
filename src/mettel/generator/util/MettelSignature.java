@@ -14,38 +14,41 @@
  * You should have received a copy of the GNU General Public License
  * along with MetTeL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package mettel.language;
-
-import org.antlr.runtime.IntStream;
-import org.antlr.runtime.RecognitionException;
+package mettel.generator.util;
 
 /**
- * @author Dmitry Tishkovsky
- * @version $Revision$ $Date$
+ * @author dmitry
  *
  */
-public class MettelRecognitionException extends RecognitionException {
+public class MettelSignature {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = -6523022868000940084L;
+	@SuppressWarnings("unused")
+	private MettelSignature() {}
 
-	/**
-	 *
-	 */
-	public MettelRecognitionException() {}
+	private String sort;
+	private String name;
+	private String[] sorts;
 
-	/**
-	 * @param input
-	 */
-	public MettelRecognitionException(IntStream input) {
-		super(input);
-		// TODO Auto-generated constructor stub
+	public MettelSignature(String sort, String name, String[] sorts){
+		super();
+		this.sort = sort;
+		this.name = name;
+		this.sorts = sorts;
+	}
+
+	public String name(){
+		return name;
+	}
+
+	public String sort(){
+		return sort;
+	}
+
+	public String[] arguments(){
+		return sorts;
 	}
 
 	public String toString(){
-		return "at line "+line+" at position "+charPositionInLine;
+		return "("+ sort+", "+name+", "+sorts+')';
 	}
-
 }

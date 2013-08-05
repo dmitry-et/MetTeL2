@@ -49,7 +49,7 @@ public class MettelJavaPackage {
 
 	public MettelFile createFile(String fileName, String extension){
 		MettelFile file = new MettelFile(fileName, extension, this);
-		files.add(file);
+		add(file);
 		return file;
 	}
 

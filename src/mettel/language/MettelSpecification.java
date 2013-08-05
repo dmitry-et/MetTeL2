@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import mettel.generator.MettelANTLRGrammarGeneratorProperties;
+import mettel.generator.java.MettelJavaPackageStructure;
+
 import static mettel.util.MettelStrings.LINE_SEPARATOR;
 
 /**
@@ -33,10 +36,18 @@ public class MettelSpecification {
 
 	private ArrayList<MettelSyntax> syntaxes = new ArrayList<MettelSyntax>();
 
+	private ArrayList<MettelTableau> tableaux = new ArrayList<MettelTableau>();
+
 	private HashMap<String,MettelSyntax> syntaxTable = new HashMap<String,MettelSyntax>();
+
+	private HashMap<String,MettelTableau> tableauTable = new HashMap<String,MettelTableau>();
 
 	public MettelSyntax getSyntax(String name){
 		return syntaxTable.get(name);
+	}
+
+	public MettelTableau getTableau(String name){
+		return tableauTable.get(name);
 	}
 
 	@SuppressWarnings("unused")
@@ -81,7 +92,16 @@ public class MettelSpecification {
 		return true;
 	}
 
-	List<MettelSyntax> get(List<String> syntaxNames){
+	boolean addTableau(MettelTableau tableau) {
+		MettelTableau t = tableauTable.get(tableau.name());
+		if(t != null) return false;
+		tableaux.add(tableau);
+		tableauTable.put(tableau.name(), tableau);
+		return true;
+	}
+
+
+	List<MettelSyntax> getSyntaxes(List<String> syntaxNames){
 		if(syntaxNames == null) return null;
 		ArrayList<MettelSyntax> syntaxList = new ArrayList<MettelSyntax>();
 		for(String s:syntaxNames){
@@ -97,6 +117,44 @@ public class MettelSpecification {
 	 */
 	public List<MettelSyntax> syntaxes() {
 		return syntaxes;
+	}
+
+	List<MettelTableau> getTableaux(List<String> tableauNames){
+		if(tableauNames == null) return null;
+		ArrayList<MettelTableau> tableauList = new ArrayList<MettelTableau>();
+		for(String t:tableauNames){
+			MettelTableau tab = tableauTable.get(t);
+			if(tab == null) return null;
+			tableauList.add(tab);
+		}
+		return tableauList;
+	}
+
+	/**
+	 * @return
+	 */
+	public List<MettelTableau> tableaux() {
+		return tableaux;
+	}
+
+	public MettelJavaPackageStructure process(MettelANTLRGrammarGeneratorProperties properties) {
+		final MettelJavaPackageStructure pStructure = new MettelJavaPackageStructure(path);
+
+		//for(MettelTableau tab:tableaux){
+		//	tab.init(pStructure, properties);
+		//}
+
+		for(MettelSyntax syn:syntaxes){
+			syn.process(pStructure, properties);
+		}
+
+		for(MettelTableau tab:tableaux){
+			tab.process(pStructure, properties);
+		}
+
+		pStructure.generateMainClass();
+
+		return pStructure;
 	}
 
 }

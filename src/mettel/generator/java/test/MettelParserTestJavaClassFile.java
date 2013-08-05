@@ -29,20 +29,24 @@ public class MettelParserTestJavaClassFile extends MettelJavaClassFile {
 	private String prefix = "Mettel";
 //	private String packName = null;
 //	private String packNameFull = null;
+	private String sort = null;
+	private String synName = null;
 
 	private MettelJavaPackageStructure pStructure = null;
 
-	public MettelParserTestJavaClassFile(String prefix, String sort, MettelJavaPackageStructure pStructure) {
-		super(prefix+"ParserTest", pStructure.testLanguagePackage(), "public", "TestCase", null);
+	public MettelParserTestJavaClassFile(String prefix, String sort, MettelJavaPackageStructure pStructure, String synName) {
+		super(prefix+"ParserTest", pStructure.testLanguagePackage(synName), "public", "TestCase", null);
 		this.pStructure = pStructure;
 
 		this.prefix = prefix;
+		this.sort = sort;
+		this.synName = synName;
 
 //		packName = pack.path();
 //		packNameFull = packName.substring(0,packName.lastIndexOf('.')+1);
 //		packName = packName.substring(0,packName.indexOf('.')+1);
 
-		body(sort);
+		body();
 	}
 
 	protected void imports(){
@@ -60,11 +64,11 @@ public class MettelParserTestJavaClassFile extends MettelJavaClassFile {
 		headings.appendLine("import org.antlr.runtime.CommonTokenStream;");
 		headings.appendLine("import org.antlr.runtime.RecognitionException;");
 		headings.appendEOL();
-		headings.appendLine("import "+pStructure.languagePackage().path()+".*;");
+		headings.appendLine("import "+pStructure.languagePackage(synName).path()+".*;");
 		headings.appendEOL();
 	}
 
-	private void body(String sort){
+	private void body(){
 
 		appendLine("final static String inFile = \""+MettelJavaNames.quote(MettelJavaNames.systemPath("test.examples."+pStructure.basePackage().path()+".input"))+"\";");
 		appendLine("final static String outFile = \""+MettelJavaNames.quote(MettelJavaNames.systemPath("test.examples."+pStructure.basePackage().path()+".output"))+"\";");

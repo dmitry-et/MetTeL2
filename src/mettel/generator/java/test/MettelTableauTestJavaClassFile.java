@@ -31,17 +31,25 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
 //	private String packNameFull = null;
 
 	private MettelJavaPackageStructure pStructure = null;
-
-	public MettelTableauTestJavaClassFile(String prefix, String sort, String branchBound, MettelJavaPackageStructure pStructure) {
-		super(prefix+"TableauTest", pStructure.testTableauPackage(), "public", "TestCase", null);
+	private String sort = null;
+	private String synName = null;
+	private String SynName = null;
+	
+	
+	public MettelTableauTestJavaClassFile(String prefix, String sort, String branchBound, MettelJavaPackageStructure pStructure, String tabName, String synName) {
+		super(prefix+"TableauTest", pStructure.testTableauPackage(tabName), "public", "TestCase", null);
 		this.pStructure = pStructure;
 		this.prefix = prefix;
-
+		this.sort = sort;
+		this.synName = synName;
+		
+		SynName = MettelJavaNames.firstCharToUpperCase(synName);
+		
 //		packName = pack.path();
 //		packNameFull = packName.substring(0,packName.lastIndexOf('.')+1);
 //		packName = packName.substring(0,packName.indexOf('.')+1);
 
-		body(sort, branchBound);
+		body(branchBound);
 
 		if(branchBound != null){
 			headings.appendLine("import mettel.core.tableau.acceptor.MettelSmallTableauStateAcceptor;");
@@ -72,11 +80,11 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
 		headings.appendLine("import mettel.core.tableau.MettelTableauObjectFactory;");
 		//headings.appendLine("import mettel.core.tableau.acceptor.MettelSmallTableauStateAcceptor;");
 
-		headings.appendLine("import "+pStructure.languagePackage().path()+".*;");
+		headings.appendLine("import "+pStructure.languagePackage(synName).path()+".*;");
 		headings.appendEOL();
 	}
 
-	private void body(String sort, String branchBound){
+	private void body(String branchBound){
 
     	appendLine("final static String tableauFile = \""+MettelJavaNames.quote(MettelJavaNames.systemPath("test.examples."+pStructure.basePackage().path()+".tableau"))+"\";");
     	appendLine("final static String inDir = \""+MettelJavaNames.quote(MettelJavaNames.systemPath("test.examples."+pStructure.basePackage().path()+".problems"))+"\";");
@@ -87,12 +95,12 @@ public class MettelTableauTestJavaClassFile extends MettelJavaClassFile {
     	incrementIndentLevel();
     		appendLine("CommonTokenStream tokens = new CommonTokenStream();");
     	    appendLine("CharStream tin = new ANTLRFileStream(tableauFile);");
-    	    appendLine(prefix+"Lexer lexer = new "+prefix+"Lexer(tin);");
+    	    appendLine(SynName+"Lexer lexer = new "+SynName+"Lexer(tin);");
 
     	    appendEOL();
 
     	    appendLine("tokens.setTokenSource(lexer);");
-    	    appendLine(prefix+"Parser parser = new "+prefix+"Parser(tokens);");
+    	    appendLine(SynName+"Parser parser = new "+SynName+"Parser(tokens);");
 
     	    appendEOL();
 
@@ -134,16 +142,16 @@ appendLine("System.out.print(\"\"+counter+\". \"+fileName+\"...\");");
     	        			appendLine("boolean expected = name.substring(j+1).equals(\"sat\");");
 
     	        			appendLine("CharStream in = new ANTLRFileStream(inDir+System.getProperty(\"file.separator\")+fileName);");
-    	        		    appendLine("lexer = new "+prefix+"Lexer(in);");
+    	        		    appendLine("lexer = new "+SynName+"Lexer(in);");
     	        		    appendLine("tokens.setTokenSource(lexer);");
 
-    	        		    appendLine("ArrayList<"+prefix+MettelJavaNames.firstCharToUpperCase(sort, pStructure.nameSeparator())+
-    	        		    		"> list = new ArrayList<"+prefix+MettelJavaNames.firstCharToUpperCase(sort, pStructure.nameSeparator())+">();");
+    	        		    appendLine("ArrayList<"+SynName+MettelJavaNames.firstCharToUpperCase(sort, pStructure.nameSeparator())+
+    	        		    		"> list = new ArrayList<"+SynName+MettelJavaNames.firstCharToUpperCase(sort, pStructure.nameSeparator())+">();");
     	        		    appendLine("parser."+sort+"s(list);");
 
 //    	        		    appendLine("TreeSet<MettelAnnotatedExpression> annotated = new TreeSet<MettelAnnotatedExpression>();");
 
-    	        		    appendLine("MettelTableauObjectFactory tfactory = new "+prefix+"TableauObjectFactory();");
+    	        		    appendLine("MettelTableauObjectFactory tfactory = new "+SynName+"TableauObjectFactory();");
     	        		    if(branchBound == null){
 
     	        		    	appendLine("MettelSimpleTableauManager m = new MettelSimpleTableauManager(tfactory, calculus);");
@@ -153,7 +161,7 @@ appendLine("System.out.print(\"\"+counter+\". \"+fileName+\"...\");");
 //
     	        		    }else{
     	        		    	appendLine("int branchBound = 0;");
-    	        		    	appendLine("for("+prefix+MettelJavaNames.firstCharToUpperCase(sort, pStructure.nameSeparator())+" e:list){");
+    	        		    	appendLine("for("+SynName+MettelJavaNames.firstCharToUpperCase(sort, pStructure.nameSeparator())+" e:list){");
     	        		    	incrementIndentLevel();
     	        		    		appendLine("branchBound += "+branchBound.replaceAll("%l", "e.length()")+';');
     	        		    	decrementIndentLevel();

@@ -17,10 +17,23 @@
 package mettel.language;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import mettel.generator.MettelANTLRGrammarGeneratorProperties;
+import mettel.generator.antlr.MettelANTLRGrammar;
+import mettel.generator.antlr.MettelANTLRMultiaryBNFStatement;
+import mettel.generator.antlr.MettelANTLRRule;
+import mettel.generator.antlr.MettelANTLRRuleReference;
+import mettel.generator.antlr.MettelANTLRStandardGrammar;
+import mettel.generator.antlr.MettelANTLRToken;
+import mettel.generator.antlr.MettelANTLRUnaryBNFStatement;
+import mettel.generator.java.MettelJavaPackageStructure;
+import mettel.util.MettelJavaNames;
+
+import static mettel.util.MettelStrings.BASIC_STRING;
 import static mettel.util.MettelStrings.LINE_SEPARATOR;
 
 /**
@@ -255,7 +268,7 @@ public class MettelSyntax implements MettelBlock {
 		return bnfs.get(sort);
 	}
 
-	public MettelSyntax unravel(){
+	/*public MettelSyntax unravel(){
 		if(parents == null) return this;
 		MettelSyntax syn = new MettelSyntax(name);
 		for(MettelSyntax s:parents){
@@ -271,7 +284,7 @@ public class MettelSyntax implements MettelBlock {
 			}
 		}
 		return syn;
-	}
+	}*/
 
 	public List<MettelSort> allSorts(){
 		if(parents == null) return sorts;
@@ -293,54 +306,242 @@ public class MettelSyntax implements MettelBlock {
 		return list;
 	}
 
-//	/**
-//	 * @return the statements
-//	 */
-//	ArrayList<MettelBNFStatement> statements() {
-//		return statements;
-//	}
+	private MettelANTLRGrammarGeneratorProperties properties = null;
+	private MettelJavaPackageStructure pStructure = null;
+	String[] sortStrings = null;
 
-	/*TODO implement hierarchical extension mechanism
-	 *
-	void unravel(){
-		while(parent!= null){
-			sorts.addAll(0,parent.sorts);
-			statements.addAll(0,parent.statements);
-			parent = parent.parent();
+	public void process(MettelJavaPackageStructure pStructure, MettelANTLRGrammarGeneratorProperties properties){
+		this.pStructure = pStructure;
+		this.properties = properties;
+
+		//unravel();
+		final String NAME = MettelJavaNames.firstCharToUpperCase(name);
+
+		pStructure.appendStandardClasses(NAME);
+		pStructure.appendStandardLanguageClasses(name, NAME, properties.nameSeparator);
+
+		MettelANTLRStandardGrammar grammar =
+				new MettelANTLRStandardGrammar(NAME, pStructure.grammarPackage(name).path(), properties.grammarOptions);
+
+		sortStrings = new String[sorts.size()];
+		int i = 0;
+		for(MettelSort sort:sorts){
+			sortStrings[i++] = sort.name();
+			sort.process(grammar, properties);
+			processBNFs(grammar, sort);
 		}
+		//for(String s:sortStrings) System.out.print(s+ " "); System.out.println();
+		pStructure.appendStandardLanguageClasses(name, NAME, sortStrings, properties.branchBound);
+
+		grammar.addRule(makeANTLRExpressionListRule(NAME));
+		grammar.addRule(makeANTLRExpressionRule(NAME, sorts));
+		grammar.addRule(makeANTLRTableauRule(NAME));
+		grammar.addRule(makeANTLRTableauCalculusRule(NAME));
+
+		pStructure.appendParser(name, grammar);
 	}
-	*/
 
-	/**
-	 *
-	 */
-//	void generateParser(PrintWriter out){
-//		//TODO header
-//		for(MettelSort sort:bnfs.keySet()){
-//			ArrayList<MettelBNFStatement> statements = bnfs.get(sort);
-//			String nodeName = sort.name()+"Primitive";
-//			out.println(nodeName);
-//			out.println(':');
-//				out.println("IDENTIFIER");
-//			out.println(';');
-//			int i = 0;
-//			for(MettelBNFStatement s:statements){
-//				if(i == 0){
-//					//identifier
-//					so = s;
-//				}else{
-//					buf.append(LINE_SEPARATOR);
-//					buf.append("\t| ");
-//				}
-//				s.toBuffer(buf);
-//				i++;
-//			}
-//			if(i > 0){
-//				buf.append(';');
-//				buf.append(LINE_SEPARATOR);
-//			}
-//		}
-//		//TODO footer
-//	}
+	private void processBNFs(MettelANTLRGrammar grammar, MettelSort sort) {
+		final String SORT_NAME = sort.name();
+		String s0 = BASIC_STRING + MettelJavaNames.firstCharToUpperCase(SORT_NAME,properties.nameSeparator);
+		String s1 = null;
+		for(MettelBNFStatement s:bnfs.get(sort)){
+			s1 = SORT_NAME +
+					MettelJavaNames.firstCharToUpperCase(s.identifier(),properties.nameSeparator);
 
+			MettelToken[] tokens = s.tokens().toArray(new MettelToken[0]);
+			final int SIZE = tokens.length;
+			if( (SIZE == 3) &&
+					  (tokens[0] instanceof MettelSort) &&
+					  (SORT_NAME.equals(((MettelSort)tokens[0]).name())) &&
+					  (tokens[1] instanceof MettelStringLiteral) &&
+					  (tokens[2] instanceof MettelSort) &&
+					  (SORT_NAME.equals(((MettelSort)tokens[2]).name()))
+					){
+
+				String id = s.identifier();
+
+				MettelANTLRMultiaryBNFStatement st = new MettelANTLRMultiaryBNFStatement();
+				st.addExpression(new MettelANTLRRuleReference(s0,"e0"));
+
+				MettelANTLRMultiaryBNFStatement st1 = new MettelANTLRMultiaryBNFStatement();
+				st1.addExpression(new MettelANTLRToken(tokens[1].toString()));
+
+				MettelANTLRRuleReference ref = new MettelANTLRRuleReference(s0,"e1");
+				ref.appendLineToPostfix("e0 = factory.create"+
+						MettelJavaNames.firstCharToUpperCase(id,properties.nameSeparator)+
+						MettelJavaNames.firstCharToUpperCase(SORT_NAME,properties.nameSeparator)+"(e0, e1);");
+				st1.addExpression(ref);
+
+				MettelANTLRUnaryBNFStatement st0 = new MettelANTLRUnaryBNFStatement(
+						st1,MettelANTLRUnaryBNFStatement.STAR);
+				st.addExpression(st0);
+
+				MettelANTLRRule r =new MettelANTLRRule(s1,st,/*true,*/new String[]{grammar.name()+
+						MettelJavaNames.firstCharToUpperCase(SORT_NAME, properties.nameSeparator)});
+				r.appendLineToAfterBlock("r0 = e0;");
+				grammar.addRule(r);
+
+				pStructure.appendConnectiveLanguageClass(name, grammar.name(), SORT_NAME, id,
+						new String[]{SORT_NAME, SORT_NAME}, s.tokens(), (s instanceof MettelEqualityBNFStatement));
+
+			}else if( (SIZE == 2) &&
+					  (tokens[0] instanceof MettelSort) &&
+					  (SORT_NAME.equals(((MettelSort)tokens[0]).name())) &&
+					  (tokens[1] instanceof MettelStringLiteral)
+					){
+				MettelANTLRMultiaryBNFStatement st = new MettelANTLRMultiaryBNFStatement();
+				st.addExpression(new MettelANTLRRuleReference(s0,"e0"));
+
+				MettelANTLRToken t = new MettelANTLRToken(tokens[1].toString());
+				t.appendLineToPostfix("e0 = factory.create"+
+						MettelJavaNames.firstCharToUpperCase(s.identifier(),properties.nameSeparator)+
+						MettelJavaNames.firstCharToUpperCase(SORT_NAME, properties.nameSeparator)+"(e0);");
+
+				MettelANTLRUnaryBNFStatement st0 = new MettelANTLRUnaryBNFStatement(
+						t ,MettelANTLRUnaryBNFStatement.STAR);
+				st.addExpression(st0);
+
+				MettelANTLRRule r =new MettelANTLRRule(s1,st,/*true,*/new String[]{grammar.name()+
+						MettelJavaNames.firstCharToUpperCase(SORT_NAME, properties.nameSeparator)});
+				r.appendLineToAfterBlock("r0 = e0;");
+				grammar.addRule(r);
+
+				pStructure.appendConnectiveLanguageClass(name, grammar.name(), SORT_NAME, s.identifier(),
+						new String[]{((MettelSort)tokens[0]).name()}, s.tokens(), false);
+
+
+			}else{ //if(tokens[0] instanceof MettelStringLiteral){
+
+				String id = s.identifier();
+
+				MettelANTLRMultiaryBNFStatement st = new MettelANTLRMultiaryBNFStatement(
+						MettelANTLRMultiaryBNFStatement.OR);
+				MettelANTLRRuleReference ref = new MettelANTLRRuleReference(s0,"e00");
+				ref.appendLineToPostfix("r0 = e00;");
+				st.addExpression(ref);
+				MettelANTLRMultiaryBNFStatement st0 = new MettelANTLRMultiaryBNFStatement();
+
+				ArrayList<String> sortStrings = new ArrayList<String>();
+				for(int i = 0, j = 0; i < SIZE; i++){
+					if(tokens[i] instanceof MettelStringLiteral){
+						st0.addExpression(new MettelANTLRToken(tokens[i].toString()));
+					}else if(tokens[i] instanceof MettelSort){
+						String name = ((MettelSort)tokens[i]).name();
+						sortStrings.add(name);
+						if(SORT_NAME.equals(name)){
+							st0.addExpression(new MettelANTLRRuleReference(s0,"e1"+j));
+						}else{
+							st0.addExpression(new MettelANTLRRuleReference(tokens[i].toString(),"e1"+j));
+						}
+						j++;
+					}
+				}
+
+				st0.appendToPostfix("r0 = factory.create"+
+						MettelJavaNames.firstCharToUpperCase(id,properties.nameSeparator)+
+						MettelJavaNames.firstCharToUpperCase(SORT_NAME, properties.nameSeparator)+'(');
+				final int jSIZE = sortStrings.size();
+				if(jSIZE >0 ){
+					st0.appendToPostfix("e10");
+					for(int j = 1; j < jSIZE; j++){
+						st0.appendToPostfix(", e1"+j);
+					}
+				}
+				st0.appendLineToPostfix(");");
+				st.addExpression(st0);
+
+				MettelANTLRRule r = new MettelANTLRRule(s1,st,/*true,*/new String[]{grammar.name()+
+						MettelJavaNames.firstCharToUpperCase(SORT_NAME, properties.nameSeparator)});
+				grammar.addRule(r);
+
+				pStructure.appendConnectiveLanguageClass(name, grammar.name(), SORT_NAME, id , sortStrings.toArray(new String[sortStrings.size()]),
+						s.tokens(), (s instanceof MettelEqualityBNFStatement));
+
+			}//TODO other alternatives: ~~P, etc
+			s0 = s1;
+		}
+		MettelANTLRRule r = new MettelANTLRRule(SORT_NAME,new MettelANTLRRuleReference(s0,"e0"),
+				new String[]{grammar.name()+MettelJavaNames.firstCharToUpperCase(SORT_NAME, properties.nameSeparator)});
+		r.appendLineToAfterBlock("r0 = e0;");
+		grammar.addRule(r);
+
+	}
+
+	private MettelANTLRRule makeANTLRTableauCalculusRule(String grammarName) {
+		final String NAME = "tableauRule";
+
+		MettelANTLRMultiaryBNFStatement s = new MettelANTLRMultiaryBNFStatement();
+		MettelANTLRRuleReference ruleRef = new MettelANTLRRuleReference(NAME,"e0");
+		ruleRef.appendLineToPostfix("a0.add(e0);");
+
+		s.addExpression(ruleRef);
+
+		MettelANTLRMultiaryBNFStatement s0 = new MettelANTLRMultiaryBNFStatement();
+		s0.addExpression(new MettelANTLRToken("'"+properties.tableauRuleDelimiter+"'"));
+		s0.addExpression(new MettelANTLRUnaryBNFStatement(ruleRef,
+							MettelANTLRUnaryBNFStatement.TEST));
+		s.addExpression(new MettelANTLRUnaryBNFStatement(
+						s0,MettelANTLRUnaryBNFStatement.STAR));
+		s.addExpression(MettelANTLRToken.EOF);
+		return new MettelANTLRRule("tableauCalculus",s/*,false*/,
+				new String[]{"Collection<MettelGeneralTableauRule>"},null);
+	}
+
+	private MettelANTLRRule makeANTLRExpressionListRule(String grammarName) {
+		final String NAME = "expression";
+		MettelANTLRMultiaryBNFStatement s = new MettelANTLRMultiaryBNFStatement();
+		MettelANTLRRuleReference ruleRef = new MettelANTLRRuleReference(NAME,"e0");
+		ruleRef.appendLineToPostfix("r0.add(e0);");
+		s.addExpression(new MettelANTLRUnaryBNFStatement(
+						ruleRef,MettelANTLRUnaryBNFStatement.STAR));
+		MettelANTLRRule r = new MettelANTLRRule(NAME+'s',s/*,false*/,
+				new String[]{"ArrayList<"+grammarName+"Expression>"});
+		r.appendLineToInitBlock("r0 = new ArrayList<"+grammarName+"Expression>();");
+		//r.appendLineToAfterBlock("r0 = e0;");
+		return r;
+	}
+
+	private MettelANTLRRule makeANTLRExpressionRule(String grammarName,Collection<MettelSort> sorts){
+		MettelANTLRMultiaryBNFStatement s = new MettelANTLRMultiaryBNFStatement(MettelANTLRMultiaryBNFStatement.OR);
+		for(MettelSort sort:sorts){
+			MettelANTLRRuleReference ruleRef = new MettelANTLRRuleReference(sort.name(),sort.name()+"Expression",true);
+			ruleRef.appendLineToPostfix("r0 = "+sort.name()+"Expression;");
+			s.addExpression(ruleRef);
+		}
+		MettelANTLRRule r = new MettelANTLRRule("expression",s,
+				new String[]{grammarName+"Expression"});
+		//r.appendLineToAfterBlock("r0 = e0;");
+		return r;
+	}
+
+	private MettelANTLRRule makeANTLRTableauRule(String grammarName){//TODO make tableau rule flexibly specifiable
+		MettelANTLRMultiaryBNFStatement s = new MettelANTLRMultiaryBNFStatement();
+		final String EXPRESSIONS = "expressions";
+		s.addExpression(new MettelANTLRRuleReference(EXPRESSIONS,"premises"));
+		s.addExpression(new MettelANTLRToken("'"+properties.tableauRulePremiseDelimiter+"'"));
+
+		MettelANTLRRuleReference ruleRef = new MettelANTLRRuleReference(EXPRESSIONS,"conclusion");
+		ruleRef.appendLineToPostfix("branches.add(new LinkedHashSet<"+grammarName+"Expression>(conclusion));");
+		s.addExpression(ruleRef);
+
+		MettelANTLRMultiaryBNFStatement s0 = new MettelANTLRMultiaryBNFStatement();
+		s0.addExpression(new MettelANTLRToken("'"+properties.tableauRuleBranchDelimiter+"'"));
+		s0.addExpression(ruleRef);
+		s.addExpression(new MettelANTLRUnaryBNFStatement(s0,MettelANTLRUnaryBNFStatement.STAR));
+
+		MettelANTLRMultiaryBNFStatement s1 = new MettelANTLRMultiaryBNFStatement();
+		s1.addExpression(new MettelANTLRToken("'priority'"));
+		s1.addExpression(new MettelANTLRToken("INT",true));
+		s1.appendLineToPostfix("priority = Integer.valueOf(t.getText());");
+		s.addExpression(new MettelANTLRUnaryBNFStatement(s1,MettelANTLRUnaryBNFStatement.TEST));
+
+		MettelANTLRRule r = new MettelANTLRRule("tableauRule",s,
+				new String[]{"MettelGeneralTableauRule"});
+		r.appendLineToInitBlock("LinkedHashSet<LinkedHashSet<"+grammarName+
+				"Expression>> branches = new LinkedHashSet<LinkedHashSet<"+grammarName+"Expression>>();");
+		r.appendLineToInitBlock("int priority = 0;");
+		r.appendLineToAfterBlock("r0 = new MettelGeneralTableauRule(new LinkedHashSet<"+grammarName+"Expression>(premises),branches,priority);");
+		return r;
+	}
 }

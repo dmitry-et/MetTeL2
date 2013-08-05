@@ -1,8 +1,10 @@
+05/08/2013 Tableau blocks in specifications, generation and improved packaging of generated code
+
 17/07/2013 Benchmark suite: problem analyser and multi-threaded benchmarking
 
 25/04/2013 Fixed a bug in ALCO example
 
-22/04/2013 A property for separators in generated names  
+22/04/2013 A property for separators in generated names
 
 03/04/2013 Verification of tableau calculus specifications
 

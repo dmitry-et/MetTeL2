@@ -33,12 +33,15 @@ tokens{
 	ALL			=	'all';
 	PROBLEM		=	'problem';
 	SYNTAX		=	'syntax';
-	SEMANTICS		=	'semantics';
+	SEMANTICS	=	'semantics';
 	TABLEAU		=	'tableau';
 
 	SORT			=	'sort';
 	EXTENDS		=	'extends';
 	ANTLR			=	'antlr';
+	IN			= 	'in';
+
+//	BLOCK;
 
 /*	PREDICATE   =   'predicate'; I think, it will be easy to determine the type of any symbol from its context
 	FUNCTION    =   'function';
@@ -51,6 +54,7 @@ tokens{
 @header{
 package mettel.language;
 
+import mettel.language.MettelParserException;
 import mettel.generator.MettelEqualityKeywords;
 }
 //Java imports
@@ -75,12 +79,17 @@ public MettelParser(TokenStream input, RecognizerSharedState state, MettelEquali
 }
 }
 
+@lexer::members{
+	boolean futureBlock = false;
+}
+
 
 /*****************************************************************************************
                                 Parser section
 *****************************************************************************************/
 specification
     returns [MettelSpecification spec = null]
+//throws MettelParserException
     :
     SPECIFICATION
     p = path
@@ -129,9 +138,13 @@ path
 
 block
     [MettelSpecification spec]
+//throws MettelParserException
     :
     (syn  = syntax[spec]
      {spec.addSyntax(syn);}
+     |
+     tab = tableau[spec]
+     {spec.addTableau(tab);}
     )
     ;
 
@@ -141,7 +154,7 @@ syntax[MettelSpecification spec]
     SYNTAX id = IDENTIFIER
     	(paths = extendsBlock)?
     	{
-    	syn = new MettelSyntax(id.getText(), spec.get(paths));
+    	syn = new MettelSyntax(id.getText(), spec.getSyntaxes(paths));
     	}
     	LBRACE
 		    (
@@ -286,9 +299,43 @@ charOrStringLiteral
     {literal = new MettelStringLiteral(l.getText());}
     ;
 
+tableau[MettelSpecification spec]
+returns [MettelTableau tab = null]
+//throws MettelParserException
+	:
+	TABLEAU	id = IDENTIFIER synName = syntaxName
+    	(paths = extendsBlock)?
+    	{
+    	String name = id.getText();
+    	if(synName == null) synName = name;
+    	MettelSyntax syntax = spec.getSyntax(synName);
+    	if(syntax == null)
+    		throw new MettelParserException("The syntax "+ synName + " is undefined", id.getLine(), id.getCharPositionInLine());
+    	tab = new MettelTableau(name, syntax, spec.getTableaux(paths));
+    	}
+    	//(IN SYNTAX? synId = IDENTIFIER)?
+		//LBRACE
+			t = BLOCK
+			{
+			tab.setContent(t.getText());
+			}
+    	//RBRACE
+	;
+
+fragment
+syntaxName
+returns [String name = null]
+	:
+	(
+	IN (SYNTAX)?
+		id = IDENTIFIER
+		{name = id.getText();}
+	)?
+	;
+
 semantics
 	:
-	SEMANTICS IDENTIFIER (EXTENDS path)?
+	SEMANTICS synName = syntaxName IDENTIFIER (EXTENDS path)?
     	LBRACE
 		    semanticOperator?
 		    (SEMI
@@ -483,219 +530,15 @@ LINE_COMMENT
             }
     ;
 
-/*
-ABSTRACT
-    :   'abstract'
-    ;
+TABLEAU
+	:
+	'tableau'
+	{
+	futureBlock = true;
+	}
+	;
 
-ASSERT
-    :   'assert'
-    ;
 
-BOOLEAN
-    :   'boolean'
-    ;
-
-BREAK
-    :   'break'
-    ;
-
-BYTE
-    :   'byte'
-    ;
-
-CASE
-    :   'case'
-    ;
-
-CATCH
-    :   'catch'
-    ;
-
-CHAR
-    :   'char'
-    ;
-
-CLASS
-    :   'class'
-    ;
-
-CONST
-    :   'const'
-    ;
-
-CONTINUE
-    :   'continue'
-    ;
-
-DEFAULT
-    :   'default'
-    ;
-
-DO
-    :   'do'
-    ;
-
-DOUBLE
-    :   'double'
-    ;
-
-ELSE
-    :   'else'
-    ;
-
-ENUM
-    :   'enum'
-    ;
-
-EXTENDS
-    :   'extends'
-    ;
-
-FINAL
-    :   'final'
-    ;
-
-FINALLY
-    :   'finally'
-    ;
-
-FLOAT
-    :   'float'
-    ;
-
-FOR
-    :   'for'
-    ;
-
-GOTO
-    :   'goto'
-    ;
-
-IF
-    :   'if'
-    ;
-
-IMPLEMENTS
-    :   'implements'
-    ;
-
-IMPORT
-    :   'import'
-    ;
-
-INSTANCEOF
-    :   'instanceof'
-    ;
-
-INT
-    :   'int'
-    ;
-
-INTERFACE
-    :   'interface'
-    ;
-
-LONG
-    :   'long'
-    ;
-
-NATIVE
-    :   'native'
-    ;
-
-NEW
-    :   'new'
-    ;
-
-PACKAGE
-    :   'package'
-    ;
-
-PRIVATE
-    :   'private'
-    ;
-
-PROTECTED
-    :   'protected'
-    ;
-
-PUBLIC
-    :   'public'
-    ;
-
-RETURN
-    :   'return'
-    ;
-
-SHORT
-    :   'short'
-    ;
-
-STATIC
-    :   'static'
-    ;
-
-STRICTFP
-    :   'strictfp'
-    ;
-
-SUPER
-    :   'super'
-    ;
-
-SWITCH
-    :   'switch'
-    ;
-
-SYNCHRONIZED
-    :   'synchronized'
-    ;
-
-THIS
-    :   'this'
-    ;
-
-THROW
-    :   'throw'
-    ;
-
-THROWS
-    :   'throws'
-    ;
-
-TRANSIENT
-    :   'transient'
-    ;
-
-TRY
-    :   'try'
-    ;
-
-VOID
-    :   'void'
-    ;
-
-VOLATILE
-    :   'volatile'
-    ;
-
-WHILE
-    :   'while'
-    ;
-
-TRUE
-    :   'true'
-    ;
-
-FALSE
-    :   'false'
-    ;
-
-NULL
-    :   'null'
-    ;
-*/
 LPAREN
     :   '('
     ;
@@ -706,11 +549,47 @@ RPAREN
 
 LBRACE
     :   '{'
+    	(
+    	{futureBlock}? =>
+    	(
+    	{
+    	_type = BLOCK;
+    	state.tokenStartCharIndex = getCharIndex();
+    	}
+		(options{greedy=false;} : . )*
+		('\r\n' | '\r' | '\n' )
+		(
+             ' '
+        |    '\t'
+        |    '\u000C'
+        )*
+		{setText(getText());}
+		'}'
+		{
+		futureBlock = false;
+		}
+    	)
+    	)?
     ;
 
 RBRACE
     :   '}'
     ;
+
+BLOCK
+	:
+	;
+
+/*BLOCK
+	:
+	LBRACE
+	{state.tokenStartCharIndex = getCharIndex();}
+	(options{greedy=false;} : . )*
+	{setText(getText());}
+	RBRACE
+	;
+*/
+
 
 LBRACKET
     :   '['

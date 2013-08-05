@@ -16,17 +16,23 @@
  */
 package mettel.generator.java;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+
+import mettel.generator.util.MettelSignature;
 
 /**
  * @author alijevt1
  *
  */
 public class MettelRandomExpressionGeneratorPropertiesFile extends MettelFile implements MettelRandomExpressionDefaultPropertiesValues {
-	// perhaps rename
-	private Hashtable<String,ArrayList<String>> signatures = new Hashtable<String,ArrayList<String>>();
-	
+
+	private HashMap<String, LinkedHashSet<MettelSignature>> signatures = null;
+
+	public void setSignatures(HashMap<String, LinkedHashSet<MettelSignature>> signatures){
+		this.signatures = signatures;
+	}
+
 	//TODO make sure it creates properties directory to do that probably needs new class
 	// for creating ordinary files (not extending MettelJavaFile)
 	public MettelRandomExpressionGeneratorPropertiesFile(String prefix, MettelJavaPackage pack) {
@@ -37,44 +43,26 @@ public class MettelRandomExpressionGeneratorPropertiesFile extends MettelFile im
 				"# by Dmitry Tishkovsky."
 				});
 	}
-	
-	//TODO perhaps rename also repeating code
-	void appendSignature(String type) {
-		ArrayList<String> ss = signatures.get(type);
-		if(ss == null){
-			ss = new ArrayList<String>();
-			signatures.put(type, ss);
-		}
-	}
-	
-	void appendSignature(String type, String name) {
-		ArrayList<String> ss = signatures.get(type);
-		if(ss == null){
-			ss = new ArrayList<String>();
-			signatures.put(type, ss);
-		}
-		ss.add(name);
-	}
-	
+
 	public void generateBody() {
 //TODO
 //		appendLine(MettelRandomExpressionDefaultPropertiesNames.METTEL_VERSION + " = " + METTEL_VERSION_VALUE);
 //		appendLine(MettelRandomExpressionDefaultPropertiesNames.SYNTAX + " = " + SYNTAX_PATH);
 		for(String type:signatures.keySet()){
-			for(String name:signatures.get(type)){
-				appendLine(MettelRandomExpressionDefaultPropertiesNames.sortConnectiveFrequencyProperty(type, name) + " = " + SORT_CONNECTIVE_FREQUENCY);
+			for(MettelSignature s:signatures.get(type)){
+				appendLine(MettelRandomExpressionDefaultPropertiesNames.sortConnectiveFrequencyProperty(type, s.name()) + " = " + SORT_CONNECTIVE_FREQUENCY);
 			}
 			appendEOL();
-			
+
 			appendLine(MettelRandomExpressionDefaultPropertiesNames.sortVariableFrequencyProperty(type) + " = " + SORT_VARIABLE_FREQUENCY);
 			appendLine(MettelRandomExpressionDefaultPropertiesNames.sortVariableDepthProperty(type) + " = " + SORT_VARIABLE_DEPTH);
 			appendLine(MettelRandomExpressionDefaultPropertiesNames.sortVariablesProperty(type) + " = " + SORT_VARIABLES_TEXT);
 			appendLine(MettelRandomExpressionDefaultPropertiesNames.sortVariablesSizeProperty(type) + " = " + SORT_VARIABLES_NUMBER);
 			appendEOL();
-			
+
 			appendLine(MettelRandomExpressionDefaultPropertiesNames.sortGenerateProperty(type) + " = " + SORT_GENERATE);
 			appendEOL();
-			
+
 			appendLine(MettelRandomExpressionDefaultPropertiesNames.sortTopConnectives(type) + " = " + SORT_TOP_CONNECTIVES_TEXT);
 			appendEOL();
 		}
