@@ -38,9 +38,13 @@ public class MettelSpecification {
 
 	private ArrayList<MettelTableau> tableaux = new ArrayList<MettelTableau>();
 
+	private ArrayList<MettelSemantics> semantics = new ArrayList<MettelSemantics>();
+
 	private HashMap<String,MettelSyntax> syntaxTable = new HashMap<String,MettelSyntax>();
 
 	private HashMap<String,MettelTableau> tableauTable = new HashMap<String,MettelTableau>();
+
+	private HashMap<String,MettelSemantics> semanticsTable = new HashMap<String,MettelSemantics>();
 
 	public MettelSyntax getSyntax(String name){
 		return syntaxTable.get(name);
@@ -48,6 +52,10 @@ public class MettelSpecification {
 
 	public MettelTableau getTableau(String name){
 		return tableauTable.get(name);
+	}
+
+	public MettelSemantics getSemantics(String name){
+		return semanticsTable.get(name);
 	}
 
 	@SuppressWarnings("unused")
@@ -100,6 +108,14 @@ public class MettelSpecification {
 		return true;
 	}
 
+	boolean addSemantics(MettelSemantics sem) {
+		MettelSemantics t = semanticsTable.get(sem.name());
+		if(t != null) return false;
+		semantics.add(sem);
+		semanticsTable.put(sem.name(), sem);
+		return true;
+	}
+
 
 	List<MettelSyntax> getSyntaxes(List<String> syntaxNames){
 		if(syntaxNames == null) return null;
@@ -137,12 +153,27 @@ public class MettelSpecification {
 		return tableaux;
 	}
 
+	List<MettelSemantics> getSemantics(List<String> semanticsNames){
+		if(semanticsNames == null) return null;
+		ArrayList<MettelSemantics> semanticsList = new ArrayList<MettelSemantics>();
+		for(String t:semanticsNames){
+			MettelSemantics tab = semanticsTable.get(t);
+			if(tab == null) return null;
+			semanticsList.add(tab);
+		}
+		return semanticsList;
+	}
+
+	/**
+	 * @return
+	 */
+	public List<MettelSemantics> semantics() {
+		return semantics;
+	}
+
+
 	public MettelJavaPackageStructure process(MettelANTLRGrammarGeneratorProperties properties) {
 		final MettelJavaPackageStructure pStructure = new MettelJavaPackageStructure(path);
-
-		//for(MettelTableau tab:tableaux){
-		//	tab.init(pStructure, properties);
-		//}
 
 		for(MettelSyntax syn:syntaxes){
 			syn.process(pStructure, properties);
@@ -152,7 +183,9 @@ public class MettelSpecification {
 			tab.process(pStructure, properties);
 		}
 
-		pStructure.generateMainClass();
+		for(MettelSemantics sem:semantics){
+			sem.process(pStructure, properties);
+		}
 
 		return pStructure;
 	}

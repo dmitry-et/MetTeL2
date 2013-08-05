@@ -461,8 +461,4 @@ public class MettelJavaPackageStructure {
 		return true;
 	}
 
-	public void generateMainClass(){
-//TODO fill in
-	}
-
 }

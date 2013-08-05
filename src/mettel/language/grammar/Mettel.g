@@ -350,21 +350,24 @@ returns [String name = null]
 	)?
 	;
 
-semantics
+semantics[MettelSpecification spec]
+returns [MettelSemantics sem = null]
 	:
-	SEMANTICS synName = syntaxName IDENTIFIER (EXTENDS path)?
-    	LBRACE
-		    semanticOperator?
-		    (SEMI
-		    semanticOperator?
-		    )*
-		RBRACE
+	SEMANTICS id = IDENTIFIER synName = syntaxName
+    	(paths = extendsBlock)?
+    	{
+    	String name = id.getText();
+    	if(synName == null) synName = name;
+    	MettelSyntax syntax = spec.getSyntax(synName);
+    	if(syntax == null)
+    		throw new MettelParserException("The syntax "+ synName + " is undefined", id.getLine(), id.getCharPositionInLine());
+    	sem = new MettelSemantics(name, syntax, spec.getSemantics(paths));
+    	}
+    	t = BLOCK
+		{
+		sem.setContent(t.getText());
+		}
     ;
-
-semanticOperator
-	:
-	semanticFormula
-	;
 
 /*
 semanticSymbolDeclaration
@@ -558,6 +561,14 @@ TABLEAU
 OPTIONS
 	:
 	'options'
+	{
+	futureBlock = true;
+	}
+	;
+
+SEMANTICS
+	:
+	'semantics'
 	{
 	futureBlock = true;
 	}
