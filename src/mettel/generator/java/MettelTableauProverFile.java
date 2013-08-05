@@ -36,7 +36,7 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
 
     private String sort = null;
 
-    private String tabName = null;
+    //private String tabName = null;
     private String synName = null;
     private String SynName = null;
 
@@ -45,7 +45,7 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
 		this.pStructure = pStructure;
 		this.prefix = prefix;
 		this.sort = sort;
-		this.tabName = tabName;
+		//this.tabName = tabName;
 		this.synName = synName;
 		SynName = MettelJavaNames.firstCharToUpperCase(synName);
 
