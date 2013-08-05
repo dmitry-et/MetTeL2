@@ -52,7 +52,7 @@ public class MettelANTLRGrammarGeneratorProperties implements MettelANTLRGrammar
 	public String expressionRightDelimiter = EXPRESSION_RIGHT_DELIMITER;
 
 	public String branchBound = null;
-	
+
 	public String nameSeparator = NAME_SEPARATOR;
 
 	//public int antlr_k = 1;
@@ -94,7 +94,7 @@ public class MettelANTLRGrammarGeneratorProperties implements MettelANTLRGrammar
 		expressionRightDelimiter = p.getProperty("expression.right.delimiter", EXPRESSION_RIGHT_DELIMITER);
 
 		branchBound = p.getProperty("branch.bound", branchBound);
-		
+
 		nameSeparator = p.getProperty("name.separator", nameSeparator);
 
 		final String antlrK = p.getProperty("antlr.k",String.valueOf(ANTLR_K));

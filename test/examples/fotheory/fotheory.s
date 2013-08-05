@@ -1,4 +1,9 @@
 specification fotheory;
+
+options{
+name.separator=
+}
+
 syntax SomeFOTheory{
 	sort formula, term, var;
 

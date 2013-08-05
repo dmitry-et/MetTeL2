@@ -36,6 +36,8 @@ tokens{
 	SEMANTICS	=	'semantics';
 	TABLEAU		=	'tableau';
 
+	OPTIONS		=   'options';
+
 	SORT			=	'sort';
 	EXTENDS		=	'extends';
 	ANTLR			=	'antlr';
@@ -54,8 +56,12 @@ tokens{
 @header{
 package mettel.language;
 
+import java.io.StringReader;
+import java.io.IOException;
+
+import mettel.MettelRuntimeException;
 import mettel.language.MettelParserException;
-import mettel.generator.MettelEqualityKeywords;
+import mettel.generator.MettelANTLRGrammarGeneratorProperties;
 }
 //Java imports
 //import java.util.HashMap;
@@ -68,14 +74,10 @@ package mettel.language;
 }
 
 @members{
-private MettelEqualityKeywords keywords = MettelEqualityKeywords.EQUALITY_KEYWORDS;
-public MettelParser(TokenStream input, MettelEqualityKeywords keywords){
-    this(input);
-    this.keywords = keywords;
-}
-public MettelParser(TokenStream input, RecognizerSharedState state, MettelEqualityKeywords keywords){
-    this(input,state);
-    this.keywords = keywords;
+private MettelANTLRGrammarGeneratorProperties properties = new MettelANTLRGrammarGeneratorProperties();
+
+public MettelANTLRGrammarGeneratorProperties properties(){
+	return properties;
 }
 }
 
@@ -97,6 +99,8 @@ specification
     {spec = new MettelSpecification(p);}
 
     importBlock?
+
+    optionsBlock?
 
     (block[spec] | SEMI)*
     EOF
@@ -221,7 +225,7 @@ bnfStatement
     )?
     EQ
     {
-    if(keywords.isEquality(id)){
+    if(properties.equalityKeywords.isEquality(id)){
     	statement = new MettelEqualityBNFStatement(id);
     }else{
     	statement = new MettelBNFStatement(id);
@@ -320,6 +324,19 @@ returns [MettelTableau tab = null]
 			tab.setContent(t.getText());
 			}
     	//RBRACE
+	;
+
+optionsBlock
+	:
+	OPTIONS
+	t = BLOCK
+	{
+	try{
+		properties = new MettelANTLRGrammarGeneratorProperties(new StringReader(t.getText()));
+	}catch(IOException e){
+		throw new MettelRuntimeException(e, "Options cannot be read");
+	}
+	}
 	;
 
 fragment
@@ -538,6 +555,13 @@ TABLEAU
 	}
 	;
 
+OPTIONS
+	:
+	'options'
+	{
+	futureBlock = true;
+	}
+	;
 
 LPAREN
     :   '('

@@ -1,6 +1,14 @@
 //Specification of linear temporal logic LTL with Boolean constraints
 specification LTLC;
 
+options{
+branch.bound=((int)(java.lang.Math.pow(2,%l+1)+java.lang.Math.pow(4,%l+1)))
+
+equality.keywords={equality,equivalence}
+
+name.separator=
+}
+
 syntax LTLC{
 	sort formula;
 	sort nominal;

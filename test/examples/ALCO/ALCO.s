@@ -1,5 +1,9 @@
 specification ALCO;
 
+options{
+name.separator=
+}
+
 syntax ALCO{
 
 	sort concept; //The first sort is the main sort

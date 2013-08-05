@@ -1,5 +1,9 @@
 specification ALBOid;
 
+options{
+name.separator=
+}
+
 syntax ALBOid{
 
 	sort concept; //The first sort is the main sort

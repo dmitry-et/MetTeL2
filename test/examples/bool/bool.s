@@ -1,5 +1,11 @@
 specification bool;
 
+options{
+equality.keywords={equivalence}
+
+name.separator=
+}
+
 syntax Boolean{
 	sort formula;
 
