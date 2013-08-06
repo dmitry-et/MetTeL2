@@ -95,6 +95,11 @@ CORE_JAR_FILE_NAME := $(NAME)2-core.jar
 CORE_JAR_FILE := $(LIB_DIR)/$(CORE_JAR_FILE_NAME)
 CORE_MANIFEST_FILE := $(SRC_DIR)/etc/core-manifest.mf
 
+UTIL_PACKAGE_SUBDIR = mettel/util
+UTIL_JAR_FILE_NAME := $(NAME)2-util.jar
+UTIL_JAR_FILE := $(LIB_DIR)/$(UTIL_JAR_FILE_NAME)
+UTIL_MANIFEST_FILE := $(SRC_DIR)/etc/util-manifest.mf
+
 ### Parser #########################################################################
 
 PARSER_DIR := $(SRC_DIR)/$(NAME)/language
@@ -208,7 +213,7 @@ clear clean clear-ast-classes compile compile-ast clear-parser-files clear-fo-pa
 clear-log only-lexer only-parser parser only-fo-parser fo-parser lexer-doc parser-doc parser-fo-doc doc resources test \
 all compile-test packages-file java-doc clear-test-log clear-doc clear-test clear-test-jar clear-test-output\
 clear-test-classes test-jar old-test junit-test junit SPASS clear-spass-log statistics \
-libantlr tableau-bin clear-bin generateLogics generateParsers compileLogics generate core-jar
+libantlr tableau-bin clear-bin generateLogics generateParsers compileLogics generate core-jar util-jar
 $(NAME): jar
 
 clear-lexer-log:
@@ -372,9 +377,11 @@ fo-parser: clear-fo-parser-files only-fo-parser
 fo-parser-doc: only-fo-parser
 
 packages-file:
-	@ cd $(SRC_DIR) && \
-		(find * -not -path "etc*" -not -path "*CVS*" -not -path "*svn*" -not -path "*/parser/grammar" -type d -print | sed -e 's/\//./g') >$(PACKAGES_FILE)
-	@ cd $(BASE_DIR)
+	@ echo $(DELIM0)
+	@ echo "Making packages file"
+	@ echo $(DELIM1)
+	@ (find $(SRC_DIR)/* -not -path "etc*" -not -path "*CVS*" -not -path "*svn*" -not -path "*/grammar" -type d -print | sed -e 's/$(SRC_DIR)\///g'| sed -e 's/\//./g') > $(PACKAGES_FILE)
+#@ cd $(BASE_DIR)
 	
 
 statistics:
@@ -388,7 +395,7 @@ java-doc: packages-file
 	@ mkdir -p $(JAVADOC_DIR)
 	@ $(JAVADOC) $(JAVADOC_OPTIONS) -classpath $(COMPILE_CLASSPATH) -sourcepath $(SRC_DIR) -d $(JAVADOC_DIR) @$(PACKAGES_FILE)
 
-doc: lexer-doc parser-doc fo-lexer-doc fo-parser-doc java-doc
+doc: parser-doc fo-parser-doc java-doc
     
 clear-ast-classes:
 	@ rm -f $(AST_CLASSES_DIR)/*.class
@@ -410,6 +417,14 @@ $(CORE_CLASSES) : $(CLASSES_DIR) $(CORE_SOURCES)
 #	echo "$(BOOTCLASSPATH)"
 #	echo "$(JAVAC)"
 	@ $(JAVAC) $(JAVAC_OPTIONS) -classpath $(COMPILE_CLASSPATH) -d "$(CLASSES_DIR)" $(CORE_SOURCES) 2>$(JAVAC_LOG_FILE) || (cat $(JAVAC_LOG_FILE) && exit 1)
+
+$(UTIL_CLASSES) : $(CLASSES_DIR) $(UTIL_SOURCES)
+#	@ echo $(CLASSES)
+	@ echo $(DELIM0)
+	@ echo "Compiling utility classes"
+	@ echo $(DELIM1)
+	@ $(JAVAC) $(JAVAC_OPTIONS) -classpath $(COMPILE_CLASSPATH) -d "$(CLASSES_DIR)" $(UTIL_SOURCES) 2>$(JAVAC_LOG_FILE) || (cat $(JAVAC_LOG_FILE) && exit 1)
+
 
 $(CLASSES) : $(CLASSES_DIR) $(SOURCES) $(CORE_JAR_FILE)
 #	@ echo $(CLASSES)
@@ -448,6 +463,14 @@ $(CORE_JAR_FILE): $(CORE_CLASSES) $(RESOURCE_FILES) $(CORE_MANIFEST_FILE)
 	@ echo "Building core runtime jar ($(CORE_JAR_FILE_NAME))"
 	@ echo $(DELIM1)
 	@ $(JAR) cvmf $(CORE_MANIFEST_FILE) $(CORE_JAR_FILE) -C $(CLASSES_DIR) $(CORE_PACKAGE_SUBDIR)
+
+util-jar: $(UTIL_JAR_FILE)
+
+$(UTIL_JAR_FILE): $(UTIL_CLASSES) $(RESOURCE_FILES) $(UTIL_MANIFEST_FILE)
+	@ echo $(DELIM0)
+	@ echo "Building runtime jar ($(UTIL_JAR_FILE_NAME))"
+	@ echo $(DELIM1)
+	@ $(JAR) cvmf $(UTIL_MANIFEST_FILE) $(UTIL_JAR_FILE) -C $(CLASSES_DIR) $(UTIL_PACKAGE_SUBDIR)
 
 jar: $(JAR_FILE)
 
@@ -578,7 +601,8 @@ SPASS:	$(DFG_FILE)
 
 clean : clear
 
-all: clean jar doc test tableau-bin
+all: clean jar util-jar doc test 
+#tableau-bin
 
 $(LIBANTLR): $(ANTLR_JAR)
 	@ echo $(DELIM0)

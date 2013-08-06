@@ -29,7 +29,7 @@ import java.io.StringReader;
 import java.util.Map;
 import java.util.Properties;
 
-import mettel.core.MettelCoreRuntimeException;
+//import mettel.core.MettelCoreRuntimeException;
 
 import static mettel.util.MettelStrings.LINE_SEPARATOR;
 
@@ -93,7 +93,7 @@ public class MettelProblemFile{
 		}
 	}
 	
-	private void extractGeneratorProperties(BufferedReader inReader) throws IOException, MettelCoreRuntimeException{
+	private void extractGeneratorProperties(BufferedReader inReader) throws IOException, MettelProblemFileException{
 		String line = null;
 		StringBuilder propertiesString = new StringBuilder();
 		while ((line = inReader.readLine()) != null && !line.trim().equals(GENERATOR_FOOTER)){
@@ -101,13 +101,13 @@ public class MettelProblemFile{
 			propertiesString.append(LINE_SEPARATOR);
 		}
 		if (line == null){
-			throw new MettelCoreRuntimeException("Invalid file format, there was no ending of generator block.");
+			throw new MettelProblemFileException("Invalid file format, there was no ending of generator block.");
 		}
 		StringReader propertiesReader = new StringReader(propertiesString.toString());
 		generatorProperties.load(propertiesReader);
 	}
 	
-	private void extractStatisticsProperties(BufferedReader inReader) throws IOException, MettelCoreRuntimeException{
+	private void extractStatisticsProperties(BufferedReader inReader) throws IOException, MettelProblemFileException{
 		String line = null;
 		StringBuilder propertiesString = new StringBuilder();
 		while ((line = inReader.readLine()) != null && !line.trim().equals(STATISTICS_FOOTER)){
@@ -115,13 +115,13 @@ public class MettelProblemFile{
 			propertiesString.append(LINE_SEPARATOR);
 		}
 		if (line == null){
-			throw new MettelCoreRuntimeException("Invalid file format, there was no ending of statistics block.");
+			throw new MettelProblemFileException("Invalid file format, there was no ending of statistics block.");
 		}
 		StringReader propertiesReader = new StringReader(propertiesString.toString());
 		statisticsProperties.load(propertiesReader);
 	}
 	
-	private void extractStatusProperties(BufferedReader inReader) throws IOException, MettelCoreRuntimeException{
+	private void extractStatusProperties(BufferedReader inReader) throws IOException, MettelProblemFileException{
 		String line = null;
 		StringBuilder propertiesString = new StringBuilder();
 		while ((line = inReader.readLine()) != null && !line.trim().equals(STATUS_FOOTER)){
@@ -129,7 +129,7 @@ public class MettelProblemFile{
 			propertiesString.append(LINE_SEPARATOR);
 		}
 		if (line == null){
-			throw new MettelCoreRuntimeException("Invalid file format, there was no ending of status block.");
+			throw new MettelProblemFileException("Invalid file format, there was no ending of status block.");
 		}
 		StringReader propertiesReader = new StringReader(propertiesString.toString());
 		statusProperties.load(propertiesReader);
@@ -239,10 +239,10 @@ public class MettelProblemFile{
 	private void makeBackupOldFile(){
 		File backupFile = new File(path.replace(".mtl", ".mtl~"));
 		if (backupFile.exists() && !backupFile.delete())
-			throw new MettelCoreRuntimeException("Couldn't delete old backup file");
+			throw new MettelProblemFileException("Couldn't delete old backup file");
 		
 		if (!file.renameTo(backupFile))
-			throw new MettelCoreRuntimeException("Couldn't make backup of old file");
+			throw new MettelProblemFileException("Couldn't make backup of old file");
 	}
 
 	/*
