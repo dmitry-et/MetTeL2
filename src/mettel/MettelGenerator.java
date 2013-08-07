@@ -218,7 +218,7 @@ public class MettelGenerator {
 
         	report("Java code of the provers is generated.");
 
-        	report.report("I have asked ANTLR to generate parsers for the syntaxes.");
+        	report("I have asked ANTLR to generate parsers for the syntaxes.");
         	if(pStructure.antlr(outputPath, report)){
         		report("The Java code of all the parsers is generated.");
         	}else{
@@ -228,6 +228,20 @@ public class MettelGenerator {
         	File src = new File(outputPath + File.separatorChar + spec.path());
         	File dir = createTempDir(spec.path());
         	compile(src, dir);
+        	
+        	pStructure.instantiateParsers(outputPath, dir, report);
+        	report("I am processing the semantics.");
+        	if(spec.processSemantics(pStructure, p) > 0){
+        		
+        		report("Generating Java code from the semantics.");
+        		
+        		pStructure.flush(outputPath);
+        		
+        		report("Generated.");
+        		
+        		compile(src, dir);
+        		
+        	}
 
         	report("I am verifying the tableau calculi specifications.");
         	if(pStructure.verifyTableaux(outputPath, dir, report)){

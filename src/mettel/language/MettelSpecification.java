@@ -183,11 +183,17 @@ public class MettelSpecification {
 			tab.process(pStructure, properties);
 		}
 
+		return pStructure;
+	}
+
+	public int processSemantics(MettelJavaPackageStructure pStructure,
+			MettelANTLRGrammarGeneratorProperties properties) {
+		
 		for(MettelSemantics sem:semantics){
 			sem.process(pStructure, properties);
 		}
 
-		return pStructure;
+		return semantics.size();
 	}
 
 }

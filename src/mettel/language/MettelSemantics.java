@@ -16,8 +16,16 @@
  */
 package mettel.language;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
+
+import mettel.fo.MettelFOFormula;
+import mettel.fo.MettelFOLexer;
+import mettel.fo.MettelFOParser;
 import mettel.generator.MettelANTLRGrammarGeneratorProperties;
 import mettel.generator.java.MettelJavaPackageStructure;
 
@@ -98,8 +106,19 @@ public class MettelSemantics implements MettelBlock {
 	//private MettelANTLRGrammarGeneratorProperties properties = null;
 	//private MettelJavaPackageStructure pStructure = null;
 
+	private ArrayList<MettelFOFormula> formulae = new ArrayList<MettelFOFormula>();
+	
 	void process(MettelJavaPackageStructure pStructure, MettelANTLRGrammarGeneratorProperties properties){
-//TODO: fill in
+		CommonTokenStream tokens = new CommonTokenStream();
+		MettelFOParser parser = new MettelFOParser(tokens, pStructure.parser(syntax.name()));
+		tokens.setTokenSource(new MettelFOLexer(new ANTLRStringStream(content)));
+		
+		try {
+			parser.formulae(formulae);
+			System.out.println(formulae);
+		} catch (RecognitionException e) {
+			e.printStackTrace();
+		}
 
 	}
 

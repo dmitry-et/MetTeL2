@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with MetTeL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package mettel.core.language;//TODO move to a runtime package!
+package mettel.core.language;
 
 
 

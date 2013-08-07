@@ -29,7 +29,8 @@ package mettel.fo;
 
 import java.util.Collection;
 
-import mettel.core.language.MettelLogicParser;
+//import mettel.core.language.MettelLogicParser;
+import mettel.core.language.MettelAbstractLogicParser;
 
 import mettel.core.tableau.MettelExpression;
 }
@@ -52,29 +53,44 @@ public Object recoverFromMismatchedToken(IntStream input, int ttype, BitSet foll
     throw e;
 }
 
-private MettelLogicParser islandParser = null;
+private MettelAbstractLogicParser islandParser = null;
 private Lexer islandLexer = null;
 
 private MettelExpression expression() throws RecognitionException {
     CharStream in = ((Lexer)this.input.getTokenSource()).getCharStream();
     int index = in.index();
+    System.out.println(index);
     int line = in.getLine();
     int charPositionInLine = in.getCharPositionInLine();
     islandLexer.setCharStream(in);
     in.seek(index);
     in.setLine(line);
     in.setCharPositionInLine(charPositionInLine);
-    return islandParser.expression();
+    MettelExpression e = islandParser.expression();
+    System.out.println(in.index());
+    return e;
 }
 
 private MettelFOObjectFactory factory = MettelFOObjectFactory.DEFAULT;
-public MettelFOParser(TokenStream input, MettelFOObjectFactory factory){
+
+public MettelFOParser(TokenStream input, MettelAbstractLogicParser parser){
+    this(input, MettelFOObjectFactory.DEFAULT, parser);
+}
+
+public MettelFOParser(TokenStream input, MettelFOObjectFactory factory, MettelAbstractLogicParser parser){
     this(input);
     this.factory = factory;
+    //System.out.println("parser = " + parser);
+    this.islandParser = parser;
+    //System.out.println("parser.input != null?" + (parser.input == null));    
+    this.islandLexer = (Lexer)parser.input.getTokenSource();
 }
-public MettelFOParser(TokenStream input, RecognizerSharedState state, MettelFOObjectFactory factory){
+
+public MettelFOParser(TokenStream input, RecognizerSharedState state, MettelFOObjectFactory factory, MettelAbstractLogicParser parser){
     this(input,state);
     this.factory = factory;
+    this.islandParser = parser;
+    this.islandLexer = (Lexer)parser.input.getTokenSource();
 }
 }
 
@@ -217,7 +233,7 @@ returns [MettelFOFormula f]
 atomicFormula
 returns [MettelFOFormula f]
 	:
-	'holds' '(' {expression();} (',' term)+ ')'
+	'holds' '(' {expression() != null}? (',' term)+ ')'
 	|
 	ID '(' termList? ')'
 	|

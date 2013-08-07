@@ -44,3 +44,8 @@ Q (P|~Q) / P priority 2$;
 P | Q / P $| Q priority 4$;
 ~(P & Q) / ~P $| ~Q priority 4
 	   		}
+	   		
+semantics Boolean{
+holds( p + q, x) <-> true
+holds(true, x) <-> true
+}

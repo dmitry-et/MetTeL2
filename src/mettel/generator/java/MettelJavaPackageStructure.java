@@ -18,6 +18,7 @@ package mettel.generator.java;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -28,8 +29,12 @@ import java.util.List;
 import java.util.Set;
 
 import org.antlr.Tool;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.TokenSource;
+import org.antlr.runtime.TokenStream;
 import org.antlr.tool.ErrorManager;
 
+import mettel.core.language.MettelAbstractLogicParser;
 import mettel.core.tableau.MettelGeneralTableauRule;
 import mettel.generator.antlr.MettelANTLRGrammar;
 import mettel.language.MettelToken;
@@ -136,6 +141,8 @@ public class MettelJavaPackageStructure {
 		private MettelExpressionGeneratorJavaInterfaceFile iExpressionGenerator = null;
 		private MettelRandomExpressionGeneratorJavaClassFile expressionGenerator = null;
 		private MettelProblemAnalyzerJavaClassFile problemAnalyzer = null;
+		
+		private MettelAbstractLogicParser parser = null;
 
 		private void appendStandardClasses(String prefix, String nameSeparator){
 			langPackage.add(new MettelExpressionInterfaceFile(prefix,langPackage));
@@ -459,6 +466,36 @@ public class MettelJavaPackageStructure {
 			}
 		}
 		return true;
+	}
+	
+	public boolean instantiateParsers(String outputPath, File dir, MettelReport report) throws MalformedURLException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		for(String name:langPacks.keySet()){
+			ClassLoader currentThreadClassLoader = Thread.currentThread().getContextClassLoader();
+			URLClassLoader classLoader = new URLClassLoader(new URL[]{dir.toURI().toURL()}, currentThreadClassLoader);
+			
+			final LanguagePackages pack = langPacks.get(name); 
+			final String parserClass = pack.langPackage.path() + '.' + MettelJavaNames.firstCharToUpperCase(name) + "Parser";
+			final String lexerClass = pack.langPackage.path() + '.' + MettelJavaNames.firstCharToUpperCase(name) + "Lexer";
+			
+			Class<?> cls = Class.forName(parserClass, true, classLoader);
+			Constructor<?> constructor = cls.getConstructor(TokenStream.class);
+			
+			CommonTokenStream tokens = new CommonTokenStream();
+			MettelAbstractLogicParser parser = (MettelAbstractLogicParser) constructor.newInstance(tokens);
+			
+			cls = Class.forName(lexerClass, true, classLoader);
+			constructor = cls.getConstructor();
+			
+			tokens.setTokenSource((TokenSource)constructor.newInstance());
+			
+			//System.out.println(name + " parser = " + parser);
+			pack.parser = parser;
+		}
+		return true;
+	}
+	
+	public MettelAbstractLogicParser parser(String name){
+		return langPacks.get(name).parser;
 	}
 
 }

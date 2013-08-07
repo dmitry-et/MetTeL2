@@ -214,7 +214,7 @@ clear-log only-lexer only-parser parser only-fo-parser fo-parser lexer-doc parse
 all compile-test packages-file java-doc clear-test-log clear-doc clear-test clear-test-jar clear-test-output\
 clear-test-classes test-jar old-test junit-test junit SPASS clear-spass-log statistics \
 libantlr tableau-bin clear-bin generateLogics generateParsers compileLogics generate core-jar util-jar
-$(NAME): jar
+$(NAME): jar util-jar
 
 clear-lexer-log:
 	@ echo $(DELIM0)
@@ -600,6 +600,8 @@ SPASS:	$(DFG_FILE)
 #1>SPASS.log 2>&1 && cat SPASS.log
 
 clean : clear
+
+all-but-doc: clean jar util-jar test
 
 all: clean jar util-jar doc test 
 #tableau-bin

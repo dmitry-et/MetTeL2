@@ -149,6 +149,10 @@ block
      |
      tab = tableau[spec]
      {spec.addTableau(tab);}
+     |
+     sem = semantics[spec]
+     {spec.addSemantics(sem);}
+ 
     )
     ;
 
