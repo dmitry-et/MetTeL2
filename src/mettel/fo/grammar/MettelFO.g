@@ -59,7 +59,7 @@ private Lexer islandLexer = null;
 private MettelExpression expression(CommonToken t) throws RecognitionException {
     CharStream in = ((Lexer)this.input.getTokenSource()).getCharStream();
     int index = in.index();
-    System.out.println(index);
+    //System.out.println(index);
     int line = in.getLine();
     int charPositionInLine = in.getCharPositionInLine();
     islandLexer.setCharStream(in);
@@ -67,7 +67,7 @@ private MettelExpression expression(CommonToken t) throws RecognitionException {
     in.setLine(line);
     in.setCharPositionInLine(charPositionInLine);
     MettelExpression e = islandParser.expression();
-    System.out.println(in.index());
+    //System.out.println(in.index());
     return e;
 }
 
@@ -233,7 +233,7 @@ returns [MettelFOFormula f]
 atomicFormula
 returns [MettelFOFormula f]
 	:
-	'holds' t = '(' {System.out.println(expression(t));} (',' term)+ ')'
+	'holds' t = '(' {System.out.println(expression((CommonToken)t));} (',' term)+ ')'
 	|
 	ID '(' termList? ')'
 	|
