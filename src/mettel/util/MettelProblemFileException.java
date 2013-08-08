@@ -23,7 +23,11 @@ package mettel.util;
  */
 public class MettelProblemFileException extends RuntimeException{
 
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7993619043157778664L;
+	
 	protected Exception cause = null;
 
 	public MettelProblemFileException(){

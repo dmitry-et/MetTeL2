@@ -35,6 +35,11 @@ public class MettelANTLRGrammarGeneratorProperties implements MettelANTLRGrammar
 	public MettelANTLRGrammarGeneratorProperties() {
 		super();
 	}
+	
+	public MettelANTLRGrammarGeneratorProperties(MettelANTLRGrammarGeneratorProperties p) {
+		super();
+		init(p);
+	}
 
 	public MettelANTLRGrammarGeneratorProperties(Reader reader) throws IOException {
 		this();
@@ -55,27 +60,9 @@ public class MettelANTLRGrammarGeneratorProperties implements MettelANTLRGrammar
 
 	public String nameSeparator = NAME_SEPARATOR;
 
-	//public int antlr_k = 1;
-
 	public MettelANTLRGrammarOptions grammarOptions = new MettelANTLRGrammarOptions();
 
 	public MettelEqualityKeywords equalityKeywords = EQUALITY_KEYWORDS;
-
-//	public static final int NONE = -1;
-//	public static final int IGNORE_HUGE_BRANCH = 0;
-//	public int acceptanceStrategy = NONE;
-
-	/*public String tableauRuleDelimiter(){
-		return tableauRuleDelimiter;
-	}
-
-	public String tableauRuleBranchDelimiter(){
-		return tableauRuleBranchDelimiter;
-	}
-
-	public String tableauRulePremiseDelimiter(){
-		return tableauRulePremiseDelimiter;
-	}*/
 
 	public void init(Reader reader) throws IOException{
 		if(reader == null) return;
@@ -83,15 +70,15 @@ public class MettelANTLRGrammarGeneratorProperties implements MettelANTLRGrammar
 		final Properties p = new Properties();
 		p.load(reader);
 
-		tableauRuleDelimiter = p.getProperty("tableau.rule.delimiter", TABLEAU_RULE_DELIMITER);
-		tableauRuleBranchDelimiter = p.getProperty("tableau.rule.branch.delimiter", TABLEAU_RULE_BRANCH_DELIMITER);
-		tableauRulePremiseDelimiter = p.getProperty("tableau.rule.premise.delimiter", TABLEAU_RULE_PREMISE_DELIMITER);
+		tableauRuleDelimiter = p.getProperty("tableau.rule.delimiter", tableauRuleDelimiter);
+		tableauRuleBranchDelimiter = p.getProperty("tableau.rule.branch.delimiter", tableauRuleBranchDelimiter);
+		tableauRulePremiseDelimiter = p.getProperty("tableau.rule.premise.delimiter", tableauRulePremiseDelimiter);
 
-		listLeftDelimiter = p.getProperty("list.left.delimiter", LIST_LEFT_DELIMITER);
-		listRightDelimiter = p.getProperty("list.right.delimiter", LIST_RIGHT_DELIMITER);
+		listLeftDelimiter = p.getProperty("list.left.delimiter", listLeftDelimiter);
+		listRightDelimiter = p.getProperty("list.right.delimiter", listRightDelimiter);
 
-		expressionLeftDelimiter = p.getProperty("expression.left.delimiter", EXPRESSION_LEFT_DELIMITER);
-		expressionRightDelimiter = p.getProperty("expression.right.delimiter", EXPRESSION_RIGHT_DELIMITER);
+		expressionLeftDelimiter = p.getProperty("expression.left.delimiter", expressionLeftDelimiter);
+		expressionRightDelimiter = p.getProperty("expression.right.delimiter", expressionRightDelimiter);
 
 		branchBound = p.getProperty("branch.bound", branchBound);
 
@@ -100,40 +87,41 @@ public class MettelANTLRGrammarGeneratorProperties implements MettelANTLRGrammar
 		final String antlrK = p.getProperty("antlr.k",String.valueOf(ANTLR_K));
 
 		//TODO: more careful check for properties
-        grammarOptions = new MettelANTLRGrammarOptions(
-        		(antlrK.indexOf('*') >= 0? 0: Integer.parseInt(antlrK)),
-        		p.getProperty("antlr.superClass", ANTLR_SUPERCLASS),
-        		Boolean.parseBoolean(p.getProperty("antlr.backtrack",String.valueOf(ANTLR_BACKTRACK))),
-        		Boolean.parseBoolean(p.getProperty("antlr.memoize",String.valueOf(ANTLR_MEMOIZE))));
-
-		//acceptanceStrategy = p.getProperty("ignore.huge.branch") == "Yes"? 0 : -1;
+        grammarOptions = new MettelANTLRGrammarOptions(grammarOptions);
+        grammarOptions.setK(antlrK.indexOf('*') >= 0? 0: Integer.parseInt(antlrK));
+        grammarOptions.setSuperClass(p.getProperty("antlr.superClass", ANTLR_SUPERCLASS));
+        grammarOptions.setBacktrack(Boolean.parseBoolean(p.getProperty("antlr.backtrack",String.valueOf(ANTLR_BACKTRACK))));
+        grammarOptions.setMemoize(Boolean.parseBoolean(p.getProperty("antlr.memoize",String.valueOf(ANTLR_MEMOIZE))));
 
         String keywords = p.getProperty("equality.keywords");
-        //System.out.println("========================"+keywords);
         if(keywords == null){
         	equalityKeywords = EQUALITY_KEYWORDS;
-        	//System.out.println("NULL========================"+keywords);
         }else{
         	equalityKeywords = new MettelEqualityKeywords(keywords.trim());
-
-        	/*final int LENGTH = keywords.length();
-        	if(keywords.charAt(0) != '{' || keywords.charAt(LENGTH - 1) != '}')
-        		throw new MettelRuntimeException("Wrong equality keywords format");
-        	int i = -1, j = 0;
-        	while((i = keywords.indexOf(',', ++i)) != -1){
-        		j++;
-        	}
-        	equalityKeywords = new String[j+1];
-        	int i0 = 1, i1 = keywords.indexOf(',', i0);
-        	j = -1;
-        	while(i1 != -1){
-        		equalityKeywords[++j] = keywords.substring(i0, i1);
-        		i0 = i1 + 1;
-        	}
-        	equalityKeywords[++j] = keywords.substring(i0, LENGTH - 2);
-        	*/
         }
-
-        //System.out.println("###############################"+equalityKeywords);
 	}
+	
+	public void init(MettelANTLRGrammarGeneratorProperties p){
+		if(p == null) return;
+
+		tableauRuleDelimiter = p.tableauRuleDelimiter;
+		tableauRuleBranchDelimiter = p.tableauRuleBranchDelimiter;
+		tableauRulePremiseDelimiter = p.tableauRulePremiseDelimiter;
+
+		listLeftDelimiter = p.listLeftDelimiter;
+		listRightDelimiter = p.listRightDelimiter;
+
+		expressionLeftDelimiter = p.expressionLeftDelimiter;
+		expressionRightDelimiter = p.expressionRightDelimiter;
+
+		branchBound = p.branchBound;
+
+		nameSeparator = p.nameSeparator;
+
+		grammarOptions = new MettelANTLRGrammarOptions(p.grammarOptions);
+       	
+		equalityKeywords = new MettelEqualityKeywords(p.equalityKeywords);
+
+	}
+
 }

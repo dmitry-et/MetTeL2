@@ -210,6 +210,11 @@ public class MettelSyntax implements MettelBlock {
 				}
 			}
 		}
+		if(options != null){
+			buf.append(LINE_SEPARATOR);
+			options.toBuffer(buf);
+			buf.append(LINE_SEPARATOR);
+		}
 		buf.append('{');
 		buf.append(LINE_SEPARATOR);
 		int i = 0;
@@ -543,5 +548,15 @@ public class MettelSyntax implements MettelBlock {
 		r.appendLineToInitBlock("int priority = 0;");
 		r.appendLineToAfterBlock("r0 = new MettelGeneralTableauRule(new LinkedHashSet<"+grammarName+"Expression>(premises),branches,priority);");
 		return r;
+	}
+	
+	MettelOptions options = null;
+	
+	void setOptions(MettelOptions options){
+		this.options = options;
+	}
+	
+	MettelOptions options(){
+		return options;
 	}
 }

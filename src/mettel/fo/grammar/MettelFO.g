@@ -56,14 +56,14 @@ public Object recoverFromMismatchedToken(IntStream input, int ttype, BitSet foll
 private MettelAbstractLogicParser islandParser = null;
 private Lexer islandLexer = null;
 
-private MettelExpression expression() throws RecognitionException {
+private MettelExpression expression(CommonToken t) throws RecognitionException {
     CharStream in = ((Lexer)this.input.getTokenSource()).getCharStream();
     int index = in.index();
     System.out.println(index);
     int line = in.getLine();
     int charPositionInLine = in.getCharPositionInLine();
     islandLexer.setCharStream(in);
-    in.seek(index);
+    in.seek(t.getStartIndex() + 1);
     in.setLine(line);
     in.setCharPositionInLine(charPositionInLine);
     MettelExpression e = islandParser.expression();
@@ -233,7 +233,7 @@ returns [MettelFOFormula f]
 atomicFormula
 returns [MettelFOFormula f]
 	:
-	'holds' '(' {expression() != null}? (',' term)+ ')'
+	'holds' t = '(' {System.out.println(expression(t));} (',' term)+ ')'
 	|
 	ID '(' termList? ')'
 	|

@@ -42,7 +42,6 @@ import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
-import mettel.generator.MettelANTLRGrammarGeneratorProperties;
 import mettel.generator.java.MettelJavaPackageStructure;
 import mettel.language.MettelLexer;
 import mettel.language.MettelParser;
@@ -201,7 +200,7 @@ public class MettelGenerator {
 
          	report("I am reading the specification.");
          	MettelSpecification spec = parser.specification();
-         	MettelANTLRGrammarGeneratorProperties p = parser.properties();
+         	//MettelANTLRGrammarGeneratorProperties p = parser.properties();
 
         	final int errorNumber = parser.getNumberOfSyntaxErrors();
         	if( errorNumber > 0){
@@ -213,7 +212,7 @@ public class MettelGenerator {
 
         	report("I am processing the specification.");
 
-        	MettelJavaPackageStructure pStructure = spec.process(p);
+        	MettelJavaPackageStructure pStructure = spec.process();
         	pStructure.flush(outputPath);
 
         	report("Java code of the provers is generated.");
@@ -231,7 +230,7 @@ public class MettelGenerator {
         	
         	pStructure.instantiateParsers(outputPath, dir, report);
         	report("I am processing the semantics.");
-        	if(spec.processSemantics(pStructure, p) > 0){
+        	if(spec.processSemantics(pStructure) > 0){
         		
         		report("Generating Java code from the semantics.");
         		

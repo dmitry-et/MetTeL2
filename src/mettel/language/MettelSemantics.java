@@ -16,6 +16,8 @@
  */
 package mettel.language;
 
+import static mettel.util.MettelStrings.LINE_SEPARATOR;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,8 +123,44 @@ public class MettelSemantics implements MettelBlock {
 		}
 
 	}
-
-	void init(MettelJavaPackageStructure pStructure, MettelANTLRGrammarGeneratorProperties properties){
-//TODO: fill in
+	
+	/**
+	 * @param buf
+	 */
+	public void toBuffer(StringBuilder buf) {
+		buf.append("semantics ");
+		buf.append(name);
+		buf.append(" in syntax ");
+		buf.append(syntax.name());
+		if(parents != null){
+			final int SIZE = parents.size();
+			if(SIZE >0){
+				buf.append(" extends ");
+				buf.append(parents.get(0).name);
+				for(int i = 1; i < SIZE; i++){
+					buf.append(", ");
+					buf.append(parents.get(i).name);
+				}
+			}
+		}
+		if(options != null){
+			buf.append(LINE_SEPARATOR);
+			options.toBuffer(buf);
+			buf.append(LINE_SEPARATOR);
+		}
+		buf.append('{');
+		buf.append(content);
+		buf.append("}");
 	}
+	
+	MettelOptions options = null;
+	
+	void setOptions(MettelOptions options){
+		this.options = options;
+	}
+	
+	MettelOptions options(){
+		return options;
+	}
+
 }

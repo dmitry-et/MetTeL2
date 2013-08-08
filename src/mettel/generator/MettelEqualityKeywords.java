@@ -37,15 +37,19 @@ public class MettelEqualityKeywords implements MettelEqualityDefaultKeywords{
 	 *
 	 */
 	public MettelEqualityKeywords() {
-		keywords = EQUALITY_KEYWORDS.keywords;
+		this(EQUALITY_KEYWORDS);
+	}
+	
+	public MettelEqualityKeywords(MettelEqualityKeywords kw) {
+		this(kw.keywords);
 	}
 
 	public MettelEqualityKeywords(String[] keywords) {
-		if(keywords == null){
-			this.keywords = EQUALITY_KEYWORDS.keywords;
-		}else{
-			this.keywords = keywords;
-		}
+		super();
+		if(keywords == null) keywords = EQUALITY_KEYWORDS.keywords;
+		final int SIZE = keywords.length; 
+		this.keywords = new String[SIZE];
+		System.arraycopy(keywords, 0, this.keywords, 0, SIZE);
 	}
 
 	public MettelEqualityKeywords(String keywordString) {

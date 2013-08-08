@@ -45,6 +45,8 @@ public class MettelSpecification {
 	private HashMap<String,MettelTableau> tableauTable = new HashMap<String,MettelTableau>();
 
 	private HashMap<String,MettelSemantics> semanticsTable = new HashMap<String,MettelSemantics>();
+	
+	MettelOptions options = null;
 
 	public MettelSyntax getSyntax(String name){
 		return syntaxTable.get(name);
@@ -82,13 +84,34 @@ public class MettelSpecification {
 		buf.append(path);
 		buf.append(';');
 		buf.append(LINE_SEPARATOR);
+		if(options != null){
+			options.toBuffer(buf);
+			buf.append(LINE_SEPARATOR);
+		}
 		for(MettelSyntax syn:syntaxes){
 			buf.append(LINE_SEPARATOR);
 			syn.toBuffer(buf);
 		}
-
+		buf.append(LINE_SEPARATOR);
+		for(MettelTableau tab:tableaux){
+			buf.append(LINE_SEPARATOR);
+			tab.toBuffer(buf);
+		}
+		buf.append(LINE_SEPARATOR);
+		for(MettelSemantics sem:semantics){
+			buf.append(LINE_SEPARATOR);
+			sem.toBuffer(buf);
+		}
 	}
 
+	void setOptions(MettelOptions options){
+		this.options = options;
+	}
+	
+	MettelOptions options(){
+		return options;
+	}
+	
 	/**
 	 * @param syn
 	 */
@@ -172,7 +195,11 @@ public class MettelSpecification {
 	}
 
 
-	public MettelJavaPackageStructure process(MettelANTLRGrammarGeneratorProperties properties) {
+	private MettelANTLRGrammarGeneratorProperties properties = new MettelANTLRGrammarGeneratorProperties();
+	
+	public MettelJavaPackageStructure process() {
+		properties = options.process(properties);
+		
 		final MettelJavaPackageStructure pStructure = new MettelJavaPackageStructure(path);
 
 		for(MettelSyntax syn:syntaxes){
@@ -186,8 +213,7 @@ public class MettelSpecification {
 		return pStructure;
 	}
 
-	public int processSemantics(MettelJavaPackageStructure pStructure,
-			MettelANTLRGrammarGeneratorProperties properties) {
+	public int processSemantics(MettelJavaPackageStructure pStructure) {
 		
 		for(MettelSemantics sem:semantics){
 			sem.process(pStructure, properties);

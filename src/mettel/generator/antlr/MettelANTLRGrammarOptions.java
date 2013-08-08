@@ -59,6 +59,10 @@ public class MettelANTLRGrammarOptions  implements MettelANTLRGrammarDefaultOpti
     	this(k);
     	this.superClass = superClass;
     }
+    
+    public MettelANTLRGrammarOptions(MettelANTLRGrammarOptions o){
+    	this(o.k, o.superClass, o.backtrack, o.memoize);
+    }
 
     public MettelANTLRGrammarOptions(int k, String superClass, boolean backtrack, boolean memoize) {
     	this(k, superClass);
@@ -66,6 +70,22 @@ public class MettelANTLRGrammarOptions  implements MettelANTLRGrammarDefaultOpti
     	this.memoize = memoize;
     }
 
+    public void setK(int k){
+    	this.k = k;
+    }
+    
+    public void setSuperClass(String superClass){
+    	this.superClass = superClass;
+    }
+    
+    public void setBacktrack(boolean backtrack){
+    	this.backtrack = backtrack;
+    }
+    
+    public void setMemoize(boolean memoize){
+    	this.memoize = memoize;
+    }
+    
     void toStringBuilder(MettelIndentedStringBuilder b) {
 	MettelIndentedStringBuilder ib = new MettelIndentedStringBuilder(b);
 	ib.indent();
