@@ -16,6 +16,8 @@
  */
 package mettel.generator.antlr;
 
+import mettel.util.MettelJavaNames;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -33,4 +35,38 @@ public class MettelANTLRFOGrammar extends MettelANTLRStandardGrammar {
 		// TODO Auto-generated constructor stub
 	}
 
+	
+	private void init(){
+		
+		MettelANTLRRuleReference ref0 = new MettelANTLRRuleReference("foFormula", "f");
+		ref0.appendToPostfix("a0.add(f)");
+		MettelANTLRUnaryBNFStatement e0 = new MettelANTLRUnaryBNFStatement(ref0, MettelANTLRUnaryBNFStatement.PLUS);
+		MettelANTLRRule r = new MettelANTLRRule("foFormulae", e0, new String[]{"Collection<MettelFOFormula>"}, null);
+		addRule(r);
+		
+		ref0 = new MettelANTLRRuleReference("foEquivalenceFormula", "f");
+		ref0.appendLineToPostfix("r0 = f");
+		r = new MettelANTLRRule("foFormula", ref0, null, new String[]{"MettelFOFormula"});
+		addRule(r);
+		
+		makeBinaryRule("equivalenceFormula", "imlicationFormula", "<->");
+		makeBinaryRule("implicationFormula", "disjunctionFormula", "->");
+		makeBinaryRule("disjunctionFormula", "conjunctionFormula", "|");
+		makeBinaryRule("conjunctionFormula", "existentialFormula", "&");
+		
+	}
+	
+	private void makeBinaryRule(String name, String refName, String token){
+		MettelANTLRMultiaryBNFStatement me0 = new MettelANTLRMultiaryBNFStatement();
+		String prefixedRefName = "fo" + MettelJavaNames.firstCharToUpperCase(refName); 
+		MettelANTLRRuleReference ref0 = new MettelANTLRRuleReference(prefixedRefName, "f0");
+		me0.addExpression(ref0);
+		MettelANTLRMultiaryBNFStatement me1 = new MettelANTLRMultiaryBNFStatement();
+		me1.addExpression(new MettelANTLRToken(token));
+		me1.addExpression(new MettelANTLRRuleReference(prefixedRefName, "f1"));
+		me1.appendLineToPostfix("f0 = foFactory.create" + MettelJavaNames.firstCharToUpperCase(name) +"(f0, f1)");
+		MettelANTLRUnaryBNFStatement e0 = new MettelANTLRUnaryBNFStatement(me1, MettelANTLRUnaryBNFStatement.STAR);
+		MettelANTLRRule r = new MettelANTLRRule("fo" + MettelJavaNames.firstCharToUpperCase(name), e0, null, new String[]{"MettelFOFormula"});
+		addRule(r);
+	}
 }
