@@ -321,28 +321,38 @@ public class MettelSyntax implements MettelBlock {
 
 		//unravel();
 		final String NAME = MettelJavaNames.firstCharToUpperCase(name);
-
+		final String FO_NAME = NAME +"FO";
+		
 		pStructure.appendStandardClasses(NAME);
 		pStructure.appendStandardLanguageClasses(name, NAME, properties.nameSeparator);
 
 		MettelANTLRStandardGrammar grammar =
 				new MettelANTLRStandardGrammar(NAME, pStructure.grammarPackage(name).path(), properties.grammarOptions);
-
+		MettelANTLRStandardGrammar foGrammar =
+				new MettelANTLRStandardGrammar(FO_NAME, pStructure.grammarPackage(name).path(), properties.grammarOptions);
+		
 		sortStrings = new String[sorts.size()];
 		int i = 0;
 		for(MettelSort sort:sorts){
 			sortStrings[i++] = sort.name();
 			sort.process(grammar, properties);
 			processBNFs(grammar, sort);
+			sort.process(foGrammar, properties);
+			processBNFs(foGrammar, sort);
 		}
 		//for(String s:sortStrings) System.out.print(s+ " "); System.out.println();
 		pStructure.appendStandardLanguageClasses(name, NAME, sortStrings, properties.branchBound);
-
+		
 		grammar.addRule(makeANTLRExpressionListRule(NAME));
 		grammar.addRule(makeANTLRExpressionRule(NAME, sorts));
 		grammar.addRule(makeANTLRTableauRule(NAME));
 		grammar.addRule(makeANTLRTableauCalculusRule(NAME));
 
+		foGrammar.addRule(makeANTLRExpressionListRule(FO_NAME));
+		foGrammar.addRule(makeANTLRExpressionRule(FO_NAME, sorts));
+		foGrammar.addRule(makeANTLRTableauRule(FO_NAME));
+		foGrammar.addRule(makeANTLRTableauCalculusRule(FO_NAME));
+		
 		pStructure.appendParser(name, grammar);
 	}
 
