@@ -345,6 +345,7 @@ public class MettelSyntax implements MettelBlock {
 		
 		grammar.addRule(makeANTLRExpressionListRule(NAME));
 		grammar.addRule(makeANTLRExpressionRule(NAME, sorts));
+		grammar.addRule(makeANTLRExpressionEOFRule(NAME, sorts)); //TODO: remove this stupid ANTLR caused hack! 
 		grammar.addRule(makeANTLRTableauRule(NAME));
 		grammar.addRule(makeANTLRTableauCalculusRule(NAME));
 
@@ -524,7 +525,22 @@ public class MettelSyntax implements MettelBlock {
 			ruleRef.appendLineToPostfix("r0 = "+sort.name()+"Expression;");
 			s.addExpression(ruleRef);
 		}
-		MettelANTLRRule r = new MettelANTLRRule("expression",s,
+		//s.addExpression(/*new MettelANTLRUnaryBNFStatement(*/MettelANTLRToken.EOF/*, MettelANTLRUnaryBNFStatement.TEST)*/);
+		MettelANTLRRule r = new MettelANTLRRule("expression", s,
+				new String[]{grammarName+"Expression"});
+		//r.appendLineToAfterBlock("r0 = e0;");
+		return r;
+	}
+	
+	private MettelANTLRRule makeANTLRExpressionEOFRule(String grammarName,Collection<MettelSort> sorts){
+		MettelANTLRMultiaryBNFStatement s = new MettelANTLRMultiaryBNFStatement(MettelANTLRMultiaryBNFStatement.OR);
+		for(MettelSort sort:sorts){
+			MettelANTLRRuleReference ruleRef = new MettelANTLRRuleReference(sort.name(),sort.name()+"Expression",true);
+			ruleRef.appendLineToPostfix("r0 = "+sort.name()+"Expression;");
+			s.addExpression(ruleRef);
+		}
+		s.addExpression(MettelANTLRToken.EOF);
+		MettelANTLRRule r = new MettelANTLRRule("expressionEOF", s,
 				new String[]{grammarName+"Expression"});
 		//r.appendLineToAfterBlock("r0 = e0;");
 		return r;

@@ -46,6 +46,6 @@ P | Q / P $| Q priority 4$;
 	   		}
 	   		
 semantics Boolean{
-holds( p <-> q, x) <-> true
-holds(true, x) <-> true
+holds((*p <-> q*), x) <-> holds((*p*), x) & holds((*q*), x) | ~holds((*p*), x) & ~holds((*q*), x) 
+holds((*true*), x) <-> true
 }

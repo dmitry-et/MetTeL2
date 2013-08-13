@@ -28,6 +28,8 @@ backtrack = true;
 package mettel.fo;
 
 import java.util.Collection;
+import java.io.StringReader;
+import java.io.InputStream;
 
 //import mettel.core.language.MettelLogicParser;
 import mettel.core.language.MettelAbstractLogicParser;
@@ -55,8 +57,9 @@ public Object recoverFromMismatchedToken(IntStream input, int ttype, BitSet foll
 
 private MettelAbstractLogicParser islandParser = null;
 private Lexer islandLexer = null;
+//private TokenStream islandTokens = null;
 
-private MettelExpression expression(CommonToken t) throws RecognitionException {
+/*private MettelExpression expression(CommonToken t) throws RecognitionException {
     CharStream in = ((Lexer)this.input.getTokenSource()).getCharStream();
     int index = in.index();
     //System.out.println(index);
@@ -69,6 +72,18 @@ private MettelExpression expression(CommonToken t) throws RecognitionException {
     MettelExpression e = islandParser.expression();
     //System.out.println(in.index());
     return e;
+}*/
+
+private MettelExpression expression(Token t){
+	islandLexer.setCharStream(new ANTLRStringStream(t.getText()));
+	//parser.input.setTokenSource(islandLexer);
+	MettelExpression result = null;
+	try{
+		result = islandParser.expressionEOF();
+	}catch(RecognitionException e){
+		throw new MettelFOParserException(e, "Cannot parse an expression " + t.getText(), t);
+	}
+	return result;
 }
 
 private MettelFOObjectFactory factory = MettelFOObjectFactory.DEFAULT;
@@ -82,7 +97,7 @@ public MettelFOParser(TokenStream input, MettelFOObjectFactory factory, MettelAb
     this.factory = factory;
     //System.out.println("parser = " + parser);
     this.islandParser = parser;
-    //System.out.println("parser.input != null?" + (parser.input == null));    
+    //System.out.println("parser.input != null?" + (parser.input == null));   
     this.islandLexer = (Lexer)parser.input.getTokenSource();
 }
 
@@ -233,7 +248,12 @@ returns [MettelFOFormula f]
 atomicFormula
 returns [MettelFOFormula f]
 	:
-	'holds' t = '(' {System.out.println(expression((CommonToken)t));} (',' term)+ ')'
+	'holds' t = '(' 
+	t = EXPRESSION
+	{
+	MettelExpression e = expression(t);
+	}
+	(',' term)+ ')'
 	|
 	ID '(' termList? ')'
 	|
@@ -310,3 +330,12 @@ UNICODE_ESC
     :   '\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
     ;
 */
+
+EXPRESSION
+	:
+	'(*' 
+	{state.tokenStartCharIndex = getCharIndex();}
+   	(options{greedy=false;} : . )*
+   	{setText(getText());}
+   	'*)'
+	;

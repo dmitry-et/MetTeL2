@@ -49,16 +49,18 @@ public class MettelRuntimeException extends RuntimeException{
 	}
 
 	public String getLocalizedMessage(){
-
-	    String result = super.getLocalizedMessage();
-	    if(result==null) result = getClass().getName();
+		StringBuilder result = new StringBuilder();
+	    String msg = super.getLocalizedMessage();
+	    if(msg == null) msg = getClass().getName();
+	    result.append(msg);
 	    if(cause != null){
-		    String causeDescription = getLocalizedMessage();
-		    result+="\n CAUSED BY \n" +
-			(causeDescription==null? "(NO DESCRIPTION)" : causeDescription);
+		    String causeDescription = cause.getLocalizedMessage();
+		    result.append(System.lineSeparator());
+		    result.append("CAUSED BY ");
+			result.append(causeDescription==null? cause.getClass().getName() : causeDescription);
 	    }
 
-	    return result;
+	    return result.toString();
 
 	}
 
