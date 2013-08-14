@@ -13,7 +13,14 @@ public interface MettelFOSubstitution extends MettelSubstitution{
     MettelFOFormula getFormula(MettelFOFormulaVariable e);
 
     Map<MettelFOFormulaVariable, MettelFOFormula> formulaMap();
+    
+    MettelFOTerm getTerm(MettelFOIndividualVariable e);
+
+    Map<MettelFOIndividualVariable, MettelFOTerm> termMap();
 
     boolean append(MettelFOFormulaVariable e0, MettelFOFormula e1);
+
+	boolean append(MettelFOIndividualVariable mettelFOIndividualVariable,
+			MettelFOTerm e);
 
 }

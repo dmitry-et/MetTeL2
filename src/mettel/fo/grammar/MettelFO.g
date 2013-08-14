@@ -171,44 +171,65 @@ returns [MettelFOFormula f]
 	f = f0;
 }
 	:
-	f0  = existentialFormula
+	f0  = unaryFormula
 	('&'
-	f1 = existentialFormula
+	f1 = unaryFormula
 		{ f0  = factory.createConjunctionFormula(f0,f1); }
 	)*
+	;
+
+fragment
+unaryFormula
+returns [MettelFOFormula f = null]
+	:
+	f0 = basicFormula
+	|
+	f0 = existentialFormula
+	|
+	f0 = universalFormula
+	|
+	f0 = negationFormula
+	{f = f0;}
 	;
 
 existentialFormula
 returns [MettelFOFormula f]
 	:
-	('exists' variableList)*
-//	  (ID ('exists' ID)*
-//	  |
-//	  '(' ID+ ')'
-//	  )
-//	)?
-	universalFormula
+	('exists' vars = variableList)+
+	f0 = unaryFormula
+	{f = factory.createExistentialFormula(vars, f0);}
 	;
 
 universalFormula
 returns [MettelFOFormula f]
 	:
-	('forall' variableList)*
-//	  (ID ('forall' ID)*
-//	  |
-//	  '(' ID+ ')'
-//	  )
-//	)?
-	negationFormula
+	('forall' vars = variableList)+
+	f0 = unaryFormula
+	{f = factory.createExistentialFormula(vars, f0);}
 	;
 
 variableList
+returns [MetelFOIndividualVariable[\] vars = null]
 	:
-		ID
+		list = idList
 		|
-		'[' ID+ ']'
+		'[' list = idList ']'
 		|
-		'(' ID+ ')'
+		'(' list = idList ')'
+		{vars = new MettelFOIndividualVariable[list.length()];
+		 int i = 0;
+		 for(String id:list){
+		 	vars[i] = factory.createIndividualVariable(id);
+		 }
+		}
+	;
+	
+fragment idList
+returns [LinkedHashSet<String> ids = new LinkedHashSet<String>()]
+	:
+		(t = ID
+		{ids.add(t.getText());}
+		)+
 	;
 
 negationFormula
@@ -219,12 +240,12 @@ returns [MettelFOFormula f]
 	:
 	('~'
 		{n++;}
-	)*
-	f0  = basicFormula
+	)+
+	f0  = unaryFormula
 		{if( (n \% 2) == 1){
 			f = factory.createNegationFormula(f0);
 		  }else{
-		     f = f0;
+		    f = f0;
 		  }
 		}
 	;
@@ -246,40 +267,62 @@ returns [MettelFOFormula f]
 	;
 
 atomicFormula
-returns [MettelFOFormula f]
+returns [MettelFOFormula f = null]
 	:
-	'holds' t = '(' 
+	'holds' '(' 
 	t = EXPRESSION
 	{
 	MettelExpression e = expression(t);
 	}
-	(',' term)+ ')'
+	','?
+	terms = termList ')'
+	{
+	f = factory.createHoldsPredicate(e, terms);
+	}
 	|
-	ID '(' termList? ')'
+	t = ID '(' terms = termList? ')'
+	{
+	final String name = t.getText();
+	final MettelFOFormulaVariable p = factory.createFormulaVariable(name);
+	f = factory.createAtomicFormula(p, terms);
+	}
 	|
    	f0  = equalityFormula
    		{f = f0;}
 	;
+	
+
 
 equalityFormula
-returns [MettelFOFormula f]
+returns [MettelFOFormula f = null]
 	:
-	'[' term '=' term ']'
+	'[' t0 = term '=' t1 = term ']'
 	|
-	'(' term '=' term ')'
+	'(' t0 = term '=' t1 = term ')'
+	{f = factory.createEqualityFormula(t0, t1);}
 	;
 
 term
+returns [MettelFOTerm t = null]
 	:
-	ID
-	( '(' termList? ')' )?
+	id = ID
+	( '(' terms = termList? ')' )?
+	{
+	final String name = id.getText();
+	final MettelFOFunctionVariable f = factory.createFunctionVariable(name);
+	f = factory.createTerm(f, terms);
+	}
 	;
 
 termList
+returns [ArrayList<MettelFOTerm> terms = new ArrayList<MettelFOTerm>()]
 	:
+	t = term
+	{terms.add(t);}
+	(','?
 	term
-	(','
-	term)+
+	{terms.add(t);}
+	)*
 	;
 
 

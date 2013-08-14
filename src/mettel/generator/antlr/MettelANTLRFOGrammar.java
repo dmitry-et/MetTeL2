@@ -32,7 +32,8 @@ public class MettelANTLRFOGrammar extends MettelANTLRStandardGrammar {
 	public MettelANTLRFOGrammar(String name, String path,
 			MettelANTLRGrammarOptions options) {
 		super(name, path, options);
-		// TODO Auto-generated constructor stub
+		// TODO Auto-generated constructor stub 
+		init();
 	}
 
 	

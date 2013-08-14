@@ -15,12 +15,23 @@ import mettel.core.tableau.MettelSubstitution;
 public class MettelFOTreeSubstitution implements MettelFOSubstitution{
 
     protected final Map<MettelFOFormulaVariable, MettelFOFormula> formulaMap = new TreeMap<MettelFOFormulaVariable, MettelFOFormula>();
+    
+    protected final Map<MettelFOIndividualVariable, MettelFOTerm> termMap = new TreeMap<MettelFOIndividualVariable, MettelFOTerm>();
+        
     public MettelFOFormula getFormula(MettelFOFormulaVariable v){
         return formulaMap.get(v);
     }
 
     public Map<MettelFOFormulaVariable, MettelFOFormula> formulaMap(){
         return formulaMap;
+    }
+    
+    public MettelFOTerm getTerm(MettelFOIndividualVariable v){
+        return termMap.get(v);
+    }
+
+    public Map<MettelFOIndividualVariable, MettelFOTerm> termMap(){
+        return termMap;
     }
 
     public boolean append(MettelFOFormulaVariable v, MettelFOFormula e1){
@@ -33,11 +44,26 @@ public class MettelFOTreeSubstitution implements MettelFOSubstitution{
             return (e.equals(e1));
         }
     }
+    
+    public boolean append(MettelFOIndividualVariable v, MettelFOTerm e1){
+        if(v == null || e1 == null){ return false; }
+        final MettelFOTerm e = termMap.get(v);
+        if(e == null){
+            termMap.put(v,e1);
+            return true;
+        }else{
+            return (e.equals(e1));
+        }
+    }
 
     public boolean append(MettelFOSubstitution s){
         final Map<MettelFOFormulaVariable, MettelFOFormula> mFormula = s.formulaMap();
         for(MettelFOFormulaVariable key:mFormula.keySet()){
-            if(!append(key,s.getFormula(key))){ return false; }
+            if(!append(key, s.getFormula(key))){ return false; }
+        }
+        final Map<MettelFOIndividualVariable, MettelFOTerm> mTerm = s.termMap();
+        for(MettelFOIndividualVariable key:mTerm.keySet()){
+            if(!append(key, s.getTerm(key))){ return false; }
         }
         return true;
     }
@@ -61,6 +87,10 @@ public class MettelFOTreeSubstitution implements MettelFOSubstitution{
             for(Entry<MettelFOFormulaVariable, MettelFOFormula> entry:entryFormulaSet){
                 if(!s.append(entry.getKey(),entry.getValue())) return null;
             }
+            Set<Entry<MettelFOIndividualVariable, MettelFOTerm>> entryTermSet = ((MettelFOSubstitution)array[i]).termMap().entrySet();
+            for(Entry<MettelFOIndividualVariable, MettelFOTerm> entry:entryTermSet){
+                if(!s.append(entry.getKey(),entry.getValue())) return null;
+            }
         }
         return s;
     }
@@ -72,7 +102,8 @@ public class MettelFOTreeSubstitution implements MettelFOSubstitution{
     public MettelSubstitution merge(MettelSubstitution[] array){
         MettelFOTreeSubstitution s = new MettelFOTreeSubstitution();
         s.formulaMap().putAll(formulaMap);
-        return appendArray(s,array);
+        s.termMap().putAll(termMap);
+        return appendArray(s, array);
     }
 
     public int compareTo(MettelSubstitution s){
@@ -95,6 +126,24 @@ public class MettelFOTreeSubstitution implements MettelFOSubstitution{
                 }
             }
         }
+        final Set<MettelFOIndividualVariable> keysTerm0 = termMap.keySet();
+        final Set<MettelFOIndividualVariable> keysTerm1 = ((MettelFOSubstitution)s).termMap().keySet();
+        final TreeSet<MettelFOIndividualVariable> keysTerm = new TreeSet<MettelFOIndividualVariable>(keysTerm0);
+        keysTerm.addAll(keysTerm1);
+        for(MettelFOIndividualVariable key:keysTerm){
+            if(!keysTerm0.contains(key)){
+                return 1;
+            }else{
+                if(!keysTerm1.contains(key)){
+                    return -1;
+                }else{
+                    final MettelFOTerm v0 = termMap.get(key);
+                    final MettelFOTerm v1 = ((MettelFOSubstitution)s).getTerm(key);
+                    final int result = v0.compareTo(v1);
+                    if(result != 0){ return result; }
+                }
+            }
+        }
         return 0;
     }
 
@@ -102,6 +151,7 @@ public class MettelFOTreeSubstitution implements MettelFOSubstitution{
     public int hashCode(){
         hashCode = 1;
         hashCode = 31*hashCode + formulaMap.hashCode();
+        hashCode = 31*hashCode + termMap.hashCode();
         return hashCode;
     }
 
@@ -109,7 +159,7 @@ public class MettelFOTreeSubstitution implements MettelFOSubstitution{
         if(o == this){ return true; }
         if(!(o instanceof MettelFOSubstitution)){ return false; }
         final MettelFOSubstitution s = (MettelFOSubstitution)o;
-        return formulaMap.equals(s.formulaMap());
+        return formulaMap.equals(s.formulaMap()) && termMap.equals(s.termMap());
     }
 
     public String toString(){
@@ -118,6 +168,19 @@ public class MettelFOTreeSubstitution implements MettelFOSubstitution{
         boolean notFirst = false;
         Set<Entry<MettelFOFormulaVariable, MettelFOFormula>> formulaEntrySet = formulaMap.entrySet();
         for(Entry<MettelFOFormulaVariable, MettelFOFormula> entry:formulaEntrySet){
+            if(notFirst){
+                b.append(", ");
+            }else{
+                notFirst = true;
+            }
+            b.append(entry.getKey());
+            b.append('/');
+            b.append(entry.getValue());
+        }
+        b.append(';');
+        notFirst = false;
+        Set<Entry<MettelFOIndividualVariable, MettelFOTerm>> termEntrySet = termMap.entrySet();
+        for(Entry<MettelFOIndividualVariable, MettelFOTerm> entry:termEntrySet){
             if(notFirst){
                 b.append(", ");
             }else{
