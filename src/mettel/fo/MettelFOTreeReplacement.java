@@ -29,6 +29,7 @@ public class MettelFOTreeReplacement implements MettelFOReplacement{
     }
 
     protected final Map<MettelFOFormula, Pointer<MettelFOFormula>> formulaMap = new TreeMap<MettelFOFormula, Pointer<MettelFOFormula>>();
+    protected final Map<MettelFOTerm, Pointer<MettelFOTerm>> termMap = new TreeMap<MettelFOTerm, Pointer<MettelFOTerm>>();
     public MettelFOFormula getFormula(MettelFOFormula e){
         final Pointer<MettelFOFormula> p = formulaMap.get(e);
         return p == null? null: p.expression;
@@ -37,6 +38,16 @@ public class MettelFOTreeReplacement implements MettelFOReplacement{
     public Set<MettelFOFormula> formulaKeys(){
         return formulaMap.keySet();
     }
+    
+    public MettelFOTerm getTerm(MettelFOTerm e){
+        final Pointer<MettelFOTerm> p = termMap.get(e);
+        return p == null? null: p.expression;
+    }
+
+    public Set<MettelFOTerm> termKeys(){
+        return termMap.keySet();
+    }
+
 
     public boolean append(MettelFOFormula e0, MettelFOFormula e1){
         if(e0 == null || e1 == null){ return false; }
@@ -71,13 +82,48 @@ public class MettelFOTreeReplacement implements MettelFOReplacement{
                 }
             }
         }
+    
+	    public boolean append(MettelFOTerm e0, MettelFOTerm e1){
+	        if(e0 == null || e1 == null){ return false; }
+	        final int ID0 = e0.id();
+	        int ID1 = e1.id();
+	        if(ID0 == ID1) return false;
+            MettelFOTerm left = null;
+            MettelFOTerm right = null;
+            if(ID0 > ID1){
+                left = e0;
+                right = e1;
+            }else{
+                left = e1;
+                right = e0;
+                ID1 = ID0;
+            }
+            final Pointer<MettelFOTerm> entry = termMap.get(left);
+            if(entry == null){
+                termMap.put(left, new Pointer<MettelFOTerm>(right));
+                return true;
+            }else{
+                final MettelFOTerm third = entry.expression;
+                final int ID2 = third.id();
+                if(ID1 == ID2) return false;
+                if(ID1 > ID2){
+                    termMap.put(right, entry);
+                    return true;
+                }else{
+                    entry.expression = right;
+                    termMap.put(third, entry);
+                    return true;
+                }
+            }
+	    }
 
         public boolean isEmpty(){
-            return formulaMap.isEmpty();
+            return formulaMap.isEmpty() && termMap.isEmpty();
         }
 
         public boolean append(MettelExpression e0, MettelExpression e1){
             if(e0 instanceof MettelFOFormula){ return append((MettelFOFormula)e0, (MettelFOFormula)e1); }
+            if(e0 instanceof MettelFOTerm){ return append((MettelFOTerm)e0, (MettelFOTerm)e1); }
             return false;
         }
 
@@ -90,6 +136,9 @@ public class MettelFOTreeReplacement implements MettelFOReplacement{
             if(e instanceof MettelFOFormula){
                 return ((MettelFOFormula)e).rewrite(this);
             }
+            if(e instanceof MettelFOTerm){
+                return ((MettelFOTerm)e).rewrite(this);
+            }
             return null;
         }
 
@@ -100,6 +149,10 @@ public class MettelFOTreeReplacement implements MettelFOReplacement{
             for(Entry<MettelFOFormulaVariable, MettelFOFormula> entry:formulaEntrySet){
                 res.append(entry.getKey(),(MettelFOFormula)rewrite(entry.getValue()));
             }
+            final Set<Entry<MettelFOIndividualVariable, MettelFOTerm>> termEntrySet = s0.termMap().entrySet();
+            for(Entry<MettelFOIndividualVariable, MettelFOTerm> entry:termEntrySet){
+                res.append(entry.getKey(),(MettelFOTerm)rewrite(entry.getValue()));
+            }
             return res;
         }
 
@@ -109,6 +162,10 @@ public class MettelFOTreeReplacement implements MettelFOReplacement{
             for(MettelFOFormula key:formulaKeys){
                 result |= append(key, r.getFormula(key));
             }
+            final Set<MettelFOTerm> termKeys = r.termKeys();
+            for(MettelFOTerm key:termKeys){
+                result |= append(key, r.getTerm(key));
+            }
             return result;
         }
 
@@ -116,6 +173,7 @@ public class MettelFOTreeReplacement implements MettelFOReplacement{
         public int hashCode(){
             hashCode = 1;
             hashCode = 31*hashCode + formulaMap.hashCode();
+            hashCode = 31*hashCode + termMap.hashCode();
             return hashCode;
         }
 
@@ -139,6 +197,24 @@ public class MettelFOTreeReplacement implements MettelFOReplacement{
                     }
                 }
             }
+            final Set<MettelFOTerm> keysTerm0 = termMap.keySet();
+            final Set<MettelFOTerm> keysTerm1 = ((MettelFOReplacement)r).termKeys();
+            final TreeSet<MettelFOTerm> keysTerm = new TreeSet<MettelFOTerm>(keysTerm0);
+            keysTerm.addAll(keysTerm1);
+            for(MettelFOTerm key:keysTerm){
+                if(!keysTerm0.contains(key)){
+                    return 1;
+                }else{
+                    if(!keysTerm1.contains(key)){
+                        return -1;
+                    }else{
+                        final MettelFOTerm v0 = termMap.get(key).expression;
+                        final MettelFOTerm v1 = ((MettelFOReplacement)r).getTerm(key);
+                        final int result = v0.compareTo(v1);
+                        if(result != 0){ return result; }
+                    }
+                }
+            }
             return 0;
         }
 
@@ -148,9 +224,15 @@ public class MettelFOTreeReplacement implements MettelFOReplacement{
             final MettelFOReplacement r = (MettelFOReplacement)o;
             final Set<MettelFOFormula> formulaKeys = formulaMap.keySet();
             if(!formulaKeys.equals(r.formulaKeys())) return false;
+            final Set<MettelFOTerm> termKeys = termMap.keySet();
+            if(!termKeys.equals(r.termKeys())) return false;
             for(MettelFOFormula key:formulaKeys){
                 final MettelFOFormula v = formulaMap.get(key).expression;
                 if(!v.equals(r.getFormula(key))) return false;
+            }
+            for(MettelFOTerm key:termKeys){
+                final MettelFOTerm v = termMap.get(key).expression;
+                if(!v.equals(r.getTerm(key))) return false;
             }
             return true;
         }
@@ -161,6 +243,19 @@ public class MettelFOTreeReplacement implements MettelFOReplacement{
             boolean notFirst = false;
             final Set<Entry<MettelFOFormula, Pointer<MettelFOFormula>>> formulaEntrySet = formulaMap.entrySet();
             for(Entry<MettelFOFormula, Pointer<MettelFOFormula>> entry:formulaEntrySet){
+                if(notFirst){
+                    b.append(", ");
+                }else{
+                    notFirst = true;
+                }
+                b.append(entry.getKey());
+                b.append('/');
+                b.append(entry.getValue().expression);
+            }
+            b.append(';');
+            notFirst = false;
+            Set<Entry<MettelFOTerm, Pointer<MettelFOTerm>>> termEntrySet = termMap.entrySet();
+            for(Entry<MettelFOTerm, Pointer<MettelFOTerm>> entry:termEntrySet){
                 if(notFirst){
                     b.append(", ");
                 }else{

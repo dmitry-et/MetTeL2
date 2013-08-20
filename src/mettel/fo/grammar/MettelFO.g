@@ -28,6 +28,7 @@ backtrack = true;
 package mettel.fo;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.io.StringReader;
 import java.io.InputStream;
 
@@ -182,6 +183,7 @@ fragment
 unaryFormula
 returns [MettelFOFormula f = null]
 	:
+	(
 	f0 = basicFormula
 	|
 	f0 = existentialFormula
@@ -189,6 +191,7 @@ returns [MettelFOFormula f = null]
 	f0 = universalFormula
 	|
 	f0 = negationFormula
+	)
 	{f = f0;}
 	;
 
@@ -209,7 +212,7 @@ returns [MettelFOFormula f]
 	;
 
 variableList
-returns [MetelFOIndividualVariable[\] vars = null]
+returns [MettelFOIndividualVariable[\] vars = null]
 	:
 		list = idList
 		|
@@ -268,16 +271,17 @@ returns [MettelFOFormula f]
 
 atomicFormula
 returns [MettelFOFormula f = null]
+@init{MettelExpression exp = null;}
 	:
 	'holds' '(' 
 	t = EXPRESSION
 	{
-	MettelExpression e = expression(t);
+	exp = expression(t);
 	}
 	','?
 	terms = termList ')'
 	{
-	f = factory.createHoldsPredicate(e, terms);
+	f = factory.createHoldsPredicate(exp, terms);
 	}
 	|
 	t = ID '(' terms = termList? ')'
@@ -310,7 +314,7 @@ returns [MettelFOTerm t = null]
 	{
 	final String name = id.getText();
 	final MettelFOFunctionVariable f = factory.createFunctionVariable(name);
-	f = factory.createTerm(f, terms);
+	t = factory.createTerm(f, terms);
 	}
 	;
 
