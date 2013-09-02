@@ -1,5 +1,18 @@
 /**
+ * This file is part of MetTeL.
  *
+ * MetTeL is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MetTeL is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with MetTeL.  If not, see <http://www.gnu.org/licenses/>.
  */
 package mettel.generator.antlr;
 
@@ -7,8 +20,8 @@ import static mettel.util.MettelStrings.PACKAGE_STRING;
 import mettel.util.MettelJavaNames;
 
 /**
- * @author dmitry
- *
+ * @author Dmitry Tishkovsky
+ * @version $Revision$ $Date$
  */
 public class MettelANTLRStandardGrammar extends MettelANTLRGrammar {
 
@@ -33,7 +46,6 @@ public class MettelANTLRStandardGrammar extends MettelANTLRGrammar {
 		addToHeader("import mettel.core.tableau.MettelGeneralTableauRule;");
 
 		addToHeader("import "+options.superClass()+';');
-		//grammar.addToHeader("import mettel.generator.MettelAbstractLogicParser;");
 
 		addToLexerHeader(s);
 

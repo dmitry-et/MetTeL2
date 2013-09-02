@@ -56,9 +56,6 @@ tokens{
 @header{
 package mettel.language;
 
-import java.io.StringReader;
-import java.io.IOException;
-
 import mettel.MettelRuntimeException;
 import mettel.language.MettelParserException;
 import mettel.generator.MettelANTLRGrammarGeneratorProperties;
@@ -75,10 +72,6 @@ package mettel.language;
 
 @members{
 private MettelANTLRGrammarGeneratorProperties properties = new MettelANTLRGrammarGeneratorProperties();
-
-public MettelANTLRGrammarGeneratorProperties properties(){
-	return properties;
-}
 }
 
 @lexer::members{
@@ -100,7 +93,10 @@ specification
 
     importBlock?
 
-    optionsBlock?
+    (o = optionsBlock
+    {spec.setOptions(o);
+     properties = o.process(properties);}
+    )?
 
     (block[spec] | SEMI)*
     EOF
@@ -136,7 +132,7 @@ path
 	(td = DOT
 		{buf.append(td.getText());}
 	 id = IDENTIFIER
-	          	{buf.append(id.getText());}
+	    {buf.append(id.getText());}
 	)*
 	;
 
@@ -149,17 +145,28 @@ block
      |
      tab = tableau[spec]
      {spec.addTableau(tab);}
+     |
+     sem = semantics[spec]
+     {spec.addSemantics(sem);}
+ 
     )
     ;
 
 syntax[MettelSpecification spec]
-    returns [MettelSyntax syn =null]
+    returns [MettelSyntax syn = null]
+    @init{MettelANTLRGrammarGeneratorProperties oldProperties = properties;}
+    @after{properties = oldProperties;}
     :
     SYNTAX id = IDENTIFIER
     	(paths = extendsBlock)?
     	{
     	syn = new MettelSyntax(id.getText(), spec.getSyntaxes(paths));
     	}
+    	(o = optionsBlock
+    	{syn.setOptions(o);
+    	 properties = o.process(properties);
+    	}
+    	)?
     	LBRACE
 		    (
 		    syntaxStatement[syn]
@@ -317,6 +324,9 @@ returns [MettelTableau tab = null]
     		throw new MettelParserException("The syntax "+ synName + " is undefined", id.getLine(), id.getCharPositionInLine());
     	tab = new MettelTableau(name, syntax, spec.getTableaux(paths));
     	}
+    	(o = optionsBlock
+    	{tab.setOptions(o);}
+    	)?
     	//(IN SYNTAX? synId = IDENTIFIER)?
 		//LBRACE
 			t = BLOCK
@@ -326,16 +336,14 @@ returns [MettelTableau tab = null]
     	//RBRACE
 	;
 
+fragment
 optionsBlock
+returns [MettelOptions o = null]
 	:
 	OPTIONS
 	t = BLOCK
 	{
-	try{
-		properties = new MettelANTLRGrammarGeneratorProperties(new StringReader(t.getText()));
-	}catch(IOException e){
-		throw new MettelRuntimeException(e, "Options cannot be read");
-	}
+	o = new MettelOptions(t.getText());
 	}
 	;
 
@@ -350,21 +358,27 @@ returns [String name = null]
 	)?
 	;
 
-semantics
+semantics[MettelSpecification spec]
+returns [MettelSemantics sem = null]
 	:
-	SEMANTICS synName = syntaxName IDENTIFIER (EXTENDS path)?
-    	LBRACE
-		    semanticOperator?
-		    (SEMI
-		    semanticOperator?
-		    )*
-		RBRACE
+	SEMANTICS id = IDENTIFIER synName = syntaxName
+    	(paths = extendsBlock)?
+    	{
+    	String name = id.getText();
+    	if(synName == null) synName = name;
+    	MettelSyntax syntax = spec.getSyntax(synName);
+    	if(syntax == null)
+    		throw new MettelParserException("The syntax "+ synName + " is undefined", id.getLine(), id.getCharPositionInLine());
+    	sem = new MettelSemantics(name, syntax, spec.getSemantics(paths));
+    	}
+    	(o = optionsBlock
+    	{sem.setOptions(o);}
+    	)?
+    	t = BLOCK
+		{
+		sem.setContent(t.getText());
+		}
     ;
-
-semanticOperator
-	:
-	semanticFormula
-	;
 
 /*
 semanticSymbolDeclaration
@@ -558,6 +572,14 @@ TABLEAU
 OPTIONS
 	:
 	'options'
+	{
+	futureBlock = true;
+	}
+	;
+
+SEMANTICS
+	:
+	'semantics'
 	{
 	futureBlock = true;
 	}

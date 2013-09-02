@@ -16,6 +16,12 @@ public interface MettelFOReplacement extends MettelReplacement{
     Set<MettelFOFormula> formulaKeys();
 
     boolean append(MettelFOFormula e0, MettelFOFormula e1);
+    
+    MettelFOTerm getTerm(MettelFOTerm e);
+
+    Set<MettelFOTerm> termKeys();
+
+    boolean append(MettelFOTerm t0, MettelFOTerm t1);
 
     boolean append(MettelFOReplacement r);
 

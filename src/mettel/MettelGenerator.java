@@ -42,7 +42,6 @@ import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.CommonTokenStream;
-import mettel.generator.MettelANTLRGrammarGeneratorProperties;
 import mettel.generator.java.MettelJavaPackageStructure;
 import mettel.language.MettelLexer;
 import mettel.language.MettelParser;
@@ -201,7 +200,7 @@ public class MettelGenerator {
 
          	report("I am reading the specification.");
          	MettelSpecification spec = parser.specification();
-         	MettelANTLRGrammarGeneratorProperties p = parser.properties();
+         	//MettelANTLRGrammarGeneratorProperties p = parser.properties();
 
         	final int errorNumber = parser.getNumberOfSyntaxErrors();
         	if( errorNumber > 0){
@@ -213,12 +212,12 @@ public class MettelGenerator {
 
         	report("I am processing the specification.");
 
-        	MettelJavaPackageStructure pStructure = spec.process(p);
+        	MettelJavaPackageStructure pStructure = spec.process();
         	pStructure.flush(outputPath);
 
         	report("Java code of the provers is generated.");
 
-        	report.report("I have asked ANTLR to generate parsers for the syntaxes.");
+        	report("I have asked ANTLR to generate parsers for the syntaxes.");
         	if(pStructure.antlr(outputPath, report)){
         		report("The Java code of all the parsers is generated.");
         	}else{
@@ -228,6 +227,20 @@ public class MettelGenerator {
         	File src = new File(outputPath + File.separatorChar + spec.path());
         	File dir = createTempDir(spec.path());
         	compile(src, dir);
+        	
+        	pStructure.instantiateParsers(outputPath, dir, report);
+        	report("I am processing the semantics.");
+        	if(spec.processSemantics(pStructure) > 0){
+        		
+        		report("Generating Java code from the semantics.");
+        		
+        		pStructure.flush(outputPath);
+        		
+        		report("Generated.");
+        		
+        		compile(src, dir);
+        		
+        	}
 
         	report("I am verifying the tableau calculi specifications.");
         	if(pStructure.verifyTableaux(outputPath, dir, report)){

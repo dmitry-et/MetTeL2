@@ -27,6 +27,6 @@ import mettel.core.tableau.MettelExpression;
  */
 public interface MettelLogicParser {
 
-	MettelExpression expression() throws RecognitionException;
+	MettelExpression expressionEOF() throws RecognitionException;
 
 }

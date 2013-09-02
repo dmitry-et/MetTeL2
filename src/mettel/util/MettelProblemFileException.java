@@ -14,53 +14,50 @@
  * You should have received a copy of the GNU General Public License
  * along with MetTeL.  If not, see <http://www.gnu.org/licenses/>.
  */
-package mettel;
+package mettel.util;
 
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public class MettelRuntimeException extends RuntimeException{
-
+public class MettelProblemFileException extends RuntimeException{
 
 	/**
-	 *
+	 * 
 	 */
-	private static final long serialVersionUID = 629573032741447104L;
-
+	private static final long serialVersionUID = -7993619043157778664L;
+	
 	protected Exception cause = null;
 
-	public MettelRuntimeException(){
+	public MettelProblemFileException(){
 		this(null, null);
 	}
 
-	public MettelRuntimeException(Exception cause, String description){
+	public MettelProblemFileException(Exception cause, String description){
 		super(description);
 		this.cause = cause;
 	}
 
-	public MettelRuntimeException(Exception cause){
+	public MettelProblemFileException(Exception cause){
 		this(cause, null);
 	}
 
-	public MettelRuntimeException(String description){
+	public MettelProblemFileException(String description){
 		this(null,description);
 	}
 
 	public String getLocalizedMessage(){
-		StringBuilder result = new StringBuilder();
-	    String msg = super.getLocalizedMessage();
-	    if(msg == null) msg = getClass().getName();
-	    result.append(msg);
+
+	    String result = super.getLocalizedMessage();
+	    if(result==null) result = getClass().getName();
 	    if(cause != null){
-		    String causeDescription = cause.getLocalizedMessage();
-		    result.append(System.lineSeparator());
-		    result.append("CAUSED BY ");
-			result.append(causeDescription==null? cause.getClass().getName() : causeDescription);
+		    String causeDescription = getLocalizedMessage();
+		    result+="\n CAUSED BY \n" +
+			(causeDescription==null? "(NO DESCRIPTION)" : causeDescription);
 	    }
 
-	    return result.toString();
+	    return result;
 
 	}
 
