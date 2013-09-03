@@ -375,5 +375,16 @@ public abstract class MettelAbstractTableauState implements MettelTableauState {
 	public MettelTableauExplanation explanation() {
 		return explanation;
 	}
-
+	
+/*	public boolean consume(MettelAbstractTableauState s){
+System.out.println("Consuming "+s);
+		final MettelGeneralTableauRuleState[] rstates = s.ruleStates;
+		final int SIZE = rstates.length;
+		if(SIZE != ruleStates.length) return false;
+		for(int i = 0; i < SIZE; i++){
+			if(!ruleStates[i].consume(rstates[i])) return false;
+		}
+		return true;
+	}
+*/
 }

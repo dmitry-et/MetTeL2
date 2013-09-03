@@ -37,8 +37,8 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 
 //		private LinkedHashMap<MettelGeneralTableauState,MettelGeneralTableauRuleState> states = null;
 
-    	private MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedExpression> pool = null;
-    	private MettelAnnotatedExpression e = null;
+    	MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedExpression> pool = null;
+    	MettelAnnotatedExpression e = null;
 
     	//TODO change the structure for substitutions
     	private MettelExpression[] premises = null;
@@ -46,8 +46,8 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 
 //    	MettelAnnotatedSubstitution s = null;
 
-    	private MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution> newSubstitutions = null;
-    	private MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution>[] oldSubstitutions = null;
+    	MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution> newSubstitutions = null;
+    	MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedSubstitution>[] oldSubstitutions = null;
 
     	private class MettelIndexedSubstitution extends MettelSimpleAnnotatedSubstitution{
     		/**
@@ -84,7 +84,7 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 			}
     	}
 
-    	private MettelTreeSetLinkedHashMap<MettelTableauState,MettelIndexedSubstitution> substitutions = null;
+    	MettelTreeSetLinkedHashMap<MettelTableauState,MettelIndexedSubstitution> substitutions = null;
 
     	private int index = 0;
 
@@ -582,4 +582,16 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 		public int priority() {
 			return priority;
 		}
+
+/*		public boolean consume(MettelGeneralTableauRuleState rs) {
+//System.out.println("Consuming "+rs);
+			pool.addAll(rs.pool);
+			if(rs.e != null) pool.add(rs.e);
+			newSubstitutions.addAll(rs.newSubstitutions);
+			substitutions.addAll(rs.substitutions);
+			for(int i = 0; i < PREMISES_NUMBER; i++){
+				oldSubstitutions[i].addAll(rs.oldSubstitutions[i]);
+			}
+			return true;
+		}*/
 }

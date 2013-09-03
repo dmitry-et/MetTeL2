@@ -583,4 +583,14 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	public Set<MettelAnnotatedExpression> equalities() {
 		return equalities;
 	}
+	
+/*	public boolean consume(MettelAbstractTableauState s){
+		final MettelGeneralTableauRuleState[] rstates = s.ruleStates;
+		final int SIZE = rstates.length;
+		if(SIZE != ruleStates.length) return false;
+		for(int i = 0; i < SIZE; i++){
+			if(!ruleStates[i].consume(rstates[i])) return false;
+		}
+		return true;
+	}*/
 }

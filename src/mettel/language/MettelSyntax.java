@@ -210,6 +210,11 @@ public class MettelSyntax implements MettelBlock {
 				}
 			}
 		}
+		if(options != null){
+			buf.append(LINE_SEPARATOR);
+			options.toBuffer(buf);
+			buf.append(LINE_SEPARATOR);
+		}
 		buf.append('{');
 		buf.append(LINE_SEPARATOR);
 		int i = 0;
@@ -316,28 +321,39 @@ public class MettelSyntax implements MettelBlock {
 
 		//unravel();
 		final String NAME = MettelJavaNames.firstCharToUpperCase(name);
-
+		//TODO final String FO_NAME = NAME +"FO";
+		
 		pStructure.appendStandardClasses(NAME);
 		pStructure.appendStandardLanguageClasses(name, NAME, properties.nameSeparator);
 
 		MettelANTLRStandardGrammar grammar =
 				new MettelANTLRStandardGrammar(NAME, pStructure.grammarPackage(name).path(), properties.grammarOptions);
-
+		/*TODO MettelANTLRStandardGrammar foGrammar =
+				new MettelANTLRStandardGrammar(FO_NAME, pStructure.grammarPackage(name).path(), properties.grammarOptions);*/
+		
 		sortStrings = new String[sorts.size()];
 		int i = 0;
 		for(MettelSort sort:sorts){
 			sortStrings[i++] = sort.name();
 			sort.process(grammar, properties);
 			processBNFs(grammar, sort);
+			/*TODO sort.process(foGrammar, properties);
+			processBNFs(foGrammar, sort);*/
 		}
 		//for(String s:sortStrings) System.out.print(s+ " "); System.out.println();
 		pStructure.appendStandardLanguageClasses(name, NAME, sortStrings, properties.branchBound);
-
+		
 		grammar.addRule(makeANTLRExpressionListRule(NAME));
 		grammar.addRule(makeANTLRExpressionRule(NAME, sorts));
+		grammar.addRule(makeANTLRExpressionEOFRule(NAME, sorts)); //TODO: remove this stupid ANTLR caused hack! 
 		grammar.addRule(makeANTLRTableauRule(NAME));
 		grammar.addRule(makeANTLRTableauCalculusRule(NAME));
 
+		/*TODO foGrammar.addRule(makeANTLRExpressionListRule(FO_NAME));
+		foGrammar.addRule(makeANTLRExpressionRule(FO_NAME, sorts));
+		foGrammar.addRule(makeANTLRTableauRule(FO_NAME));
+		foGrammar.addRule(makeANTLRTableauCalculusRule(FO_NAME));*/
+		
 		pStructure.appendParser(name, grammar);
 	}
 
@@ -509,7 +525,22 @@ public class MettelSyntax implements MettelBlock {
 			ruleRef.appendLineToPostfix("r0 = "+sort.name()+"Expression;");
 			s.addExpression(ruleRef);
 		}
-		MettelANTLRRule r = new MettelANTLRRule("expression",s,
+		//s.addExpression(/*new MettelANTLRUnaryBNFStatement(*/MettelANTLRToken.EOF/*, MettelANTLRUnaryBNFStatement.TEST)*/);
+		MettelANTLRRule r = new MettelANTLRRule("expression", s,
+				new String[]{grammarName+"Expression"});
+		//r.appendLineToAfterBlock("r0 = e0;");
+		return r;
+	}
+	
+	private MettelANTLRRule makeANTLRExpressionEOFRule(String grammarName,Collection<MettelSort> sorts){
+		MettelANTLRMultiaryBNFStatement s = new MettelANTLRMultiaryBNFStatement(MettelANTLRMultiaryBNFStatement.OR);
+		for(MettelSort sort:sorts){
+			MettelANTLRRuleReference ruleRef = new MettelANTLRRuleReference(sort.name(),sort.name()+"Expression",true);
+			ruleRef.appendLineToPostfix("r0 = "+sort.name()+"Expression;");
+			s.addExpression(ruleRef);
+		}
+		s.addExpression(MettelANTLRToken.EOF);
+		MettelANTLRRule r = new MettelANTLRRule("expressionEOF", s,
 				new String[]{grammarName+"Expression"});
 		//r.appendLineToAfterBlock("r0 = e0;");
 		return r;
@@ -543,5 +574,15 @@ public class MettelSyntax implements MettelBlock {
 		r.appendLineToInitBlock("int priority = 0;");
 		r.appendLineToAfterBlock("r0 = new MettelGeneralTableauRule(new LinkedHashSet<"+grammarName+"Expression>(premises),branches,priority);");
 		return r;
+	}
+	
+	MettelOptions options = null;
+	
+	void setOptions(MettelOptions options){
+		this.options = options;
+	}
+	
+	MettelOptions options(){
+		return options;
 	}
 }

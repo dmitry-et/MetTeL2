@@ -102,4 +102,6 @@ public interface MettelTableauState extends Comparable<MettelTableauState>{
 
 	Set<MettelAnnotatedExpression> equalities();
 
+	//boolean consume(MettelAbstractTableauState s);
+
 }

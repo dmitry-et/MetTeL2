@@ -28,8 +28,12 @@ backtrack = true;
 package mettel.fo;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.io.StringReader;
+import java.io.InputStream;
 
-import mettel.core.language.MettelLogicParser;
+//import mettel.core.language.MettelLogicParser;
+import mettel.core.language.MettelAbstractLogicParser;
 
 import mettel.core.tableau.MettelExpression;
 }
@@ -52,29 +56,57 @@ public Object recoverFromMismatchedToken(IntStream input, int ttype, BitSet foll
     throw e;
 }
 
-private MettelLogicParser islandParser = null;
+private MettelAbstractLogicParser islandParser = null;
 private Lexer islandLexer = null;
+//private TokenStream islandTokens = null;
 
-private MettelExpression expression() throws RecognitionException {
+/*private MettelExpression expression(CommonToken t) throws RecognitionException {
     CharStream in = ((Lexer)this.input.getTokenSource()).getCharStream();
     int index = in.index();
+    //System.out.println(index);
     int line = in.getLine();
     int charPositionInLine = in.getCharPositionInLine();
     islandLexer.setCharStream(in);
-    in.seek(index);
+    in.seek(t.getStartIndex() + 1);
     in.setLine(line);
     in.setCharPositionInLine(charPositionInLine);
-    return islandParser.expression();
+    MettelExpression e = islandParser.expression();
+    //System.out.println(in.index());
+    return e;
+}*/
+
+private MettelExpression expression(Token t){
+	islandLexer.setCharStream(new ANTLRStringStream(t.getText()));
+	//parser.input.setTokenSource(islandLexer);
+	MettelExpression result = null;
+	try{
+		result = islandParser.expressionEOF();
+	}catch(RecognitionException e){
+		throw new MettelFOParserException(e, "Cannot parse an expression " + t.getText(), t);
+	}
+	return result;
 }
 
 private MettelFOObjectFactory factory = MettelFOObjectFactory.DEFAULT;
-public MettelFOParser(TokenStream input, MettelFOObjectFactory factory){
+
+public MettelFOParser(TokenStream input, MettelAbstractLogicParser parser){
+    this(input, MettelFOObjectFactory.DEFAULT, parser);
+}
+
+public MettelFOParser(TokenStream input, MettelFOObjectFactory factory, MettelAbstractLogicParser parser){
     this(input);
     this.factory = factory;
+    //System.out.println("parser = " + parser);
+    this.islandParser = parser;
+    //System.out.println("parser.input != null?" + (parser.input == null));   
+    this.islandLexer = (Lexer)parser.input.getTokenSource();
 }
-public MettelFOParser(TokenStream input, RecognizerSharedState state, MettelFOObjectFactory factory){
+
+public MettelFOParser(TokenStream input, RecognizerSharedState state, MettelFOObjectFactory factory, MettelAbstractLogicParser parser){
     this(input,state);
     this.factory = factory;
+    this.islandParser = parser;
+    this.islandLexer = (Lexer)parser.input.getTokenSource();
 }
 }
 
@@ -140,44 +172,72 @@ returns [MettelFOFormula f]
 	f = f0;
 }
 	:
-	f0  = existentialFormula
+	f0  = unaryFormula
 	('&'
-	f1 = existentialFormula
+	f1 = unaryFormula
 		{ f0  = factory.createConjunctionFormula(f0,f1); }
 	)*
+	;
+
+fragment
+unaryFormula
+returns [MettelFOFormula f = null]
+	:
+	(
+	f0 = basicFormula
+	|
+	f0 = existentialFormula
+	|
+	f0 = universalFormula
+	|
+	f0 = negationFormula
+	)
+	{f = f0;}
 	;
 
 existentialFormula
 returns [MettelFOFormula f]
 	:
-	('exists' variableList)*
-//	  (ID ('exists' ID)*
-//	  |
-//	  '(' ID+ ')'
-//	  )
-//	)?
-	universalFormula
+	('exists' vars = variableList)+
+	f0 = unaryFormula
+	{
+	//f = factory.createExistentialFormula(vars, f0);
+	}
 	;
 
 universalFormula
 returns [MettelFOFormula f]
 	:
-	('forall' variableList)*
-//	  (ID ('forall' ID)*
-//	  |
-//	  '(' ID+ ')'
-//	  )
-//	)?
-	negationFormula
+	('forall' vars = variableList)+
+	f0 = unaryFormula
+	{
+	//f = factory.createExistentialFormula(vars, f0);
+	}
 	;
 
 variableList
+returns [MettelFOIndividualVariable[\] vars = null]
 	:
-		ID
+		list = idList
 		|
-		'[' ID+ ']'
+		'[' list = idList ']'
 		|
-		'(' ID+ ')'
+		'(' list = idList ')'
+		{
+		 //vars = new MettelFOIndividualVariable[list.length()];
+		 //int i = 0;
+		 //for(String id:list){
+		 //	vars[i] = factory.createIndividualVariable(id);
+		 //}
+		}
+	;
+	
+fragment idList
+returns [LinkedHashSet<String> ids = new LinkedHashSet<String>()]
+	:
+		(t = ID
+		{ids.add(t.getText());}
+		)+
 	;
 
 negationFormula
@@ -188,12 +248,12 @@ returns [MettelFOFormula f]
 	:
 	('~'
 		{n++;}
-	)*
-	f0  = basicFormula
+	)+
+	f0  = unaryFormula
 		{if( (n \% 2) == 1){
 			f = factory.createNegationFormula(f0);
 		  }else{
-		     f = f0;
+		    f = f0;
 		  }
 		}
 	;
@@ -215,35 +275,65 @@ returns [MettelFOFormula f]
 	;
 
 atomicFormula
-returns [MettelFOFormula f]
+returns [MettelFOFormula f = null]
+@init{MettelExpression exp = null;}
 	:
-	'holds' '(' {expression();} (',' term)+ ')'
+	'holds' '(' 
+	t = EXPRESSION
+	{
+	exp = expression(t);
+	}
+	','?
+	terms = termList ')'
+	{
+	//f = factory.createHoldsPredicate(exp, terms);
+	}
 	|
-	ID '(' termList? ')'
+	t = ID '(' terms = termList? ')'
+	{
+	final String name = t.getText();
+	final MettelFOFormulaVariable p = factory.createFormulaVariable(name);
+	//f = factory.createAtomicFormula(p, terms);
+	}
 	|
    	f0  = equalityFormula
    		{f = f0;}
 	;
+	
+
 
 equalityFormula
-returns [MettelFOFormula f]
+returns [MettelFOFormula f = null]
 	:
-	'[' term '=' term ']'
+	'[' t0 = term '=' t1 = term ']'
 	|
-	'(' term '=' term ')'
+	'(' t0 = term '=' t1 = term ')'
+	{
+	//f = factory.createEqualityFormula(t0, t1);
+	}
 	;
 
 term
+returns [MettelFOTerm t = null]
 	:
-	ID
-	( '(' termList? ')' )?
+	id = ID
+	( '(' terms = termList? ')' )?
+	{
+	final String name = id.getText();
+	//final MettelFOFunctionVariable f = factory.createFunctionVariable(name);
+	//t = factory.createTerm(f, terms);
+	}
 	;
 
 termList
+returns [ArrayList<MettelFOTerm> terms = new ArrayList<MettelFOTerm>()]
 	:
+	t = term
+	{terms.add(t);}
+	(','?
 	term
-	(','
-	term)+
+	{terms.add(t);}
+	)*
 	;
 
 
@@ -294,3 +384,12 @@ UNICODE_ESC
     :   '\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
     ;
 */
+
+EXPRESSION
+	:
+	'(*' 
+	{state.tokenStartCharIndex = getCharIndex();}
+   	(options{greedy=false;} : . )*
+   	{setText(getText());}
+   	'*)'
+	;

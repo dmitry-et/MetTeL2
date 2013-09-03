@@ -51,8 +51,14 @@ public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 		this.acceptor = acceptor;
 	}
 
+	
+/*	protected boolean add(MettelTableauState state) {
+		return unexpandedStates.add(state);
+	}*/
+
 	private final MettelTableauStateComparator comparator = new MettelTableauStateComparator();
 
+	@Override
 	protected boolean add(MettelTableauState state){
 		if(state.isExpanded()){
 			final Iterator<MettelTableauState> i = unexpandedStates.iterator();
@@ -60,16 +66,18 @@ public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 				final MettelTableauState s = i.next();
 //				if(s.expressions().equals(state.expressions())){
 				if(comparator.compare(state, s) == 0){
-					if(state.id() < s.id()){
-						i.remove();//unexpandedStates.remove(s);
-						unexpandedStates.add(state);
-						return true;
-					}
+//					if(state.id() < s.id()){
+//						i.remove();//unexpandedStates.remove(s);
+////						state.consume((MettelAbstractTableauState)s);
+//						unexpandedStates.add(state);
+//						return true;
+////					}else{
+////						s.consume((MettelAbstractTableauState)state);
+//					}
 					return false;
 				}
 			}
 		}
-
 		return unexpandedStates.add(state);
 	}
 

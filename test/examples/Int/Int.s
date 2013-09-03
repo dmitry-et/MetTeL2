@@ -1,7 +1,7 @@
 specification Int;
 
 options{
-equality.keywords={equality, equivalence}
+equality.keywords = {equality, equivalence}
 name.separator=
 
 tableau.rule.delimiter=;

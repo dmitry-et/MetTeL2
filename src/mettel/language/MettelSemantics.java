@@ -18,24 +18,31 @@ package mettel.language;
 
 import static mettel.util.MettelStrings.LINE_SEPARATOR;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
+
+import mettel.fo.MettelFOFormula;
+import mettel.fo.MettelFOLexer;
+import mettel.fo.MettelFOParser;
 import mettel.generator.MettelANTLRGrammarGeneratorProperties;
 import mettel.generator.java.MettelJavaPackageStructure;
-import mettel.util.MettelJavaNames;
 
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public class MettelTableau implements MettelBlock {
+public class MettelSemantics implements MettelBlock {
 
 	private String name = null;
 
 	private MettelSyntax syntax = null;
 
-	private List<MettelTableau> parents = null;
+	private List<MettelSemantics> parents = null;
 
 	public String name(){
 		return name;
@@ -45,7 +52,7 @@ public class MettelTableau implements MettelBlock {
 		return syntax;
 	}
 
-	public List<MettelTableau> parents(){
+	public List<MettelSemantics> parents(){
 		return parents;
 	}
 
@@ -66,13 +73,13 @@ public class MettelTableau implements MettelBlock {
 	 *
 	 */
     @SuppressWarnings("unused")
-	private MettelTableau(){};
+	private MettelSemantics(){};
 
-	MettelTableau(String name, MettelSyntax syntax) {
+	MettelSemantics(String name, MettelSyntax syntax) {
 		this(name, syntax, null);
 	}
 
-	MettelTableau(String name, MettelSyntax syntax, List<MettelTableau> parents) {
+	MettelSemantics(String name, MettelSyntax syntax, List<MettelSemantics> parents) {
 		super();
 		this.name = name;
 		this.syntax = syntax;
@@ -101,30 +108,27 @@ public class MettelTableau implements MettelBlock {
 	//private MettelANTLRGrammarGeneratorProperties properties = null;
 	//private MettelJavaPackageStructure pStructure = null;
 
+	private ArrayList<MettelFOFormula> formulae = new ArrayList<MettelFOFormula>();
+	
 	void process(MettelJavaPackageStructure pStructure, MettelANTLRGrammarGeneratorProperties properties){
-		//this.pStructure = pStructure;
-		//this.properties = properties;
-
-		//unravel();
-
-		final String prefix = MettelJavaNames.firstCharToUpperCase(name);
-		pStructure.appendStandardTableauClasses(name, syntax.name(), prefix, properties.nameSeparator);
-		pStructure.appendStandardTableauClasses(name, prefix, syntax.sortStrings, properties.branchBound);
-		pStructure.appendTableauFile(name,content);
-
+		CommonTokenStream tokens = new CommonTokenStream();
+		MettelFOParser parser = new MettelFOParser(tokens, pStructure.parser(syntax.name()));
+		tokens.setTokenSource(new MettelFOLexer(new ANTLRStringStream(content)));
+		
+		try {
+			parser.formulae(formulae);
+			System.out.println(formulae);
+		} catch (RecognitionException e) {
+			e.printStackTrace();
+		}
 
 	}
-
-/*	void init(MettelJavaPackageStructure pStructure, MettelANTLRGrammarGeneratorProperties properties){
-		final String prefix = MettelJavaNames.firstCharToUpperCase(name);
-		pStructure.appendStandardTableauClasses(name, syntax.name(), prefix, properties.nameSeparator);
-	}*/
 	
 	/**
 	 * @param buf
 	 */
 	public void toBuffer(StringBuilder buf) {
-		buf.append("tableau ");
+		buf.append("semantics ");
 		buf.append(name);
 		buf.append(" in syntax ");
 		buf.append(syntax.name());

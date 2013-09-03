@@ -38,9 +38,15 @@ public class MettelSpecification {
 
 	private ArrayList<MettelTableau> tableaux = new ArrayList<MettelTableau>();
 
+	private ArrayList<MettelSemantics> semantics = new ArrayList<MettelSemantics>();
+
 	private HashMap<String,MettelSyntax> syntaxTable = new HashMap<String,MettelSyntax>();
 
 	private HashMap<String,MettelTableau> tableauTable = new HashMap<String,MettelTableau>();
+
+	private HashMap<String,MettelSemantics> semanticsTable = new HashMap<String,MettelSemantics>();
+	
+	MettelOptions options = null;
 
 	public MettelSyntax getSyntax(String name){
 		return syntaxTable.get(name);
@@ -48,6 +54,10 @@ public class MettelSpecification {
 
 	public MettelTableau getTableau(String name){
 		return tableauTable.get(name);
+	}
+
+	public MettelSemantics getSemantics(String name){
+		return semanticsTable.get(name);
 	}
 
 	@SuppressWarnings("unused")
@@ -74,13 +84,34 @@ public class MettelSpecification {
 		buf.append(path);
 		buf.append(';');
 		buf.append(LINE_SEPARATOR);
+		if(options != null){
+			options.toBuffer(buf);
+			buf.append(LINE_SEPARATOR);
+		}
 		for(MettelSyntax syn:syntaxes){
 			buf.append(LINE_SEPARATOR);
 			syn.toBuffer(buf);
 		}
-
+		buf.append(LINE_SEPARATOR);
+		for(MettelTableau tab:tableaux){
+			buf.append(LINE_SEPARATOR);
+			tab.toBuffer(buf);
+		}
+		buf.append(LINE_SEPARATOR);
+		for(MettelSemantics sem:semantics){
+			buf.append(LINE_SEPARATOR);
+			sem.toBuffer(buf);
+		}
 	}
 
+	void setOptions(MettelOptions options){
+		this.options = options;
+	}
+	
+	MettelOptions options(){
+		return options;
+	}
+	
 	/**
 	 * @param syn
 	 */
@@ -97,6 +128,14 @@ public class MettelSpecification {
 		if(t != null) return false;
 		tableaux.add(tableau);
 		tableauTable.put(tableau.name(), tableau);
+		return true;
+	}
+
+	boolean addSemantics(MettelSemantics sem) {
+		MettelSemantics t = semanticsTable.get(sem.name());
+		if(t != null) return false;
+		semantics.add(sem);
+		semanticsTable.put(sem.name(), sem);
 		return true;
 	}
 
@@ -137,12 +176,31 @@ public class MettelSpecification {
 		return tableaux;
 	}
 
-	public MettelJavaPackageStructure process(MettelANTLRGrammarGeneratorProperties properties) {
-		final MettelJavaPackageStructure pStructure = new MettelJavaPackageStructure(path);
+	List<MettelSemantics> getSemantics(List<String> semanticsNames){
+		if(semanticsNames == null) return null;
+		ArrayList<MettelSemantics> semanticsList = new ArrayList<MettelSemantics>();
+		for(String t:semanticsNames){
+			MettelSemantics tab = semanticsTable.get(t);
+			if(tab == null) return null;
+			semanticsList.add(tab);
+		}
+		return semanticsList;
+	}
 
-		//for(MettelTableau tab:tableaux){
-		//	tab.init(pStructure, properties);
-		//}
+	/**
+	 * @return
+	 */
+	public List<MettelSemantics> semantics() {
+		return semantics;
+	}
+
+
+	private MettelANTLRGrammarGeneratorProperties properties = new MettelANTLRGrammarGeneratorProperties();
+	
+	public MettelJavaPackageStructure process() {
+		properties = options.process(properties);
+		
+		final MettelJavaPackageStructure pStructure = new MettelJavaPackageStructure(path);
 
 		for(MettelSyntax syn:syntaxes){
 			syn.process(pStructure, properties);
@@ -152,9 +210,16 @@ public class MettelSpecification {
 			tab.process(pStructure, properties);
 		}
 
-		pStructure.generateMainClass();
-
 		return pStructure;
+	}
+
+	public int processSemantics(MettelJavaPackageStructure pStructure) {
+		
+		for(MettelSemantics sem:semantics){
+			sem.process(pStructure, properties);
+		}
+
+		return semantics.size();
 	}
 
 }
