@@ -29,6 +29,7 @@ public class MettelProverThread extends Thread {
     private Set<MettelExpression> model = null;
     private Set<MettelExpression> contradiction = null;
     private boolean finished = false;
+    private String error = null;
     
     private ThreadMXBean mxBean = null;
     
@@ -42,13 +43,19 @@ public class MettelProverThread extends Thread {
 
 	@Override
     public void run(){
-        if (result = m.isSatisfiable(problem)){
-            model = m.model();
-        }
-        else
-        {
-            contradiction = m.contradiction();
-        }
+		try{
+	        if (result = m.isSatisfiable(problem)){
+	            model = m.model();
+	        }
+	        else
+	        {
+	            contradiction = m.contradiction();
+	        }
+		}catch(ThreadDeath e0){
+			throw e0;
+		}catch(Throwable e0){
+			error = e0.toString();
+		}
         time = mxBean.getThreadUserTime(getId());
         finished = true;
     }
@@ -72,5 +79,9 @@ public class MettelProverThread extends Thread {
 
     public boolean finished(){
         return finished;
+    }
+    
+    public String exception(){
+    	return error;
     }
 }

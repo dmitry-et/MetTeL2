@@ -195,7 +195,8 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 							appendLine("boolean threadFinished = false;");
 							appendLine("if (!thread.isAlive()){");
 								incrementIndentLevel();
-								appendLine("System.out.println(thread.getName() + \" completed, \" + thread.time() + \" ms, \" + (thread.result() ? \"Satisfiable\" : \"Unsatisfiable\"));");
+								appendLine("final Boolean threadResult = thread.result();");
+								appendLine("System.out.println(thread.getName() + \" completed, \" + thread.time() + \" ms, \" + (threadResult == null ? \"Error\" :(threadResult ? \"Satisfiable\" : \"Unsatisfiable\")));");
 								appendLine("threadFinished = true;");
 								decrementIndentLevel();
 							appendLine("}else{");
@@ -314,6 +315,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 	        appendLine("problemInfo[6] = String.valueOf(timeOutMilliSeconds);");
     		appendLine("problemInfo[7] = String.valueOf(numberOfThreads);");
 			appendLine("problemInfo[8] = systemInfoFile.toString();");
+			appendLine("problemInfo[9] = String.valueOf(thread.exception());");
 			appendEOL();
 
 			appendLine("if (thread.finished()){");
@@ -372,7 +374,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 
 		appendLine("private static void fillCsvStatistics(String[] problemInfo){");
 			//TODO do not hardcode index
-			int i = 9;
+			int i = 10;
 			incrementIndentLevel();
 			for(String sort : signatures.keySet()){
 				appendLine("problemInfo[" + i + "] = pStat.getProperty(\"" + MettelProblemAnalyzerDefaultPropertiesNames.totalNumberOfSortVariables(sort) + "\");");
@@ -497,7 +499,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 
 	// TODO somehow different because output huge and some fields are static same everywhere
 	private String generateCSVHeader() {
-		StringBuilder header = new StringBuilder("\"File name\", \"Satisfiable\", \"Model's/Contradiction's file name\", \"User time(ms)\", \"Time-out\", \"Timestamp\", \"Allowed execution-time(ms)\", \"Number of threads\", \"System Information\", ");
+		StringBuilder header = new StringBuilder("\"File name\", \"Satisfiable\", \"Model's/Contradiction's file name\", \"User time(ms)\", \"Time-out\", \"Timestamp\", \"Allowed execution-time(ms)\", \"Number of threads\", \"System Information\", \"Exception\",");
 		for(String sort : signatures.keySet()){
 			header.append("\"" + MettelProblemAnalyzerDefaultPropertiesNames.totalNumberOfSortVariables(sort) + "\", ");
 			header.append("\"" + MettelProblemAnalyzerDefaultPropertiesNames.totalNumberOfSortConnectives(sort) + "\", ");
