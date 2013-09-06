@@ -98,6 +98,8 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 	}
 
 	public void generateBody(){
+		appendLine("private final static Runtime runtime = Runtime.getRuntime();");
+		appendLine("private static int memoryExcess = 0;");
 		appendLine("private final static int MAX_THREAD_TRIES = 10000;");
 		//appendLine("private final static int SLEEP_FACTOR = 1000;");
 		appendLine("private static BufferedWriter out = null;");
@@ -185,7 +187,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 
 					appendLine("while (!threads.isEmpty() || indexProblemFile < problemFiles.length){");
 						incrementIndentLevel();
-						appendLine("for (int i = threads.size(); i < numberOfThreads && indexProblemFile < problemFiles.length; i++){");
+						appendLine("for (int i = threads.size(); i < numberOfThreads && indexProblemFile < problemFiles.length && (runtime.freeMemory() % (threads.size() * 1024 *1024) >= memoryExcess); i++){");
 							incrementIndentLevel();
 							appendLine("threads.add(createAndStartNewThread(problemFiles[indexProblemFile]));");
 							appendLine("indexProblemFile++;");
@@ -464,6 +466,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 					appendLine("if(i < SIZE-1){");
 						incrementIndentLevel();
 						appendLine("timeOutMilliSeconds = Long.parseLong(args[++i]);");
+						appendLine("if(timeOutMilliSeconds < 0)  timeOutMilliSeconds *= -1;");
 						appendLine("System.out.println(\"Timeout is: \" + timeOutMilliSeconds + \" ms\");");
 						decrementIndentLevel();
 					appendLine("}else{");
@@ -478,11 +481,27 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 					appendLine("if(i < SIZE-1){");
 						incrementIndentLevel();
 						appendLine("numberOfThreads = Integer.parseInt(args[++i]);");
+						appendLine("if(numberOfThreads < 0) numberOfThreads *= -1;");
 						appendLine("System.out.println(\"Number of threads is: \" + numberOfThreads);");
 						decrementIndentLevel();
 					appendLine("}else{");
 						incrementIndentLevel();
 						appendLine("System.out.println(\"I need a number which specifies number of threads.\");");
+						appendLine("System.exit(-1);");
+						decrementIndentLevel();
+					appendLine('}');
+					decrementIndentLevel();
+				appendLine("}else if(\"-me\".equals(args[i])||\"--memory-excess\".equals(args[i])){");
+					incrementIndentLevel();
+					appendLine("if(i < SIZE-1){");
+						incrementIndentLevel();
+						appendLine("memoryExcess = Integer.parseInt(args[++i]);");
+						appendLine("if(memoryExcess < 0) memoryExcess *= -1;");
+						appendLine("System.out.println(\"Memory excess per thread is: \" + memoryExcess + 'M');");
+						decrementIndentLevel();
+					appendLine("}else{");
+						incrementIndentLevel();
+						appendLine("System.out.println(\"I need a number which specifies the memory excess.\");");
 						appendLine("System.exit(-1);");
 						decrementIndentLevel();
 					appendLine('}');
