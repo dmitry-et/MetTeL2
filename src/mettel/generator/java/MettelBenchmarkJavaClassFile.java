@@ -265,14 +265,12 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 					decrementIndentLevel();
 				appendLine("}catch(OutOfMemoryError e){");
 					incrementIndentLevel();
+					appendLine("System.gc();");
 					appendLine("if(i == 0) System.out.print(problemFile + \" start failure #\");");
 					appendLine("for(int j = i; j > 0; j = j%10) System.out.print('\\b');");
 					appendLine("System.out.print(i+1);");
 					appendLine("if(i == MAX_THREAD_TRIES - 1){ throw e; }");
-					appendLine("System.gc();");
-					appendLine("Thread.sleep(0);");
 					appendLine("System.runFinalization();");
-					appendLine("Thread.sleep(0);");
 					appendLine("System.gc();");
 					decrementIndentLevel();
 				appendLine('}');
