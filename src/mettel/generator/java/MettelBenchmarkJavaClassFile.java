@@ -216,6 +216,8 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 								appendLine('}');
 								decrementIndentLevel();
 							appendLine('}');
+							appendLine("System.runFinalization();");
+							appendLine("System.gc();");
 							appendLine("if (threadFinished){");
 								incrementIndentLevel();
 								appendLine("updateProblemFile(thread);");
