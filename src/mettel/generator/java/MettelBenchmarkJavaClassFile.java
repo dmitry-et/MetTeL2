@@ -204,6 +204,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 							appendLine('}');
 							appendLine("threads.add(createAndStartNewThread(problemFiles[indexProblemFile]));");
 							appendLine("indexProblemFile++;");
+							appendLine("Thread.sleep(0);");
 							decrementIndentLevel();
 						appendLine('}');
 						appendLine("Thread.sleep(0);");
