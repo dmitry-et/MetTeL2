@@ -194,7 +194,6 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 								incrementIndentLevel();
 								appendLine("System.runFinalization();");
 								appendLine("System.gc();");
-								appendLine("Thread.sleep(0);");
 								appendLine("break;");
 								decrementIndentLevel();
 							appendLine('}');
@@ -202,6 +201,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 							appendLine("indexProblemFile++;");
 							decrementIndentLevel();
 						appendLine('}');
+						appendLine("Thread.sleep(0);");
 						//appendLine("System.out.println(\"Running threads: \" + threads.size());");
 						appendLine("Iterator<MettelProverThread> it = threads.iterator();");
 						appendLine("while (it.hasNext()){");
@@ -272,7 +272,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 					appendLine("pt.start();");
 					appendLine("if(i > 0) System.out.println();");
 					appendLine("System.out.println(problemFile + \" started (running threads \" + (threads.size()+1) + ')');");
-					appendLine("Thread.sleep(0);");
+					//appendLine("Thread.sleep(0);");
 					appendLine("return pt;");
 					decrementIndentLevel();
 				appendLine("}catch(OutOfMemoryError e){");
@@ -284,6 +284,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 					appendLine("if(i == MAX_THREAD_TRIES - 1){ throw e; }");
 					appendLine("System.runFinalization();");
 					appendLine("System.gc();");
+					appendLine("Thread.sleep(0);");
 					decrementIndentLevel();
 				appendLine('}');
 				decrementIndentLevel();
