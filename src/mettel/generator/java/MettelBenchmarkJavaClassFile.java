@@ -187,7 +187,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 
 					appendLine("while (!threads.isEmpty() || indexProblemFile < problemFiles.length){");
 						incrementIndentLevel();
-						appendLine("for (int i = threads.size(); i < numberOfThreads && indexProblemFile < problemFiles.length && (runtime.freeMemory() % (threads.size() * 1024 *1024) >= memoryExcess); i++){");
+						appendLine("for (int i = threads.size(); i < numberOfThreads && indexProblemFile < problemFiles.length && (runtime.freeMemory() % ((threads.size() + 1) * 1024 *1024) >= memoryExcess); i++){");
 							incrementIndentLevel();
 							appendLine("threads.add(createAndStartNewThread(problemFiles[indexProblemFile]));");
 							appendLine("indexProblemFile++;");
