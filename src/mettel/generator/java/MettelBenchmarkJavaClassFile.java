@@ -187,8 +187,15 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 
 					appendLine("while (!threads.isEmpty() || indexProblemFile < problemFiles.length){");
 						incrementIndentLevel();
-						appendLine("for (int i = threads.size(); i < numberOfThreads && indexProblemFile < problemFiles.length && (runtime.freeMemory() % ((threads.size() + 1) * 1024 *1024) >= memoryExcess); i++){");
+						appendLine("for (int i = threads.size(); i < numberOfThreads && indexProblemFile < problemFiles.length; i++){");
 							incrementIndentLevel();
+							appendLine("if(runtime.freeMemory() < memoryExcess){");
+								incrementIndentLevel();
+								appendLine("System.runFinalization();");
+								appendLine("System.gc();");
+								appendLine("break;");
+								decrementIndentLevel();
+							appendLine('}');
 							appendLine("threads.add(createAndStartNewThread(problemFiles[indexProblemFile]));");
 							appendLine("indexProblemFile++;");
 							decrementIndentLevel();
@@ -216,8 +223,6 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 								appendLine('}');
 								decrementIndentLevel();
 							appendLine('}');
-							appendLine("System.runFinalization();");
-							appendLine("System.gc();");
 							appendLine("if (threadFinished){");
 								incrementIndentLevel();
 								appendLine("updateProblemFile(thread);");
@@ -499,7 +504,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 						incrementIndentLevel();
 						appendLine("memoryExcess = Integer.parseInt(args[++i]);");
 						appendLine("if(memoryExcess < 0) memoryExcess *= -1;");
-						appendLine("System.out.println(\"Memory excess per thread is: \" + memoryExcess + 'M');");
+						appendLine("System.out.println(\"Memory excess: \" + memoryExcess + 'M');");
 						decrementIndentLevel();
 					appendLine("}else{");
 						incrementIndentLevel();
