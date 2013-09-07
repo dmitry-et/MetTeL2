@@ -98,6 +98,8 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 	}
 
 	public void generateBody(){
+		appendLine("private static int started = 0;");
+		appendLine("private static int finished = 0;");
 		appendLine("private final static Runtime runtime = Runtime.getRuntime();");
 		appendLine("private static int memoryExcess = 0;");
 		appendLine("private final static int MAX_THREAD_TRIES = 10000;");
@@ -211,7 +213,8 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 							appendLine("if (!thread.isAlive()){");
 								incrementIndentLevel();
 								appendLine("final Boolean threadResult = thread.result();");
-								appendLine("System.out.println(thread.getName() + \" completed (running threads \" + (threads.size()-1) + \"), \" + thread.time() + \" ms, \" + (threadResult == null ? (thread.exception() == null? \"Unknown error\": thread.exception()) : (threadResult ? \"Satisfiable\" : \"Unsatisfiable\")));");
+								appendLine("finished++;");
+								appendLine("System.out.println(\"[\"+ finished + '/'+ problemFiles.length + ']' + thread.getName() + \" completed (running threads \" + (threads.size()-1) + \"), \" + thread.time() + \" ms, \" + (threadResult == null ? (thread.exception() == null? \"Unknown error\": thread.exception()) : (threadResult ? \"Satisfiable\" : \"Unsatisfiable\")));");
 								appendLine("threadFinished = true;");
 								decrementIndentLevel();
 							appendLine("}else{");
@@ -220,7 +223,8 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 								appendLine("if (nanos >= timeOutMilliSeconds * NANO_TO_MILLI_SECONDS){");
 									incrementIndentLevel();
 									appendLine("thread.stop();");
-									appendLine("System.out.println(thread.getName()+\" time-out (running threads \" + (threads.size()-1) + ')');");
+									appendLine("finished++;");
+									appendLine("System.out.println(\"[\"+ finished + '/'+ problemFiles.length + ']' + thread.getName()+\" time-out (running threads \" + (threads.size()-1) + ')');");
 									appendLine("threadFinished = true;");
 									decrementIndentLevel();
 								appendLine('}');
@@ -271,7 +275,8 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 					appendLine("pt.setName(problemFile);");
 					appendLine("pt.start();");
 					appendLine("if(i > 0) System.out.println();");
-					appendLine("System.out.println(problemFile + \" started (running threads \" + (threads.size()+1) + ')');");
+					appendLine("started++;");
+					appendLine("System.out.println(\"[\"+ started + '/'+ problemFiles.length + ']' + problemFile + \" started (running threads \" + (threads.size()+1) + ')');");
 					//appendLine("Thread.sleep(0);");
 					appendLine("return pt;");
 					decrementIndentLevel();
