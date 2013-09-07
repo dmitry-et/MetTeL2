@@ -218,7 +218,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 								incrementIndentLevel();
 								appendLine("final Boolean threadResult = thread.result();");
 								appendLine("finished++;");
-								appendLine("System.out.println(\"[\"+ finished + '/'+ total + ']' + thread.getName() + \" completed (running threads \" + (threads.size()-1) + \"), \" + thread.time() + \" ms, \" + (threadResult == null ? (thread.exception() == null? \"Unknown error\": thread.exception()) : (threadResult ? \"Satisfiable\" : \"Unsatisfiable\")));");
+								appendLine("System.out.println(\"[\"+ finished + '/'+ total + ',' + (threads.size()-1) + ']' + thread.getName() + \" completed, \" + thread.time() + \" ms, \" + (threadResult == null ? (thread.exception() == null? \"Unknown error\": thread.exception()) : (threadResult ? \"Satisfiable\" : \"Unsatisfiable\")));");
 								appendLine("threadFinished = true;");
 								decrementIndentLevel();
 							appendLine("}else{");
@@ -228,7 +228,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 									incrementIndentLevel();
 									appendLine("thread.stop();");
 									appendLine("finished++;");
-									appendLine("System.out.println(\"[\"+ finished + '/'+ total + ']' + thread.getName()+\" time-out (running threads \" + (threads.size()-1) + ')');");
+									appendLine("System.out.println(\"[\"+ finished + '/'+ total + ',' + (threads.size()-1) + ']' + thread.getName()+\" time-out\");");
 									appendLine("threadFinished = true;");
 									decrementIndentLevel();
 								appendLine('}');
@@ -280,7 +280,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 					appendLine("pt.start();");
 					appendLine("if(i > 0) System.out.println();");
 					appendLine("started++;");
-					appendLine("System.out.println(\"[\"+ started + '/'+ total + ']' + problemFile + \" started (running threads \" + (threads.size()+1) + ')');");
+					appendLine("System.out.println(\"[\"+ started + '/'+ total + ',' + (threads.size()+1) + ']' + problemFile + \" started\");");
 					//appendLine("Thread.sleep(0);");
 					appendLine("return pt;");
 					decrementIndentLevel();
