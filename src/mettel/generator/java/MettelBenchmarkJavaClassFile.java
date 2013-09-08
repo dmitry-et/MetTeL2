@@ -236,6 +236,8 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 							appendLine('}');
 							appendLine("if (threadFinished){");
 								incrementIndentLevel();
+								appendLine("System.runFinalization();");
+								appendLine("System.gc();");
 								appendLine("updateProblemFile(thread);");
 								appendLine("printToCSV(thread);");
 								appendLine("it.remove();");
@@ -487,7 +489,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 						incrementIndentLevel();
 						appendLine("timeOutMilliSeconds = Long.parseLong(args[++i]);");
 						appendLine("if(timeOutMilliSeconds < 0)  timeOutMilliSeconds *= -1;");
-						appendLine("System.out.println(\"Timeout is: \" + timeOutMilliSeconds + \" ms\");");
+						appendLine("System.out.println(\"Timeout: \" + timeOutMilliSeconds + \" ms\");");
 						decrementIndentLevel();
 					appendLine("}else{");
 						incrementIndentLevel();
@@ -502,7 +504,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 						incrementIndentLevel();
 						appendLine("numberOfThreads = Integer.parseInt(args[++i]);");
 						appendLine("if(numberOfThreads < 0) numberOfThreads *= -1;");
-						appendLine("System.out.println(\"Number of threads is: \" + numberOfThreads);");
+						appendLine("System.out.println(\"Number of threads: \" + numberOfThreads);");
 						decrementIndentLevel();
 					appendLine("}else{");
 						incrementIndentLevel();
