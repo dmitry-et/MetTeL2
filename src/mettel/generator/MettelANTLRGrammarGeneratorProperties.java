@@ -63,6 +63,8 @@ public class MettelANTLRGrammarGeneratorProperties implements MettelANTLRGrammar
 	public MettelANTLRGrammarOptions grammarOptions = new MettelANTLRGrammarOptions();
 
 	public MettelEqualityKeywords equalityKeywords = EQUALITY_KEYWORDS;
+	
+	public String searchStrategy = BRANCH_SELECTION_STRATEGY;
 
 	public void init(Reader reader) throws IOException{
 		if(reader == null) return;
@@ -84,6 +86,8 @@ public class MettelANTLRGrammarGeneratorProperties implements MettelANTLRGrammar
 
 		nameSeparator = p.getProperty("name.separator", nameSeparator);
 
+		searchStrategy = p.getProperty("branch.selection.strategy", searchStrategy);
+		
 		final String antlrK = p.getProperty("antlr.k",String.valueOf(ANTLR_K));
 
 		//TODO: more careful check for properties

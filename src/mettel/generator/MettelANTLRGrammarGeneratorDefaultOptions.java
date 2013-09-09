@@ -17,5 +17,7 @@ public interface MettelANTLRGrammarGeneratorDefaultOptions extends MettelANTLRGr
 	public static final String BRANCH_BOUND = null;
 	
 	public static final String NAME_SEPARATOR = "_";
+	
+	public static final String BRANCH_SELECTION_STRATEGY = ""; //"mettel.core.tableau.MettelSimpleFIFOBranchSelectionStrategy";
 
 }

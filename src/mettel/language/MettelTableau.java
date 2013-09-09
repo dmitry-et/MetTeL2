@@ -108,8 +108,8 @@ public class MettelTableau implements MettelBlock {
 		//unravel();
 
 		final String prefix = MettelJavaNames.firstCharToUpperCase(name);
-		pStructure.appendStandardTableauClasses(name, syntax.name(), prefix, properties.nameSeparator);
-		pStructure.appendStandardTableauClasses(name, prefix, syntax.sortStrings, properties.branchBound);
+		pStructure.appendStandardTableauClasses(name, syntax.name(), prefix, properties.nameSeparator, properties.searchStrategy);
+		pStructure.appendStandardTableauClasses(name, prefix, syntax.sortStrings, properties.branchBound, properties.searchStrategy);
 		pStructure.appendTableauFile(name,content);
 
 

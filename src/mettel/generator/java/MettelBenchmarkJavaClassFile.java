@@ -35,22 +35,34 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 	private String SynName = null;
 
 	private HashMap<String, LinkedHashSet<MettelSignature>> signatures = null;
-
+	
+	private String searchStrategy = "";
+	
+	private String branchBound = null;
+	
 	public void setMainSort(String sort){
 		mainConnective = sort;
 		MainConnective = MettelJavaNames.firstCharToUpperCase(sort, nameSeparator);
 	}
 
+	public void setBranchBound(String branchBound){
+		this.branchBound = branchBound;
+		if(branchBound != null){
+			headings.appendLine("import mettel.core.tableau.acceptor.MettelSmallTableauStateAcceptor;");
+		}
+	}
+	
 	public void setSignatures(HashMap<String, LinkedHashSet<MettelSignature>> signatures){
 		this.signatures = signatures;
 	}
 
-	public MettelBenchmarkJavaClassFile(String prefix, MettelJavaPackage pack, MettelJavaPackage langPack, String nameSeparator, String synName) {
+	public MettelBenchmarkJavaClassFile(String prefix, MettelJavaPackage pack, MettelJavaPackage langPack, String nameSeparator, String synName, String searchStrategy) {
 		super(prefix + "Benchmark", pack, "public", null, null);
 			this.prefix = prefix;
 			this.langPack = langPack;
 			this.nameSeparator = nameSeparator;
 			SynName = MettelJavaNames.firstCharToUpperCase(synName);
+			this.searchStrategy = searchStrategy;
 	}
 
 	protected void imports(){
@@ -76,6 +88,7 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 		headings.appendEOL();
 		headings.appendLine("import mettel.core.tableau.MettelGeneralTableauRule;");
 		headings.appendLine("import mettel.core.tableau.MettelProverThread;");
+		headings.appendLine("import mettel.core.tableau.MettelSimpleTableauManager;");
 		headings.appendLine("import mettel.core.MettelCoreRuntimeException;");
 		headings.appendLine("import mettel.util.MettelProblemFile;");
 		headings.appendLine("import mettel.util.MettelProperties;");
@@ -277,7 +290,29 @@ public class MettelBenchmarkJavaClassFile extends MettelJavaClassFile{
 					//TODO better way to add s
 					appendLine("parser." + mainConnective + "s(list);");
 					appendLine(SynName + "TableauObjectFactory tfactory = new " + SynName + "TableauObjectFactory();");
-					appendLine("MettelProverThread pt = new MettelProverThread(calculus, list, tfactory, mxBean);");
+					
+					if(branchBound == null){
+	    		    	if( searchStrategy.isEmpty() ){
+	    		    		appendLine("MettelSimpleTableauManager m = new MettelSimpleTableauManager(tfactory, calculus);");
+	    		    	}else{
+	    		    		appendLine("MettelSimpleTableauManager m = new MettelSimpleTableauManager(tfactory, calculus, new " + searchStrategy +"());");
+	    		    	}
+	    		    }else{
+	    		    	appendLine("int branchBound = 0;");
+	    		    	appendLine("for("+SynName+MettelJavaNames.firstCharToUpperCase(mainConnective, nameSeparator)+" e:list){");
+	    		    	incrementIndentLevel();
+	    		    		appendLine("branchBound += "+branchBound.replaceAll("%l", "e.length()")+';');
+	    		    	decrementIndentLevel();
+	    		    	appendLine('}');
+	    		    	appendLine("MettelSmallTableauStateAcceptor acceptor = new MettelSmallTableauStateAcceptor(branchBound);");
+	    		    	if( searchStrategy.isEmpty() ){
+	    		    		appendLine("MettelSimpleTableauManager m = new MettelSimpleTableauManager(tfactory, calculus, acceptor);");
+	    		    	}else{
+	    		    		appendLine("MettelSimpleTableauManager m = new MettelSimpleTableauManager(tfactory, calculus, new " + searchStrategy +"(), acceptor);");
+	    		    	}
+	    		    }
+					appendLine("MettelProverThread pt = new MettelProverThread(m, list, mxBean);");
+					
 					appendLine("pt.setName(problemFile);");
 					appendLine("pt.start();");
 					appendLine("if(i > 0) System.out.println();");
