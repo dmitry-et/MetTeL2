@@ -4,6 +4,9 @@ options{
 equality.keywords={equivalence}
 
 name.separator=
+
+//branch.selection.strategy = mettel.core.tableau.MettelSimpleFIFOBranchSelectionStrategy
+
 }
 
 syntax Boolean{

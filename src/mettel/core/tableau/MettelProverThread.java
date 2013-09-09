@@ -22,7 +22,7 @@ import java.util.Set;
 import java.util.Collection;
 
 public class MettelProverThread extends Thread {
-    private MettelSimpleTableauManager m = null;
+    private MettelTableauManager m = null;
     private Boolean result = null;
     private Collection<? extends MettelExpression> problem = null;
     private double time = -1;
@@ -35,8 +35,8 @@ public class MettelProverThread extends Thread {
     
     private static double NANO_TO_MILLI_SECONDS = 1000000.0;
     
-    public MettelProverThread(Collection<MettelGeneralTableauRule> calculus, Collection<? extends MettelExpression> problem, MettelTableauObjectFactory tfactory, ThreadMXBean mxBean){
-        this.m = new MettelSimpleTableauManager(tfactory, calculus);
+    public MettelProverThread(MettelTableauManager m, Collection<? extends MettelExpression> problem, ThreadMXBean mxBean){
+        this.m = m;
         this.problem = problem;
         this.mxBean = mxBean;
     }
