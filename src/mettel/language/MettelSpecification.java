@@ -198,7 +198,7 @@ public class MettelSpecification {
 	private MettelANTLRGrammarGeneratorProperties properties = new MettelANTLRGrammarGeneratorProperties();
 	
 	public MettelJavaPackageStructure process() {
-		properties = options.process(properties);
+		if(options != null) properties = options.process(properties);
 		
 		final MettelJavaPackageStructure pStructure = new MettelJavaPackageStructure(path);
 

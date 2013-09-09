@@ -53,6 +53,7 @@ public class MettelOptions implements MettelBlock {
 	public MettelANTLRGrammarGeneratorProperties process(MettelANTLRGrammarGeneratorProperties properties){
 		
 		MettelANTLRGrammarGeneratorProperties result = new MettelANTLRGrammarGeneratorProperties(properties);
+		if(content == null) return result;
 		try{
 			result.init(new StringReader(content));
 		}catch(IOException e){
@@ -63,6 +64,7 @@ public class MettelOptions implements MettelBlock {
 	}
 
 	public void toBuffer(StringBuilder buf){
+		if(content == null) return;
 		buf.append("options {");
 		buf.append(content);
 		buf.append("}");
