@@ -46,6 +46,7 @@ import mettel.generator.java.MettelJavaPackageStructure;
 import mettel.language.MettelLexer;
 import mettel.language.MettelParser;
 import mettel.language.MettelSpecification;
+import mettel.util.MettelJavaNames;
 import mettel.util.MettelReport;
 
 /**
@@ -224,7 +225,7 @@ public class MettelGenerator {
         		System.exit(2);
         	}
 
-        	File src = new File(outputPath + File.separatorChar + spec.path());
+        	File src = new File(outputPath + File.separatorChar + MettelJavaNames.systemPath(spec.path()));
         	File dir = createTempDir(spec.path());
         	compile(src, dir);
         	
