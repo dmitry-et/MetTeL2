@@ -76,6 +76,7 @@ private MettelANTLRGrammarGeneratorProperties properties = new MettelANTLRGramma
 
 @lexer::members{
 	boolean futureBlock = false;
+	boolean futureBlock0 = false;
 }
 
 
@@ -565,7 +566,7 @@ TABLEAU
 	:
 	'tableau'
 	{
-	futureBlock = true;
+	futureBlock0 = true;
 	}
 	;
 
@@ -581,7 +582,7 @@ SEMANTICS
 	:
 	'semantics'
 	{
-	futureBlock = true;
+	futureBlock0 = true;
 	}
 	;
 
@@ -596,7 +597,7 @@ RPAREN
 LBRACE
     :   '{'
     	(
-    	{futureBlock}? =>
+    	{futureBlock|futureBlock0}? =>
     	(
     	{
     	_type = BLOCK;
@@ -612,7 +613,11 @@ LBRACE
 		{setText(getText());}
 		'}'
 		{
-		futureBlock = false;
+		if(futureBlock){
+			futureBlock = false;
+		}else{
+			futureBlock0 = false;
+		}
 		}
     	)
     	)?
