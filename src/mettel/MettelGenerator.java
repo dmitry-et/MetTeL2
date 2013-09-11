@@ -173,6 +173,11 @@ public class MettelGenerator {
                         System.exit(-1);
                     }
 */
+        		}else if((in ==null) && !args[i].startsWith("-")){
+        			in = new ANTLRFileStream(args[i]);
+        			System.out.println("Specification file: "+args[i]);
+        		}else{
+        			System.out.println("Ignoring argument: "+args[i]);
         		}
         	}
 
@@ -371,7 +376,7 @@ public class MettelGenerator {
 		}finally{
 			jar.close();
 		}
-		report("The jar is made.");
+		report(path +".jar is made.");
 
 		return true;
 	}
