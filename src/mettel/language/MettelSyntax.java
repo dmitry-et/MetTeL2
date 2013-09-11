@@ -317,7 +317,12 @@ public class MettelSyntax implements MettelBlock {
 
 	public void process(MettelJavaPackageStructure pStructure, MettelANTLRGrammarGeneratorProperties properties){
 		this.pStructure = pStructure;
-		this.properties = properties;
+		if(options != null){
+			this.properties = options.process(properties);
+		}else{
+			this.properties = properties;
+		}
+		
 
 		//unravel();
 		final String NAME = MettelJavaNames.firstCharToUpperCase(name);

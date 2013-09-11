@@ -101,11 +101,17 @@ public class MettelTableau implements MettelBlock {
 	//private MettelANTLRGrammarGeneratorProperties properties = null;
 	//private MettelJavaPackageStructure pStructure = null;
 
-	void process(MettelJavaPackageStructure pStructure, MettelANTLRGrammarGeneratorProperties properties){
+	void process(MettelJavaPackageStructure pStructure, MettelANTLRGrammarGeneratorProperties props){
 		//this.pStructure = pStructure;
 		//this.properties = properties;
 
 		//unravel();
+		MettelANTLRGrammarGeneratorProperties properties = null;
+		if(options != null){
+			properties = options.process(props);
+		}else{
+			properties = props;
+		}
 
 		final String prefix = MettelJavaNames.firstCharToUpperCase(name);
 		pStructure.appendStandardTableauClasses(name, syntax.name(), prefix, properties.nameSeparator, properties.searchStrategy);
