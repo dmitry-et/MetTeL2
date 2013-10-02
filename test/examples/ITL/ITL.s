@@ -1,7 +1,7 @@
 specification ITL;
 
 options{
-	equality.keywords={equality, equivalence}
+	equality.keywords={equality}
 	name.separator=
 
 	tableau.rule.delimiter=;
@@ -9,41 +9,41 @@ options{
 }
 
 syntax ITL{
-	sort formula, point, interval;
-	
-	interval interval = '[' point ',' point ']';
+	sort formula, point;
 	
 	formula false = 'false';
-	formula less = point '<' point;
-	formula equality = point '=' point;
-	formula relationA = 'R' interval interval;
-	formula interval = '@' interval formula;
+	
+	formula less =  '{' point '<' point '}';
+	formula equality =  '{{' point '=' point '}}';
 	
 	formula negation = '~' formula;
+	formula diamond = '<A>' formula;
+	formula at = '[' point ',' point ']' ':' formula;
+	
 	formula disjunction = formula '|' formula;
 	
-	formula diamond = '<A>' formula;
-	
+	point function = 'f' '(' point ',' formula ')';
 }
 
-tableau ITL
-{
-	@i false / priority 0;
-	@i p @i ~p / priority 0;
+tableau ITL{
+	[a,b]:false / priority 0;
+	[a,b]:p [a,b]:~p / priority 0;
 	
-	a < a / priority 0;
-	a < b b < c / a < c priority 3;
+	{a < a} / priority 0;
+	{a < b} {b < c} / {a < c} priority 3;
 	
-	@[a,b] p / a < b priority 1;
+	[a,b]:p / {a < b} priority 1;
 	
-	@ i (p|q) / @i p || @i q priority 5;
-	@ i ~(p|q) / @i ~p @i ~q priority 3;
+	[a,b]:(p|q) / [a,b]:p || [a,b]:q priority 5;
+	[a,b]:~(p|q) / [a,b]:~p [a,b]:~q priority 3;
 	
-	@[a,b] <A>p / @[b,f(b,p)] p priority 9;
-	@[a,b] ~(<A>p) b < c / @[b,c] ~p priority 4;
+	[a,b]:<A>p / [b,f(b,p)]:p priority 9;
+	[a,b]:~(<A>p) {b < c} / [b,c]:~p priority 4;
 	
-	a < b c < d / 
-		c = a || c < a || a < c priority 7;
-	a < b c < d / 
-		d = a || d < a || a < d priority 7;
+	{a < b} {c < d} / 
+		{{c = a}} || {c < a} || {a < c} {c < b} ||
+		{{c = b}} || {b < c} priority 7;
+	{a < b} {c < d} / 
+		{{d = a}} || {d < a} || {a < d} {d < b} ||
+		{{d = b}} || {b < d} priority 7;
 }
