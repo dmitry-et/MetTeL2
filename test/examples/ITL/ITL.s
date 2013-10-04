@@ -18,9 +18,12 @@ syntax ITL{
 	
 	formula negation = '~' formula;
 	formula diamond = '<A>' formula;
+	formula box = '[A]' formula;
 	formula at = '[' point ',' point ']' ':' formula;
 	
+	formula conjunction = formula '&' formula;
 	formula disjunction = formula '|' formula;
+	formula implication = formula '->' formula;
 	
 	point function = 'f' '(' point ',' formula ')';
 }
@@ -34,11 +37,20 @@ tableau ITL{
 	
 	[a,b]:p / {a < b} priority 1;
 	
+	[a,b]:(p&q) / [a,b]:p [a,b]:q priority 3;
+	[a,b]:~(p&q) / [a,b]:~p || [a,b]:~q priority 5;
+
 	[a,b]:(p|q) / [a,b]:p || [a,b]:q priority 5;
 	[a,b]:~(p|q) / [a,b]:~p [a,b]:~q priority 3;
+
+	[a,b]:(p->q) / [a,b]:~p || [a,b]:q priority 5;
+	[a,b]:~(p->q) / [a,b]:p [a,b]:~q priority 3;
 	
 	[a,b]:<A>p / [b,f(b,p)]:p priority 9;
 	[a,b]:~(<A>p) {b < c} / [b,c]:~p priority 4;
+
+	[a,b]:~([A]p) / [b,f(b,p)]:~p priority 9;
+	[a,b]:[A]p {b < c} / [b,c]:p priority 4;
 	
 	{a < b} {c < d} / 
 		{{c = a}} || {c < a} || {a < c} {c < b} ||
