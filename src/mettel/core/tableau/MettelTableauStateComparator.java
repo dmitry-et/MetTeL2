@@ -43,7 +43,19 @@ public class MettelTableauStateComparator implements Comparator<MettelTableauSta
 			return -1;
 		}
 		if(s2 == null) return 1;
-
+		
+		/*Iterator<MettelTableauAction> ia1 = s1.actions().iterator();
+		Iterator<MettelTableauAction> ia2 = s2.actions().iterator();
+		while(ia1.hasNext()){
+			if(!ia2.hasNext()) return 1;
+			MettelTableauAction a1 = ia1.next();
+			MettelTableauAction a2 = ia2.next();
+			int result = a1.compareTo(a2);
+			if(result != 0) return result;
+		}
+		if(ia2.hasNext()) return -1;
+		*/
+		
 		Iterator<MettelAnnotatedExpression> i1 = s1.expressions().iterator();
 		Iterator<MettelAnnotatedExpression> i2 = s2.expressions().iterator();
 		while(i1.hasNext()){

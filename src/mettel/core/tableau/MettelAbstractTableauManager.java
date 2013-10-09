@@ -130,10 +130,10 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 
 				Set<MettelTableauState> children = null;
 				boolean actionExecuted = false;
-				final Set<MettelTableauAction> actions = state.actions();
+//				final Set<MettelTableauAction> actions = state.actions();
 //System.out.println("Potential actions "+actions);
-				if(actions != null){
-					final Iterator<MettelTableauAction> ia = actions.iterator();
+//				if(actions != null){
+					final Iterator<MettelTableauAction> ia = state.actions().iterator();
 					while(ia.hasNext()){
 						final MettelTableauAction a = ia.next();
 						final boolean f = a.isFor(state);
@@ -151,7 +151,7 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 							ia.remove();
 						}
 					}
-				}
+//				}
 //System.out.println("Done");
 				if(!actionExecuted)	children = state.expand();
 				addActions(state);

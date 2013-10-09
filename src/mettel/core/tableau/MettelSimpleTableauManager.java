@@ -63,12 +63,30 @@ public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 			final Iterator<MettelTableauState> i = unexpandedStates.iterator();
 			while(i.hasNext()){
 				final MettelTableauState s = i.next();
+				
+				/*boolean notRemoved = true;
+				final Iterator<MettelTableauAction> ia = s.actions().iterator();
+				while(ia.hasNext()){
+					final MettelTableauAction a = ia.next();
+					if(a.isFor(s)){
+						if(a instanceof MettelTableauTerminateAction){
+							a.execute(s);
+							i.remove();
+							if(a.completed()){
+								ia.remove();
+							}
+							notRemoved = false;
+						}
+						break;
+					}
+				}*/
+
+				
 //				if(s.expressions().equals(state.expressions())){
-				if(comparator.compare(state, s) == 0){
+				if(/*notRemoved &&*/ comparator.compare(state, s) == 0){
 					if(state.id() < s.id()){
 						i.remove();//unexpandedStates.remove(s);
-						unexpandedStates.add(state);
-						return true;
+						return unexpandedStates.add(state);
 					}
 					return false;
 				}
