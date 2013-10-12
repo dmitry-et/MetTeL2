@@ -44,8 +44,8 @@ public class MettelRecognitionException extends RecognitionException {
 		// TODO Auto-generated constructor stub
 	}
 
-	public String toString(){
-		return "at line "+line+" at position "+charPositionInLine;
+	public String getMessage(){
+		return "Something is not right.";//at line "+line+" at position "+charPositionInLine;
 	}
 
 }

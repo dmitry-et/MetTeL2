@@ -39,7 +39,7 @@ public class MettelUndeclaredSortException extends MettelRecognitionException {
 		this.sortName =  sortName;
 	}
 
-	public String toString(){
-		return "The sort "+sortName+" is not declared "+super.toString();
+	public String getMessage(){
+		return "The sort '"+sortName+"' is not declared.";// + super.getMessage();
 	}
 }
