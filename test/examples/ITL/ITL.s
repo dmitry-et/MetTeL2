@@ -6,6 +6,8 @@ options{
 
 	tableau.rule.delimiter=;
 	tableau.rule.branch.delimiter=||
+	
+	branch.selection.strategy=mettel.core.tableau.MettelSimpleLIFOBranchSelectionStrategy
 }
 
 syntax ITL{
@@ -37,13 +39,25 @@ tableau ITL{
 	
 	[a,b]:p / {a < b} priority 1;
 	
+	[a,b]:~(~p) / [a,b]:p priority 1;
+	
 	[a,b]:(p&q) / [a,b]:p [a,b]:q priority 3;
-	[a,b]:~(p&q) / [a,b]:~p || [a,b]:~q priority 5;
+	[a,b]:~(p&q) / [a,b]:(~p|~q) priority 1;
+//	[a,b]:~(p&q) / [a,b]:~p || [a,b]:~q priority 5;
+//	[a,b]:~(p&q) [a,b]:p / [a,b]:~q priority 4;
+//	[a,b]:~(p&q) [a,b]:q / [a,b]:~p priority 4;
 
 	[a,b]:(p|q) / [a,b]:p || [a,b]:q priority 5;
+	[a,b]:(~p|q) [a,b]:p / [a,b]:q priority 4;
+	[a,b]:(p|~q) [a,b]:q / [a,b]:p priority 4;
+	[a,b]:(p|q) [a,b]:~p / [a,b]:q priority 4;
+	[a,b]:(p|q) [a,b]:~q / [a,b]:p priority 4;
 	[a,b]:~(p|q) / [a,b]:~p [a,b]:~q priority 3;
 
-	[a,b]:(p->q) / [a,b]:~p || [a,b]:q priority 5;
+//	[a,b]:(p->q) / [a,b]:~p || [a,b]:q priority 5;
+	[a,b]:(p->q) / [a,b]:(~p|q) priority 1;
+//	[a,b]:(p->q) [a,b]:p / [a,b]:q priority 4;
+//	[a,b]:(p->q) [a,b]:~q / [a,b]:~p priority 4;
 	[a,b]:~(p->q) / [a,b]:p [a,b]:~q priority 3;
 	
 	[a,b]:<A>p / [b,f(b,p)]:p priority 9;

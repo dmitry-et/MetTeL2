@@ -258,7 +258,7 @@ bnfDefinition
      t = IDENTIFIER
     {
     MettelSort sort = syn.getSort(t.getText());
-    if(sort == null)  throw new MettelUndeclaredSortException(t.getText());
+    if(sort == null)  throw new MettelUndeclaredSortException(t.getLine(),t.getCharPositionInLine(),t.getText());
     argc++;
     if(fEquality){
     	switch(argc){

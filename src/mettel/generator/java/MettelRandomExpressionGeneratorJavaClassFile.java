@@ -26,11 +26,10 @@ package mettel.generator.java;
 import java.util.LinkedHashSet;
 import java.util.HashMap;
 
+import mettel.core.MettelCoreRuntimeException;
 import mettel.generator.util.MettelSignature;
 import mettel.util.MettelJavaNames;
-
 import static mettel.generator.MettelANTLRGrammarGeneratorDefaultOptions.NAME_SEPARATOR;
-
 import static mettel.util.MettelStrings.FILE_SEPARATOR;
 //TODO also if you generate nominal sort do you need to print information about formula sort? also do you need to print information in standard output?"
 //TODO can use specify same named variables?
@@ -107,7 +106,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 				appendLine("if (prop != null){");
 					incrementIndentLevel();
 					appendLine("setProperties();");
-					appendLine("checkPropertiesValidity();");
+					//appendLine("checkPropertiesValidity();");
 					decrementIndentLevel();
 				appendLine("}else{");
 					incrementIndentLevel();
@@ -597,6 +596,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 									appendLine("r -= " + ltype + "Frequency;");
 									decrementIndentLevel();
 						}
+						appendLine("throw new MettelCoreRuntimeException(\"Frequences of all top connectives are 0.\");");
 						//TODO repeating list2
 						final LinkedHashSet<MettelSignature> list2 = signatures.get(type);
 						final int SIZE2 = list2.size();
@@ -638,7 +638,15 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 								appendLine("r -= " + ltype + "Frequency;");
 							}
 						}
-						appendLine("return " + type + "Variable();");
+						appendLine("if(r < " + vtype + "Frequency){");
+							incrementIndentLevel();
+							appendLine("return " + type + "Variable();");
+							decrementIndentLevel();
+						appendLine("}else{");
+							incrementIndentLevel();
+							appendLine("throw new MettelCoreRuntimeException(\"Frequences of all variables and constants (nullary connectives) of the sort '" + type + "' are 0.\");");
+							decrementIndentLevel();
+						appendLine('}');
 						for(MettelSignature s:signatures.get(type)){
 							if (s.arguments().length == 0){
 								decrementIndentLevel();
@@ -677,8 +685,15 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 						appendLine("r -= " + ltype + "Frequency;");
 				}
 
-				appendLine("return " + type + "Variable();");
-
+				appendLine("if(r < " + vtype + "Frequency){");
+					incrementIndentLevel();
+					appendLine("return " + type + "Variable();");
+					decrementIndentLevel();
+				appendLine("}else{");
+					incrementIndentLevel();
+					appendLine("throw new MettelCoreRuntimeException(\"Frequences of all variables and connectives of the sort '" + type + "' are 0.\");");
+					decrementIndentLevel();
+				appendLine('}');
 
 				final LinkedHashSet<MettelSignature> list = signatures.get(type);
 				final int SIZE = list.size();
