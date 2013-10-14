@@ -36,6 +36,12 @@ public class MettelUndeclaredSortException extends MettelRecognitionException {
 	 * @param sortName
 	 */
 	public MettelUndeclaredSortException(String sortName) {
+		super();
+		this.sortName =  sortName;
+	}
+	
+	public MettelUndeclaredSortException(int line, int pos, String sortName) {
+		super(line, pos);
 		this.sortName =  sortName;
 	}
 
