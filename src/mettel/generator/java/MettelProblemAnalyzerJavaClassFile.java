@@ -47,6 +47,7 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 		headings.appendLine("import java.io.IOException;");
 		headings.appendLine("import java.io.FileInputStream;");
 		headings.appendEOL();
+		headings.appendLine("import java.util.Collection;");
 		headings.appendLine("import java.util.ArrayList;");
 		headings.appendLine("import java.util.Collections;");
 		headings.appendLine("import java.util.HashMap;");
@@ -126,8 +127,24 @@ public class MettelProblemAnalyzerJavaClassFile extends MettelJavaClassFile{
 			appendLine('}');
 			decrementIndentLevel();
 		appendLine('}');
-	appendEOL();
-
+		appendEOL();
+		
+		appendLine("public " + prefix + "ProblemAnalyzer(Collection<" + prefix + "Expression> col){");
+		incrementIndentLevel();
+		
+		appendLine("for (" + prefix + "Expression expression : col){");
+			incrementIndentLevel();
+				appendLine("if (totalSymbolsMaxLength < expression.length()){");
+					incrementIndentLevel();
+						appendLine("totalSymbolsMaxLength = expression.length();");
+					decrementIndentLevel();
+				appendLine('}');
+				appendLine("determineSymbol(expression);");
+			decrementIndentLevel();
+		appendLine('}');
+		decrementIndentLevel();
+		appendLine('}');
+		appendEOL();
 
 		appendLine("private void determineSymbol(" + prefix + "Expression expression){");
 			incrementIndentLevel();
