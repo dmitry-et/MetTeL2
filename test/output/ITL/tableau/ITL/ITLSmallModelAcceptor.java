@@ -51,7 +51,7 @@ public class ITLSmallModelAcceptor implements
 		
 System.out.println("m: " + m);
 
-		this.size = (long)Math.pow(2., (double)m*(double)m) + 1;
+		this.size = (long)Math.pow(2., (double)m)*m + 1;
 		
 System.out.println("Model size: " + this.size);
 
