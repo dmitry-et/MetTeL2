@@ -38,9 +38,9 @@ public class ITLSmallModelAcceptor implements
 
 	private long size = Long.MAX_VALUE;
 
-	public ITLSmallModelAcceptor(int size){
+	public ITLSmallModelAcceptor(long size){
 		super();
-		this.size = size;
+		if(size > 0) this.size = size;
 	}
 	
 	public ITLSmallModelAcceptor(Collection<ITLExpression> col){
@@ -49,11 +49,12 @@ public class ITLSmallModelAcceptor implements
 		ITLProblemAnalyzer a = new ITLProblemAnalyzer(col);
 		int m = a.boxFormulaOccurences() + a.diamondFormulaOccurences();
 		
-System.out.println("m: " + m);
+//System.out.println("m: " + m);
 
 		this.size = (long)Math.pow(2., (double)m)*m + 1;
+		if(this.size <= 0) this.size = Long.MAX_VALUE;
 		
-System.out.println("Model size: " + this.size);
+//System.out.println("Model size: " + this.size);
 
 	}
 
