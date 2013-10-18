@@ -1,0 +1,13 @@
+7 p0 p1 p2 p3 p4 p5 p6 
+10
+p0
+( ( NOT ( p1 )  OR NOT ( p2 )  )  OR p4 ) 
+BOX ( ( ( NOT ( p1 )  OR NOT ( p2 )  )  OR p4 )  )
+BOX ( BOX ( ( ( NOT ( p1 )  OR NOT ( p2 )  )  OR p4 )  ) )
+( ( DIA ( p3 )  OR BOX ( p5 )  )  OR NOT ( p2 )  ) 
+BOX ( ( ( DIA ( p3 )  OR BOX ( p5 )  )  OR NOT ( p2 )  )  )
+BOX ( BOX ( ( ( DIA ( p3 )  OR BOX ( p5 )  )  OR NOT ( p2 )  )  ) )
+( ( NOT ( BOX ( p0 )  )  OR NOT ( BOX ( p5 )  )  )  OR NOT ( p6 )  ) 
+BOX ( ( ( NOT ( BOX ( p0 )  )  OR NOT ( BOX ( p5 )  )  )  OR NOT ( p6 )  )  )
+BOX ( BOX ( ( ( NOT ( BOX ( p0 )  )  OR NOT ( BOX ( p5 )  )  )  OR NOT ( p6 )  )  ) )
+

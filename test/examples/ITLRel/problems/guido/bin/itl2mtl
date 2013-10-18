@@ -1,0 +1,27 @@
+#!/usr/bin/perl
+
+my $line = 0;
+my $OUT;
+open(OUT,"> -") or die("Cannot open stdout for writing");
+#print OUT "~(";
+while(<>){
+	if($line < 2){
+	    print OUT "//$_";
+	    $line++;
+	}else{
+	    s/IMPLIES/->/g;
+	    s/OR/|/g;
+	    s/AND/&/g;
+	    s/NOT/~/g;
+	    s/DIA/<A>/g;
+	    s/BOX/[A]/g;
+	    s/^\s+|\s+$//g;
+	    if("$_" ne ""){
+		print OUT "@ i $_\n";
+	    }else{
+		print OUT "$_\n";
+	    }
+	}
+}
+# print OUT ")";
+close(OUT);

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for i in *.mtl; do
+echo $i started
+(/usr/bin/time -v -- java -XX:-UseGCOverheadLimit -Xms3G -jar ../../../../../../lib/ITLRel.jar -i $i) 1>$(basename $i .mtl).log 2>&1
+echo $i finished
+done

@@ -1,0 +1,6 @@
+2 p0 p1 
+3
+DIA ( p0 )
+DIA ( p1 )
+BOX ( NOT ( ( p0 AND p1 ) ) )
+
