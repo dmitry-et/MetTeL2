@@ -63,11 +63,11 @@ public class MettelSimpleRuleSelectionStrategy implements MettelRuleSelectionStr
 		/* (non-Javadoc)
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 		 * Note: this comparator imposes orderings that are inconsistent with equals.
-		 */
+		 *
 		@Override
 		public int compare(MettelTableauRuleState o1, MettelTableauRuleState o2) {
 			return 0;
-		}
+		}*/
 
 		/* (non-Javadoc)
 		 * @see mettel.core.tableau.MettelRuleSelectionStrategy#create(mettel.core.tableau.MettelTableauRuleState[])

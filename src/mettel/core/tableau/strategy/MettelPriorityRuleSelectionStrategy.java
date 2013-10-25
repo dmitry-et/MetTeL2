@@ -64,11 +64,11 @@ public class MettelPriorityRuleSelectionStrategy implements
 
 	/* (non-Javadoc)
 	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-	 */
+	 *
 	@Override
 	public int compare(MettelTableauRuleState o1, MettelTableauRuleState o2) {
 		return 0;
-	}
+	}*/
 
 	/* (non-Javadoc)
 	 * @see mettel.core.tableau.MettelRuleSelectionStrategy#select()

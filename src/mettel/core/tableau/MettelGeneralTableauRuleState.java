@@ -447,7 +447,8 @@ public class MettelGeneralTableauRuleState implements MettelTableauRuleState {
 		 */
 		@Override
 		public void rewrite(MettelTableauState s,MettelReplacement r) {
-//System.out.println("Before rewriting: "+this);
+if(terminal)
+System.out.println("##Before rewriting: "+this);
 			final MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedExpression> pool0 = pool;
 			pool = new MettelTreeSetLinkedHashMap<MettelTableauState,MettelAnnotatedExpression>();
 			pool.init(s);

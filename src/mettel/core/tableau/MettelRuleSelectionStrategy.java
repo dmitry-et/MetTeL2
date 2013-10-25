@@ -16,14 +16,14 @@
  */
 package mettel.core.tableau;
 
-import java.util.Comparator;
+//import java.util.Comparator;
 
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
-public interface MettelRuleSelectionStrategy extends Comparator<MettelTableauRuleState>{
+public interface MettelRuleSelectionStrategy{// extends Comparator<MettelTableauRuleState>{
 
 	MettelTableauRuleState select();
 

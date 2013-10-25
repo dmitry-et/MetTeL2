@@ -71,7 +71,7 @@ public class MettelGeneralTableauStateWithRewriting extends MettelAbstractTablea
 	 */
 	@Override
 	public boolean add(MettelAnnotatedExpression e) {
-System.out.println("Adding "+e);
+System.out.println("Adding "+e+"===========================================");
 System.out.println("Replacement is "+replacement);
 		final MettelExpression exp = e.expression();
 		final MettelExpression exp0 = replacement.rewrite(exp);//XXX: Does not work as expected, needs fix!
@@ -136,6 +136,7 @@ System.out.println("Backward rewriting: "+replacement);
 			expressions = pool;
 			for(MettelGeneralTableauRuleState rs:ruleStates){
 				rs.rewrite(this, replacement);
+				//rs.setApplicable(true);
 //System.out.println("Rule state: "+rs);
 			}
 		}
