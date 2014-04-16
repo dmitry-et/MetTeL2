@@ -201,6 +201,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 			appendEOL();
 
 			appendLine("configuration.load(prop);");
+			appendLine("g.setSatToUnsatRatio(Double.parseDouble(configuration.getProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.SAT_TO_UNSAT_RATIO +"\", \"" + SAT_TO_UNSAT_RATIO_VALUE + "\").trim()));");
 			for(String type:signatures.keySet()){
 				final String Type = MettelJavaNames.firstCharToUpperCase(type, nameSeparator);
 
@@ -335,6 +336,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 			incrementIndentLevel();
 			appendLine("configuration.setProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.METTEL_VERSION + "\", \"" + METTEL_VERSION_VALUE + "\");");
 			appendLine("configuration.setProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.SYNTAX + "\", \"" + SYNTAX_PATH + "\");");
+			appendLine("configuration.setProperty(\"" + MettelRandomExpressionDefaultPropertiesNames.SAT_TO_UNSAT_RATIO + "\", \"" + SAT_TO_UNSAT_RATIO_VALUE + "\");");
 			for(String type:signatures.keySet()){
 				for(MettelSignature s:signatures.get(type)){
 					appendLine("configuration.setProperty(\"" +
@@ -486,7 +488,20 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 		appendLine("private Random random = new Random();");
 
 		appendEOL();
-
+		
+		//appendLine("private Random satRandom = new Random();");
+		appendLine("private boolean satToUnsatRatioCheck = false;");
+		appendLine("private double satProbability = 1.0;");
+		
+		appendLine("public void setSatToUnsatRatio(Double ratio){");
+	    	incrementIndentLevel();
+	    	appendLine("satToUnsatRatioCheck = ratio >= 0;");
+	    	appendLine("satProbability = ratio / (ratio + 1.0);");
+	    	decrementIndentLevel();
+		appendLine('}');
+		
+		appendEOL();
+		
 		for(String type:signatures.keySet()){
 			final String Type = MettelJavaNames.firstCharToUpperCase(type, nameSeparator);
 

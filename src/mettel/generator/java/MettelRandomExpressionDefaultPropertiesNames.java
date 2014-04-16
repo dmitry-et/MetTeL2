@@ -23,6 +23,8 @@ package mettel.generator.java;
 // put into same class? MettelRandomExpressionDefaultPropertiesNames and MettelRandomExpressionDefaultPropertiesValues?
 public class MettelRandomExpressionDefaultPropertiesNames {
 
+	public static final String SAT_TO_UNSAT_RATIO = "sat.to.unsat.ratio";
+
 	public static String sortConnectiveFrequencyProperty(String sort, String connective) {
 		return sort + "." + connective + ".frequency";
 	}
