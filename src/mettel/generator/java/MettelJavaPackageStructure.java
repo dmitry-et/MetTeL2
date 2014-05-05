@@ -180,6 +180,7 @@ public class MettelJavaPackageStructure {
 
 			if(sorts.length > 0){
 				testLangPackage.add(new MettelParserTestJavaClassFile(prefix, sorts[0], MettelJavaPackageStructure.this, name));
+				expressionGenerator.setMainSort(sorts[0]);
 			}
 
 			for(String sort:sorts){

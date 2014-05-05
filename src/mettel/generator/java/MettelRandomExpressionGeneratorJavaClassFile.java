@@ -44,6 +44,7 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 	private String nameSeparator = NAME_SEPARATOR;
 
 	private HashMap<String, LinkedHashSet<MettelSignature>> signatures = null;
+	private String mainSort = null;
 
 	public void setSignatures(HashMap<String, LinkedHashSet<MettelSignature>> signatures){
 		this.signatures = signatures;
@@ -796,5 +797,9 @@ public class MettelRandomExpressionGeneratorJavaClassFile extends
 				decrementIndentLevel();
 			appendLine('}');
 		}
+	}
+
+	public void setMainSort(String mainSort) {
+		this.mainSort  = mainSort;
 	}
 }
