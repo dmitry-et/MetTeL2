@@ -3,9 +3,16 @@
 #
 
 ### General ########################################################################
+JVM_TARGET := 1.8
+
 ifeq ($(strip $(JAVA_HOME)),)
-    JAVA_HOME := /usr/lib/jvm/java
-endif
+#JAVA_HOME := /usr/lib/jvm/java
+JAVAC = javac
+JAVADOC = javadoc
+JAVA = java
+JAR = jar
+JAVAC_OPTIONS := -Xlint:unchecked -source $(JVM_TARGET) -target $(JVM_TARGET)
+else
 ifeq ($(strip $(JAVAC)),) 
     JAVAC := $(JAVA_HOME)/bin/javac
 endif
@@ -18,14 +25,17 @@ endif
 ifeq ($(strip $(JAR)),) 
     JAR := $(JAVA_HOME)/bin/jar
 endif
+BOOTCLASSPATH := $(JAVA_HOME)/jre/lib/rt.jar
+JAVAC_OPTIONS := -Xlint:unchecked -source $(JVM_TARGET) -target $(JVM_TARGET) -bootclasspath $(BOOTCLASSPATH)
+endif
 
 #Java options
 #BOOTCLASSPATH := /usr/lib/jvm/java-1.5.0/jre/lib/rt.jar
 #BOOTCLASSPATH := /usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/jre/lib/rt.jar
-BOOTCLASSPATH := $(JAVA_HOME)/jre/lib/rt.jar
-JVM_TARGET := 1.7
-JAVA_OPTIONS :=
-JAVAC_OPTIONS := -Xlint:unchecked -source $(JVM_TARGET) -target $(JVM_TARGET) -bootclasspath $(BOOTCLASSPATH)
+#BOOTCLASSPATH := $(JAVA_HOME)/jre/lib/rt.jar
+#JVM_TARGET := 1.8
+#JAVA_OPTIONS :=
+#JAVAC_OPTIONS := -Xlint:unchecked -source $(JVM_TARGET) -target $(JVM_TARGET) -bootclasspath $(BOOTCLASSPATH)
 
 # Project name
 NAME := mettel
@@ -197,7 +207,7 @@ JAVA_TEST_OPTIONS := $(JAVA_OPTIONS) -Xfuture -Xbatch -Xms256M -Xmx1024M
 
 TEST_EXAMPLES_DIR = $(TEST_DIR)/examples
 TEST_OUTPUT_DIR = $(TEST_DIR)/output
-TEST_LOGIC_DIRS = "bool Int ALCO S4 ALBOid LTL LTLC lists KE3 fotheory IEL"
+TEST_LOGIC_DIRS = "bool Int ALCO S4 ALBOid LTL LTLC lists KE3 fotheory IEL V P"
 TEST_LOGIC_PARSERS = $(shell find $(TEST_OUTPUT_DIR) -name '*.g')
 TEST_LOGIC_SOURCES = $(shell find $(TEST_OUTPUT_DIR) -name '*.java')
 
@@ -487,7 +497,7 @@ generateLogics: $(JAR_FILE) $(TEST_CLASSES_DIR) $(CORE_JAR_FILE)
 	@ echo "Generating logics"
 #	@ echo $(DELIM1)
 	@ for D in "$(TEST_LOGIC_DIRS)"; do echo $(DELIM1); echo "Generating $${D}"; java -cp $(RUNTIME_CLASSPATH) mettel.MettelGenerator -i "$(TEST_EXAMPLES_DIR)/$${D}/$${D}.s" -d "test/output"; done
-	@ mv -fu *.jar $(LIB_DIR)
+	@ mv -f *.jar $(LIB_DIR)
 	@ rm -f *.tokens
 	
 generateParsers: generateLogics

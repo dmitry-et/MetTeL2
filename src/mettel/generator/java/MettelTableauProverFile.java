@@ -91,6 +91,7 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
 		appendLine("private static CharStream in = null;");
 		appendLine("private static String outFileName = null;");
 		appendLine("private static String tableauFile = null;");
+		appendLine("private static boolean notQuiet = true;");
 		appendEOL();
 		appendLine("public static void main(String[] args) {");
 			incrementIndentLevel();
@@ -162,6 +163,10 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
 	                		decrementIndentLevel();
 	                	appendLine('}');
 	                    decrementIndentLevel();
+	                appendLine("}else if(\"-q\".equals(args[i])||\"--quiet\".equals(args[i])){");
+	                	incrementIndentLevel();
+	                		appendLine("notQuiet = false;");
+	                	decrementIndentLevel();
 	                appendLine('}');
 	                decrementIndentLevel();
 	            appendLine('}');
@@ -214,12 +219,12 @@ public class MettelTableauProverFile extends MettelJavaClassFile {
     		    appendLine("if(result){");
     		    	incrementIndentLevel();
     		    	appendLine("out.println(\"Satisfiable.\");");
-    		    	appendLine("out.println(\"Model: \"+m.model());");
+    		    	appendLine("if(notQuiet) out.println(\"Model: \"+m.model());");
     		    	decrementIndentLevel();
     		    appendLine("}else{");
     		    	incrementIndentLevel();
     		    	appendLine("out.println(\"Unsatisfiable.\");");
-    		    	appendLine("if(m.contradiction() != null){");
+    		    	appendLine("if(notQuiet && (m.contradiction() != null)){");
     		    		incrementIndentLevel();
     		    		appendLine("out.println(\"Contradiction: \"+m.contradiction());");
     		    		decrementIndentLevel();
