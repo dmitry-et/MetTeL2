@@ -19,39 +19,42 @@
 //
 grammar Mettel;
 
-options{
-	k=1;
+//options{
+//	k=1;
 //	backtrack=true;
 //	memoize=true;
-}
+//}
 
-tokens{
-	SPECIFICATION 	= 	'specification';
+/*tokens{
+	SPECIFICATION,
+	
+	IMPORT,
 
-	IMPORT		=	'import';
+	ALL,
+	PROBLEM,
+	SYNTAX,
+	SEMANTICS,
+	TABLEAU,
 
-	ALL			=	'all';
-	PROBLEM		=	'problem';
-	SYNTAX		=	'syntax';
-	SEMANTICS	=	'semantics';
-	TABLEAU		=	'tableau';
+	OPTIONS,
 
-	OPTIONS		=   'options';
+	SORT,
+	EXTENDS,
+	ANTLR,
+	IN,
 
-	SORT			=	'sort';
-	EXTENDS		=	'extends';
-	ANTLR			=	'antlr';
-	IN			= 	'in';
+	SEMI,
+	IDENTIFIER,
+	DOT,
+	LBRACE,
+	RBRACE,
+	COMMA,
+	BAR,
+	EQ,
+	STRINGLITERAL,
+	BLOCK
 
-//	BLOCK;
-
-/*	PREDICATE   =   'predicate'; I think, it will be easy to determine the type of any symbol from its context
-	FUNCTION    =   'function';
-	CONSTANT    =   'constant';
-	ARITY	    =   'arity';
-	OF			=   'of';
-*/
-}
+}*/
 
 @header{
 package mettel.language;
@@ -66,18 +69,18 @@ import mettel.generator.MettelANTLRGrammarGeneratorProperties;
 //import mettel.language.MettelSpecification;
 //}
 
-@lexer::header{
-package mettel.language;
-}
+//@lexer::header{
+//package mettel.language;
+//}
 
 @members{
 private MettelANTLRGrammarGeneratorProperties properties = new MettelANTLRGrammarGeneratorProperties();
 }
 
-@lexer::members{
-	boolean futureBlock = false;
-	boolean futureBlock0 = false;
-}
+//@lexer::members{
+//	boolean futureBlock = false;
+//	boolean futureBlock0 = false;
+//}
 
 
 /*****************************************************************************************
@@ -329,26 +332,26 @@ returns [MettelTableau tab = null]
     	{tab.setOptions(o);}
     	)?
     	//(IN SYNTAX? synId = IDENTIFIER)?
-		//LBRACE
-			t = BLOCK
+	LBRACE
+			t = .*
 			{
 			tab.setContent(t.getText());
 			}
-    	//RBRACE
+    	RBRACE
 	;
 
-fragment
 optionsBlock
 returns [MettelOptions o = null]
 	:
 	OPTIONS
-	t = BLOCK
+	LBRACE
+	t = .*
+	RBRACE
 	{
 	o = new MettelOptions(t.getText());
 	}
 	;
 
-fragment
 syntaxName
 returns [String name = null]
 	:
@@ -375,7 +378,9 @@ returns [MettelSemantics sem = null]
     	(o = optionsBlock
     	{sem.setOptions(o);}
     	)?
-    	t = BLOCK
+    	LBRACE
+    	t = .*
+    	RBRACE
 		{
 		sem.setContent(t.getText());
 		}
@@ -399,9 +404,37 @@ semanticEquivalenceFormula
 	:
 	IDENTIFIER //TODO: Expand further
 	;
+
 /*****************************************************************************************
                                 Lexer section
 *****************************************************************************************/
+SPECIFICATION 	:	'specification';
+
+IMPORT		:	'import';
+
+ALL		:	'all';
+PROBLEM		:	'problem';
+SYNTAX		:	'syntax';
+SEMANTICS	:	'semantics';
+TABLEAU		:	'tableau';
+
+OPTIONS		:	'options';
+
+SORT		:	'sort';
+EXTENDS		:	'extends';
+ANTLR		:	'antlr';
+IN		:	'in';
+
+//	BLOCK;
+
+/*	PREDICATE   =   'predicate'; I think, it will be easy to determine the type of any symbol from its context
+	FUNCTION    =   'function';
+	CONSTANT    =   'constant';
+	ARITY	    =   'arity';
+	OF			=   'of';
+*/
+
+
 EQ	 	:   '=';
 //OR      :   '|';
 MAP     :   '->';
@@ -517,74 +550,19 @@ EscapeSequence
              )
 ;
 
-WS
-    :   (
-             ' '
-        |    '\r'
-        |    '\t'
-        |    '\u000C'
-        |    '\n'
-        )
-            {
-                skip();
-            }
-    ;
+//
+// Whitespace and comments
+//
+WS : [ \t\r\n\u000C]+ -> skip
+;
 
 COMMENT
-         @init{
-            boolean isJavaDoc = false;
-        }
-    :   '/*'
-            {
-                if((char)input.LA(1) == '*'){
-                    isJavaDoc = true;
-                }
-            }
-        (options {greedy=false;} : . )*
-        '*/'
-            {
-                if(isJavaDoc==true){
-                    $channel=HIDDEN;
-                }else{
-                    skip();
-                }
-            }
-    ;
+: '/*' .*? '*/' -> skip
+;
 
 LINE_COMMENT
-    :   '//' ~('\n'|'\r')*  ('\r\n' | '\r' | '\n')
-            {
-                skip();
-            }
-    |   '//' ~('\n'|'\r')*     // a line comment could appear at the end of the file without CR/LF
-            {
-                skip();
-            }
-    ;
-
-TABLEAU
-	:
-	'tableau'
-	{
-	futureBlock0 = true;
-	}
-	;
-
-OPTIONS
-	:
-	'options'
-	{
-	futureBlock = true;
-	}
-	;
-
-SEMANTICS
-	:
-	'semantics'
-	{
-	futureBlock0 = true;
-	}
-	;
+: '//' ~[\r\n]* -> skip
+;
 
 LPAREN
     :   '('
@@ -596,41 +574,12 @@ RPAREN
 
 LBRACE
     :   '{'
-    	(
-    	{futureBlock|futureBlock0}? =>
-    	(
-    	{
-    	_type = BLOCK;
-    	state.tokenStartCharIndex = getCharIndex();
-    	}
-		(options{greedy=false;} : . )*
-		('\r\n' | '\r' | '\n' )
-		(
-             ' '
-        |    '\t'
-        |    '\u000C'
-        )*
-		{setText(getText());}
-		'}'
-		{
-		if(futureBlock){
-			futureBlock = false;
-		}else{
-			futureBlock0 = false;
-		}
-		}
-    	)
-    	)?
     ;
 
 RBRACE
     :   '}'
     ;
-
-BLOCK
-	:
-	;
-
+    
 /*BLOCK
 	:
 	LBRACE

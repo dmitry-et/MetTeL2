@@ -73,12 +73,16 @@ JAVADOC_OPTIONS := -private -windowtitle "$(TITLE)" -author -version -use -sourc
 ANTLR:=antlr
 ANTLR3:=antlr3
 ANTLR3_RUNTIME:=antlr3-runtime
+ANTLR4:=antlr4
+ANTLR4_RUNTIME:=antlr4-runtime
 STRINGTEMPLATE:=stringtemplate4
 ANTLR_JAR:=$(LIB_DIR)/$(ANTLR).jar
 ANTLR3_JAR:=$(LIB_DIR)/$(ANTLR3).jar
 ANTLR3_RUNTIME_JAR:=$(LIB_DIR)/$(ANTLR3_RUNTIME).jar
+ANTLR4_JAR:=$(LIB_DIR)/$(ANTLR4).jar
+ANTLR4_RUNTIME_JAR:=$(LIB_DIR)/$(ANTLR4_RUNTIME).jar
 STRINGTEMPLATE_JAR:=$(LIB_DIR)/$(STRINGTEMPLATE).jar
-COMPILE_CLASSPATH:=$(ANTLR3_RUNTIME_JAR):$(STRINGTEMPLATE_JAR):$(ANTLR_JAR):$(ANTLR3_JAR)
+COMPILE_CLASSPATH:=$(ANTLR4_RUNTIME_JAR):$(STRINGTEMPLATE_JAR):$(ANTLR_JAR):$(ANTLR4_JAR)
 
 #Antlr shared library
 LIBANTLR=$(BIN_DIR)/lib$(ANTLR).so
@@ -119,7 +123,8 @@ LEXER_NAME := $(GRAMMAR_NAME)Lexer
 PARSER_NAME := $(GRAMMAR_NAME)Parser
 GRAMMAR_FILE_NAME := $(GRAMMAR_NAME).g
 GRAMMAR_FILE := $(PARSER_DIR)/grammar/$(GRAMMAR_FILE_NAME)
-TOKENS_FILE := $(PARSER_DIR)/$(GRAMMAR_NAME).tokens
+TOKENS_FILES := $(PARSER_DIR)/grammar/$(GRAMMAR_NAME).tokens $(PARSER_DIR)/grammar/$(GRAMMAR_NAME)Lexer.tokens
+PARSER_FILES_G = $(PARSER_DIR)/grammar/$(LEXER_NAME).java $(PARSER_DIR)/grammar/$(PARSER_NAME).java
 PARSER_FILES := $(PARSER_DIR)/$(LEXER_NAME).java $(PARSER_DIR)/$(PARSER_NAME).java 
 
 # Parser doc files
@@ -139,7 +144,8 @@ FO_LEXER_NAME := $(FO_GRAMMAR_NAME)Lexer
 FO_PARSER_NAME := $(FO_GRAMMAR_NAME)Parser
 FO_GRAMMAR_FILE_NAME := $(FO_GRAMMAR_NAME).g
 FO_GRAMMAR_FILE := $(FO_PARSER_DIR)/grammar/$(FO_GRAMMAR_FILE_NAME)
-FO_TOKENS_FILE := $(FO_PARSER_DIR)/$(FO_GRAMMAR_NAME).tokens
+FO_TOKENS_FILES := $(FO_PARSER_DIR)/grammar/$(FO_GRAMMAR_NAME).tokens $(FO_PARSER_DIR)/grammar/$(FO_GRAMMAR_NAME)Lexer.tokens
+FO_PARSER_FILES_G := $(FO_PARSER_DIR)/grammar/$(FO_LEXER_NAME).java $(FO_PARSER_DIR)/grammar/$(FO_PARSER_NAME).java 
 FO_PARSER_FILES := $(FO_PARSER_DIR)/$(FO_LEXER_NAME).java $(FO_PARSER_DIR)/$(FO_PARSER_NAME).java 
 
 # FO-Parser doc files
@@ -161,7 +167,7 @@ PURE_SOURCES := $(shell find $(SRC_DIR) -name '*.java' \
 ! -name $(FO_LEXER_NAME).java \
 ! -name $(FO_PARSER_NAME).java \
 ! -name $(VOCABULARY)TokenTypes.java \
-! -name $(PARSER_NAME)TokenTypes.java) 
+! -name $(PARSER_NAME)TokenAreTypes.java) 
 SOURCES := $(PURE_SOURCES) \
 $(PARSER_DIR)/$(LEXER_NAME).java \
 $(PARSER_DIR)/$(PARSER_NAME).java \
@@ -179,7 +185,7 @@ CORE_CLASSES := $(shell echo $(CORE_SOURCES) | sed -e 's/\.java/\.class/g; s/src
 
 ### Test ###########################################################################
 
-RUNTIME_CLASSPATH:=$(ANTLR3_JAR):$(ANTLR_JAR):$(STRINGTEMPLATE_JAR):$(JAR_FILE):$(CORE_JAR_FILE)
+RUNTIME_CLASSPATH:=$(ANTLR4_JAR):$(ANTLR_JAR):$(STRINGTEMPLATE_JAR):$(JAR_FILE):$(CORE_JAR_FILE)
 LOGIC_GENERATION_CLASSPATH:=$(RUNTIME_CLASSPATH)
 #$(COMPILE_CLASSPATH):$(JAR_FILE)
 
@@ -363,7 +369,7 @@ $(PARSER_FILES): $(GRAMMAR_FILE)
 	@ echo "Making parser and parser documentation"
 	@ echo $(DELIM1)
 	@ mkdir -p $(DOC_DIR)/grammar
-	@ $(JAVA) $(JAVA_OPTIONS) -classpath $(COMPILE_CLASSPATH) org.antlr.Tool -fo $(PARSER_DIR) -print $(ANTLR_OPTIONS) $(GRAMMAR_FILE) 1>$(DOC_DIR)/grammar/$(PARSER_NAME).txt 2>$(ANTLR_PARSER_LOG_FILE) && rm -f $(TOKENS_FILE) 
+	@ $(JAVA) -jar $(ANTLR4_JAR) -no-listener $(ANTLR_OPTIONS) $(GRAMMAR_FILE) 1>$(ANTLR_PARSER_LOG_FILE) 2>&1 && rm -f $(TOKENS_FILES) && mv -f $(PARSER_FILES_G) $(PARSER_DIR)
 	@ cat $(ANTLR_PARSER_LOG_FILE)
 
 only-parser: $(PARSER_FILES)
@@ -377,7 +383,8 @@ $(FO_PARSER_FILES): $(FO_GRAMMAR_FILE)
 	@ echo "Making first-order language parser and parser documentation"
 	@ echo $(DELIM1)
 	@ mkdir -p $(DOC_DIR)/grammar
-	@ $(JAVA) $(JAVA_OPTIONS) -classpath $(COMPILE_CLASSPATH) org.antlr.Tool -fo $(FO_PARSER_DIR) -print $(ANTLR_OPTIONS) $(FO_GRAMMAR_FILE) 1>$(DOC_DIR)/grammar/$(FO_PARSER_NAME).txt 2>$(ANTLR_FO_PARSER_LOG_FILE) && rm -f $(FO_TOKENS_FILE) 
+#	@ $(JAVA) $(JAVA_OPTIONS) -classpath $(COMPILE_CLASSPATH) org.antlr.v4.Tool -fo $(FO_PARSER_DIR) -print $(ANTLR_OPTIONS) $(FO_GRAMMAR_FILE) 1>$(DOC_DIR)/grammar/$(FO_PARSER_NAME).txt 2>$(ANTLR_FO_PARSER_LOG_FILE) && rm -f $(FO_TOKENS_FILE) 
+	@ $(JAVA) -jar $(ANTLR4_JAR) -no-listener $(ANTLR_OPTIONS) $(FO_GRAMMAR_FILE) 1>$(ANTLR_FO_PARSER_LOG_FILE) 2>&1 && rm -f $(FO_TOKENS_FILES) && mv -f $(FO_PARSER_FILES_G) $(FO_PARSER_DIR)
 	@ cat $(ANTLR_FO_PARSER_LOG_FILE)
 
 only-fo-parser: $(FO_PARSER_FILES)
@@ -508,7 +515,7 @@ generateParsers: generateLogics
 	@ echo $(DELIM1)
 	@for P in $(shell find $(TEST_OUTPUT_DIR) -name '*.g'); do \
 		echo "Generating parser from \"$${P}\""; \
-		java -cp $(COMPILE_CLASSPATH) org.antlr.Tool "$${P}" && \
+		java -cp $(COMPILE_CLASSPATH) org.antlr.v4.Tool "$${P}" && \
 	    rm -f -v "$$(basename $${P} .g).tokens"; done
 #	@rm -f -v *.tokens
 	
