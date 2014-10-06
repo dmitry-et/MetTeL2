@@ -19,12 +19,12 @@
 //
 grammar MettelFO;
 
-options{
+//options{
 // k=1;
-backtrack = true;
-}
+//backtrack = true;
+//}
 
-@header{
+@parser::header{
 package mettel.fo;
 
 import java.util.Collection;
@@ -34,6 +34,8 @@ import java.io.InputStream;
 
 //import mettel.core.language.MettelLogicParser;
 import mettel.core.language.MettelAbstractLogicParser;
+
+import org.antlr.v4.runtime.RecognizerSharedState;
 
 import mettel.core.tableau.MettelExpression;
 }
@@ -48,13 +50,13 @@ catch (RecognitionException e) {
     throw e;
 }
 }
-@members{
-public Object recoverFromMismatchedToken(IntStream input, int ttype, BitSet follow)
+@parser::members{
+/*public Object recoverFromMismatchedToken(IntStream input, int ttype, BitSet follow)
        throws RecognitionException{
     MismatchedTokenException e = new MismatchedTokenException(ttype, input);
     reportError(e);
     throw e;
-}
+}*/
 
 private MettelAbstractLogicParser islandParser = null;
 private Lexer islandLexer = null;
@@ -102,18 +104,18 @@ public MettelFOParser(TokenStream input, MettelFOObjectFactory factory, MettelAb
     this.islandLexer = (Lexer)parser.input.getTokenSource();
 }
 
-public MettelFOParser(TokenStream input, RecognizerSharedState state, MettelFOObjectFactory factory, MettelAbstractLogicParser parser){
+/*public MettelFOParser(TokenStream input, RecognizerSharedState state, MettelFOObjectFactory factory, MettelAbstractLogicParser parser){
     this(input,state);
     this.factory = factory;
     this.islandParser = parser;
     this.islandLexer = (Lexer)parser.input.getTokenSource();
-}
+}*/
 }
 
 formulae[Collection<MettelFOFormula> c]
 	:
 	(f  = formula
-		{ c.add(f); }
+		{ $c.add($f.f); }
 	)+
 	;
 
@@ -121,65 +123,70 @@ formula
 returns [MettelFOFormula f]
 	:
 	f0 = equivalenceFormula
-		{f = f0;}
+		{$f = $f0.f;}
 	;
 
 
 equivalenceFormula
 returns [MettelFOFormula f]
-@after{
-	f = f0;
-}
+//locals [MettelFOFormula f]
+//@after{
+//	f = f0;
+//}
 	:
 	f0  = implicationFormula
+		{ $f = $f0.f; }
 	('<->'
-	f1  = implicationFormula
-		{ f0  = factory.createEquivalenceFormula(f0,f1); }
+	f0  = implicationFormula
+		{ $f  = factory.createEquivalenceFormula($f, $f0.f); }
 	)*
 	;
 
 
 implicationFormula
 returns [MettelFOFormula f]
-@after{
-	f = f0;
-}
+//@after{
+//	f = f0;
+//}
 	:
 	f0  = disjunctionFormula
+		{ $f = $f0.f; }
 	('->'
-	f1 = disjunctionFormula
-		{ f0  = factory.createImplicationFormula(f0,f1); }
+	f0 = disjunctionFormula
+		{ $f  = factory.createImplicationFormula($f, $f0.f); }
 	)*
 	;
 
 
 disjunctionFormula
 returns [MettelFOFormula f]
-@after{
-	f = f0;
-}
+//@after{
+//	f = f0;
+//}
 	:
 	f0  = conjunctionFormula
+		{ $f = $f0.f; }
 	('|'
-	f1 = conjunctionFormula
-		{ f0  = factory.createDisjunctionFormula(f0,f1); }
+	f0 = conjunctionFormula
+		{ $f = factory.createDisjunctionFormula($f, $f0.f); }
 	)*
 	;
 
 conjunctionFormula
 returns [MettelFOFormula f]
-@after{
-	f = f0;
-}
+//@after{
+//	f = f0;
+//}
 	:
 	f0  = unaryFormula
+		{ $f = $f0.f; }
 	('&'
-	f1 = unaryFormula
-		{ f0  = factory.createConjunctionFormula(f0,f1); }
+	f0 = unaryFormula
+		{ $f  = factory.createConjunctionFormula($f, $f0.f); }
 	)*
 	;
 
-fragment
+//fragment
 unaryFormula
 returns [MettelFOFormula f = null]
 	:
@@ -192,7 +199,7 @@ returns [MettelFOFormula f = null]
 	|
 	f0 = negationFormula
 	)
-	{f = f0;}
+	{$f = $f0.f;}
 	;
 
 existentialFormula
@@ -216,7 +223,7 @@ returns [MettelFOFormula f]
 	;
 
 variableList
-returns [MettelFOIndividualVariable[\] vars = null]
+returns [MettelFOIndividualVariable[] vars = null]
 	:
 		list = idList
 		|
@@ -232,28 +239,30 @@ returns [MettelFOIndividualVariable[\] vars = null]
 		}
 	;
 	
-fragment idList
+//fragment 
+idList
 returns [LinkedHashSet<String> ids = new LinkedHashSet<String>()]
 	:
 		(t = ID
-		{ids.add(t.getText());}
+		{$ids.add($t.getText());}
 		)+
 	;
 
 negationFormula
 returns [MettelFOFormula f]
-@init{
-	int n = 0;
-}
+locals [int n = 0]
+//@init{
+//	int n = 0;
+//}
 	:
 	('~'
-		{n++;}
+		{$n++;}
 	)+
 	f0  = unaryFormula
-		{if( (n \% 2) == 1){
-			f = factory.createNegationFormula(f0);
+		{if( ($n % 2) == 1){
+			$f = factory.createNegationFormula($f0.f);
 		  }else{
-		    f = f0;
+		    $f = $f0.f;
 		  }
 		}
 	;
@@ -262,26 +271,26 @@ basicFormula
 returns [MettelFOFormula f]
 	:
 	'true'
-		{f = factory.createTrueFormula(); }
+		{$f = factory.createTrueFormula(); }
 	|
 	'false'
-		{f = factory.createFalseFormula(); }
+		{$f = factory.createFalseFormula(); }
 	|
 	'(' f0 = formula ')'
-		{f = f0;} 
+		{$f = $f0.f;} 
 	|
 	f0 = atomicFormula
-		{f = f0;}
+		{$f = $f0.f;}
 	;
 
 atomicFormula
 returns [MettelFOFormula f = null]
-@init{MettelExpression exp = null;}
+locals [MettelExpression exp = null]
 	:
 	'holds' '(' 
 	t = EXPRESSION
 	{
-	exp = expression(t);
+	$exp = expression($t);
 	}
 	','?
 	terms = termList ')'
@@ -291,13 +300,13 @@ returns [MettelFOFormula f = null]
 	|
 	t = ID '(' terms = termList? ')'
 	{
-	final String name = t.getText();
+	final String name = $t.getText();
 	final MettelFOFormulaVariable p = factory.createFormulaVariable(name);
 	//f = factory.createAtomicFormula(p, terms);
 	}
 	|
    	f0  = equalityFormula
-   		{f = f0;}
+   		{$f = $f0.f;}
 	;
 	
 
@@ -319,7 +328,7 @@ returns [MettelFOTerm t = null]
 	id = ID
 	( '(' terms = termList? ')' )?
 	{
-	final String name = id.getText();
+	final String name = $id.getText();
 	//final MettelFOFunctionVariable f = factory.createFunctionVariable(name);
 	//t = factory.createTerm(f, terms);
 	}
@@ -329,10 +338,10 @@ termList
 returns [ArrayList<MettelFOTerm> terms = new ArrayList<MettelFOTerm>()]
 	:
 	t = term
-	{terms.add(t);}
+	{$terms.add($t.t);}
 	(','?
 	term
-	{terms.add(t);}
+	{$terms.add($t.t);}
 	)*
 	;
 
@@ -342,17 +351,19 @@ returns [ArrayList<MettelFOTerm> terms = new ArrayList<MettelFOTerm>()]
 ID  :	('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'0'..'9'|'_')*
     ;
 
-COMMENT
-    :   '//' ~('\n'|'\r')* '\r'? '\n' {$channel=HIDDEN;}
-    |   '/*' ( options {greedy=false;} : . )* '*/' {$channel=HIDDEN;}
-    ;
+//
+// Whitespace and comments
+//
+WS : [ \t\r\n\u000C]+ -> skip
+;
 
-WS  :   ( ' '
-        | '\t'
-        | '\r'
-        | '\n'
-        ) {$channel=HIDDEN;}
-    ;
+COMMENT
+: '/*' .*? '*/' -> skip
+;
+
+LINE_COMMENT
+: '//' ~[\r\n]* -> skip
+;
 
 /*
 STRING
@@ -389,7 +400,8 @@ EXPRESSION
 	:
 	'(*' 
 	{state.tokenStartCharIndex = getCharIndex();}
-   	(options{greedy=false;} : . )*
+   	.*?
+   	//(options{greedy=false;} : . )*
    	{setText(getText());}
    	'*)'
 	;

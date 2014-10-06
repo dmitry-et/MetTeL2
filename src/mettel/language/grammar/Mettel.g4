@@ -56,7 +56,7 @@ grammar Mettel;
 
 }*/
 
-@header{
+@parser::header{
 package mettel.language;
 
 import mettel.MettelRuntimeException;
@@ -69,11 +69,11 @@ import mettel.generator.MettelANTLRGrammarGeneratorProperties;
 //import mettel.language.MettelSpecification;
 //}
 
-//@lexer::header{
-//package mettel.language;
-//}
+@lexer::header{
+package mettel.language;
+}
 
-@members{
+@parser::members{
 private MettelANTLRGrammarGeneratorProperties properties = new MettelANTLRGrammarGeneratorProperties();
 }
 
@@ -93,16 +93,16 @@ specification
     SPECIFICATION
     p = path
     SEMI
-    {spec = new MettelSpecification(p);}
+    {$spec = new MettelSpecification($p.p);}
 
     importBlock?
 
     (o = optionsBlock
-    {spec.setOptions(o);
-     properties = o.process(properties);}
+    {$spec.setOptions($o.o);
+     properties = $o.o.process(properties);}
     )?
 
-    (block[spec] | SEMI)*
+    (block[$spec] | SEMI)*
     EOF
     ;
 
@@ -129,14 +129,14 @@ importDeclaration
 path
 	returns [String p = null]
 	@init{StringBuffer buf = new StringBuffer();}
-	@after{p = buf.toString();}
+	@after{$p = buf.toString();}
 	:
 	id = IDENTIFIER
-	{buf.append(id.getText());}
+	{buf.append($id.getText());}
 	(td = DOT
-		{buf.append(td.getText());}
+		{buf.append($td.getText());}
 	 id = IDENTIFIER
-	    {buf.append(id.getText());}
+	    {buf.append($id.getText());}
 	)*
 	;
 
@@ -144,14 +144,14 @@ block
     [MettelSpecification spec]
 //throws MettelParserException
     :
-    (syn  = syntax[spec]
-     {spec.addSyntax(syn);}
+    ( syn  = syntax[$spec]
+     {$spec.addSyntax($syn.syn);}
      |
-     tab = tableau[spec]
-     {spec.addTableau(tab);}
+     tab = tableau[$spec]
+     {$spec.addTableau($tab.tab);}
      |
-     sem = semantics[spec]
-     {spec.addSemantics(sem);}
+     sem = semantics[$spec]
+     {$spec.addSemantics($sem.sem);}
  
     )
     ;
@@ -164,19 +164,19 @@ syntax[MettelSpecification spec]
     SYNTAX id = IDENTIFIER
     	(paths = extendsBlock)?
     	{
-    	syn = new MettelSyntax(id.getText(), spec.getSyntaxes(paths));
+    	$syn = new MettelSyntax($id.getText(), $spec.getSyntaxes($paths.paths));
     	}
     	(o = optionsBlock
-    	{syn.setOptions(o);
-    	 properties = o.process(properties);
+    	{$syn.setOptions($o.o);
+    	 properties = $o.o.process(properties);
     	}
     	)?
     	LBRACE
 		    (
-		    syntaxStatement[syn]
+		    syntaxStatement[$syn]
 		    )?
 			(SEMI
-		     (syntaxStatement[syn]
+		     (syntaxStatement[$syn]
 		     )?
 		    )*
 //		    (SEMI)?
@@ -188,25 +188,26 @@ extendsBlock
    :
    EXTENDS
    p = path
-   {paths.add(p);}
-   (COMMA path
-   {paths.add(p);}
+   {$paths.add($p.p);}
+   (COMMA 
+   p = path
+   {$paths.add($p.p);}
    )*
    ;
 
 syntaxStatement
     [MettelSyntax syn]
     :
-    (sortDeclaration[syn] | bnf[syn])
+    (sortDeclaration[$syn] | bnf[$syn])
     ;
 
 sortDeclaration
     [MettelSyntax syn]
      :
     SORT id = IDENTIFIER
-    	{syn.addSort(id.getText());}//Throw RedeclaredSortException?
+    	{$syn.addSort($id.getText());}//Throw RedeclaredSortException?
     	(COMMA id = IDENTIFIER
-    	{syn.addSort(id.getText());}
+    	{$syn.addSort($id.getText());}
     	)*
     ;
 
@@ -215,34 +216,34 @@ bnf
      :
     t = IDENTIFIER
     {
-    MettelSort sort = syn.getSort(t.getText());
-    if(sort == null)  throw new MettelUndeclaredSortException(t.getText());
+    MettelSort sort = $syn.getSort($t.getText());
+    if(sort == null)  throw new MettelUndeclaredSortException($t.getText());
     }
-    bs = bnfStatement[syn]
-    {syn.addBNF(sort,bs);}
+    bs = bnfStatement[$syn]
+    {$syn.addBNF(sort,$bs.statement);}
     (BAR
-    bs = bnfStatement[syn]
-    {syn.addBNF(sort,bs);}
+    bs = bnfStatement[$syn]
+    {$syn.addBNF(sort,$bs.statement);}
     )*
     ;
 
 bnfStatement
    [MettelSyntax syn]
     returns [MettelBNFStatement statement = null]
-    @init{String id = null;}
+    locals [String id = null]
     :
     (t = IDENTIFIER
-    {id = t.getText();}
+    {$id = $t.getText();}
     )?
     EQ
     {
-    if(properties.equalityKeywords.isEquality(id)){
-    	statement = new MettelEqualityBNFStatement(id);
+    if(properties.equalityKeywords.isEquality($id)){
+    	$statement = new MettelEqualityBNFStatement($id);
     }else{
-    	statement = new MettelBNFStatement(id);
+    	$statement = new MettelBNFStatement($id);
     }
     }
-    bnfDefinition[syn, statement]
+    bnfDefinition[$syn, $statement]
     ;
 
 bnfDefinition
@@ -251,25 +252,25 @@ bnfDefinition
  //  throws MettelParseException
     @init{
     	int argc = 0;
-    	boolean fEquality = statement instanceof MettelEqualityBNFStatement;
+    	boolean fEquality = $statement instanceof MettelEqualityBNFStatement;
     }
     :
     (
     l = charOrStringLiteral
-    {statement.addToken(l);}
+    {$statement.addToken($l.literal);}
      |
      t = IDENTIFIER
     {
-    MettelSort sort = syn.getSort(t.getText());
-    if(sort == null)  throw new MettelUndeclaredSortException(t.getLine(),t.getCharPositionInLine(),t.getText());
+    MettelSort sort = $syn.getSort($t.getText());
+    if(sort == null)  throw new MettelUndeclaredSortException($t.getLine(),$t.getCharPositionInLine(),$t.getText());
     argc++;
     if(fEquality){
     	switch(argc){
     		case 1:
- 	 			((MettelEqualityBNFStatement)statement).setSort(sort);
+ 	 			((MettelEqualityBNFStatement)$statement).setSort(sort);
     			break;
     		case 2:
-    			final MettelSort sort0 = ((MettelEqualityBNFStatement)statement).sort();
+    			final MettelSort sort0 = ((MettelEqualityBNFStatement)$statement).sort();
     			if(sort != sort0){
     				throw new MettelEqualityArgumentTypeException(sort.name(),sort0.name());
     			}
@@ -280,7 +281,7 @@ bnfDefinition
     			}
     	}
     }
-    statement.addToken(sort);
+    $statement.addToken(sort);
     }
     )+
 	{
@@ -311,7 +312,7 @@ charOrStringLiteral
     returns [MettelStringLiteral literal = null]
     :
     l = STRINGLITERAL
-    {literal = new MettelStringLiteral(l.getText());}
+    {$literal = new MettelStringLiteral($l.getText());}
     ;
 
 tableau[MettelSpecification spec]
@@ -321,21 +322,21 @@ returns [MettelTableau tab = null]
 	TABLEAU	id = IDENTIFIER synName = syntaxName
     	(paths = extendsBlock)?
     	{
-    	String name = id.getText();
-    	if(synName == null) synName = name;
-    	MettelSyntax syntax = spec.getSyntax(synName);
+    	String name = $id.getText();
+    	if($synName.name == null) $synName.name = name;
+    	MettelSyntax syntax = $spec.getSyntax($synName.name);
     	if(syntax == null)
-    		throw new MettelParserException("The syntax "+ synName + " is undefined", id.getLine(), id.getCharPositionInLine());
-    	tab = new MettelTableau(name, syntax, spec.getTableaux(paths));
+    		throw new MettelParserException("The syntax "+ $synName.name + " is undefined", $id.getLine(), $id.getCharPositionInLine());
+    	$tab = new MettelTableau(name, syntax, $spec.getTableaux($paths.paths));
     	}
     	(o = optionsBlock
-    	{tab.setOptions(o);}
+    	{$tab.setOptions($o.o);}
     	)?
     	//(IN SYNTAX? synId = IDENTIFIER)?
 	LBRACE
 			t = .*
 			{
-			tab.setContent(t.getText());
+			$tab.setContent($t.getText());
 			}
     	RBRACE
 	;
@@ -348,7 +349,7 @@ returns [MettelOptions o = null]
 	t = .*
 	RBRACE
 	{
-	o = new MettelOptions(t.getText());
+	$o = new MettelOptions($t.getText());
 	}
 	;
 
@@ -358,7 +359,7 @@ returns [String name = null]
 	(
 	IN (SYNTAX)?
 		id = IDENTIFIER
-		{name = id.getText();}
+		{$name = $id.getText();}
 	)?
 	;
 
@@ -368,21 +369,21 @@ returns [MettelSemantics sem = null]
 	SEMANTICS id = IDENTIFIER synName = syntaxName
     	(paths = extendsBlock)?
     	{
-    	String name = id.getText();
-    	if(synName == null) synName = name;
-    	MettelSyntax syntax = spec.getSyntax(synName);
+    	String name = $id.getText();
+    	if($synName.name == null) $synName.name = name;
+    	MettelSyntax syntax = $spec.getSyntax($synName.name);
     	if(syntax == null)
-    		throw new MettelParserException("The syntax "+ synName + " is undefined", id.getLine(), id.getCharPositionInLine());
-    	sem = new MettelSemantics(name, syntax, spec.getSemantics(paths));
+    		throw new MettelParserException("The syntax "+ $synName.name + " is undefined", $id.getLine(), $id.getCharPositionInLine());
+    	$sem = new MettelSemantics(name, syntax, $spec.getSemantics($paths.paths));
     	}
     	(o = optionsBlock
-    	{sem.setOptions(o);}
+    	{$sem.setOptions($o.o);}
     	)?
     	LBRACE
     	t = .*
     	RBRACE
 		{
-		sem.setContent(t.getText());
+		$sem.setContent($t.getText());
 		}
     ;
 

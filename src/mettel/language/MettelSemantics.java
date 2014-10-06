@@ -21,9 +21,9 @@ import static mettel.util.MettelStrings.LINE_SEPARATOR;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.RecognitionException;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RecognitionException;
 
 import mettel.fo.MettelFOFormula;
 import mettel.fo.MettelFOLexer;
@@ -111,9 +111,9 @@ public class MettelSemantics implements MettelBlock {
 	private ArrayList<MettelFOFormula> formulae = new ArrayList<MettelFOFormula>();
 	
 	void process(MettelJavaPackageStructure pStructure, MettelANTLRGrammarGeneratorProperties properties){
-		CommonTokenStream tokens = new CommonTokenStream();
+		CommonTokenStream tokens = new CommonTokenStream(new MettelFOLexer(new ANTLRInputStream(content)));
 		MettelFOParser parser = new MettelFOParser(tokens, pStructure.parser(syntax.name()));
-		tokens.setTokenSource(new MettelFOLexer(new ANTLRStringStream(content)));
+		//tokens.setTokenSource(new MettelFOLexer(new ANTLRStringStream(content)));
 		
 		try {
 			parser.formulae(formulae);

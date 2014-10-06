@@ -38,10 +38,10 @@ import java.util.jar.Manifest;
 import javax.tools.ToolProvider;
 import javax.tools.JavaCompiler;
 
-import org.antlr.runtime.ANTLRFileStream;
-import org.antlr.runtime.ANTLRInputStream;
-import org.antlr.runtime.CharStream;
-import org.antlr.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.ANTLRFileStream;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CommonTokenStream;
 import mettel.generator.java.MettelJavaPackageStructure;
 import mettel.language.MettelLexer;
 import mettel.language.MettelParser;
@@ -192,7 +192,6 @@ public class MettelGenerator {
          	if(err == null) err = new PrintWriter(
     				new OutputStreamWriter(System.err),true);
 */
-        	CommonTokenStream tokens = new CommonTokenStream();
 
     		if(in == null){
     			in = new ANTLRInputStream(System.in);
@@ -200,12 +199,13 @@ public class MettelGenerator {
     		}
 
         	MettelLexer lexer = new MettelLexer(in);
-
-        	tokens.setTokenSource(lexer);
+        	CommonTokenStream tokens = new CommonTokenStream(lexer);
+        	
+        	//tokens.setTokenSource(lexer);
         	MettelParser parser = new MettelParser(tokens);//, p.equalityKeywords);
 
          	report("I am reading the specification.");
-         	MettelSpecification spec = parser.specification();
+         	MettelSpecification spec = parser.specification().spec;
          	//MettelANTLRGrammarGeneratorProperties p = parser.properties();
 
         	final int errorNumber = parser.getNumberOfSyntaxErrors();

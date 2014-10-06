@@ -28,11 +28,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.antlr.Tool;
+import org.antlr.v4.Tool;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.TokenSource;
 import org.antlr.runtime.TokenStream;
-import org.antlr.tool.ErrorManager;
 
 import mettel.core.language.MettelAbstractLogicParser;
 import mettel.core.tableau.MettelGeneralTableauRule;
@@ -432,8 +431,8 @@ public class MettelJavaPackageStructure {
 
 			report.report("  ANTLR is generating a parser for the syntax "+lang+'.');
 			Tool antlr = new Tool(antlrArguments);
-	        antlr.process();
-	        final int errorNumber = ErrorManager.getNumErrors();
+	        antlr.processGrammarsOnCommandLine();
+	        final int errorNumber = antlr.errMgr.getNumErrors();
 	        if ( errorNumber > 0) {
 	        		report.report("\t ANTLR reported "+errorNumber+" errors for the syntax "+lang+'.');
 	                return false;

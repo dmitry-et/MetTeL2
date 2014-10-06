@@ -16,8 +16,8 @@
  */
 package mettel.language;
 
-import org.antlr.runtime.IntStream;
-import org.antlr.runtime.RecognitionException;
+import org.antlr.v4.runtime.IntStream;
+import org.antlr.v4.runtime.RecognitionException;
 
 /**
  * @author Dmitry Tishkovsky
@@ -31,21 +31,27 @@ public class MettelRecognitionException extends RecognitionException {
 	 */
 	private static final long serialVersionUID = -6523022868000940084L;
 
+	protected int line = -1;
+	protected int charPositionInLine = -1;
+	
+	
 	/**
 	 *
 	 */
-	public MettelRecognitionException() {}
+	public MettelRecognitionException() {
+		super(null,null,null);
+	}
 
 	/**
 	 * @param input
 	 */
 	public MettelRecognitionException(IntStream input) {
-		super(input);
+		super(null,input,null);
 		// TODO Auto-generated constructor stub
 	}
 	
 	public MettelRecognitionException(int line, int pos) {
-		super();
+		this();
 		this.line = line;
 		this.charPositionInLine = pos;
 	}
