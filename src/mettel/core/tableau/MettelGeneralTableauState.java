@@ -44,8 +44,8 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	private MettelTableauStatePool expressions = null;
 //		new MettelTableauTreeSetLinkedHashMap<MettelTableauState, MettelAnnotatedExpression>();
 
-	private MettelTreeSetLinkedHashMap<MettelTableauState, MettelTableauAction> actions =
-		new MettelTreeSetLinkedHashMap<MettelTableauState, MettelTableauAction>();
+	private MettelTreeSetLinkedHashMap<MettelTableauState, MettelTableauAction, MettelTableauAction> actions =
+		new MettelTreeSetLinkedHashMap<MettelTableauState, MettelTableauAction, MettelTableauAction>();
 
 	private MettelTableauObjectFactory factory = null;
 
@@ -322,7 +322,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 	public boolean add(MettelAnnotatedExpression e) {
 //System.out.println("Adding "+e);
 //System.out.println("Replacement is "+replacement);
-		final MettelExpression exp = e.expression();
+		final MettelExpression exp = e.element();
 		final MettelExpression exp0 = replacement.rewrite(exp);//XXX: Does not work as expected, needs fix!
 		if(exp0 != exp){
 			e = annotator.annotate(exp0, this);//TODO: Needs specific annotations to be effective
@@ -453,7 +453,7 @@ public class MettelGeneralTableauState implements MettelTableauState {
 		expanded = false;
 //		final LinkedHashSet<MettelAnnotatedExpression> rewritten = new LinkedHashSet<MettelAnnotatedExpression>();
 		for(MettelAnnotatedExpression ae:expressions){
-			final MettelExpression e0 = ae.expression();
+			final MettelExpression e0 = ae.element();
 			final MettelExpression e1 = replacement.rewrite(e0);
 			if(e0 == e1){//Only single instance of expression exists!
 				pool.add(ae);

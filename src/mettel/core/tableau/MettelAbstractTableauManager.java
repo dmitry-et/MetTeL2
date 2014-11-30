@@ -287,7 +287,7 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 		final LinkedHashSet<MettelExpression> result = new LinkedHashSet<MettelExpression>();
 		final Set<MettelAnnotatedExpression> expressions = state.expressions();
 		for(MettelAnnotatedExpression ae:expressions){
-			result.add(ae.expression());
+			result.add(ae.element());
 		}
 		return result;
 	}
@@ -300,7 +300,7 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 		if(lemma == null) return null;
 		final LinkedHashSet<MettelExpression> result = new LinkedHashSet<MettelExpression>();
 		for(MettelAnnotatedExpression ae:lemma){
-			result.add(ae.expression());
+			result.add(ae.element());
 		}
 		return result;
 	}

@@ -42,19 +42,20 @@ public class MettelSimpleAnnotatedExpression extends
 	}
 
 	/* (non-Javadoc)
-	 * @see mettel.util.MettelAnnotatedObject#object()
+	 * @see mettel.util.MettelAnnotatedObject#element()
 	 */
-	@Override
-	public Object object() {
-		return this.expression();
+  /*  @Override
+	public MettelExpression element() {
+		return this.element();
 	}
+*/
 
 	/* (non-Javadoc)
 	 * @see mettel.util.MettelAnnotatedObject#create(java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public Object create(MettelTableauState key, Object o) {
-		return new MettelSimpleAnnotatedExpression((MettelExpression)o, new MettelSimpleTableauAnnotation(key));
+	public Object create(MettelTableauState key, MettelExpression e) {
+		return new MettelSimpleAnnotatedExpression(e, new MettelSimpleTableauAnnotation(key));
 	}
 
 }

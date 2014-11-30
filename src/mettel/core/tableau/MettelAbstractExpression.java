@@ -24,11 +24,11 @@ package mettel.core.tableau;
 public abstract class MettelAbstractExpression implements MettelExpression {
 
 	public MettelAnnotatedExpression substitute(MettelAnnotatedSubstitution s){
-		return s.annotation().annotate(substitute(s.substitution()));
+		return s.annotation().annotate(substitute(s.element()));
 	}
 
 	public MettelAnnotatedSubstitution match(MettelAnnotatedExpression e){
-		MettelSubstitution s = match(e.expression());
+		MettelSubstitution s = match(e.element());
 		if(s == null) return null;
 		return e.annotation().annotate(s);
 	}

@@ -12,7 +12,7 @@ public class MettelSetMapTest extends TestCase{
 
 	private static int counter = -1;
 
-	private class Entry implements MettelAnnotatedObject<String>, Comparable<Entry>{
+	private class Entry implements MettelAnnotatedObject<String,Object>, Comparable<Entry>{
 
 		private final int e;// = ++counter;
 
@@ -66,7 +66,7 @@ public class MettelSetMapTest extends TestCase{
 		 * @see mettel.util.MettelAnnotatedObject#object()
 		 */
 		@Override
-		public Object object() {
+		public Object element() {
 			return this;
 		}
 
@@ -87,7 +87,7 @@ public class MettelSetMapTest extends TestCase{
 
 	}
 
-	private MettelTreeSetLinkedHashMap<String,Entry> set = new MettelTreeSetLinkedHashMap<String,Entry>();
+	private MettelTreeSetLinkedHashMap<String,Entry,Object> set = new MettelTreeSetLinkedHashMap<String,Entry,Object>();
 	private LinkedHashSet<Entry> set0 = new LinkedHashSet<Entry>();
 
     public void testSetMap(){

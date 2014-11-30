@@ -39,8 +39,8 @@ public abstract class MettelAbstractTableauState implements MettelTableauState {
 
 	protected MettelTableauStatePool expressions = null;
 
-	private MettelTreeSetLinkedHashMap<MettelTableauState, MettelTableauAction> actions =
-		new MettelTreeSetLinkedHashMap<MettelTableauState, MettelTableauAction>();
+	private MettelTreeSetLinkedHashMap<MettelTableauState, MettelTableauAction, MettelTableauAction> actions =
+		new MettelTreeSetLinkedHashMap<MettelTableauState, MettelTableauAction, MettelTableauAction>();
 
 	protected MettelTableauObjectFactory factory = null;
 

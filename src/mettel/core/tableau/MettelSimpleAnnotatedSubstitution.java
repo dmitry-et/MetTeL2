@@ -44,17 +44,17 @@ public class MettelSimpleAnnotatedSubstitution extends
 	/* (non-Javadoc)
 	 * @see mettel.util.MettelAnnotatedObject#object()
 	 */
-	@Override
+/*	@Override
 	public Object object() {
 		return this.substitution();
-	}
+	}*/
 
 	/* (non-Javadoc)
 	 * @see mettel.util.MettelAnnotatedObject#create(java.lang.Object, java.lang.Object)
 	 */
 	@Override
-	public Object create(MettelTableauState key, Object o) {
-		return new MettelSimpleAnnotatedSubstitution((MettelSubstitution)o, new MettelSimpleTableauAnnotation(key));
+	public Object create(MettelTableauState key, MettelSubstitution s) {
+		return new MettelSimpleAnnotatedSubstitution(s, new MettelSimpleTableauAnnotation(key));
 	}
 
 }

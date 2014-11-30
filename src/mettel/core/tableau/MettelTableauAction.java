@@ -25,7 +25,7 @@ import mettel.core.util.MettelAnnotatedObject;
  * @version $Revision$ $Date$
  *
  */
-public interface MettelTableauAction extends MettelAnnotatedObject<MettelTableauState>, Comparable<MettelTableauAction>{
+public interface MettelTableauAction extends MettelAnnotatedObject<MettelTableauState,MettelTableauAction>, Comparable<MettelTableauAction>{
 
 	//Set<MettelTableauState> states();
 	int id();

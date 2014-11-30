@@ -16,15 +16,13 @@
  */
 package mettel.core.tableau;
 
-import mettel.core.util.MettelAnnotatedObject;
-
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
 public abstract class MettelAbstractAnnotatedSubstitution implements
-		MettelAnnotatedSubstitution, MettelAnnotatedObject<MettelTableauState> {
+		MettelAnnotatedSubstitution{ //, MettelAnnotatedObject<MettelTableauState,MettelSubstitution> {
 
 
 	@SuppressWarnings("unused")
@@ -42,7 +40,7 @@ public abstract class MettelAbstractAnnotatedSubstitution implements
 	 * @see mettel.core.tableau.MettelAnnotatedSubstitution#substitution()
 	 */
 	@Override
-	public MettelSubstitution substitution() {
+	public MettelSubstitution element() {
 		return s;
 	}
 
@@ -61,7 +59,7 @@ public abstract class MettelAbstractAnnotatedSubstitution implements
 	 */
 	@Override
 	public MettelAnnotatedSubstitution merge(MettelAnnotatedSubstitution s0) {
-		MettelSubstitution s1 = s.merge(s0.substitution());
+		MettelSubstitution s1 = s.merge(s0.element());
 		if(s1 == null) return null;
 		return a.merge(s0.annotation()).annotate(s1);
 	}
@@ -75,7 +73,7 @@ public abstract class MettelAbstractAnnotatedSubstitution implements
 		MettelSubstitution[] subs0 = new MettelSubstitution[SIZE];
 		MettelTableauAnnotation[] anns0 = new MettelTableauAnnotation[SIZE];
 		for(int i = 0; i < SIZE; i++){
-			subs0[i] = subs[i].substitution();
+			subs0[i] = subs[i].element();
 			anns0[i] = subs[i].annotation();
 		}
 		return a.merge(anns0).annotate(s.merge(subs0));
@@ -90,7 +88,7 @@ public abstract class MettelAbstractAnnotatedSubstitution implements
 		MettelSubstitution[] subs0 = new MettelSubstitution[SIZE];
 		MettelTableauAnnotation[] anns0 = new MettelTableauAnnotation[SIZE];
 		for(int i = 0; i < SIZE; i++){
-			subs0[i] = subs[i].substitution();
+			subs0[i] = subs[i].element();
 			anns0[i] = subs[i].annotation();
 		}
 		return a.mergeArray(anns0).annotate(s.mergeArray(subs0));
@@ -105,6 +103,6 @@ public abstract class MettelAbstractAnnotatedSubstitution implements
 	 */
 	@Override
 	public int compareTo(MettelAnnotatedSubstitution s0) {
-		return this.s.compareTo(s0.substitution());
+		return this.s.compareTo(s0.element());
 	}
 }

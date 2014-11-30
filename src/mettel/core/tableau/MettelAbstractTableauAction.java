@@ -73,8 +73,16 @@ abstract class MettelAbstractTableauAction implements MettelTableauAction {
 	 * @see mettel.util.MettelAnnotatedObject#object()
 	 */
 	@Override
-	public Object object() {
+	public MettelTableauAction element() {
 		return this;
+	}
+
+	/* (non-Javadoc)
+	 * @see mettel.util.MettelAnnotatedObject#create(java.lang.Object, java.lang.Object)
+	 */
+	@Override
+	public Object create(MettelTableauState key, MettelTableauAction a) {
+		return a;
 	}
 
 	/* (non-Javadoc)

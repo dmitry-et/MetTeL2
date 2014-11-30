@@ -16,15 +16,13 @@
  */
 package mettel.core.tableau;
 
-import mettel.core.util.MettelAnnotatedObject;
-
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
  *
  */
 public abstract class MettelAbstractAnnotatedExpression
-		implements MettelAnnotatedExpression, MettelAnnotatedObject<MettelTableauState> {
+		implements MettelAnnotatedExpression{ //, MettelAnnotatedObject<MettelTableauState,MettelExpression> {
 
 	@SuppressWarnings("unused")
 	private MettelAbstractAnnotatedExpression() {}
@@ -39,7 +37,8 @@ public abstract class MettelAbstractAnnotatedExpression
 
 	private MettelTableauAnnotation a = null;
 
-    public MettelExpression expression() { return e; }
+    //public MettelExpression expression() { return e; }
+	public MettelExpression element() { return e; }
 
     public MettelTableauAnnotation annotation() { return a; }
 
@@ -48,7 +47,7 @@ public abstract class MettelAbstractAnnotatedExpression
 	 */
 	@Override
 	public MettelAnnotatedExpression substitute(MettelAnnotatedSubstitution s) {
-		MettelExpression e0 = e.substitute(s.substitution());
+		MettelExpression e0 = e.substitute(s.element());
 		return a.merge(s.annotation()).annotate(e0);
 	}
 
@@ -61,11 +60,11 @@ public abstract class MettelAbstractAnnotatedExpression
 	 */
 	@Override
 	public int compareTo(MettelAnnotatedExpression e0) {
-		return this.e.compareTo(e0.expression());
+		return this.e.compareTo(e0.element());
 	}
 
 	public boolean equals(MettelAnnotatedExpression e0) {
-		return this.e.equals(e0.expression());
+		return this.e.equals(e0.element());
 	}
 
 	public String toString(){

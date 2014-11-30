@@ -41,7 +41,7 @@ public class MettelSimpleAnnotator implements MettelAnnotator {
 	@Override
 	public MettelAnnotatedExpression substitute(MettelExpression e,
 			MettelAnnotatedSubstitution s) {
-		return new MettelSimpleAnnotatedExpression(e.substitute(s.substitution()),s.annotation());
+		return new MettelSimpleAnnotatedExpression(e.substitute(s.element()),s.annotation());
 	}
 
 	/* (non-Javadoc)
@@ -51,7 +51,7 @@ public class MettelSimpleAnnotator implements MettelAnnotator {
 	public MettelAnnotatedSubstitution merge(MettelAnnotatedSubstitution s0,
 			MettelAnnotatedSubstitution s1) {
 //System.out.println("s0="+s0+", s1="+s1);
-		MettelSubstitution s = s0.substitution().merge(s1.substitution());
+		MettelSubstitution s = s0.element().merge(s1.element());
 		if(s == null) return null;
 		return new MettelSimpleAnnotatedSubstitution(s,s0.annotation().merge(s1.annotation()));
 	}
@@ -63,7 +63,7 @@ public class MettelSimpleAnnotator implements MettelAnnotator {
 	public MettelAnnotatedSubstitution match(MettelExpression e,
 			MettelAnnotatedExpression ae) {
 //System.out.println("e="+e+", ae="+ae);
-		final MettelSubstitution s = e.match(ae.expression());
+		final MettelSubstitution s = e.match(ae.element());
 		if(s == null) return null;
 		final MettelSimpleTableauAnnotation a = new MettelSimpleTableauAnnotation(ae.annotation());
 		a.appendDependency(ae);
@@ -79,7 +79,7 @@ public class MettelSimpleAnnotator implements MettelAnnotator {
 		final LinkedHashSet<MettelAnnotatedExpression> result = new LinkedHashSet<MettelAnnotatedExpression>(set.size());
 		final MettelSimpleTableauAnnotation a = new MettelSimpleTableauAnnotation(state);
 		for(MettelAnnotatedExpression ae:set){
-			result.add(new MettelSimpleAnnotatedExpression(ae.expression(),a));
+			result.add(new MettelSimpleAnnotatedExpression(ae.element(),a));
 		}
 		return result;
 	}

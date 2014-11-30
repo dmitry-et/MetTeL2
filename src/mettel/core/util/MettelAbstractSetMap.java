@@ -30,8 +30,8 @@ import java.util.Map;
  * @version $Revision$ $Date$
  *
  */
-abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<Key>>
-		extends AbstractSet<E> implements MettelSetMap<Key, E> {
+abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<Key, ET>, ET>
+		extends AbstractSet<E> implements MettelSetMap<Key, E, ET> {
 
 	protected Map<Key,Set<E>> map = null;
 
@@ -65,13 +65,13 @@ abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<Key>>
 		if(o == null) return false;
 
 		@SuppressWarnings("unchecked")
-		final MettelAnnotatedObject<Key> e = (MettelAnnotatedObject<Key>)o;
+		final MettelAnnotatedObject<Key, E> e = (MettelAnnotatedObject<Key,E>)o;
 
 		final Iterator<Key> ki = keySet().iterator();
 		while(ki.hasNext()){
 			final Key key = ki.next();
 //System.out.println("Contains: key="+key);
-			if(contains(key,e.create(key,e.object()))){
+			if(contains(key,e.create(key,e.element()))){
 				return true;
 			}
 		}
@@ -467,7 +467,7 @@ abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<Key>>
 		while(ki.hasNext()){
 			final Key key = ki.next();
 //System.out.println("Contains#2: key="+key);
-			if(contains(key,e.create(key,e.object()))){
+			if(contains(key,e.create(key,e.element()))){
 				return true;
 			}
 		}
@@ -491,7 +491,7 @@ abstract class MettelAbstractSetMap<Key, E extends MettelAnnotatedObject<Key>>
 		return remove(e.key(),e);
 	}
 
-    public boolean removeAll(MettelSetMap<?, ?> c) {
+    public boolean removeAll(MettelSetMap<?, ?, ?> c) {
     	boolean modified = false;
 
     	Set<?> keySet = c.keySet();

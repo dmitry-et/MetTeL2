@@ -27,7 +27,7 @@ import mettel.core.util.MettelTreeSetLinkedHashMap;
  */
 public class MettelTableauStatePool
 		extends
-		MettelTreeSetLinkedHashMap<MettelTableauState, MettelAnnotatedExpression> {
+		MettelTreeSetLinkedHashMap<MettelTableauState, MettelAnnotatedExpression, MettelExpression> {
 
 
 //	private MettelTableauState state = null;

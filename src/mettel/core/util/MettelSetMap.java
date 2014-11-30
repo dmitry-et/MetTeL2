@@ -26,19 +26,19 @@ import java.util.Set;
  * @version $Revision$ $Date$
  *
  */
-public interface MettelSetMap<Key, E extends MettelAnnotatedObject<Key>> extends Set<E> {
+public interface MettelSetMap<Key, E extends MettelAnnotatedObject<Key, ET>, ET> extends Set<E> {
 
 	public int size(Object key);
 	public boolean isEmpty(Object key);
 	public boolean contains(Object key, Object o);
-	public boolean contains(E e);
+    public boolean contains(E e);
 	public Iterator<E> iterator(Object key);
 	public Set<Key> keySet();
 	public Object[] toArray(Object key);
 	public <T> T[] toArray(Object key,T[] a);
 	public boolean add(Object key,E e);
 	public boolean remove(Object key,Object o);
-	public boolean remove(E e);
+    public boolean remove(E e);
 	public boolean containsAll(Object key,Collection<?> c);
 	public boolean addAll(Object key,Collection<? extends E> c);
 	public boolean retainAll(Object key,Collection<?> c);

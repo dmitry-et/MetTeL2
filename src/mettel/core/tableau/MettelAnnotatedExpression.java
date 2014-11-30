@@ -23,9 +23,9 @@ import mettel.core.util.MettelAnnotatedObject;
  * @version $Revision: $ $Date: $
  *
  */
-public interface MettelAnnotatedExpression extends Comparable<MettelAnnotatedExpression>, MettelAnnotatedObject<MettelTableauState>{
+public interface MettelAnnotatedExpression extends Comparable<MettelAnnotatedExpression>, MettelAnnotatedObject<MettelTableauState, MettelExpression>{
 
-    MettelExpression expression();
+    //MettelExpression expression();
 
     MettelTableauAnnotation annotation();
 

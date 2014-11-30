@@ -27,7 +27,7 @@ import java.util.TreeSet;
  * @version $Revision$ $Date$
  *
  */
-public class MettelTreeSetLinkedHashMap<Key, E extends MettelAnnotatedObject<Key>> extends MettelAbstractSetMap<Key, E> {
+public class MettelTreeSetLinkedHashMap<Key, E extends MettelAnnotatedObject<Key, ET>, ET> extends MettelAbstractSetMap<Key, E, ET> {
 
 	public MettelTreeSetLinkedHashMap(){
 		this(null);
@@ -48,7 +48,7 @@ public class MettelTreeSetLinkedHashMap<Key, E extends MettelAnnotatedObject<Key
 	}
 
 	@SuppressWarnings("unchecked")
-	public void embed(MettelTreeSetLinkedHashMap<? extends Key, ? extends E> set){
+	public void embed(MettelTreeSetLinkedHashMap<? extends Key, ? extends E, ? extends ET> set){
 		Set<Key> keySet = (Set<Key>)set.keySet();
 		for(Key k:keySet){
 			map.put(k,(Set<E>)set.subset(k));

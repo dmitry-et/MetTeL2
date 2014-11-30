@@ -25,8 +25,8 @@ import java.util.Iterator;
  * @version $Revision: $ $Date: $
  *
  */
-public class MettelTreeSetLinkedHashMapLeastKey<Key extends Comparable<? super Key>, E extends MettelAnnotatedObject<Key>> extends
-		MettelTreeSetLinkedHashMap<Key, E> {
+public class MettelTreeSetLinkedHashMapLeastKey<Key extends Comparable<? super Key>, E extends MettelAnnotatedObject<Key,ET>, ET> extends
+		MettelTreeSetLinkedHashMap<Key, E, ET> {
 	
 	public MettelTreeSetLinkedHashMapLeastKey(){
 		super();
@@ -47,7 +47,7 @@ public class MettelTreeSetLinkedHashMapLeastKey<Key extends Comparable<? super K
 		while(ki.hasNext()){
 			final Key key = ki.next();
 //System.out.println("Contains: key="+key);
-			final Object o = e.create(key,e.object());
+			final Object o = e.create(key,e.element());
 			
 			if(contains(key,o)){
 				if(key.compareTo(e.key()) <= 0) return false;

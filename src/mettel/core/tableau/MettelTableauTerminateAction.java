@@ -49,10 +49,11 @@ public class MettelTableauTerminateAction extends MettelAbstractTableauAction {
 	/* (non-Javadoc)
 	 * @see mettel.util.MettelAnnotatedObject#create(java.lang.Object, java.lang.Object)
 	 */
-	@Override
+/*	@Override
 	public Object create(MettelTableauState key, Object o) {
 		return o;
 	}
+*/
 
 	/* (non-Javadoc)
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)

@@ -73,7 +73,7 @@ public class MettelGeneralTableauStateWithRewriting extends MettelAbstractTablea
 	public boolean add(MettelAnnotatedExpression e) {
 //System.out.println("Adding "+e);
 //System.out.println("Replacement is "+replacement);
-		final MettelExpression exp = e.expression();
+		final MettelExpression exp = e.element();
 		final MettelExpression exp0 = replacement.rewrite(exp);//XXX: Does not work as expected, needs fix!
 		MettelAnnotatedExpression e0 = null;
 		//boolean result = false;
@@ -114,7 +114,7 @@ public class MettelGeneralTableauStateWithRewriting extends MettelAbstractTablea
 		pool.init(this);
 		expanded = false;
 		for(MettelAnnotatedExpression ae:expressions){
-			final MettelExpression e0 = ae.expression();
+			final MettelExpression e0 = ae.element();
 			final MettelExpression e1 = replacement.rewrite(e0);
 			if(e0 == e1){//Only single instance of expression exists!
 				pool.add(ae);

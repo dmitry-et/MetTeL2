@@ -21,12 +21,12 @@ package mettel.core.util;
  * @version $Revision$ $Date$
  *
  */
-public interface MettelAnnotatedObject<Key> {
+public interface MettelAnnotatedObject<Key, E> {
 
 	Key key();
 
-	Object object();
+	E element();
 
-	Object create(Key key, Object o);
+	Object create(Key key, E e);
 
 }
