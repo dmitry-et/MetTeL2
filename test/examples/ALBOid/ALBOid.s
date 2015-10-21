@@ -92,7 +92,7 @@ tableau ALBOid{
 
 @l exists r-.{l2} / @l2 exists r.{l} priority 1$;
 @l ~(exists r-.P) @l2 exists r.{l} / @l2 ~P priority 2$;
-@l ~(exists r--.P) / @l exists r.P priority 2$;
+@l ~(exists r--.P) / @l ~(exists r.P) priority 2$;
 @l ~(exists (r|s)-.P) / @l ~(exists (r-)|(s-).P) priority 1$;
 @l ~(exists (r&s)-.P) / @l ~(exists (r-)&(s-).P) priority 1$;
 @l ~(exists (~r)-.P) / @l ~(exists ~(r-).P) priority 1$;
