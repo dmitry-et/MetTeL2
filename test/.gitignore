@@ -1,0 +1,5 @@
+/classes/
+/output/
+/examples/*/output
+/examples/*/*-test-output.s
+/examples/fo-output

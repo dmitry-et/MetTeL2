@@ -21,19 +21,17 @@
  */
 package mettel.generator.java;
 
-
-
-import java.util.LinkedHashSet;
-import java.util.HashMap;
-
-import mettel.core.MettelCoreRuntimeException;
-import mettel.generator.util.MettelSignature;
-import mettel.util.MettelJavaNames;
 import static mettel.generator.MettelANTLRGrammarGeneratorDefaultOptions.NAME_SEPARATOR;
 import static mettel.util.MettelStrings.FILE_SEPARATOR;
 //TODO also if you generate nominal sort do you need to print information about formula sort? also do you need to print information in standard output?"
 //TODO can use specify same named variables?
 //TODO exceptions?
+
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+
+import mettel.generator.util.MettelSignature;
+import mettel.util.MettelJavaNames;
 
 public class MettelRandomExpressionGeneratorJavaClassFile extends
 		MettelJavaClassFile implements MettelRandomExpressionDefaultPropertiesValues{

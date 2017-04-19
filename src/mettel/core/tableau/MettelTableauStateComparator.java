@@ -38,18 +38,16 @@ public class MettelTableauStateComparator implements Comparator<MettelTableauSta
 	 */
 	@Override
 	public int compare(MettelTableauState s1, MettelTableauState s2) {
-		if(s1 == null){
-			if(s2 == null) return 0;
-			return -1;
-		}
+		if(s1 == s2) return 0;
+		if(s1 == null) return -1;
 		if(s2 == null) return 1;
-
-		Iterator<MettelAnnotatedExpression> i1 = s1.expressions().iterator();
-		Iterator<MettelAnnotatedExpression> i2 = s2.expressions().iterator();
+		
+		final Iterator<MettelAnnotatedExpression> i1 = s1.expressions().iterator();
+		final Iterator<MettelAnnotatedExpression> i2 = s2.expressions().iterator();
 		while(i1.hasNext()){
 			if(!i2.hasNext()) return 1;
-			MettelAnnotatedExpression e1 = i1.next();
-			MettelAnnotatedExpression e2 = i2.next();
+			final MettelAnnotatedExpression e1 = i1.next();
+			final MettelAnnotatedExpression e2 = i2.next();
 			int result  = e1.compareTo(e2);
 			if(result != 0) return result;
 		}
