@@ -1,2 +1,2 @@
-# MetTeL2
+# MetTeL<sup>2</sup>
 Automated (tableau-based) prover generator
