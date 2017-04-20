@@ -16,6 +16,7 @@
  */
 package mettel.core.tableau;
 
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -81,7 +82,7 @@ abstract class MettelAbstractTableauAction implements MettelTableauAction {
 	 * @see mettel.core.tableau.MettelTableauAction#addAll(java.util.Set)
 	 */
 	@Override
-	public boolean addAll(Set<MettelTableauState> children) {
+	public boolean addAll(Collection<MettelTableauState> children) {
 		return states.addAll(children);
 	}
 
@@ -93,7 +94,7 @@ abstract class MettelAbstractTableauAction implements MettelTableauAction {
 		return states.isEmpty();
 	}
 
-	public boolean retainAll(Set<MettelTableauState> set) {
+	public boolean retainAll(Collection<MettelTableauState> set) {
 		return states.retainAll(set);
 	}
 }
