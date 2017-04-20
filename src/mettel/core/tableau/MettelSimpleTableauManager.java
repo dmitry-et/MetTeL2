@@ -17,8 +17,9 @@
 package mettel.core.tableau;
 
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.TreeSet;
+import java.util.Comparator;
+
+import mettel.core.util.MettelDoubleTreeSet;
 
 /**
  * @author Dmitry Tishkovsky
@@ -46,8 +47,9 @@ public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 	
 	public MettelSimpleTableauManager(MettelTableauObjectFactory factory, Collection<? extends MettelTableauRule> calculus,
 					MettelBranchSelectionStrategy strategy, MettelTableauStateAcceptor acceptor) {
-		unexpandedStates =
-				new TreeSet<MettelTableauState>();
+		unexpandedStates = 
+				new MettelDoubleTreeSet<MettelTableauState>(Comparator.naturalOrder(), comparator);
+				//new TreeSet<MettelTableauState>();
 				//new LinkedHashSet<MettelTableauState>();
 				//new TreeSet<MettelTableauState>(comparator);
 				//new TreeSet<MettelTableauState>(new MettelTableauStateReverseNaturalComparator());
@@ -59,21 +61,17 @@ public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 	private static final MettelTableauStateComparator comparator = new MettelTableauStateComparator();
 
 	protected boolean add(MettelTableauState state){
-		if(state.isExpanded()){
-			final Iterator<MettelTableauState> i = unexpandedStates.iterator();
-			while(i.hasNext()){
-				final MettelTableauState s = i.next();
-//				if(s.expressions().equals(state.expressions())) {
-				if(comparator.compare(state, s) == 0){
-					if(state.id() < s.id()){
-						i.remove();//unexpandedStates.remove(s);
-						unexpandedStates.add(state);
-						return true;
-					}
-					return false;
+		/*if(state.isExpanded()){
+			final int index = Collections.binarySearch(unexpandedStates, state, comparator);
+			if(index >= 0) {
+				final MettelTableauState s = unexpandedStates.get(index);
+				if(state.compareTo(s) < 0) {
+					unexpandedStates.set(index, state);
+					return true;
 				}
+				return false;
 			}
-		}
+		}*/
 
 		return unexpandedStates.add(state);
 	}

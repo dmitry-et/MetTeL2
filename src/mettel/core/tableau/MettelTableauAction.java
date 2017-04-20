@@ -16,6 +16,7 @@
  */
 package mettel.core.tableau;
 
+import java.util.Collection;
 import java.util.Set;
 
 import mettel.core.util.MettelAnnotatedObject;
@@ -41,7 +42,7 @@ public interface MettelTableauAction extends MettelAnnotatedObject<MettelTableau
 	/**
 	 * @param children
 	 */
-	boolean addAll(Set<MettelTableauState> children);
+	boolean addAll(Collection<MettelTableauState> children);
 
 	/**
 	 * @return
@@ -51,6 +52,6 @@ public interface MettelTableauAction extends MettelAnnotatedObject<MettelTableau
 	/**
 	 * @param unexpandedStates
 	 */
-	boolean retainAll(Set<MettelTableauState> unexpandedStates);
+	boolean retainAll(Collection<MettelTableauState> unexpandedStates);
 
 }

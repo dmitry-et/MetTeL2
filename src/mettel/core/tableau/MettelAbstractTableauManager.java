@@ -16,11 +16,11 @@
  */
 package mettel.core.tableau;
 
-import java.util.SortedSet;
-import java.util.LinkedHashSet;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.SortedSet;
 
 /**
  * @author Dmitry Tishkovsky
@@ -38,7 +38,7 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 	protected MettelTableauStateAcceptor acceptor = null;
 
 	//protected Set<MettelGeneralTableauRule> calculus = null;
-
+	
 	private class MettelSatisfiableTableauStateAcceptor implements MettelTableauStateAcceptor{
 
 		/* (non-Javadoc)
