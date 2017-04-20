@@ -49,21 +49,21 @@ public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 		unexpandedStates =
 				new TreeSet<MettelTableauState>();
 				//new LinkedHashSet<MettelTableauState>();
-				//new TreeSet<MettelTableauState>(new MettelTableauStateComparator());
+				//new TreeSet<MettelTableauState>(comparator);
 				//new TreeSet<MettelTableauState>(new MettelTableauStateReverseNaturalComparator());
 		root = state = new MettelGeneralTableauStateWithRewriting(factory, calculus);//TODO: Good possibility to implement AND-OR graph
 		this.strategy = strategy;
 		this.acceptor = acceptor;
 	}
 
-	private final MettelTableauStateComparator comparator = new MettelTableauStateComparator();
+	private static final MettelTableauStateComparator comparator = new MettelTableauStateComparator();
 
 	protected boolean add(MettelTableauState state){
 		if(state.isExpanded()){
 			final Iterator<MettelTableauState> i = unexpandedStates.iterator();
 			while(i.hasNext()){
 				final MettelTableauState s = i.next();
-//				if(s.expressions().equals(state.expressions())){
+//				if(s.expressions().equals(state.expressions())) {
 				if(comparator.compare(state, s) == 0){
 					if(state.id() < s.id()){
 						i.remove();//unexpandedStates.remove(s);
