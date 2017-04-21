@@ -16,11 +16,11 @@
  */
 package mettel.core.tableau;
 
-import java.util.SortedSet;
-import java.util.LinkedHashSet;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.SortedSet;
 
 /**
  * @author Dmitry Tishkovsky
@@ -29,15 +29,22 @@ import java.util.Set;
  */
 abstract class MettelAbstractTableauManager implements MettelTableauManager {
 
-	protected MettelAnnotator annotator = MettelSimpleAnnotator.ANNOTATOR;
+	private final static MettelAnnotator annotator = MettelSimpleAnnotator.ANNOTATOR;
 
 	protected SortedSet<MettelTableauState> unexpandedStates = null;
 
-	protected MettelBranchSelectionStrategy strategy = null;
+	private final MettelBranchSelectionStrategy strategy;
 
-	protected MettelTableauStateAcceptor acceptor = null;
+	private final MettelTableauStateAcceptor acceptor;
 
-	//protected Set<MettelGeneralTableauRule> calculus = null;
+	protected MettelAbstractTableauManager(
+			MettelTableauState root,
+			MettelBranchSelectionStrategy strategy, 
+			MettelTableauStateAcceptor acceptor) {
+		this.root = this.state = root;
+		this.strategy = strategy == null? new MettelSimpleLIFOBranchSelectionStrategy(): strategy;
+		this.acceptor = acceptor == null? new MettelSatisfiableTableauStateAcceptor(): acceptor;
+	}
 
 	private class MettelSatisfiableTableauStateAcceptor implements MettelTableauStateAcceptor{
 
@@ -54,7 +61,7 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 	 * @author Dmitry Tishkovsky
 	 *
 	 * Provides depth-first left-to-right strategy if the states are in the natural order.
-	 */
+	 *
 	private class MettelSimpleBranchSelectionStrategy extends MettelSimpleLIFOBranchSelectionStrategy{}
 
 		/* (non-Javadoc)
@@ -106,14 +113,6 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 	}
 
 	boolean isSatisfiable(Set<MettelAnnotatedExpression> input) {
-
-		if(strategy == null){
-			strategy = new MettelSimpleBranchSelectionStrategy();
-		}
-
-		if(acceptor == null){
-			acceptor = new MettelSatisfiableTableauStateAcceptor();
-		}
 
 		if(state.addAll(input)){
 

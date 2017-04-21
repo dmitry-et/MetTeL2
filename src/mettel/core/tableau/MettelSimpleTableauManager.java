@@ -26,6 +26,8 @@ import java.util.TreeSet;
  *
  */
 public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
+	
+	private static final MettelTableauStateComparator comparator = new MettelTableauStateComparator();
 
 	/**
 	 *
@@ -46,17 +48,13 @@ public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 	
 	public MettelSimpleTableauManager(MettelTableauObjectFactory factory, Collection<? extends MettelTableauRule> calculus,
 					MettelBranchSelectionStrategy strategy, MettelTableauStateAcceptor acceptor) {
+		super(new MettelGeneralTableauStateWithRewriting(factory, calculus), strategy, acceptor);//TODO: Good possibility to implement AND-OR graph
 		unexpandedStates =
 				new TreeSet<MettelTableauState>();
 				//new LinkedHashSet<MettelTableauState>();
 				//new TreeSet<MettelTableauState>(comparator);
 				//new TreeSet<MettelTableauState>(new MettelTableauStateReverseNaturalComparator());
-		root = state = new MettelGeneralTableauStateWithRewriting(factory, calculus);//TODO: Good possibility to implement AND-OR graph
-		this.strategy = strategy;
-		this.acceptor = acceptor;
 	}
-
-	private static final MettelTableauStateComparator comparator = new MettelTableauStateComparator();
 
 	protected boolean add(MettelTableauState state){
 		if(state.isExpanded()){
@@ -65,7 +63,7 @@ public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 				final MettelTableauState s = i.next();
 //				if(s.expressions().equals(state.expressions())) {
 				if(comparator.compare(state, s) == 0){
-					if(state.id() < s.id()){
+					if(state.compareTo(s) < 0){
 						i.remove();//unexpandedStates.remove(s);
 						unexpandedStates.add(state);
 						return true;
