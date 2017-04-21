@@ -16,7 +16,7 @@
  */
 package mettel.core.tableau;
 
-import java.util.SortedSet;
+import java.util.LinkedList;
 
 /**
  * @author Dmitry Tishkovsky
@@ -32,9 +32,9 @@ public class MettelSimpleFIFOBranchSelectionStrategy implements
 	 * @see mettel.core.tableau.MettelBranchSelectionStrategy#chooseTableauState(java.util.SortedSet)
 	 */
 	@Override
-	public MettelTableauState chooseTableauState(SortedSet<MettelTableauState> s) {
+	public MettelTableauState selectTableauState(LinkedList<MettelTableauState> s) {
 		if(s.isEmpty()) return null;
-		return s.first();
+		return s.getFirst();
 	}
 
 }

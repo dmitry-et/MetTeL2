@@ -18,7 +18,6 @@ package mettel.core.tableau;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.TreeSet;
 
 /**
  * @author Dmitry Tishkovsky
@@ -49,8 +48,8 @@ public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 	public MettelSimpleTableauManager(MettelTableauObjectFactory factory, Collection<? extends MettelTableauRule> calculus,
 					MettelBranchSelectionStrategy strategy, MettelTableauStateAcceptor acceptor) {
 		super(new MettelGeneralTableauStateWithRewriting(factory, calculus), strategy, acceptor);//TODO: Good possibility to implement AND-OR graph
-		unexpandedStates =
-				new TreeSet<MettelTableauState>();
+		//unexpandedStates =
+		//		new TreeSet<MettelTableauState>();
 				//new LinkedHashSet<MettelTableauState>();
 				//new TreeSet<MettelTableauState>(comparator);
 				//new TreeSet<MettelTableauState>(new MettelTableauStateReverseNaturalComparator());
@@ -61,9 +60,8 @@ public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 			final Iterator<MettelTableauState> i = unexpandedStates.iterator();
 			while(i.hasNext()){
 				final MettelTableauState s = i.next();
-//				if(s.expressions().equals(state.expressions())) {
 				if(comparator.compare(state, s) == 0){
-					if(state.compareTo(s) < 0){
+					if(state.id() < s.id()) {//state.compareTo(s) < 0){
 						i.remove();//unexpandedStates.remove(s);
 						unexpandedStates.add(state);
 						return true;
@@ -76,14 +74,4 @@ public class MettelSimpleTableauManager extends MettelAbstractTableauManager {
 		return unexpandedStates.add(state);
 	}
 
-	/* (non-Javadoc)
-	 * @see mettel.core.tableau.MettelAbstractTableauManager#cleanUp()
-	 *
-	@Override
-	void cleanUp() {
-		final TreeSet<MettelTableauState> states = new TreeSet<MettelTableauState>(new MettelTableauStateComparator());
-		states.addAll(unexpandedStates);
-		unexpandedStates = states;
-	}
-*/
 }

@@ -16,7 +16,7 @@
  */
 package mettel.core.tableau;
 
-import java.util.SortedSet;
+import java.util.LinkedList;
 
 /**
  * @author Dmitry Tishkovsky
@@ -25,6 +25,6 @@ import java.util.SortedSet;
  */
 public interface MettelBranchSelectionStrategy {
 
-	MettelTableauState chooseTableauState(SortedSet<MettelTableauState> s);
+	MettelTableauState selectTableauState(LinkedList<MettelTableauState> s);
 
 }

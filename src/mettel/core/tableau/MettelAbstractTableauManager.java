@@ -19,8 +19,8 @@ package mettel.core.tableau;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.Set;
-import java.util.SortedSet;
 
 /**
  * @author Dmitry Tishkovsky
@@ -31,11 +31,14 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 
 	private final static MettelAnnotator annotator = MettelSimpleAnnotator.ANNOTATOR;
 
-	protected SortedSet<MettelTableauState> unexpandedStates = null;
+	protected final LinkedList<MettelTableauState> unexpandedStates = new LinkedList<>();
 
 	private final MettelBranchSelectionStrategy strategy;
 
 	private final MettelTableauStateAcceptor acceptor;
+	
+	private MettelTableauState state;
+	private final MettelTableauState root;
 
 	protected MettelAbstractTableauManager(
 			MettelTableauState root,
@@ -58,33 +61,10 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 	}
 
 	/**
-	 * @author Dmitry Tishkovsky
-	 *
 	 * Provides depth-first left-to-right strategy if the states are in the natural order.
-	 *
-	private class MettelSimpleBranchSelectionStrategy extends MettelSimpleLIFOBranchSelectionStrategy{}
+	 */
+	//private class MettelSimpleBranchSelectionStrategy extends MettelSimpleLIFOBranchSelectionStrategy{}
 
-		/* (non-Javadoc)
-		 * @see mettel.core.tableau.MettelBranchChoiceStrategy#chooseTableauState(java.util.SortedSet)
-		 *
-		@Override
-		public MettelTableauState chooseTableauState(SortedSet<MettelTableauState> s) {
-			if(s.isEmpty()) return null;
-			return s.last();
-/*			final Iterator<MettelTableauState> i = s.iterator();
-			if(i.hasNext()){
-				//MettelTableauState state = i.next();
-//System.out.println("Looking at state "+state);
-				//if(state.isSatisfiable()) return state;
-				//i.remove();
-				return i.next();
-//System.out.println("The state "+state+" is unsatisfiable");
-			}
-//System.out.println("No states to select from");
-			return null;*
-		}
-
-	}*/
 
 	/* (non-Javadoc)
 	 * @see mettel.core.tableau.MettelTableauManager#isSatisfiable(mettel.core.tableau.MettelAnnotatedExpression)
@@ -97,14 +77,17 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 	}
 
 
-	protected MettelTableauState state = null, root = null;
+	
 
 	/* (non-Javadoc)
 	 * @see mettel.core.tableau.MettelTableauManager#isSatisfiable(java.util.Set)
 	 */
 	@Override
 	public boolean isSatisfiable(Collection<? extends MettelExpression> input) {
-		Set<MettelAnnotatedExpression> set = new LinkedHashSet<MettelAnnotatedExpression>(input.size());
+		if(input == null) return true;
+		final int SIZE = input.size();
+		if(SIZE == 0) return true;
+		final Set<MettelAnnotatedExpression> set = new LinkedHashSet<MettelAnnotatedExpression>(SIZE);
 		for(MettelExpression e:input){
 			if(!set.add(annotator.annotate(e,state)))
 				throw new MettelCoreRuntimeException("Failed to create a set containing "+e);
@@ -112,19 +95,18 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 		return isSatisfiable(set);
 	}
 
-	boolean isSatisfiable(Set<MettelAnnotatedExpression> input) {
+	boolean isSatisfiable(Set<MettelAnnotatedExpression> input) {		
 
 		if(state.addAll(input)){
 
+			unexpandedStates.clear();
 			unexpandedStates.add(state);
 
 			do{
 //System.out.println("Unexpanded states:"+unexpandedStates);
 //System.out.println("Expanding "+state);
 //System.out.println("Expressions "+state.expressions());
-				//final MettelTableauState[] children =
 //System.out.println("Processing actions for "+state+"...");
-
 				unexpandedStates.remove(state);
 
 				Set<MettelTableauState> children = null;
@@ -138,7 +120,6 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 						final boolean f = a.isFor(state);
 						a.retainAll(unexpandedStates);
 						if(f){
-//							a.add(state);
 							children = a.execute(state);
 							actionExecuted = true;
 							if(a.completed()){
@@ -157,54 +138,23 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 				if(acceptor.accept(state)){
 					if(state.isComplete()) return true;
 
-					addChildren(state,children);
+					addChildren(state, children);
 					children = null;
 
-					//	throw new MettelCoreRuntimeException("Failed to add children of "+state);
-
 				}
-//				else{
 //System.out.println("Removing "+state);
 //System.out.println("Satisfiable? "+state.isSatisfiable());
 //System.out.println("Expressions: "+state.expressions());
 //System.out.println("Explanation: "+state.explanation());
-//				}
-/*
-					unexpandedStates.remove(state);
-//					final Iterator<MettelTableauAction> ia = actions.iterator();
-//					while(ia.hasNext()){
-//						final MettelTableauAction a = ia.next();
-//						a.remove(state);
-//						if(a.completed()) ia.remove();
-//					}
-				}
-
-				cleanUp();
-*/
-
-//				final Iterator<MettelTableauAction> ia = actions.iterator();
-//					final MettelTableauAction a = ia.next();
-//					a.retainAll(unexpandedStates);
-//					if(a.completed()) ia.remove();
-//				}
-
-				state = strategy.chooseTableauState(unexpandedStates);
+				state = strategy.selectTableauState(unexpandedStates);
 			}while(state != null);
 
 			return false;
 		}
-
-		if(input == null || input.isEmpty()){
-			throw new MettelCoreRuntimeException("Input set cannot be empty");
-		}
+		
 		throw new MettelCoreRuntimeException("Failed to create a state containing "+input);
 	}
 
-
-	/**
-	 *
-	 */
-//	abstract void cleanUp();
 
 	/**
 	 * @param s
@@ -212,7 +162,6 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 	private void addActions(MettelTableauState s) {
 		final Set<MettelTableauAction> actionsToAdd = s.actionsToAdd();
 		if(actionsToAdd == null) return;
-//		Set<MettelTableauAction> actions = s.actions();
 //System.out.println("Adding actions for "+s+"...");
 //System.out.println("Actions to add "+actionsToAdd);
 		final Iterator<MettelTableauAction> ia = actionsToAdd.iterator();
@@ -232,35 +181,16 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 //System.out.println("Done");
 	}
 
-
-
-
-/*	boolean remove(MettelTableauState state){
-		if(unexpandedStates.remove(state)) return true;
-
-		final Set<MettelTableauState> children = state.children();
-		if(children == null) return false;
-
-		boolean result = false;
-		for(MettelTableauState child:children){
-			result |= remove(child);
-		}
-		return result;
-	}
-*/
-	void addChildren(MettelTableauState state, Set<MettelTableauState> children){
+	private void addChildren(MettelTableauState state, Set<MettelTableauState> children){
 //System.out.println("Unexpanded states:"+unexpandedStates);
-		//final Set<MettelTableauState> children = state.children();
 //System.out.println("Children:"+children);
 		if(children == null){
-			//unexpandedStates.add(state);
 			add(state);
 			return;
 		}
 		//Expanded succesfully (not terminal and rule was applicable)
 //System.out.println("Removing state "+state);
 		for(MettelTableauState child:children){
-			//unexpandedStates.add(child);
 			add(child);
 		}
 
@@ -278,8 +208,6 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 	}
 
 	abstract protected boolean add(MettelTableauState state);
-
-//	public abstract boolean isAcceptable(MettelTableauState s);
 
 	public Set<MettelExpression> model(){
 		if(state == null) return null;
