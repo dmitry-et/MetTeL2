@@ -36,5 +36,10 @@ public class MettelSimpleLIFOBranchSelectionStrategy implements
 		if(s.isEmpty()) return null;
 		return s.getLast();
 	}
+
+	@Override
+	public int selectTableauStateIndex(LinkedList<MettelTableauState> s) {
+		return s.size() - 1;
+	}
 		
 }

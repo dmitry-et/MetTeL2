@@ -26,5 +26,7 @@ import java.util.LinkedList;
 public interface MettelBranchSelectionStrategy {
 
 	MettelTableauState selectTableauState(LinkedList<MettelTableauState> s);
+	
+	int selectTableauStateIndex(LinkedList<MettelTableauState> s);
 
 }

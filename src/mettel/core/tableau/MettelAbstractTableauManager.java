@@ -38,6 +38,7 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 	private final MettelTableauStateAcceptor acceptor;
 	
 	private MettelTableauState state;
+	private int index = 0;
 	private final MettelTableauState root;
 
 	protected MettelAbstractTableauManager(
@@ -100,13 +101,15 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 		if(state.addAll(input)){
 
 			unexpandedStates.clear();
-			unexpandedStates.add(state);
+			unexpandedStates.add(root);
+			index = 0;
 
 			do{
 //System.out.println("Unexpanded states:"+unexpandedStates);
 //System.out.println("Expanding "+state);
 //System.out.println("Expressions "+state.expressions());
 //System.out.println("Processing actions for "+state+"...");
+				state = unexpandedStates.get(index);
 				unexpandedStates.remove(state);
 
 				Set<MettelTableauState> children = null;
@@ -139,22 +142,21 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 					if(state.isComplete()) return true;
 
 					addChildren(state, children);
-					children = null;
+					//children = null;
 
 				}
 //System.out.println("Removing "+state);
 //System.out.println("Satisfiable? "+state.isSatisfiable());
 //System.out.println("Expressions: "+state.expressions());
 //System.out.println("Explanation: "+state.explanation());
-				state = strategy.selectTableauState(unexpandedStates);
-			}while(state != null);
+				index = strategy.selectTableauStateIndex(unexpandedStates);
+			}while(index >= 0);
 
 			return false;
 		}
 		
 		throw new MettelCoreRuntimeException("Failed to create a state containing "+input);
 	}
-
 
 	/**
 	 * @param s

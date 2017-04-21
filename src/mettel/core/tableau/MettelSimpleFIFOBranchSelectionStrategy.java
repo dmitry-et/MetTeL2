@@ -37,4 +37,9 @@ public class MettelSimpleFIFOBranchSelectionStrategy implements
 		return s.getFirst();
 	}
 
+	@Override
+	public int selectTableauStateIndex(LinkedList<MettelTableauState> s) {
+		return 0;
+	}
+
 }
