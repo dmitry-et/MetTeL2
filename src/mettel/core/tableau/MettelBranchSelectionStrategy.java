@@ -18,6 +18,8 @@ package mettel.core.tableau;
 
 import java.util.LinkedList;
 
+import mettel.core.util.MettelUncheckedLinkedList;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -27,6 +29,8 @@ public interface MettelBranchSelectionStrategy {
 
 	MettelTableauState selectTableauState(LinkedList<MettelTableauState> s);
 	
-	int selectTableauStateIndex(LinkedList<MettelTableauState> s);
+	int selectTableauStateIndex(MettelUncheckedLinkedList<MettelTableauState> unexpandedStates);
+	
+	MettelUncheckedLinkedList.Node<MettelTableauState> selectTableauStateNode(MettelUncheckedLinkedList<MettelTableauState> unexpandedStates);
 
 }

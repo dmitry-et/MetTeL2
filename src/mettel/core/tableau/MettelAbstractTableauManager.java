@@ -19,8 +19,9 @@ package mettel.core.tableau;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.Set;
+
+import mettel.core.util.MettelUncheckedLinkedList;
 
 /**
  * @author Dmitry Tishkovsky
@@ -31,14 +32,14 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 
 	private final static MettelAnnotator annotator = MettelSimpleAnnotator.ANNOTATOR;
 
-	protected final LinkedList<MettelTableauState> unexpandedStates = new LinkedList<>();
+	protected final MettelUncheckedLinkedList<MettelTableauState> unexpandedStates = new MettelUncheckedLinkedList<>();
 
 	private final MettelBranchSelectionStrategy strategy;
 
 	private final MettelTableauStateAcceptor acceptor;
 	
 	private MettelTableauState state;
-	private int index = 0;
+	private MettelUncheckedLinkedList.Node<MettelTableauState> node = null;
 	private final MettelTableauState root;
 
 	protected MettelAbstractTableauManager(
@@ -102,15 +103,15 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 
 			unexpandedStates.clear();
 			unexpandedStates.add(root);
-			index = 0;
+			node = unexpandedStates.firstNode();
 
 			do{
 //System.out.println("Unexpanded states:"+unexpandedStates);
 //System.out.println("Expanding "+state);
 //System.out.println("Expressions "+state.expressions());
 //System.out.println("Processing actions for "+state+"...");
-				state = unexpandedStates.get(index);
-				unexpandedStates.remove(state);
+				state = node.item();
+				unexpandedStates.unlink(node);
 
 				Set<MettelTableauState> children = null;
 				boolean actionExecuted = false;
@@ -149,8 +150,8 @@ abstract class MettelAbstractTableauManager implements MettelTableauManager {
 //System.out.println("Satisfiable? "+state.isSatisfiable());
 //System.out.println("Expressions: "+state.expressions());
 //System.out.println("Explanation: "+state.explanation());
-				index = strategy.selectTableauStateIndex(unexpandedStates);
-			}while(index >= 0);
+				node = strategy.selectTableauStateNode(unexpandedStates);
+			}while(node != null);
 
 			return false;
 		}

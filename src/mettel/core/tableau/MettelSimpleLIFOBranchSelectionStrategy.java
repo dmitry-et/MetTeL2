@@ -18,6 +18,9 @@ package mettel.core.tableau;
 
 import java.util.LinkedList;
 
+import mettel.core.util.MettelUncheckedLinkedList;
+import mettel.core.util.MettelUncheckedLinkedList.Node;
+
 /**
  * @author Dmitry Tishkovsky
  * @version $Revision$ $Date$
@@ -38,8 +41,14 @@ public class MettelSimpleLIFOBranchSelectionStrategy implements
 	}
 
 	@Override
-	public int selectTableauStateIndex(LinkedList<MettelTableauState> s) {
+	public int selectTableauStateIndex(MettelUncheckedLinkedList<MettelTableauState> s) {
 		return s.size() - 1;
+	}
+
+	@Override
+	public Node<MettelTableauState> selectTableauStateNode(
+			MettelUncheckedLinkedList<MettelTableauState> s) {
+		return s.lastNode();
 	}
 		
 }
